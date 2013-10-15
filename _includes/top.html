@@ -28,8 +28,9 @@
             return result && unescape(result[1]) || ""; 
           }
           
-        alert(location.pathname);          
-    
+        $ThisPage = location.pathname;          
+        $ThisPageName = "";
+        
         $token = "5fb96a3de1e3119929b8292a284bb10663cd4c7e";
     
         var github = new Github({
@@ -41,13 +42,26 @@
         
         repo.read('master','site.json',function(err, data){ 
             //alert(data);
-            $Navigation = jQuery.parseJSON(data);
+            $Site = jQuery.parseJSON(data);
     
-            $.each($Navigation['navigation'], function($key, $value) {
+            $.each($Site['navigation'], function($key, $value) {
                 $NavigationString = '<li><a href="' + $value + '">' + $key + '</a></li>';
-                alert($NavigationString);
-                $("#primaryNavItems").append($NavigationString);             
+                //alert($NavigationString);
+                $("#primaryNavItems").append($NavigationString);   
+                
+                if($value==$ThisPage)
+                    {
+                    $ThisPageName = $key;   
+                    }          
             });
+            
+            $.each($Site['pages'], function($key, $value) {
+                alert($key + ' = ' + $ThisPageName)
+                if($key==$ThisPageName)
+                    {
+                    $("#pageBody").append($value);
+                    }             
+            });            
         });
         
     </script> 
