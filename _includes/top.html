@@ -31,7 +31,7 @@
         $ThisPage = location.pathname;          
         $ThisPageName = "";
         
-        $token = "5fb96a3de1e3119929b8292a284bb10663cd4c7e";
+        $token = getUrlVar('t');
     
         var github = new Github({
             token: $token,
@@ -41,25 +41,20 @@
         var repo = github.getRepo('kinlane', 'api-commons');
         
         repo.read('master','site.json',function(err, data){ 
-            //alert(data);
             $Site = jQuery.parseJSON(data);
     
             $.each($Site['navigation'], function($key, $value) {
                 $NavigationString = '<li><a href="' + $value + '">' + $key + '</a></li>';
-                //alert($NavigationString);
                 $("#primaryNavItems").append($NavigationString);   
                 
-                if($value==$ThisPage)
-                    {
+                if($value==$ThisPage){
                     $ThisPageName = $key;   
                     }          
             });
             
             $.each($Site['pages'], function($key, $value) {
-                alert($key + ' = ' + $ThisPageName)
-                if($key==$ThisPageName)
-                    {
-                    $("#pageBody").append($value);
+                if($key==$ThisPageName){
+                    $("#pageBody").html($value);
                     }             
             });            
         });
