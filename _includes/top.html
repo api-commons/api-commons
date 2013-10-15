@@ -32,12 +32,12 @@
         var repo = github.getRepo('kinlane', 'api-commons');
         
         repo.read('master','site.json',function(err, data){ 
-            alert(data);
+            //alert(data);
             $Navigation = jQuery.parseJSON(data);
     
             $.each($Navigation['navigation'], function($key, $value) {
-                $NavigationString = '<li class="{% if page.overview %}current{% endif %}"><a href="' + $value + '">' + $key + '</a></li>';
-                alert($NavigationString);
+                $NavigationString = '<li><a href="' + $value + '">' + $key + '</a></li>';
+                //alert($NavigationString);
                 $("#primaryNav").append($NavigationString);             
             });
         });
