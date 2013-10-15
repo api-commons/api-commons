@@ -21,6 +21,14 @@
   <script type="text/javascript" src="/api-commons/js/utilities.js"></script>   
       
   <script type="text/javascript">
+  
+        //Pull variables from URL
+        function getUrlVar(key){
+            var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
+            return result && unescape(result[1]) || ""; 
+          }
+          
+        alert(location.pathname);          
     
         $token = "5fb96a3de1e3119929b8292a284bb10663cd4c7e";
     
