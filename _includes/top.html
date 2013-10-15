@@ -42,6 +42,7 @@
         var repo = github.getRepo('kinlane', 'api-commons');
         
         repo.read('master','site.json',function(err, data){ 
+            
             $Site = jQuery.parseJSON(data);
     
             $.each($Site['navigation'], function($key, $value) {
