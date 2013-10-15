@@ -27,8 +27,10 @@
             return result && unescape(result[1]) || ""; 
           }
           
-        $ThisPage = location.pathname;          
-        $ThisPageName = "";
+        $ThisPage = getUrlVar('p');    
+        if($ThisPage==''){
+            $ThisPage = "Home";
+        }    
         
         $token = getUrlVar('t');
     
@@ -39,27 +41,19 @@
   
         var repo = github.getRepo('kinlane', 'api-commons');
         
-        repo.read('master','site.json',function(err, data){ 
-            
-            if(err)
-                {
-                // No content
-                }
-            else
-                {
+        repo.read('master','site.json',function(err, data){            
+            if(!err) {
                 $Site = jQuery.parseJSON(data);
         
+                // Build the navigation
                 $.each($Site['navigation'], function($key, $value) {
                     $NavigationString = '<li><a href="' + $value + '">' + $key + '</a></li>';
-                    $("#primaryNavItems").append($NavigationString);   
-                    
-                    if($value==$ThisPage){
-                        $ThisPageName = $key;   
-                        }          
+                    $("#primaryNavItems").append($NavigationString);           
                 });
                 
+                // Build the Page Content
                 $.each($Site['pages'], function($key, $value) {
-                    if($key==$ThisPageName){
+                    if($key==$ThisPage){
                         $("#pageBody").html($value);
                         }             
                 });  
