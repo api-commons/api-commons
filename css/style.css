@@ -12,7 +12,7 @@ body {
   font-weight: 300;
   color: #ddd;
   background: #333;
-  border-top: 5px solid #0147FA;
+  border-top: 5px solid #fc0;
   box-shadow: inset 0 3px 30px rgba(0,0,0,.3);
   text-shadow: 0 1px 3px rgba(0,0,0,.5);
 }
@@ -83,7 +83,7 @@ nav li {
 }
 
 .main-nav li.current a {
-  background: #0147FA;
+  background: #fc0;
   color: #222;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 1px 5px rgba(0,0,0,.5);
   text-shadow: 0 1px 0 rgba(255,255,255,.3);
@@ -99,7 +99,7 @@ nav li {
   float: left;
   width: 100%;
   background: #333;
-  color: #0147FA;
+  color: #fc0;
   text-align: center;
   text-transform: uppercase;
   font-size: 14px;
@@ -109,7 +109,7 @@ nav li {
 }
 
 .mobile-nav .current a {
-  background: #0147FA;
+  background: #fc0;
   color: #222;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 1px 5px rgba(0,0,0,.5);
   text-shadow: 0 1px 0 rgba(255,255,255,.3);
@@ -656,7 +656,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: #0147FA;
+  color: #fc0;
   text-decoration: none;
   transition: all .25s;
    -moz-transition: all .25s;
@@ -904,7 +904,7 @@ code.option, code.flag, code.filter, code.output {
 
 .note:after {
   content: "★";
-  color: #0147FA;
+  color: #fc0;
   position: absolute;
   top: 14px;
   left: 14px;
@@ -926,7 +926,7 @@ code.option, code.flag, code.filter, code.output {
 
 .warning:after {
   content: "‼";
-  color: #0147FA;
+  color: #fc0;
   position: absolute;
   top: 15px;
   left: 15px;
