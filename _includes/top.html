@@ -37,8 +37,8 @@
     
             $.each($Navigation['navigation'], function($key, $value) {
                 $NavigationString = '<li><a href="' + $value + '">' + $key + '</a></li>';
-                //alert($NavigationString);
-                $("#primaryNav").append($NavigationString);             
+                alert($NavigationString);
+                $("#primaryNavItems").append($NavigationString);             
             });
         });
         
