@@ -1,0 +1,12 @@
+{
+    "navigation": {
+        "Home": "/api-commons/index.html",
+        "About": "/api-comons/about.html",
+        "Contact": "/api-commons/contact.html"
+    },
+    "pages": {
+        "Home": "<h1>Home</h1><p>This is the home page.</p>",
+        "About": "<h1>Home</h1><p>This is the about page.</p>",
+        "Contact": "<h1>Home</h1><p>This is the contact page.</p>"
+    }
+}
