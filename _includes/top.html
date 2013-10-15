@@ -33,7 +33,7 @@
         $Navigation = jQuery.parseJSON(data);
 
         $.each($Navigation['navigation'], function($key, $value) {
-            $NavigationString = '<li class="{% if page.overview %}current{% endif %}"><a href="' + $value . '">' + $key . '</a></li>';
+            $NavigationString = '<li class="{% if page.overview %}current{% endif %}"><a href="' + $value + '">' + $key + '</a></li>';
             $("#primaryNav").append($NavigationString);             
             }
     </script> 
