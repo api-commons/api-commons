@@ -32,8 +32,6 @@
         
         $token = getUrlVar('t');
     
-        alert("Token:" + $token);
-        
         var github = new Github({
             token: $token,
             auth: "oauth"
@@ -43,24 +41,29 @@
         
         repo.read('master','site.json',function(err, data){ 
             
-            alert(err);
-            
-            $Site = jQuery.parseJSON(data);
-    
-            $.each($Site['navigation'], function($key, $value) {
-                $NavigationString = '<li><a href="' + $value + '">' + $key + '</a></li>';
-                $("#primaryNavItems").append($NavigationString);   
+            if(err)
+                {
+                // No content.
+                }
+            else
+                {
+                $Site = jQuery.parseJSON(data);
+        
+                $.each($Site['navigation'], function($key, $value) {
+                    $NavigationString = '<li><a href="' + $value + '">' + $key + '</a></li>';
+                    $("#primaryNavItems").append($NavigationString);   
+                    
+                    if($value==$ThisPage){
+                        $ThisPageName = $key;   
+                        }          
+                });
                 
-                if($value==$ThisPage){
-                    $ThisPageName = $key;   
-                    }          
-            });
-            
-            $.each($Site['pages'], function($key, $value) {
-                if($key==$ThisPageName){
-                    $("#pageBody").html($value);
-                    }             
-            });            
+                $.each($Site['pages'], function($key, $value) {
+                    if($key==$ThisPageName){
+                        $("#pageBody").html($value);
+                        }             
+                });  
+             }          
         });
         
     </script> 
