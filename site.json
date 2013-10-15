@@ -1,6 +1,6 @@
 {
     "navigation": {
-        "Home": "/api-commons/index.html",
+        "Home": "/api-commons/",
         "About": "/api-comons/about.html",
         "Contact": "/api-commons/contact.html"
     },
