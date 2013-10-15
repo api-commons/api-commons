@@ -43,6 +43,8 @@
         
         repo.read('master','site.json',function(err, data){ 
             
+            alert(err);
+            
             $Site = jQuery.parseJSON(data);
     
             $.each($Site['navigation'], function($key, $value) {
