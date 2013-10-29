@@ -46,10 +46,10 @@
                 $Site = jQuery.parseJSON(data);
         
                 // Build the navigation
-                $.each($Site['navigation'], function($key, $value) {
-                    $NavigationString = '<li><a href="' + $value + '">' + $key + '</a></li>';
-                    $("#primaryNavItems").append($NavigationString);           
-                });
+               // $.each($Site['navigation'], function($key, $value) {
+               //     $NavigationString = '<li><a href="' + $value + '">' + $key + '</a></li>';
+               //     $("#primaryNavItems").append($NavigationString);           
+               // });
                 
                 // Build the Page Content
                 $.each($Site['pages'], function($key, $value) {
