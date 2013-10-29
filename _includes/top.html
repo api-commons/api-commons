@@ -43,6 +43,7 @@
         
         repo.read('master','site.json',function(err, data){            
             if(!err) {
+                
                 $Site = jQuery.parseJSON(data);
         
                 // Build the navigation
