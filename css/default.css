@@ -53,7 +53,7 @@
 	
 	.container
 	{
-		margin: 10px;
+		margin: 0px auto;
 		width: 1200px;
 	}
 	
@@ -235,8 +235,7 @@
 
 	#logo
 	{
-		margin: 4em auto 4em auto;
-		text-transform: uppercase;
+
 	}
 	
 	#logo h1
@@ -528,7 +527,7 @@
 		margin: 0 auto;
 		width:0;
 		height:0;
-		border-top: 40px solid #FFF;
+		border-top: 15px solid #FFF;
 		border-left: 50px solid transparent;
 		border-right: 50px solid transparent;
 		display: block;
