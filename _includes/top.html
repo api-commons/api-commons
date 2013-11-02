@@ -49,6 +49,7 @@
         
                 // Build the navigation
                 $.each($Site['navigation'], function($key, $value) {
+                    $value = $value + '?p=' + $key + '&t=' + $token;
                     $NavigationString = '<li><a href="' + $value + '" title="' + $key + '">' + $key + '</a></li>';
                    $("#primaryNavItems").append($NavigationString);           
                 });
