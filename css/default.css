@@ -394,7 +394,7 @@
 
 	#copyright
 	{
-		padding: 6em 0em;
+		padding: 0em 0em;
 		font-size: 0.70em;
 		letter-spacing: 0.20em;
 		text-align: center;
@@ -527,7 +527,7 @@
 		margin: 0 auto;
 		width:0;
 		height:0;
-		border-top: 15px solid #FFF;
+		border-top: 25px solid #FFF;
 		border-left: 50px solid transparent;
 		border-right: 50px solid transparent;
 		display: block;
