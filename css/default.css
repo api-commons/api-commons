@@ -7,7 +7,7 @@
 	{
 		margin: 0px;
 		padding: 0px;
-		background: #E9E9E9 url(images/bg01.png) repeat;
+		background: #E9E9E9 url(/img/bg01.png) repeat;
 		font-family: 'Open Sans', sans-serif;
 		font-size: 11pt;
 		font-weight: 400;
@@ -298,6 +298,7 @@
 		list-style: none;
 		line-height: normal;
 		text-align: center;
+		border: 1px solid #000;
 	}
 	
 	#menu li
