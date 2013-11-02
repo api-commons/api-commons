@@ -237,6 +237,7 @@
 	{
 		margin: 4em auto 4em auto;
 		text-transform: uppercase;
+		border: 1px solid #000;
 	}
 	
 	#logo h1
@@ -251,33 +252,6 @@
 		text-decoration: none;
 		font-size: 1.5em;
 		color: #292929;
-	}
-	
-	#logo span
-	{
-		color: #01A9DC;
-	}
-
-	#logo .icon-size
-	{
-		padding-top: 0.20em;
-		font-size: 2em !important;
-		color: #01A9DC;
-	}
-	
-	#logo p
-	{
-		margin: 0;
-		padding: 0 0 0 5em;
-		letter-spacing: 0.10em;
-		font-size: 0.90em;
-		color: #828282;
-	}
-
-	#logo p a
-	{
-		text-decoration: none;
-		color: #828282;
 	}
 
 
@@ -297,7 +271,6 @@
 		list-style: none;
 		line-height: normal;
 		text-align: center;
-		border: 1px solid #000;
 	}
 	
 	#menu li
