@@ -1,0 +1,15 @@
+{
+    "apis": {
+        "Businesses": "https://github.com/ongithub/businesses/blob/gh-pages/businesses",
+        "Events": "https://github.com/ongithub/events/blob/gh-pages/events",
+        "Images": "https://github.com/ongithub/images/blob/gh-pages/images",
+        "Jobs": "https://github.com/ongithub/jobs/blob/gh-pages/jobs",
+        "Offices": "https://github.com/ongithub/offices/blob/gh-pages/offices",
+        "Places": "https://github.com/ongithub/places/blob/gh-pages/places",
+        "People": "https://github.com/ongithub/people/blob/gh-pages/people",
+        "Press": "https://github.com/ongithub/press/blob/gh-pages/press",
+        "Products": "https://github.com/ongithub/products/blob/gh-pages/products",
+        "Programs": "https://github.com/ongithub/programs/blob/gh-pages/programs",
+        "Videos": "https://github.com/ongithub/videos/blob/gh-pages/videos",
+    }
+}
