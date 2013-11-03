@@ -46,11 +46,10 @@ overview: true
         if(!err) {
             
             $APIs = jQuery.parseJSON(data);
-            
-            // Build the Page Content
+
             $.each($APIs['apis'], function($key, $value) {
                 var template = $('#apiListingTemplate').html();
-                var html = Mustache.to_html(template, val);
+                var html = Mustache.to_html(template, $value);
                 $('#api-listing').append(html);                                     
             });  
          }          
