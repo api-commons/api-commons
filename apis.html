@@ -48,7 +48,7 @@ overview: true
             $APIs = jQuery.parseJSON(data);
             
             // Build the Page Content
-            $.each($Site['api'], function($key, $value) {
+            $.each($APIs['apis'], function($key, $value) {
                 var template = $('#apiListingTemplate').html();
                 var html = Mustache.to_html(template, val);
                 $('#api-listing').append(html);                                     
