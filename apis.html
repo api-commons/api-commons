@@ -19,8 +19,17 @@ overview: true
             <a href="{{url}}"><img src="{{image}}" width="50" align="left" style="padding: 15px;" /></a>
         </td>
         <td align="left">
-            <a href="{{url}}" style="color: #000;"><strong>{{name}}</strong></a> - {{description}}. <a href="{{url}}">view</a>.
+            <a href="{{url}}" style="color: #000;"><strong>{{name}}</strong></a>
         </td>
+        <td align="left">
+            {{description}}
+        </td>        
+        <td align="left" width="50">>
+            {{type}}
+        </td>
+        <td align="left" width="20">
+            <a href="{{url}}" target="_blank">view</a>.
+        </td>                
     </tr>                                                                                               
 </script>
 {% endraw %}
