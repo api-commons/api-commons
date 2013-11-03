@@ -1,15 +1,82 @@
 {
-    "apis": {
-        "Businesses": "https://github.com/ongithub/businesses/blob/gh-pages/businesses",
-        "Events": "https://github.com/ongithub/events/blob/gh-pages/events",
-        "Images": "https://github.com/ongithub/images/blob/gh-pages/images",
-        "Jobs": "https://github.com/ongithub/jobs/blob/gh-pages/jobs",
-        "Offices": "https://github.com/ongithub/offices/blob/gh-pages/offices",
-        "Places": "https://github.com/ongithub/places/blob/gh-pages/places",
-        "People": "https://github.com/ongithub/people/blob/gh-pages/people",
-        "Press": "https://github.com/ongithub/press/blob/gh-pages/press",
-        "Products": "https://github.com/ongithub/products/blob/gh-pages/products",
-        "Programs": "https://github.com/ongithub/programs/blob/gh-pages/programs",
-        "Videos": "https://github.com/ongithub/videos/blob/gh-pages/videos",
-    }
+    "api": [
+        {
+            "name": "Businesses",
+            "url": "https://github.com/ongithub/businesses/blob/gh-pages/businesses",
+            "type": "swagger",
+            "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-business-icon.png",
+            "tags": "business, directory"
+        },
+        {
+            "name": "Events",
+            "url": "https://github.com/ongithub/events/blob/gh-pages/events",
+            "type": "swagger",
+            "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-calendar.png",
+            "tags": "events, directory"
+        },
+        {
+            "name": "Images",
+            "url": "https://github.com/ongithub/images/blob/gh-pages/images",
+            "type": "swagger",
+            "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-camera.jpg",
+            "tags": "images, photo, gallery"
+        },
+        {
+            "name": "Jobs",
+            "url": "https://github.com/ongithub/jobs/blob/gh-pages/jobs",
+            "type": "swagger",
+            "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-job.jpg",
+            "tags": "jobs, employment"
+        },
+        {
+            "name": "Offices",
+            "url": "https://github.com/ongithub/offices/blob/gh-pages/offices",
+            "type": "swagger",
+            "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-office.png",
+            "tags": "offices, locations"
+        },
+        {
+            "name": "Places",
+            "url": "https://github.com/ongithub/places/blob/gh-pages/places",
+            "type": "swagger",
+            "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-places.png",
+            "tags": "places, locations"
+        },
+        {
+            "name": "People",
+            "url": "https://github.com/ongithub/people/blob/gh-pages/people",
+            "type": "swagger",
+            "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-people.png",
+            "tags": "people, person"
+        },
+        {
+            "name": "Press",
+            "url": "https://github.com/ongithub/press/blob/gh-pages/press",
+            "type": "swagger",
+            "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-news-icon.png",
+            "tags": "press, news"
+        },
+        {
+            "name": "Products",
+            "url": "https://github.com/ongithub/products/blob/gh-pages/products",
+            "type": "swagger",
+            "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-products.png",
+            "tags": "products, goods"
+        },
+        {
+            "name": "Programs",
+            "url": "https://github.com/ongithub/programs/blob/gh-pages/programs",
+            "type": "swagger",
+            "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-programs.png",
+            "tags": "programs, services"
+        },
+        {
+            "name": "Videos",
+            "url": "https://github.com/ongithub/videos/blob/gh-pages/videos",
+            "type": "swagger",
+            "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-video.png",
+            "tags": "movies, videos"
+        }
+    ],
+    "published": "06/29/2013"
 }
