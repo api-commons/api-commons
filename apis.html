@@ -11,46 +11,49 @@ overview: true
     </div>
 </div>
 
-  <script type="text/javascript">
+
+{% raw  %}
+<script id="apiListingTemplate" type="text/template">       
+    <li>
+        <a href="{{url}}"><img src="{{image}}" width="150" align="left" style="padding: 15px;" /></a>
+        <a href="{{url}}" style="color: #000;"><strong>{{name}}</strong></a> - {{description}}. <a href="{{url}}">view</a>.
+    </li>                                                                                               
+</script>
+{% endraw %}
+
+<script type="text/javascript">
   
-        function getUrlVar(key){
-            var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
-            return result && unescape(result[1]) || ""; 
-          }
-          
-        $ThisPage = getUrlVar('p');    
-        if($ThisPage==''){
-            $ThisPage = "Home";
-        }    
-        
-        $token = getUrlVar('t');
+    function getUrlVar(key){
+        var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
+        return result && unescape(result[1]) || ""; 
+      }
+      
+    $ThisPage = getUrlVar('p');    
+    if($ThisPage==''){
+        $ThisPage = "Home";
+    }    
     
-        var github = new Github({
-            token: $token,
-            auth: "oauth"
+    $token = getUrlVar('t');
+
+    var github = new Github({
+        token: $token,
+        auth: "oauth"
             });
-  
-        var repo = github.getRepo('kinlane', 'api-commons');
-        
-        repo.read('master','site.json',function(err, data){            
-            if(!err) {
-                
-                $Site = jQuery.parseJSON(data);
-        
-                // Build the navigation
-                $.each($Site['navigation'], function($key, $value) {
-                    $value = $value + '?p=' + $key + '&t=' + $token;
-                    $NavigationString = '<li><a href="' + $value + '" title="' + $key + '">' + $key + '</a></li>';
-                   $("#primaryNavItems").append($NavigationString);           
-                });
-                
-                // Build the Page Content
-                $.each($Site['pages'], function($key, $value) {
-                    if($key==$ThisPage){
-                        $("#pageBody").html($value);
-                        }             
-                });  
-             }          
-        });
-        
-    </script> 
+
+    var repo = github.getRepo('kinlane', 'api-commons');
+
+    repo.read('master','apis.json',function(err, data){            
+        if(!err) {
+            
+            $APIs = jQuery.parseJSON(data);
+            
+            // Build the Page Content
+            $.each($Site['api'], function($key, $value) {
+                var template = $('#apiListingTemplate').html();
+                var html = Mustache.to_html(template, val);
+                $('#api-listing').append(html);                                     
+            });  
+         }          
+    });
+    
+</script> 
