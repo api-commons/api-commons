@@ -1,5 +1,5 @@
 {
-    "api": [
+    "apis": [
         {
             "name": "Businesses",
             "description": "This is a simple API specification for a listing of businesses.",
