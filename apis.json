@@ -3,90 +3,156 @@
         {
             "name": "Businesses",
             "description": "This is a simple API specification for a listing of businesses.",
-            "url": "https://github.com/ongithub/businesses/blob/gh-pages/businesses",
-            "type": "swagger",
             "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-business-icon.png",
-            "keywords": "business, directory"
+            "keywords": "business, directory",
+            "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+            "attribution": "Kin Lane",
+            "links": [
+                {
+                    "type": "swagger",
+                    "url": "https://github.com/ongithub/businesses/blob/gh-pages/businesses"
+                }
+            ]
         },
         {
             "name": "Events",
             "description": "This is a simple API specification for a listing of events.",
-            "url": "https://github.com/ongithub/events/blob/gh-pages/events",
-            "type": "swagger",
             "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-calendar.png",
-            "keywords": "events, directory"
+            "keywords": "events, directory",
+            "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+            "attribution": "Kin Lane",
+            "links": [
+                {
+                    "type": "swagger",
+                    "url": "https://github.com/ongithub/events/blob/gh-pages/events"
+                }
+            ]
         },
         {
             "name": "Images",
             "description": "This is a simple API specification for a listing of photos and images.",
-            "url": "https://github.com/ongithub/images/blob/gh-pages/images",
-            "type": "swagger",
             "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-camera.jpg",
-            "keywords": "images, photo, gallery"
+            "keywords": "images, photo, gallery",
+            "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+            "attribution": "Kin Lane",
+            "links": [
+                {
+                    "type": "swagger",
+                    "url": "https://github.com/ongithub/images/blob/gh-pages/images"
+                }
+            ]
         },
         {
             "name": "Jobs",
             "description": "This is a simple API specification for a listing of jobs.",
-            "url": "https://github.com/ongithub/jobs/blob/gh-pages/jobs",
-            "type": "swagger",
             "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-job.jpg",
-            "keywords": "jobs, employment"
+            "keywords": "jobs, employment",
+            "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+            "attribution": "Kin Lane",
+            "links": [
+                {
+                    "type": "swagger",
+                    "url": "https://github.com/ongithub/jobs/blob/gh-pages/jobs"
+                }
+            ]
         },
         {
             "name": "Offices",
             "description": "This is a simple API specification for a listing of offices.",
-            "url": "https://github.com/ongithub/offices/blob/gh-pages/offices",
-            "type": "swagger",
             "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-office.png",
-            "keywords": "offices, locations"
+            "keywords": "offices, locations",
+            "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+            "attribution": "Kin Lane",
+            "links": [
+                {
+                    "type": "swagger",
+                    "url": "https://github.com/ongithub/offices/blob/gh-pages/offices"
+                }
+            ]
         },
         {
             "name": "Places",
             "description": "This is a simple API specification for a listing of places.",
-            "url": "https://github.com/ongithub/places/blob/gh-pages/places",
-            "type": "swagger",
             "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-places.png",
-            "keywords": "places, locations"
+            "keywords": "places, locations",
+            "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+            "attribution": "Kin Lane",
+            "links": [
+                {
+                    "type": "swagger",
+                    "url": "https://github.com/ongithub/places/blob/gh-pages/places"
+                }
+            ]
         },
         {
             "name": "People",
             "description": "This is a simple API specification for a listing of people.",
-            "url": "https://github.com/ongithub/people/blob/gh-pages/people",
-            "type": "swagger",
             "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-people.png",
-            "keywords": "people, person"
+            "keywords": "people, person",
+            "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+            "attribution": "Kin Lane",
+            "links": [
+                {
+                    "type": "swagger",
+                    "url": "https://github.com/ongithub/people/blob/gh-pages/people"
+                }
+            ]
         },
         {
             "name": "Press",
             "description": "This is a simple API specification for a listing of news and press releases.",
-            "url": "https://github.com/ongithub/press/blob/gh-pages/press",
-            "type": "swagger",
             "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-news-icon.png",
-            "keywords": "press, news"
+            "keywords": "press, news",
+            "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+            "attribution": "Kin Lane",
+            "links": [
+                {
+                    "type": "swagger",
+                    "url": "https://github.com/ongithub/press/blob/gh-pages/press"
+                }
+            ]
         },
         {
             "name": "Products",
             "description": "This is a simple API specification for a listing of products.",
-            "url": "https://github.com/ongithub/products/blob/gh-pages/products",
-            "type": "swagger",
             "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-products.png",
-            "keywords": "products, goods"
+            "keywords": "products, goods",
+            "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+            "attribution": "Kin Lane",
+            "links": [
+                {
+                    "type": "swagger",
+                    "url": "https://github.com/ongithub/products/blob/gh-pages/products"
+                }
+            ]
         },
         {
             "name": "Programs",
             "description": "This is a simple API specification for a listing of programs.",
-            "url": "https://github.com/ongithub/programs/blob/gh-pages/programs",
-            "type": "swagger",
             "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-programs.png",
-            "keywords": "programs, services"
+            "keywords": "programs, services",
+            "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+            "attribution": "Kin Lane",
+            "links": [
+                {
+                    "type": "swagger",
+                    "url": "https://github.com/ongithub/programs/blob/gh-pages/programs"
+                }
+            ]
         },
         {
             "name": "Videos",
             "description": "This is a simple API specification for a listing of videos.",
-            "url": "https://github.com/ongithub/videos/blob/gh-pages/videos",
-            "type": "swagger",
             "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-video.png",
-            "keywords": "movies, videos"
+            "keywords": "movies, videos",
+            "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+            "attribution": "Kin Lane",
+            "links": [
+                {
+                    "type": "swagger",
+                    "url": "https://github.com/ongithub/videos/blob/gh-pages/videos"
+                }
+            ]
         }
     ],
     "updated": "11/03/2013"
