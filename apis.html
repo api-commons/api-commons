@@ -24,7 +24,7 @@ overview: true
             {{description}}
         </td>        
         <td align="center" width="10%">
-            {{type}}
+            
         </td>
         <td align="center" width="5%">
             <a href="" target="_blank">view</a>
@@ -64,7 +64,10 @@ overview: true
                 var html = Mustache.to_html(template, $value);
                 $('#api-listing').append(html);                                     
             });  
-         }          
+         }  
+        else{
+            alert(err);
+        }        
     });
     
 </script> 
