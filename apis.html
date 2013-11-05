@@ -15,20 +15,19 @@ overview: true
 <script id="apiListingTemplate" type="text/template">       
     <tr>
         <td align="center" width="15%">
-            <a href=""><img src="{{image}}" width="50" align="left" style="padding: 15px;" /></a>
+           <img src="{{image}}" width="50" align="left" style="padding: 15px;" />
         </td>
         <td align="left">
-            <a href="" style="color: #000;"><strong>{{name}}</strong></a>
+            <strong>{{name}}</strong>
         </td>
         <td align="left">
             {{description}}
         </td>        
-        <td align="center" width="10%">
-            
-        </td>
-        <td align="center" width="5%">
-            <a href="" target="_blank">view</a>
-        </td>                
+        {{#definitions}}
+            <td align="center" width="10%">
+                <a href="{{url}}">{{type}}</a>
+            </td>
+        {{/definitions}}              
     </tr>                                                                                               
 </script>
 {% endraw %}
