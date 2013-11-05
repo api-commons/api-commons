@@ -1,8 +1,8 @@
 {
     "navigation": {
         "Home": "/index.html",
-        "FAQ": "/faq.html",
         "About": "/about.html",
+        "FAQ": "/faq.html",
         "Contact": "/contact.html",
         "APIs": "/apis.html"
     },
