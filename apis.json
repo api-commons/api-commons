@@ -133,7 +133,7 @@
             "keywords": "programs, services",
             "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
             "attribution": "Kin Lane",
-            "links": [
+            "definitions": [
                 {
                     "type": "swagger",
                     "url": "https://github.com/ongithub/programs/blob/gh-pages/programs"
