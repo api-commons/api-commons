@@ -479,7 +479,7 @@
 	{
 		padding-top: 0.50em;
 		font-size: 0.90em;
-		color: #858585;
+		color: #FFF;
 	}
 	
 	#portfolio .actions
@@ -492,7 +492,7 @@
 		overflow: hidden;
 		padding: 2em 5em 0em 5em;
 		text-align: center;
-		color: #858585;
+		color: #FFF;
 	}
 	
 	#portfolio .content p
