@@ -7,7 +7,8 @@ overview: true
 <div id="three-column" class="container">
     <div><span class="arrow-down"></span></div>
     <div id="pageBody" style="text-align: left; margin: 25px;">
-        
+        <h2>APIs</h2>
+        <table id='api-listing' style='padding-left:25px; padding-right:25px;' width='100%'></table>    
     </div>
 </div>
 
@@ -32,41 +33,12 @@ overview: true
 </script>
 {% endraw %}
 
-<script type="text/javascript">
-  
-    function getUrlVar(key){
-        var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
-        return result && unescape(result[1]) || ""; 
-      }
-      
-    $ThisPage = getUrlVar('p');    
-    if($ThisPage==''){
-        $ThisPage = "Home";
-    }    
-    
-    $token = getUrlVar('t');
-
-    var github = new Github({
-        token: $token,
-        auth: "oauth"
-            });
-
-    var repo = github.getRepo('kinlane', 'api-commons');
-
-    repo.read('master','apis.json',function(err, data){            
-        if(!err) {
-            
-            $APIs = jQuery.parseJSON(data);
-
+<script type="text/javascript"> 
+    $.getJSON('data/apis.json', function(data) {
             $.each($APIs['apis'], function($key, $value) {
                 var template = $('#apiListingTemplate').html();
                 var html = Mustache.to_html(template, $value);
                 $('#api-listing').append(html);                                     
-            });  
-         }  
-        else{
-            dodump(err);
-        }        
-    });
-    
+            }); 
+        });   
 </script> 
