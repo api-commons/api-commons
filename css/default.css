@@ -418,48 +418,8 @@
 		overflow: hidden;
 		width: 1050px;
 		padding: 0em 75px 6em 75px;
-		background: #292929 url(images/bg01.png) repeat;
-	}
+		background: #292929 url(/images/bg01.png) repeat;
 	
-	#portfolio ul
-	{
-		margin-bottom: 2em;
-		padding: 0;
-		list-style: none;
-	}
-	
-	#portfolio li
-	{
-		float: left;
-		width: 310px;
-		margin: 0px 10px;
-		padding: 10px 10px;
-	}
-	
-	#portfolio li img
-	{
-		border: 10px solid rgba(0,0,0,.10);
-	}
-	
-	#portfolio li a
-	{
-		-webkit-transition: all .25s ease-in-out;
-		-moz-transition: all .25s ease-in-out;
-		-ms-transition: all .25s ease-in-out;
-		-o-transition: all .25s ease-in-out;
-		transition: all .25s ease-in-out;
-		opacity: .5;
-	}
-
-	#portfolio li a:hover
-	{
-		-webkit-transition: all .25s ease-in-out;
-		-moz-transition: all .25s ease-in-out;
-		-ms-transition: all .25s ease-in-out;
-		-o-transition: all .25s ease-in-out;
-		transition: all .25s ease-in-out;
-		opacity: 1;
-	}
 	
 	#portfolio .current_item a
 	{
