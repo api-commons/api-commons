@@ -35,7 +35,7 @@ overview: true
 
 <script type="text/javascript"> 
     $.getJSON('data/apis.json', function(data) {
-            $.each($APIs['apis'], function($key, $value) {
+            $.each(data['apis'], function($key, $value) {
                 var template = $('#apiListingTemplate').html();
                 var html = Mustache.to_html(template, $value);
                 $('#api-listing').append(html);                                     
