@@ -1,6 +1,23 @@
+title : API Commons
+
+safe: true
+lsi: false
 pygments: true
-relative_permalinks: false
-gauges_id: 
-permalink: /news/:year/:month/:day/:title/
-excerpt_separator: 
-repository: https://github.com/kinlane/api-commons
+auto: true
+
+source: api-commons
+destination: api-commons
+
+permalink: /:categories/:year/:month/:day/:title 
+exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
+
+paginate: 1000
+paginate_path: "/blog/page:num"
+
+production_url : http://apicommons.org
+
+BASE_PATH : http://apicommons.org
+
+archive_path: /archive.html
+categories_path : /categories.html
+tags_path : /tags.html
