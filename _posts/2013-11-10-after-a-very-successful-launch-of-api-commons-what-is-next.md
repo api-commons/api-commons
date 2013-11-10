@@ -23,7 +23,7 @@ The news coverage of the API Commons launch was everything we hoped for:
 
 The feedback was 98% positive and we continue to welcome the constructive criticism we received and hope everyone will keep asking the hard questions. The positive feedback was more than we anticipated. We strongly feel that API Commons is a critical piece in moving the API space forward in a meaningful way, but it was great to hear that so many people can immediately see the same vision without any education about what is API Commons. It just speaks for itself.
 
-Now that we've launched, what is next?  The number of thing is get more API designs in the commons. We need you to step up and register your own API definitions, and help spread the word to other API providers around the importance for declaring their API definitions, as well.
+Now that we've launched, what is next?  The number one thing is get more API designs hung in the commons. We need you to step up and register your own API definitions, and help spread the word to other API providers about the importance for declaring their API definitions.
 
 We believe that API Commons will resonate within city, county, state and federal government first, but commercial API providers will quickly see the benefits of putting their valuable designs into the commons. 
 
