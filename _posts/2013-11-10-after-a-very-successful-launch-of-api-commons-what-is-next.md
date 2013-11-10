@@ -27,6 +27,6 @@ Now that we've launched, what is next?  The number one thing is get more API des
 
 We believe that API Commons will resonate within city, county, state and federal government first, but commercial API providers will quickly see the benefits of putting their valuable designs into the commons. 
 
-If you have any questions, concerns or anything you think would benefit the API Commons community please post it on the [API Commons Google Group](https://groups.google.com/forum/?hl=en#!forum/api-commons), on Twitter at [@apicommons](https://twitter.com/apicommons) or email us directly at [apicommons@gmail.com](mailto:apicommons@gmail.com). The conversation around API definitions and data models is just as important publishing them in the commons.
+If you have any questions, concerns or anything you think would benefit the API Commons community, please post it on the [API Commons Google Group](https://groups.google.com/forum/?hl=en#!forum/api-commons), on Twitter at [@apicommons](https://twitter.com/apicommons) or email us directly at [apicommons@gmail.com](mailto:apicommons@gmail.com). The conversation around API definitions and data models is just as important publishing them in the commons.
 
 API Commons is your project, so please help us make it the place everyone goes to discover, share and collaborate around the best API definitions and data models in the industry. 
