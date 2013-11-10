@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "After A Very Successful Launch Of API Commons, What is Next?"
 date: "2013-11-10 12:12:00 -0700"
 author: Kin Lane
