@@ -3,8 +3,12 @@ layout: post
 title: "After A Very Successful Launch Of API Commons, What is Next?"
 date: "2013-11-10 12:12:00 -0700"
 author: Kin Lane
+image: https://s3.amazonaws.com/kinlane-productions/api-commons/steve-willmott-defrag-api-commons.jpg
 ---
 
+#After A Very Successful Launch Of API Commons, What is Next?
+
+<img src="https://s3.amazonaws.com/kinlane-productions/api-commons/steve-willmott-defrag-api-commons.jpg" align="right" width="200" style="padding: 15px;" />
 We chose to launch [API Commons](http://apicommons.org) at [Defrag](http://defragcon.com/) because we felt it was precisely the audience that would understand what we are trying to do, and we were right! Attendees of Defrag represent the leading edge of the tech space and provided us with the critical feedback we were looking for, while also helping us spread the word out about the project to all of the people who truly mattered.
 
 The news coverage of the API Commons launch was everything we hoped for:
