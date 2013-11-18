@@ -6,7 +6,7 @@ author: Kin Lane
 image: https://s3.amazonaws.com/kinlane-productions/api-commons/api-commons-icon.png
 ---
 
-#After A Very Successful Launch Of API Commons, What is Next?
+#API Commons Is More Than Just The Definition, Specification or Schema
 
 <img src="https://s3.amazonaws.com/kinlane-productions/api-commons/api-commons-icon.png" align="right" width="200" style="padding: 15px;" />
 
