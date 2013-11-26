@@ -161,10 +161,11 @@
       "keywords": "legal,opinion,court,citations,US",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Free Law Project",
+      "url": "https://raw.github.com/freelawproject/court-listener-api-definition/master/api-commons-manifest.json",
       "definitions": [
         {
           "type": "swagger",
-          "url": "https://github.com/freelawproject/court-listener-api-definition/api-commons-manifest.json"
+          "url": "https://raw.github.com/freelawproject/court-listener-api-definition/master/api-commons-manifest.json"
         }
       ]
     }
