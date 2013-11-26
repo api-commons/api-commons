@@ -165,7 +165,7 @@
       "definitions": [
         {
           "type": "swagger",
-          "url": "https://raw.github.com/freelawproject/court-listener-api-definition/master/api-commons-manifest.json"
+          "url": "https://raw.github.com/freelawproject/court-listener-api-definition/master/court-listener-api.json"
         }
       ]
     }
