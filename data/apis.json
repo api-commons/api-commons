@@ -168,6 +168,20 @@
           "url": "https://raw.github.com/freelawproject/court-listener-api-definition/master/court-listener-api.json"
         }
       ]
+    },
+    {
+      "name": "Avoindata.net RESTful API",
+      "description": "API provides JSON formatted avoindata.net - Finnish Open data question-answer - service data including the questions, answers, categories and tags.",
+      "image": "http://avoindata.net/qa-theme/tovolt/images/opendata.png",
+      "keywords": "open data, Finland, community, question, answer",
+      "license": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "attribution": "Sisältö on Suomen avoimen datan yhteisön tuottamaa, avoindata.net",
+      "definitions": [
+        {
+          "type": "swagger",
+          "url": "https://github.com/locationofdefinition"
+        }
+      ]
     }
   ],
   "updated": "11/03/2013"
