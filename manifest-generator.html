@@ -1,0 +1,73 @@
+---
+layout: generator
+title: API Commons Manifest Generator
+overview: true
+---
+
+<h1>API Commons Manifest Generator</h1>
+
+<p>Using the form below you can create an API Commons manifest for your API(s). You can add multiple APIs as well as definitions for each APIs.</p>
+
+<p>Select the Generate JSON Manifest button when done and you can copy the generated JSON manifest and publish to your Github repository--API Commons will do the rest.</p> 
+<form role="form">
+    
+<h2>APIs:</h2>
+
+<div id="apis">    
+    <div style="padding-left: 25px; width:450px;">  
+        <hr />                            
+        <div class="form-group">
+            <label for="name_1">Name</label>
+            <input type="text" class="form-control" id="name_1" placeholder="Name of Your APIs">
+        </div>
+        <div class="form-group">
+            <label for="description_1">Description</label>
+            <input type="text" class="form-control" id="description_1" placeholder="Description of what your api does and the value it delivers.">
+        </div>
+        <div class="form-group">
+            <label for="image_1">Image</label>
+            <input type="text" class="form-control" id="image_1" placeholder="https://example.com/image.png">
+        </div>
+        <div class="form-group">
+            <label for="keywords_1">Keywords</label>
+            <input type="text" class="form-control" id="keywords_1" placeholder="keywords, tags, that, describe, api">
+        </div>
+        <div class="form-group">
+            <label for="license_1">License</label>
+            <input type="text" class="form-control" id="license_1" placeholder="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US">
+        </div>
+        <div class="form-group">
+            <label for="attribution_1">Attribution</label>
+            <input type="text" class="form-control" id="attribution_1" placeholder="Individual or Company Name">
+        </div>   
+        <div class="form-group">
+            <label for="attribution_1">URL</label>
+            <input type="text" class="form-control" id="attribution_1" placeholder="URL to this APIs manifest">
+        </div>      
+        <input type="hidden" id="definition-count_1" value="1" />   
+        <strong>Definitions: (<a href="#" onclick="newDefinition(1); return false;">add another</a>)</strong>                                                                                                                                                                       
+        <div id="definitions_1" style="width: 400px; padding-left: 15px;">  
+            <div class="form-group">
+                <label for="license_1_1">type</label>
+                <input type="text" class="form-control" id="definitions-type_1_1" placeholder="[type: ie Swagger, RAML, API Blueprint]">
+            </div>
+            <div class="form-group">
+                <label for="attribution_1_1">url</label>
+                <input type="text" class="form-control" id="definitions-url_1_1" placeholder="URL to API definition">
+            </div> 
+        </div>
+        <input type="hidden" id="endrow_1" value="1" />
+        <hr />
+    </div>
+    
+</div>                                           
+    
+</form>
+
+<button type="button" class="btn btn-default" onclick="newAPI(); return false;">Add New API</button>
+<button type="button" class="btn btn-default" onclick="generateJSON(); return false;">Generate JSON Manifest</button>
+                   
+<div id="OutputArea" style="display:none;">
+    <br />
+    <textarea cols="40" rows="5" id="source" style="border: 1px solid #000; width: 100%; height: 400px;"></textarea>
+</div> 
