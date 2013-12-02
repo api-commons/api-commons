@@ -182,7 +182,22 @@
           "url": "https://github.com/locationofdefinition"
         }
       ]
+    },
+    {
+      "name": "OpenEd API",
+      "description": "Search for resources for standards or by topic.  Get information on standards.  Get information on our area/subject taxonomy of resources.",
+      "image": "https://pbs.twimg.com/profile_images/378800000580251314/04fe1856596c096c1b5da337946aba45_bigger.png",
+      "keywords": "ed tech, resources, videos, games, K-12, flipped classroom, Common Core",
+      "license": "http://opensource.org/licenses/MIT",
+      "attribution": "OpenEd, Inc.",
+      "url": "http://docs.opened.apiary.io",
+      "definitions": [
+        {
+          "type": "[API Blueprint]",
+          "url": "https://github.com/apiaryio/api-blueprint"
+        }
+      ]
     }
   ],
-  "updated": "11/03/2013"
+  "updated": "12/01/2013"
 }
