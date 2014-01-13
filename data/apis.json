@@ -197,7 +197,22 @@
           "url": "https://github.com/apiaryio/api-blueprint"
         }
       ]
+    },
+    {
+      "name": "Free Application for Federal Student Aid (FAFSA) API",
+      "description": "An API interface for the Free Application for Federal Student Aid (FAFSA) form.",
+      "image": "https://2.gravatar.com/avatar/a4fe18d810096d5c7f6995dd5a2dd95c?d=https%3A%2F%2Fidenticons.github.com%2F45eb0bb660526b4e846b21c26bc199eb.png&r=x&s=440",
+      "keywords": "fafsa,financial aid, student aid, form",
+      "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+      "attribution": "Ed Data",
+      "url": "https://raw2.github.com/ed-data/fafsa-api/master/api-commons-manifest.json",
+      "definitions": [
+        {
+          "type": "Swagger",
+          "url": "https://raw2.github.com/ed-data/fafsa-api/master/Applications"
+        }
+      ]
     }
   ],
-  "updated": "12/01/2013"
+  "updated": "01/13/2014"
 }
