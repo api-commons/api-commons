@@ -220,6 +220,19 @@
 			"type": "[type: ie Swagger, RAML, API Blueprint]",
 			"url": "https://github.com/locationofdefinition2"
 		}]
+	},
+	{
+		"name": "My Cool API - 2",
+		"description": "Description of what your api does and the value it delivers.",
+		"image": "https://example.com/image.png",
+		"keywords": "keywords, tags, that, describe, api",
+		"license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+		"attribution": "Individual or Company Name",
+		"url": "URL to API Page",
+		"definitions": [{
+			"type": "[type: ie Swagger, RAML, API Blueprint]",
+			"url": "https://github.com/locationofdefinition2"
+		}]
 	}],
 	"updated": "01/13/2014"
 }
