@@ -1,5 +1,7 @@
 title : API Commons
 
+markdown: kramdown
+
 safe: true
 lsi: false
 pygments: true
