@@ -212,6 +212,21 @@
           "url": "https://raw2.github.com/ed-data/fafsa-api/master/Applications"
         }
       ]
+    },
+    {
+      "name": "Evercam.io",
+      "description": "Evercam.io makes it easier for you to connect your camera and share it with the world.",
+      "image": "http://www.evercam.io/img/logo.png",
+      "keywords": "video, camera, security",
+      "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+      "attribution": "Evercam.io",
+      "url": "https://api.evercam.io/docs/api/v1/swagger",
+      "definitions": [
+        {
+          "type": "swagger",
+          "url": "https://api.evercam.io/v1/swagger.json"
+        }
+      ]
     }
   ],
   "updated": "03/03/2014"
