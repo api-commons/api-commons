@@ -186,7 +186,7 @@
     {
       "name": "OpenEd API",
       "description": "Search for resources for standards or by topic.  Get information on standards.  Get information on our area/subject taxonomy of resources.",
-      "image": "https://pbs.twimg.com/profile_images/378800000580251314/04fe1856596c096c1b5da337946aba45_bigger.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions/open-ed/open-ed-logo-2.png",
       "keywords": "ed tech, resources, videos, games, K-12, flipped classroom, Common Core",
       "license": "http://opensource.org/licenses/MIT",
       "attribution": "OpenEd, Inc.",
