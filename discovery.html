@@ -1,0 +1,71 @@
+---
+layout: default
+title: About API Commons
+overview: true
+---
+
+<div id="three-column" class="container">
+    <div>
+        <span class="arrow-down"></span>
+    </div>
+    <div id="pageBody" style="text-align: left; margin: 25px;">
+        <h2>Discovery</h2>
+        <p>This is a proposed specification for an api.json file, which can be placed in the root of any domain, providing a single inventory of all API resources available within that domain, as well as pointers to other associated api.json files.</p>
+        
+        <ul class="mainlist">
+            <li>name</li>
+            <li>description</li>
+            <li>image</li>
+            <li>url</li>
+            <li>
+                apis (collection)
+                <ul class="mainlist">
+                    <li>name</li>
+                    <li>description</li>
+                    <li>image</li>
+                    <li>human-url</li>      
+                    <li>machine-url</li>      
+                    <li>tags</li>   
+                    <li>
+                        urls (collection)
+                        <ul class="mainlist">
+                            <li>type</li>
+                            <li>url</li>                            
+                        </ul>
+                    </li>  
+                    <li>
+                        contact (collection)
+                        <ul class="mainlist">
+                            <li>type</li>
+                            <li>url</li>                            
+                        </ul>
+                    </li> 
+                    <li>
+                        meta (collection)
+                        <ul class="mainlist">
+                            <li>key</li>
+                            <li>value</li>                            
+                        </ul>
+                    </li>                                                                                      
+                </ul>
+            </li>
+            <li>
+                include (collection)
+                <ul class="mainlist">
+                    <li>name</li>
+                    <li>url</li>                            
+                </ul>
+            </li> 
+            <li>
+                maintainer (collection)
+                <ul class="mainlist">
+                    <li>type</li>
+                    <li>url</li>                            
+                </ul>
+            </li> 
+            <li>tags</li>
+            <li>modified</li>                                    
+        </ul>
+        
+    </div>
+</div>
