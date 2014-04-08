@@ -1,0 +1,211 @@
+{
+    "apiVersion": "1.0",
+    "swaggerVersion": "1.2",
+    "basePath": "http://api.apicommons.org/",
+    "resourcePath": "/facilities",
+    "produces": [
+        "application/json"
+    ],
+    "apis": [
+        {
+            "path": "/facilities/",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Finds all facilities",
+                    "notes": "Returns a list of all facilities, allowing you to filter by state, type, region and keyword query. You can also apply a custom callback to the JSON response.",
+                    "nickname": "getFacilities",
+                    "type": "facilities",
+                    "parameters": [
+                        {
+                            "name": "query",
+                            "description": "a text query to search across facilities",
+                            "required": false,
+                            "allowMultiple": false,
+                            "dataType": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "state",
+                            "description": "a us state to filter facilities by",
+                            "required": false,
+                            "allowMultiple": false,
+                            "dataType": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "region",
+                            "description": "a region to filter facilities by. see region api resource for a list of values",
+                            "required": false,
+                            "allowMultiple": false,
+                            "dataType": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "type",
+                            "description": "a type of facility to filter by. see facility/types for values.",
+                            "required": false,
+                            "allowMultiple": false,
+                            "dataType": "string",
+                            "paramType": "query"
+                        },
+                        {
+                            "name": "callback",
+                            "description": "the callback for API call",
+                            "required": false,
+                            "allowMultiple": false,
+                            "dataType": "string",
+                            "paramType": "query"
+                        }
+                    ],
+                    "produces": [
+                        "application/json"
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "There are no Application Informations"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/facilities/{id}",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Retrieve a facility using it's ID",
+                    "notes": "Returns a facility detail",
+                    "type": "facilities",
+                    "nickname": "getFacility",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "description": "facility id for the facility, notice this is in the path, not a query variable",
+                            "required": false,
+                            "allowMultiple": false,
+                            "dataType": "integer",
+                            "paramType": "path"
+                        },
+                        {
+                            "name": "callback",
+                            "description": "the callback for API call",
+                            "required": false,
+                            "allowMultiple": false,
+                            "dataType": "string",
+                            "paramType": "query"
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 400,
+                            "message": "Invalid Application Information ID supplied"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Application Information not found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/facilities/types/",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Retrieve a listing of facility types.",
+                    "notes": "Returns a list of all facility types, You can also apply a custom callback to the JSON response.",
+                    "nickname": "getfacilitiestypes",
+                    "type": "facilitiestype",
+                    "parameters": [
+                        {
+                            "name": "callback",
+                            "description": "the callback name",
+                            "required": false,
+                            "allowMultiple": false,
+                            "dataType": "string",
+                            "paramType": "query"
+                        }
+                    ],
+                    "produces": [
+                        "application/json"
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "There are no Application Informations"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "Facilities": {
+            "id": "facilities",
+            "properties": {
+                "facility_id": {
+                    "type": "integer"
+                },
+                "station_id": {
+                    "type": "integer"
+                },
+                "division": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "region": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "postal_code": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "fax": {
+                    "type": "string"
+                },
+                "latitude": {
+                    "type": "string"
+                },
+                "longitude": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "facilitiestype": {
+            "id": "facilitiestype",
+            "properties": {
+                "type": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
