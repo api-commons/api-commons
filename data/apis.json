@@ -175,7 +175,7 @@
       "image": "http://avoindata.net/qa-theme/tovolt/images/opendata.png",
       "keywords": "open data, Finland, community, question, answer",
       "license": "https://creativecommons.org/licenses/by-sa/3.0/",
-      "attribution": "Sisältö on Suomen avoimen datan yhteisön tuottamaa, avoindata.net",
+      "attribution": "Sisu00e4ltu00f6 on Suomen avoimen datan yhteisu00f6n tuottamaa, avoindata.net",
       "definitions": [
         {
           "type": "swagger",
@@ -186,7 +186,7 @@
     {
       "name": "OpenEd API",
       "description": "Search for resources for standards or by topic.  Get information on standards.  Get information on our area/subject taxonomy of resources.",
-      "image": "https://pbs.twimg.com/profile_images/378800000580251314/04fe1856596c096c1b5da337946aba45_bigger.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions/open-ed/open-ed-logo-2.png",
       "keywords": "ed tech, resources, videos, games, K-12, flipped classroom, Common Core",
       "license": "http://opensource.org/licenses/MIT",
       "attribution": "OpenEd, Inc.",
@@ -212,7 +212,22 @@
           "url": "https://raw2.github.com/ed-data/fafsa-api/master/Applications"
         }
       ]
+    },
+    {
+      "name": "Evercam.io",
+      "description": "Evercam.io makes it easier for you to connect your camera and share it with the world.",
+      "image": "http://www.evercam.io/img/logo.png",
+      "keywords": "video, camera, security",
+      "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+      "attribution": "Evercam.io",
+      "url": "https://api.evercam.io/docs/api/v1/swagger",
+      "definitions": [
+        {
+          "type": "swagger",
+          "url": "https://api.evercam.io/v1/swagger.json"
+        }
+      ]
     }
   ],
-  "updated": "01/13/2014"
+  "updated": "03/03/2014"
 }
