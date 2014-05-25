@@ -21,6 +21,10 @@
           "type": "swagger",
           "url": "http://api.apicommons.org/swagger-spec.json"
         }
+        {
+          "type": "api-commons",
+          "url": "http://apicommons.org/api-commons-manifest.json"
+        }        
       ],
       "contact": [
         {
