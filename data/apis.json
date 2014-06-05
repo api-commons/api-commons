@@ -269,7 +269,7 @@
         "definitions": [
             {
                 "type": "swagger",
-                "url": "http://api.apievangelist.com/definitions/apis.json"
+                "url": "http://apicommons.org/api-commons-manifest.json"
             }
         ]
     }    
