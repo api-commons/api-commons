@@ -148,6 +148,7 @@
           "type": "swagger",
           "url": "https://raw.githubusercontent.com/ongithub/programs/gh-pages/programs"
         }
+      ]
     },
     {
       "name": "Videos",
@@ -255,20 +256,20 @@
       ]
     },
     {
-        "name": "API Commons",
-        "description": "The API that returns of list of APIs that are in the API Commons, and allows you to add a manifest for an API.",
-        "image": "https://s3.amazonaws.com/kinlane-productions/api-commons/api-commons-icon.png",
-        "keywords": "API, Copyright, Commons",
-        "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
-        "attribution": "API Commons",
-        "url": "http://apicommons.org/api-commons-manifest.json",
-        "definitions": [
-            {
-                "type": "swagger",
-                "url": "http://apicommons.org/api-commons-manifest.json"
-            }
-        ]
-    }    
+      "name": "API Commons",
+      "description": "The API that returns of list of APIs that are in the API Commons, and allows you to add a manifest for an API.",
+      "image": "https://s3.amazonaws.com/kinlane-productions/api-commons/api-commons-icon.png",
+      "keywords": "API, Copyright, Commons",
+      "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+      "attribution": "API Commons",
+      "url": "http://apicommons.org/api-commons-manifest.json",
+      "definitions": [
+        {
+          "type": "swagger",
+          "url": "http://apicommons.org/api-commons-manifest.json"
+        }
+      ]
+    }
   ],
   "updated": "05/07/2014"
 }
