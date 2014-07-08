@@ -7,10 +7,11 @@
       "keywords": "business, directory",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
+      "url": "https://raw.githubusercontent.com/ongithub/businesses/gh-pages/api-commons-manifest.json",
       "definitions": [
         {
           "type": "swagger",
-          "url": "https://github.com/ongithub/businesses/blob/gh-pages/businesses"
+          "url": "https://raw.githubusercontent.com/ongithub/businesses/gh-pages/businesses"
         }
       ]
     },
@@ -21,10 +22,11 @@
       "keywords": "events, directory",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
+      "url": "https://raw.githubusercontent.com/ongithub/events/gh-pages/api-commons-manifest.json",
       "definitions": [
         {
           "type": "swagger",
-          "url": "https://github.com/ongithub/events/blob/gh-pages/events"
+          "url": "https://raw.githubusercontent.com/ongithub/events/gh-pages/events"
         }
       ]
     },
@@ -35,10 +37,11 @@
       "keywords": "images, photo, gallery",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
+      "url": "https://raw.githubusercontent.com/ongithub/images/gh-pages/api-commons-manifest.json",
       "definitions": [
         {
           "type": "swagger",
-          "url": "https://github.com/ongithub/images/blob/gh-pages/images"
+          "url": "https://raw.githubusercontent.com/ongithub/images/gh-pages/images"
         }
       ]
     },
@@ -49,10 +52,11 @@
       "keywords": "jobs, employment",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
+      "url": "https://raw.githubusercontent.com/ongithub/jobs/gh-pages/api-commons-manifest.json",
       "definitions": [
         {
           "type": "swagger",
-          "url": "https://github.com/ongithub/jobs/blob/gh-pages/jobs"
+          "url": "https://raw.githubusercontent.com/ongithub/jobs/gh-pages/jobs"
         }
       ]
     },
@@ -63,10 +67,11 @@
       "keywords": "offices, locations",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
+      "url": "https://raw.githubusercontent.com/ongithub/offices/gh-pages/api-commons-manifest.json",
       "definitions": [
         {
           "type": "swagger",
-          "url": "https://github.com/ongithub/offices/blob/gh-pages/offices"
+          "url": "https://raw.githubusercontent.com/ongithub/offices/gh-pages/offices"
         }
       ]
     },
@@ -77,10 +82,11 @@
       "keywords": "places, locations",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
+      "url": "https://raw.githubusercontent.com/ongithub/places/gh-pages/api-commons-manifest.json",
       "definitions": [
         {
           "type": "swagger",
-          "url": "https://github.com/ongithub/places/blob/gh-pages/places"
+          "url": "https://raw.githubusercontent.com/ongithub/places/gh-pages/places"
         }
       ]
     },
@@ -91,10 +97,11 @@
       "keywords": "people, person",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
+      "url": "https://raw.githubusercontent.com/ongithub/people/gh-pages/api-commons-manifest.json",
       "definitions": [
         {
           "type": "swagger",
-          "url": "https://github.com/ongithub/people/blob/gh-pages/people"
+          "url": "https://raw.githubusercontent.com/ongithub/people/gh-pages/people"
         }
       ]
     },
@@ -105,10 +112,11 @@
       "keywords": "press, news",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
+      "url": "https://raw.githubusercontent.com/ongithub/press/gh-pages/api-commons-manifest.json",
       "definitions": [
         {
           "type": "swagger",
-          "url": "https://github.com/ongithub/press/blob/gh-pages/press"
+          "url": "https://raw.githubusercontent.com/ongithub/press/gh-pages/press"
         }
       ]
     },
@@ -119,10 +127,11 @@
       "keywords": "products, goods",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
+      "url": "https://raw.githubusercontent.com/ongithub/products/gh-pages/api-commons-manifest.json",
       "definitions": [
         {
           "type": "swagger",
-          "url": "https://github.com/ongithub/products/blob/gh-pages/products"
+          "url": "https://raw.githubusercontent.com/ongithub/products/gh-pages/products"
         }
       ]
     },
@@ -133,12 +142,12 @@
       "keywords": "programs, services",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
+      "url": "https://raw.githubusercontent.com/ongithub/programs/gh-pages/api-commons-manifest.json",
       "definitions": [
         {
           "type": "swagger",
-          "url": "https://github.com/ongithub/programs/blob/gh-pages/programs"
+          "url": "https://raw.githubusercontent.com/ongithub/programs/gh-pages/programs"
         }
-      ]
     },
     {
       "name": "Videos",
@@ -147,10 +156,11 @@
       "keywords": "movies, videos",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
+      "url": "https://raw.githubusercontent.com/ongithub/videos/gh-pages/api-commons-manifest.json",
       "definitions": [
         {
           "type": "swagger",
-          "url": "https://github.com/ongithub/videos/blob/gh-pages/videos"
+          "url": "https://raw.githubusercontent.com/ongithub/videos/gh-pages/videos"
         }
       ]
     },
@@ -170,30 +180,16 @@
       ]
     },
     {
-      "name": "Avoindata.net RESTful API",
-      "description": "API provides JSON formatted avoindata.net - Finnish Open data question-answer - service data including the questions, answers, categories and tags.",
-      "image": "http://avoindata.net/qa-theme/tovolt/images/opendata.png",
-      "keywords": "open data, Finland, community, question, answer",
-      "license": "https://creativecommons.org/licenses/by-sa/3.0/",
-      "attribution": "Sisu00e4ltu00f6 on Suomen avoimen datan yhteisu00f6n tuottamaa, avoindata.net",
-      "definitions": [
-        {
-          "type": "swagger",
-          "url": "https://github.com/locationofdefinition"
-        }
-      ]
-    },
-    {
       "name": "OpenEd API",
       "description": "Search for resources for standards or by topic.  Get information on standards.  Get information on our area/subject taxonomy of resources.",
       "image": "https://s3.amazonaws.com/kinlane-productions/open-ed/open-ed-logo-2.png",
       "keywords": "ed tech, resources, videos, games, K-12, flipped classroom, Common Core",
       "license": "http://opensource.org/licenses/MIT",
       "attribution": "OpenEd, Inc.",
-      "url": "http://docs.opened.apiary.io",
+      "url": "http://docs.opened.apiary.io/#apicommons",
       "definitions": [
         {
-          "type": "[API Blueprint]",
+          "type": "API Blueprint",
           "url": "https://github.com/apiaryio/api-blueprint"
         }
       ]
@@ -220,7 +216,7 @@
       "keywords": "video, camera, security",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Evercam.io",
-      "url": "https://api.evercam.io/docs/api/v1/swagger",
+      "url": "https://raw.githubusercontent.com/evercam/resources/master/api-commons-manifest.json",
       "definitions": [
         {
           "type": "swagger",
@@ -235,7 +231,7 @@
       "keywords": "energy, power, electricity",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "EnergyOS",
-      "url": "http://www.energyos.org",
+      "url": "https://raw.githubusercontent.com/energyos/OpenESPI-GreenButton-API-Documentation/6c04effde7d2609ebabe13cee3f908c71564f19c/API/api-commons-manifest.json",
       "definitions": [
         {
           "type": "Swagger",
