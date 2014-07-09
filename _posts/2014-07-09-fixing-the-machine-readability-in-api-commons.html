@@ -1,0 +1,24 @@
+---
+layout: post
+title: 'Fixing The Machine Readability in API Commons'
+url: http://apicommons.org/2014/07/09/fix_machine_readability_in_api_commons.php/
+image: https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-machine-learning.png
+---
+
+<h2>Fixing The Machine Readability in API Commons</h2>
+<p><p>
+     <img class="c1" src="https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-machine-learning.png" alt="" width="250" align="right" />
+</p>
+<p>
+     When I first published 11 simple API definitions, I had developed using <a href="http://schema.org/">schema.org</a>, into the <a href="http://apicommons.org/">API Commons</a>, I made a mistake when I referenced the Swagger specifications for each of the APIs. I linked to the machine readable Swagger spec, but not the raw JSON stored on Github, errorneously I linked directly to the Github page.
+</p>
+<p>
+     I want the <a href="https://raw.githubusercontent.com/api-commons/api-commons/gh-pages/data/apis.json">machine readable API datastore</a>, at API Commons, which is used to drive the <a href="http://apicommons.org/apis.html">API listing page</a>, to be completely machine readable, referencing all APIs, their machine readable API Commons manifest, as well as machine readable API definition. As the smart folks over at <a href="https://www.apimatic.io/">APIMatic</a> pointed out to me, I had been flip-flopping on this. Some of my later entries were machine readable pointers, but my earlier entries were not.
+</p>
+<p>
+     Now all of the entries in the commons, have machine readable references to both their API Commons manifest, and API definition. I've also added a “<a href="http://apicommons.org/format.html">format</a>” page, to explain each of the fields, in the the API Commons manifest format, to help API providers better understand, and not make the same mistake I made.
+</p>
+<p>
+     The API Commons manifest is meant to be a standalone, machine readable pointer to an APIs central truth (a machine readable API definition), and associated CC-BY-SA or CC0 licensing, and now, I think we have achieved our original goals around making this happen.
+</p></p>
+
