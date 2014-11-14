@@ -245,6 +245,19 @@
 			"type": "[type: ie Swagger, RAML, API Blueprint]",
 			"url": "https://github.com/locationofdefinition"
 		}]
+	},
+	{
+		"name": "My Cool APIs",
+		"description": "Description of what your api does and the value it delivers.",
+		"image": "https://example.com/image.png",
+		"keywords": "keywords, tags, that, describe, api",
+		"license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
+		"attribution": "Individual or Company Name",
+		"url": "http://api.apicommons.org/v1/apis/",
+		"definitions": [{
+			"type": "[type: ie Swagger, RAML, API Blueprint]",
+			"url": "https://github.com/locationofdefinition"
+		}]
 	}],
 	"updated": "11/13/2014"
 }
