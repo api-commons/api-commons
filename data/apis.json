@@ -247,7 +247,7 @@
       "keywords": "Sensor, Hardware, Firmware, Readings, Connected, Internet of Things, IoT, M2M",
       "license": "http://creativecommons.org/licenses/by/4.0/",
       "attribution": "relayr (iThings4U GmbH)",
-      "url": "https://github.com/relayr/SensorDefinitionAPI/api-commons-manifest.json",
+      "url": "https://github.com/relayr/SensorDefinitionAPI",
       "definitions": [
         {
           "type": "API Blueprint",
