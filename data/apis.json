@@ -3,7 +3,7 @@
     {
       "name": "Businesses",
       "description": "This is a simple API specification for a listing of businesses.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-business-icon.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-business-icon.png",
       "keywords": "business, directory",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
@@ -18,7 +18,7 @@
     {
       "name": "Events",
       "description": "This is a simple API specification for a listing of events.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-calendar.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-calendar.png",
       "keywords": "events, directory",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
@@ -33,7 +33,7 @@
     {
       "name": "Images",
       "description": "This is a simple API specification for a listing of photos and images.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-camera.jpg",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-camera.jpg",
       "keywords": "images, photo, gallery",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
@@ -48,7 +48,7 @@
     {
       "name": "Jobs",
       "description": "This is a simple API specification for a listing of jobs.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-job.jpg",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-job.jpg",
       "keywords": "jobs, employment",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
@@ -63,7 +63,7 @@
     {
       "name": "Offices",
       "description": "This is a simple API specification for a listing of offices.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-office.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-office.png",
       "keywords": "offices, locations",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
@@ -78,7 +78,7 @@
     {
       "name": "Places",
       "description": "This is a simple API specification for a listing of places.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-places.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-places.png",
       "keywords": "places, locations",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
@@ -93,7 +93,7 @@
     {
       "name": "People",
       "description": "This is a simple API specification for a listing of people.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-people.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-people.png",
       "keywords": "people, person",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
@@ -108,7 +108,7 @@
     {
       "name": "Press",
       "description": "This is a simple API specification for a listing of news and press releases.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-news-icon.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-news-icon.png",
       "keywords": "press, news",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
@@ -123,7 +123,7 @@
     {
       "name": "Products",
       "description": "This is a simple API specification for a listing of products.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-products.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-products.png",
       "keywords": "products, goods",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
@@ -138,7 +138,7 @@
     {
       "name": "Programs",
       "description": "This is a simple API specification for a listing of programs.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-programs.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-programs.png",
       "keywords": "programs, services",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
@@ -153,7 +153,7 @@
     {
       "name": "Videos",
       "description": "This is a simple API specification for a listing of videos.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/bw-icons/bw-video.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-video.png",
       "keywords": "movies, videos",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "Kin Lane",
@@ -183,7 +183,7 @@
     {
       "name": "OpenEd API",
       "description": "Search for resources for standards or by topic.  Get information on standards.  Get information on our area/subject taxonomy of resources.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/open-ed/open-ed-logo-2.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/open-ed/open-ed-logo-2.png",
       "keywords": "ed tech, resources, videos, games, K-12, flipped classroom, Common Core",
       "license": "http://opensource.org/licenses/MIT",
       "attribution": "OpenEd, Inc.",
@@ -258,7 +258,7 @@
     {
       "name": "API Commons",
       "description": "The API that returns of list of APIs that are in the API Commons, and allows you to add a manifest for an API.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/api-commons/api-commons-icon.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-icon.png",
       "keywords": "API, Copyright, Commons",
       "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
       "attribution": "API Commons",
