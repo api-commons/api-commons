@@ -3,7 +3,7 @@
         {
             "name": "API Commons",
             "description": "The API that returns of list of APIs that are in the API Commons, and allows you to add a manifest for an API.",
-            "image": "https://s3.amazonaws.com/kinlane-productions/api-commons/api-commons-icon.png",
+            "image": "https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-icon.png",
             "keywords": "API, Copyright, Commons",
             "license": "http://creativecommons.org/licenses/by-sa/3.0/deed.en_US",
             "attribution": "API Commons",

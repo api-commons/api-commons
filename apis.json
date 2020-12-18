@@ -1,7 +1,7 @@
 {
   "name": "API Commons",
   "description": "An API for adding and pulling APIs that are in the commons.",
-  "image": "https://s3.amazonaws.com/kinlane-productions/api-commons/api-commons-icon.png",
+  "image": "https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-icon.png",
   "url": "https://api-commons.3scale.net/docs",
   "created": "04/07/2014",
   "modified": "07/09/2014",
@@ -10,7 +10,7 @@
     {
       "name": "API Commons",
       "description": "An API for adding and pulling APIs that are in the commons.",
-      "image": "https://s3.amazonaws.com/kinlane-productions/api-commons/api-commons-icon.png",
+      "image": "https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-icon.png",
       "human-url": "https://api-commons.3scale.net/docs",
       "machine-url": "http://api.apicommons.org/swagger-spec.json",
       "tags": "API, Application Programming Interface, Copyright",
@@ -26,7 +26,7 @@
         {
           "type": "apicommonsmanifest",
           "url": "http://apicommons.org/api-commons-manifest.json"
-        }        
+        }
       ],
       "contact": [
         {
