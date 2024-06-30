@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>API Commons - Base</title>
+    <link href="http://localhost:4000/assets/bootstrap.min.css" rel="stylesheet">
+    <link href="http://localhost:4000/assets/sticky-footer.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">API Commons</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/">Home</a>
+            </li>   
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="https://apisjson.org" target="_blank">APIs.json</a>
+            </li>             
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/common/">Common</a>
+            </li> 
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/community/">Community</a>
+            </li> 
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/overlays/">Overlays</a>
+            </li>  
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/base/">Base</a>
+            </li>   
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/blueprints/">Blueprints</a>
+            </li>                          
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/about/">About</a>
+            </li>                                                                             
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!--
+    <div class="alert alert-danger" role="alert" style="text-align: center;">
+      This Search is Exploratory -- <a href="https://github.com/api-search/explore/issues">Submit An Issue With Any Questions</a>!
+    </div>
+    -->
+    <div class="container my-5">
+      <h2>What Are the Base APIs That Should Be Common?</h2>
+<p>These are APIs for the most common resources that are essentially API commodities. These are the APis we shouldn't be competing upon and should just exist, allowing for standardization and interoperability when it comes to the most fundamental building blocks of our applications..</p>
+
+<table width="100%">
+      
+	<tr>
+		<td align="center">
+			<a href="/base/accounts/"><img src="/images/accounts.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Accounts</strong> - We need an account for everything these days, and if you are a developer you likely have many accounts associated with your APIs. This business of APIs is the first place we should be standardizing and stopping reinventing the wheels and be utilizing the same base account API for every new service we launch, helping streamlining onboarding of users and API consumer accounts.
+		</td>
+		<td width="10%" align="center">
+			<a href="/base/accounts/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/base/images/"><img src="/images/images.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Images API</strong> - Images have been done, and there is no reason we shouldn't all be using the same image API for all of the base images of our applications. A common images API would go a long way towards helping companies focus on what they do best, and not reinventing the wheel, while also promoting interoperability.
+		</td>
+		<td width="10%" align="center">
+			<a href="/base/images/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/base/train-travel/"><img src="/images/train-travel.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Train Travel</strong> - The Train Travel OpenAPI example from Bump.sh, providing a real world example of an API that can be used as a baseline for your API. It is a modern, realistic, and functional API that provides a rich starting point for anyone learning OpenAPI and looking to apply to their own APIs.
+		</td>
+		<td width="10%" align="center">
+			<a href="/base/train-travel/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/base/videos/"><img src="/images/videos.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Videos API</strong> - Videos have been done, and there is no reason we shouldn't all be using the same image API for all of the base videos of our applications. A common videos API would go a long way towards helping companies focus on what they do best, and not reinventing the wheel, while also promoting interoperability.
+		</td>
+		<td width="10%" align="center">
+			<a href="/base/videos/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+
+</table>
+
+    </div>
+
+    <script src="http://localhost:4000/assets/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="http://localhost:4000/assets/js-yaml.min.js"></script>
+
+    <footer class="footer">
+      <div class="container">
+        <table cellspacing="3" cellpadding="2" align="center">
+          <tr>
+            <td><a href="https://apis.io" style="color: #000;">APIs.io</a></td>
+            <td>|</td>
+            <td><a href="https://apisjson.org" style="color: #000;">APIs.json</a></td>
+            <td>|</td>
+            <td><a href="https://github.com/api-commons/api-commons/issues" style="color: #000;">Issues</a></td>
+            <td>|</td>
+            <td><a href="blog/" style="color: #000;">Blog</a></td>
+            <td>|</td>
+            <td><a href="mailto:team@apis.io" style="color: #000;">Email</a></td>
+          </tr>
+        </table>
+      </div>
+    </footer>
+
+  </body>
+</html>

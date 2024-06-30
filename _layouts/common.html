@@ -1,0 +1,12 @@
+---
+layout: default
+---
+<img src="{{ page.image }}" align="right" width="100">
+<h2>{{ page.title }}</h2>
+<p>{{ page.description }}</p>
+<ul>
+{% for tag in page.tags %}
+    <li>{{ tag }}</li>
+{% endfor %}
+</ul>
+<p align="center"><a href="/common/"><strong>All Common Properties</strong></a></p>

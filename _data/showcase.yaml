@@ -1,0 +1,21 @@
+---
+- view_sort: A
+  name: Fitbit
+  identifier: openapi
+  url: https://www.fitbit.com/apis.json
+  image: https://kinlane-productions2.s3.amazonaws.com/apis-json/showcase/fitbit-logo.png
+- view_sort: B
+  name: Plivo
+  identifier: openapi
+  url: https://www.plivo.com/apis.json
+  image: https://kinlane-productions2.s3.amazonaws.com/apis-json/showcase/plivo-logo.png
+- view_sort: C
+  name: Neutrino API
+  identifier: postman
+  url: https://www.neutrinoapi.com/apis.json
+  image: https://kinlane-productions2.s3.amazonaws.com/apis-json/showcase/neutrino-api.png
+- view_sort: D
+  name: Actuity Scheduling
+  identifier: json-schema
+  url: https://acuityscheduling.com/apis.json
+  image: https://kinlane-productions2.s3.amazonaws.com/apis-json/showcase/actuity-scheduling.png

@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>API Commons - Blog</title>
+    <link href="http://localhost:4000/assets/bootstrap.min.css" rel="stylesheet">
+    <link href="http://localhost:4000/assets/sticky-footer.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">API Commons</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/">Home</a>
+            </li>   
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="https://apisjson.org" target="_blank">APIs.json</a>
+            </li>             
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/common/">Common</a>
+            </li> 
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/community/">Community</a>
+            </li> 
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/overlays/">Overlays</a>
+            </li>  
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/base/">Base</a>
+            </li>   
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/blueprints/">Blueprints</a>
+            </li>                          
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/about/">About</a>
+            </li>                                                                             
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!--
+    <div class="alert alert-danger" role="alert" style="text-align: center;">
+      This Search is Exploratory -- <a href="https://github.com/api-search/explore/issues">Submit An Issue With Any Questions</a>!
+    </div>
+    -->
+    <div class="container my-5">
+      
+
+<!-- Tools -->
+<section>
+  <header class="main">
+    <h2></h2>
+  </header>
+  <p></p>
+	
+  
+	 	
+    
+			
+        <h3><a href="/2015/02/04/what-exactly-is-api-commons/">What Exactly Is API Commons?</a></h3>
+        <span class="post-date">04 Feb 2015</span>
+        <p><a href="http://apicommons.org/"><img style="padding: 15px;" src="https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-logo.png" alt="" width="300" align="right" /></a></p>
+<p>As I travel around talking to folks about APIs, I spend as much time as I can educating folks about <a href="http://apicommons.org/">API Commons</a>, and I&rsquo;m constantly reminded how little people, who have even heard, and read about API Commons, really understand what it is. With this in mind, I will be regularly publishing examples of what API Commons is, to help onboard everyone to mine and Steve's (<a href="https://twitter.com/njyx">@njyx</a>) vision of API Commons.</p>
+<p><span style="text-decoration: underline;">API Commons is a machine readable pointer to the license of your API</span>. As I talk with folks, and watch <a href="https://www.youtube.com/watch?v=FJ3-yFWYtrk">videos like this one at APICon in UK</a>, I realize how many misconceptions there are about it. Many folks emphasize the Creative Commons license we&rsquo;ve chosen, or the listing of APIs we&rsquo;ve had added to our version of the commons, by publishing an API Commons manifest, which references a CC-BY or CC0 license.</p>
+<p>If you feel your API should be covered under an open source license, or covered by your patent, or not covered by any sort of license, create an API Commons manifest that points to your API, references your license, and you&rsquo;ve created your own commons. Now you can spider, and aggregate any API providers who have used the same license, into your own definition of what is the API Commons.</p>
+<p>API Commons is not an API directory. API Commons is not a push for copyright in APIs. API Commons is a machine readable format for taking a stance on the licensing (or not) of your API definitions, and data models. Please join us today, by <a href="http://apicommons.org/">letting us know your stance on licensing of your API</a>, we&rsquo;ve love to hear your voice, and better understand your stance.</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2015/02/04/what-exactly-is-api-commons/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2014/07/16/support-for-only-two-creative-commons-licenses-in-the-api-commons/">Support For Only Two Creative Commons Licenses In The API Commons </a></h3>
+        <span class="post-date">16 Jul 2014</span>
+        <p><a href="http://creativecommons.org/"><img style="padding: 15px;" src="https://s3.amazonaws.com/kinlane-productions2/api-evangelist/creative-commons/cc.logo.large.png" alt="" width="225" align="right" /></a></p>
+<p>When we first conceived <a href="http://apicommons.org">API Commons</a>, we were a little fuzzy about which of Creative Commons licenses API providers should apply to their API definitions. As long as a provider took a stance on API copyright around your API definitions, applied a Creative Commons license, we considered an API &ldquo;in the commons&rdquo;.</p>
+<p>As time has evolved, and we've had time to reflect on the <a href="https://www.eff.org/deeplinks/2014/05/dangerous-ruling-oracle-v-google-federal-circuit-reverses-sensible-lower-court">decision that the Federal Circuit Court handed down in the Oracle v Google case</a>, we've adjusted our vision of what Creative Commons licenses should &nbsp;be applied to an API, and still be considered as part of the "API Commons".</p>
+<p>Moving forward the API Commons will accept two types of Creative Commons license:</p>
+<ul class="mainlist">
+<li><strong><a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a></strong> - At a minimum we want API designers to be recognized for their work, and other designers to recognize original authorship when relevant.</li>
+<li><strong><a href="http://creativecommons.org/about/cc0">CC0</a></strong> - Ideally all API designers put their API definitions into the public domain, and wave all their copyright around API designs.</li>
+</ul>
+<p>We feel pretty strongly that API definitions have to remain openly licensed, re-usable, even for commercial purposes. In a perfect world we wouldn't have to apply copyright at all, but in light of the Oracle v Google case we should take a proactive stance, and apply the copyright license that make the most sense.</p>
+<p><a href="http://apicommons.org">API Commons</a> acknowledges the rights of API designers to recognized for their works, but strongly believe that for the API economy to grow and flourish, API definitions have to be re-usable, shareable and interoperable&mdash;publish your APIs into the API Commons today.</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2014/07/16/support-for-only-two-creative-commons-licenses-in-the-api-commons/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2014/07/09/fixing-the-machine-readability-in-api-commons/">Fixing The Machine Readability in API Commons</a></h3>
+        <span class="post-date">09 Jul 2014</span>
+        <p><img style="padding: 10px;" src="https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-machine-learning.png" alt="" width="250" align="right" /></p>
+<p>When I first published 11 simple API definitions, I had developed using <a href="http://schema.org/">schema.org</a>, into the <a href="http://apicommons.org/">API Commons</a>, I made a mistake when I referenced the Swagger specifications for each of the APIs. I linked to the machine readable Swagger spec, but not the raw JSON stored on Github, errorneously I linked directly to the Github page.</p>
+<p>I want the <a href="https://raw.githubusercontent.com/api-commons/api-commons/gh-pages/data/apis.json">machine readable API datastore</a>, at API Commons, which is used to drive the <a href="http://apicommons.org/apis.html">API listing page</a>, to be completely machine readable, referencing all APIs, their machine readable API Commons manifest, as well as machine readable API definition. As the smart folks over at <a href="https://www.apimatic.io/">APIMatic</a> pointed out to me, I had been flip-flopping on this. Some of my later entries were machine readable pointers, but my earlier entries were not.</p>
+<p>Now all of the entries in the commons, have machine readable references to both their API Commons manifest, and API definition. I've also added a &ldquo;<a href="http://apicommons.org/format.html">format</a>&rdquo; page, to explain each of the fields, in the the API Commons manifest format, to help API providers better understand, and not make the same mistake I made.</p>
+<p>The API Commons manifest is meant to be a standalone, machine readable pointer to an APIs central truth (a machine readable API definition), and associated CC-BY-SA or CC0 licensing, and now, I think we have achieved our original goals around making this happen.</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2014/07/09/fixing-the-machine-readability-in-api-commons/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2014/06/05/api-commons-added-to-the-api-commons/">API Commons Added To The API Commons</a></h3>
+        <span class="post-date">05 Jun 2014</span>
+        <p><img style="padding: 15px;" src="https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-icon.png" alt="" width="200" align="right" /></p>
+<p>Even with the risk of possible creating some sort of API wormhole, I just added the <a href="http://apicommons.org/apis.html">API Commons API to the API Commons</a>. The API for adding and searching for APIs that are in the commons, now has an <a href="http://apicommons.org/api-commons-manifest.json">API definition</a> that is publicly declared as part of the commons, with a CC-BY license.</p>
+<p>It just makes sense to have the API for the commons in the commons, so anyone can establish their own commons, complete with common API. 3Scale and API Evangelist are taking a particular stance on the API copyright discussion, and if our approach doesn&rsquo;t match your vision of the API economy, we encourage you to fork and establish your own commons.</p>
+<p>We only launched the API Commons API two months ago, so the definition is still fairly new, and we would love to hear your thoughts on the API definition, and the underlying format of the API Commons Manifest. It is up to all of us to help keep the surface area of the API economy as open, accessible, reusable and interoperable as possible.</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2014/06/05/api-commons-added-to-the-api-commons/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2014/05/14/nothing-has-changed-for-api-commons-in-light-of-oracle-v-google-decision/">Nothing Has Changed For API Commons In Light Of Oracle v Google Decision</a></h3>
+        <span class="post-date">14 May 2014</span>
+        <p><img style="padding: 15px;" src="http://kinlane-productions2.s3.amazonaws.com/api-voice/oraclevgoogle/oraclevgoogle.png" alt="" width="250" align="right" /></p>
+<p>While we definitely are concerned by the <a href="https://s3.amazonaws.com/kinlane-productions2/api-voice/oraclevgoogle/223105653-Oracle-Google-Java-Appeal-Decision.pdf">response from the federal court in the Oracle v Google case</a>, but for us at API Commons nothing has changed&mdash;it just turns up the heat. The precedent for applying copyright to web APIs is far from settled, this will be a long legal road that will play out over years, during which the mission of API Commons remains the same&mdash;encourage as many API providers as possible to publish API definitions into the commons, accompanied with a liberal creative commons license.</p>
+<p>The API sector and all derived areas (which is huge), would be better off without copyright being applied to a technological area that depends on re-use and interoperability, but if companies like Oracle want to be able to add yet another layer of control and monetization to APIs&mdash;let&rsquo;s beat them to it and openly license the best API patterns in a way that acknowledges API designers, but also encourage the widest re-use possible. There are seven separate <a href="http://creativecommons.org/licenses/">Creative Commons licenses</a> to choose from, and we encourage putting it into the <a href="http://creativecommons.org/publicdomain/">public domain</a>, which despite popular belief still gives you copyright control over your designs.</p>
+<p>Join API Commons and the entire API community in taking a stand on the API copyright issue. Publish your API definition into the commons, choose a creative commons license that meet your business and organizational goals. We have faith in the API communities belief that APIs designs are meant to be interoperable and reusable, and our ability to stay ahead of those who believe otherwise, by generating the best possible API design patterns and making sure these definitions are accessible by everyone!</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2014/05/14/nothing-has-changed-for-api-commons-in-light-of-oracle-v-google-decision/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2014/05/14/nothing-has-change-for-api-commons-in-light-of-oracle-v-google-decision/">Nothing Has Change For API Commons In Light Of Oracle v Google Decision</a></h3>
+        <span class="post-date">14 May 2014</span>
+        <h2>Nothing Has Change For API Commons In Light Of Oracle v Google Decision</h2>
+<p><p>
+     <img class="c1" src="http://kinlane-productions2.s3.amazonaws.com/api-voice/oraclevgoogle/oraclevgoogle.png" alt="" width="250" align="right" />
+</p>
+<p>
+     While we definitely are concerned by the <a href="https://s3.amazonaws.com/kinlane-productions2/api-voice/oraclevgoogle/223105653-Oracle-Google-Java-Appeal-Decision.pdf">response from the federal court in the Oracle v Google case</a>, but for us at API Commons nothing has changed—it just turns up the heat. The precedent for applying copyright to web APIs is far from settled, this will be a long legal road that will play out over years, during which the mission of API Commons remains the same—encourage as many API providers as possible to publish API definitions into the commons, accompanied with a liberal creative commons license.
+</p>
+<p>
+     The API sector and all derived areas (which is huge), would be better off without copyright being applied to a technological area that depends on re-use and interoperability, but if companies like Oracle want to be able to add yet another layer of control and monetization to APIs—let’s beat them to it and openly license the best API patterns in a way that acknowledges API designers, but also encourage the widest re-use possible. There are seven separate <a href="http://creativecommons.org/licenses/">Creative Commons licenses</a> to choose from, and we encourage putting it into the <a href="http://creativecommons.org/publicdomain/">public domain</a>, which despite popular belief still gives you copyright control over your designs.
+</p>
+<p>
+     Join API Commons and the entire API community in taking a stand on the API copyright issue. Publish your API definition into the commons, choose a creative commons license that meet your business and organizational goals. We have faith in the API communities belief that APIs designs are meant to be interoperable and reusable, and our ability to stay ahead of those who believe otherwise, by generating the best possible API design patterns and making sure these definitions are accessible by everyone!
+</p></p>
+
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2014/05/14/nothing-has-change-for-api-commons-in-light-of-oracle-v-google-decision/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2014/05/07/green-button-energy-api-added-to-api-commons/">Green Button (Energy) API Added To API Commons</a></h3>
+        <span class="post-date">07 May 2014</span>
+        <p><a href="http://www.greenbuttondata.org/"><img src="https://s3.amazonaws.com/kinlane-productions2/federal-government/green-button/green-button.jpg" alt="" width="200" align="right" /></a></p>
+<p>One of the most meaningful API projects I work on with the US government is the <a href="http://energyos.github.io/OpenESPI-GreenButton-API-Documentation/">Green Button AP</a>I, which provides access to energy data for US consumers across the country.  First, what is the Green Button API? The Green Button builds on top of the Green Button data initiative which is:</p>
+<blockquote><em>...an industry-led effort that responds to a White House call-to-action: provide electricity customers with easy access to their energy usage data in a consumer-friendly and computer-friendly format via a "Green Button" on electric utilities' website.</em></blockquote>
+<p>Which Todd Park, Assistant to the President and U.S. Chief Technology Officer states:</p>
+<blockquote><em>Giving residential and commercial customers secure access to their own energy data in a standard, easy-to-understand format will help them visualize their energy use and identify opportunities to save money. At the same time, Green Button is spurring the development of new online tools and services that add value to this information, creating an innovative new domain for entrepreneurship and job creation.</em></blockquote>
+<p>The Green Button API delivers flexible access to Energy Usage Information through a set of RESTful interfaces, providing access any consumers Green Button data. The Green Button API is being designed by <a href="https://www.energyos.org/">EnergyOS</a>, providing a solution that any utility can download and run to mediate access between their retail energy customers, and 3rd parties who will provide energy data driven services to them.</p>
+<p>I&rsquo;m very excited to announce that the Green Button API definition has been added to the <a title="API Commons" href="http://apicommons.org">API Commons</a>. The Green Button API represents why 3Scale and API Evangelist launched API Commons, to provide a place where we can hang the most important, and meaningful API interfaces, and underlying data models, to encourage re-use.</p>
+<p>You can find the <a href="http://energyos.github.io/OpenESPI-GreenButton-API-Documentation/API/api-docs">Swagger specification for the Green Button API on Github</a>, complete with <a href="http://energyos.github.io/OpenESPI-GreenButton-API-Documentation/API/">interactive documentation</a> and other resources. The project is a work in progress, with the final specification still being hammered out by EnergyOS and utilities across the country, but the API is fully functional, and since it is on Github&mdash;the <a href="https://github.com/energyos/OpenESPI-GreenButton-API-Documentation/issues">entire project is open for comment</a>.</p>
+<p>If you&rsquo;d like to know more about the project, feel free to contact me directly at <a href="https://twitter.com/kinlane">@kinlane</a> or <a href="https://twitter.com/apicommons">@apicommons</a>.</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2014/05/07/green-button-energy-api-added-to-api-commons/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2014/04/07/adding-evercamio-to-the-api-commons/">Adding Evercam.io To The API Commons</a></h3>
+        <span class="post-date">07 Apr 2014</span>
+        <p><a href="http://www.evercam.io/"><img style="padding: 10px;" src="https://s3.amazonaws.com/kinlane-productions2/api-evangelist/evercam/evercam-logo.png" alt="" width="225" align="right" /></a></p>
+<p>The <a href="http://www.evercam.io/">Internet of things (Iot), and security camera API platform evercam.io</a> has submitted the API definition for their camera API to the <a href="http://apicommons.org/apis.html">API Commons</a>.</p>
+<p>I&rsquo;ve been impressed with the amount of leadership that is coming out of this new startup in a potentially very political, and inevitable aspect of the API economy&mdash;cameras.</p>
+<p>Marco Herbst (<a href="https://twitter.com/marcoherbst">@marcoherbst</a>) of evercam.io approached me during <a href="http://www.apistrategyconference.com/2014Amsterdam/index.php">#APIStrat in Amsterdam</a> and expressed interest in submitting their <a href="https://api.evercam.io/v1/swagger.json">Swagger API definition</a> into the commons, and this last weekend we created the API Commons manifest and published to the commons.</p>
+<p><a href="http://bit.ly/1e27KIc" target="_blank"><img style="border: 0px solid #000;" src="https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-icon.png" alt="" width="100" align="right" /></a></p>
+<p>When I spoke with Marco several months ago about API Commons, he took the importance of submitting an API definition to heart. By doing so evercam.io is saying that their API definition is significant in their industry, and something that others in the industry should follow.</p>
+<p>This type of stance in an industry like Iot is going to become crucial in encouraging not just manufacturers to adhere to a common format, but also saving application developers and data scientists time when their are building Iot solutions.</p>
+<p>Thanks evercam.io for sharing your API definition with the world, and taking your role and responsibility in defining an interface to a very important layer of the API economy, so seriously.</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2014/04/07/adding-evercamio-to-the-api-commons/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2014/03/03/added-api-for-searching-and-adding-api-definitions-to-api-commons/">Added API For Searching And Adding API Definitions To API Commons</a></h3>
+        <span class="post-date">03 Mar 2014</span>
+        <p><img style="padding: 15px;" src="https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-icon.png" alt="" width="175" align="right" /></p>
+<p>I think the title of this blog post has the most occurrence of API, I&rsquo;ve ever used.  We have had requests to provide an API for the API commons, so now you can add API definitions using a Github manifest, the API Commons Manifest generator, or via the <a href="https://api-commons.3scale.net/docs">API Commons API</a>.</p>
+<p>I added the ability to search API definitions, as well as POST an API through the new interface. I deployed a simple registration form for the API using <a href="http://bit.ly/1cHBhd5">3Scale API infrastructure</a>, and will add more account management features as the API matures&mdash;right now can just signup, login, get your keys and logout.</p>
+<p>If you&rsquo;d like to integrate the publishing of API definitions directly to the commons from your API management system let us know, we are happy to help you with the integration, and keeping the latest version of your API definitions published to the commons automatically.</p>
+<p>If you run into any issues or have comments you can <a href="https://github.com/kinlane/api-commons/issues">submit via the issue management for the Github repository</a> that the API Commons site runs in.</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2014/03/03/added-api-for-searching-and-adding-api-definitions-to-api-commons/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2014/01/13/when-to-submit-api-definition-to-the-api-commons-earlier-or-later/">When To Submit API Definition To The API Commons? Earlier or Later?</a></h3>
+        <span class="post-date">13 Jan 2014</span>
+        <p><img style="padding: 15px;" src="https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-clock.jpeg" alt="" width="225" align="right" /></p>
+<p>I had a great conversation with a company developing some very interesting API designs, and upon talking with them about submitting their API definitions to the commons I got a common question: When should we submit our definitions? Now or later? They will be changing often.</p>
+<p>Of course each API development team will be different, but my recommendation is submit early on. The sooner the better. Even if your API definition changes often, it is better to showcase the design, soliciting feedback from the community, and establishing a precedent within your industry now.</p>
+<p>You can see this in action with the <a href="http://ed-data.github.io/fafsa-api/index.html">Free Application for Federal Student Aid (FAFSA) API</a>. It is an initial API definition for a potentially very complex PDF form that the Department of Education uses. As soon as the API definition was published, it was made open via Github, looking to solicit feedback from government, developers and anyone involved in the FAFSA project.  This has opened up quite a bit of discussion and participation in the design from several companies, developers and allowed the overall design to move forward in new ways.</p>
+<p>When it comes to your API design it is ok to iterate, but without sharing these stories within your industry, you run the risk of reinventing the wheel, and doing work without first receiving feedback from potential consumers, missing critical opportunities to partner with key players, and so much more. Of course, evolving your API design out in the commons takes a humble approach to API design, but ultimately you will be healthier for it.</p>
+<p>Your API design will never be done. Why wait for some unknown date, that may never happen. Get your API definition into the commons, make your mark on your industry, open up conversation and lead with your API. To be in the commons you just <a href="http://apicommons.org/add-apis.html">submit a manifest</a> which acts as a pointer to your API definition, allowing your definition to change as much as it needs.</p>
+<p>We encourage you submit your API definitions to the API commons now, rather than later, and then you can confidently move forward with the iteration on your API, knowing you have declared your API design to be open licensed, and a meaningful design worth following.</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2014/01/13/when-to-submit-api-definition-to-the-api-commons-earlier-or-later/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2014/01/13/adding-free-application-for-federal-student-aid-fafsa-api-definition/">Adding Free Application for Federal Student Aid (FAFSA) API Definition</a></h3>
+        <span class="post-date">13 Jan 2014</span>
+        <p><a href="https://ed-data.github.io/fafsa-api"><img src="https://s3.amazonaws.com/kinlane-productions2/federal-government/ed/fafsa-form.jpg" alt="" width="175" align="right" /></a></p>
+<p>We are adding the <a href="https://raw2.github.com/ed-data/fafsa-api/master/Applications">Free Application for Federal Student Aid (FAFSA) API swagger definition</a> to the <a href="http://apicommons.org/apis.html">API Commons</a> today.</p>
+<p>The <a href="http://ed-data.github.io/fafsa-api/index.html">FAFSA API is a working project to show the Department of Education what is possible</a> when you turn a form into an API, with a goal of stimulating development of custom PDF implementations, as well as web and mobile application tools that use the API.</p>
+<p>The FAFSA API is not an official federal government project, but reflects a public / private sector partnership, showing was is done with the private sector and government work together to design APIs and to develop open source tooling around these APIs.</p>
+<p>You can participate in the FAFSA API development via the <a href="https://github.com/ed-data/fafsa-api">Github repository</a> and supporting <a href="http://ed-data.github.io/fafsa-api/index.html">research Gitub page</a>.</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2014/01/13/adding-free-application-for-federal-student-aid-fafsa-api-definition/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2013/12/11/its-between-copyright-and-fair-use-in-oracle-vs-google-api-case/">It Is Between Copyright And Fair Use In Oracle vs Google API Case</a></h3>
+        <span class="post-date">11 Dec 2013</span>
+        <p><img style="padding: 15px;" src="http://kinlane-productions2.s3.amazonaws.com/api-voice/oraclevgoogle/oraclevgoogle.png" alt="" width="250" align="right" /></p>
+<p>I'm just getting time to read through the news coming out of the United States Court of Appeals for the Federal Circuit, and the next phase of the Oracle v. Google case, which kicked off December 4th in California courts.</p>
+<p>A panel of three judges presided over the Oracle v. Google Android/Java copyright appeal hearing, and after <a href="http://www.fosspatents.com/2013/12/detailed-analysis-of-federal-circuit.html">reading several accounts of the hearing</a>, all three judges seem to all agree that the Java API should protected under copyright, but whether Google's use of portions of the Java API is fair use, is still unclear--potentially overturning Judge William Alsup earlier ruling.</p>
+<p>I strongly feel that APIs are the "fair use tip" of software that could potentially be covered by copyright and patents. As demonstrated by <a href="https://www.eff.org/cases/oracle-v-google/amici">my support</a> of the <a href="https://www.eff.org/sites/default/files/filenode/2013.1021.1022.computer.scientists.amici_.brief_.pdf">Electronic Frontier Foundation amicus brief</a>, I think API definitions remaining fair use is critical to interoperability and and not just a healthy API economy, but the the larger economy.</p>
+<p>The hearing last week is just the beginning, the legal battle is likely to go on for a while,  potentially making its way to the Supreme Court and / or possibly heading back to a lower court. Even if the earlier Oracle vs. Google ruling, that APIs aren't copyrightable is upheld, I anticipate we will see many, many legal battles on this front in coming years.</p>
+<p>As we increase our vocabulary for describing and designing API interfaces, with approaches such as <a title="Swagger" href="https://bitly.com/1j2KERU+">Swagger</a>, <a title="RAML" href="https://bitly.com/16ZTZYt+">RAML</a> and <a href="https://bitly.com/1cl8tCc+">API Blueprint</a>, attempts to protect these definitions by copyright will increase. While I will continue to support efforts to defend APIs in their entirety as being protected under fair use and free from copyright, I will be focusing my efforts on encouraging healthy API design, sharing and collaboration through placement of API definitions into the <a title="API Commons" href="http://apicommons.org">API Commons</a>.</p>
+<p>While Oracle vs. Google remains a critical case that will have a major impact on the world of APIs, whichever way the case goes, it won't change the importance of <a title="publishing APIs to the commons" href="http://apicommons.org/add-apis.html">publishing API definitions to the commons</a>, setting the precedent for fair use, reinforcing the fact that this open use of API designs is critical to getting us from 10K APIs to millions of APIs, ensuring the interoperability we will need for our increasingly Internet enabled world.</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2013/12/11/its-between-copyright-and-fair-use-in-oracle-vs-google-api-case/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2013/12/11/it39s-between-copyright-and-fair-use-in-oracle-vs-google-api-case/">It&#39;s Between Copyright And Fair Use In Oracle vs Google API Case</a></h3>
+        <span class="post-date">11 Dec 2013</span>
+        <h2>It&#39;s Between Copyright And Fair Use In Oracle vs Google API Case</h2>
+<p><p>
+     <img class="c1" src="http://kinlane-productions2.s3.amazonaws.com/api-voice/oraclevgoogle/oraclevgoogle.png" alt="" width="250" align="right" />
+</p>
+<p>
+     I'm just getting time to read through the news coming out of the United States Court of Appeals for the Federal Circuit, and the next phase of the Oracle v. Google case, which kicked off December 4th in California courts.
+</p>
+<p>
+     A panel of three judges presided over the Oracle v. Google Android/Java copyright appeal hearing, and after <a href="http://www.fosspatents.com/2013/12/detailed-analysis-of-federal-circuit.html">reading several accounts of the hearing</a>, all three judges seem to all agree that the Java API should protected under copyright, but whether Google's use of portions of the Java API is fair use, is still unclear--potentially overturning Judge William Alsup earlier ruling.
+</p>
+<p>
+     I strongly feel that APIs are the "fair use tip" of software that could potentially be covered by copyright and patents. As demonstrated by <a href="https://www.eff.org/cases/oracle-v-google/amici">my support</a> of the <a href="https://www.eff.org/sites/default/files/filenode/2013.1021.1022.computer.scientists.amici_.brief_.pdf">Electronic Frontier Foundation amicus brief</a>, I think API definitions remaining fair use is critical to interoperability and and not just a healthy API economy, but the the larger economy.
+</p>
+<p>
+     The hearing last week is just the beginning, the legal battle is likely to go on for a while, potentially making its way to the Supreme Court and / or possibly heading back to a lower court. Even if the earlier Oracle vs. Google ruling, that APIs aren't copyrightable is upheld, I anticipate we will see many, many legal battles on this front in coming years.
+</p>
+<p>
+     As we increase our vocabulary for describing and designing API interfaces, with approaches such as <a title="Swagger" href="https://bitly.com/1j2KERU+">Swagger</a>, <a title="RAML" href="https://bitly.com/16ZTZYt+">RAML</a> and <a href="https://bitly.com/1cl8tCc+">API Blueprint</a>, attempts to protect these definitions by copyright will increase. While I will continue to support efforts to defend APIs in their entirety as being protected under fair use and free from copyright, I will be focusing my efforts on encouraging healthy API design, sharing and collaboration through placement of API definitions into the <a title="API Commons" href="http://apicommons.org">API Commons</a>.
+</p>
+<p>
+     While Oracle vs. Google remains a critical case that will have a major impact on the world of APIs, whichever way the case goes, it won't change the importance of <a title="publishing APIs to the commons" href="http://apicommons.org/add-apis.html">publishing API definitions to the commons</a>, setting the precedent for fair use, reinforcing the fact that this open use of API designs is critical to getting us from 10K APIs to millions of APIs, ensuring the interoperability we will need for our increasingly Internet enabled world.
+</p></p>
+
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2013/12/11/it39s-between-copyright-and-fair-use-in-oracle-vs-google-api-case/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2013/12/01/adding-the-opened-api-to-the-api-commons/">Adding The OpenEd API To The API Commons</a></h3>
+        <span class="post-date">01 Dec 2013</span>
+        <p><a href="http://www.opened.io/#/developer"><img style="padding: 25px;" src="https://s3.amazonaws.com/kinlane-productions2/open-ed/open-ed-logo-2.png" alt="" align="right" /></a></p>
+<p>We have added the <a title="OpenEd API" href="http://www.opened.io/#/developer">OpenEd API</a> to the <a title="API Commons" href="http://apicommons.org">API Commons</a>. OpenEd provides open educational resources like courses, videos and games for teachers to use in their classes.</p>
+<p>Using the API, developers can read and write resources to the platform, which currently houses 250K openly licensed educational resources.</p>
+<p>In addition to making all of the content openly licensed, the <a href="https://github.com/openedinc/opened.io">OpenEd.io site is also open sourced on Github</a>. Making the OpenEd API definition a perfect candidate for the API commons.</p>
+<p>The <a href="http://docs.opened.apiary.io/">OpenEd team designed their API using Apiary.io</a>, defining it using API Blueprint, a <a href="http://apiblueprint.com/">web API language that allows for the description of APIs using markdown</a>.</p>
+<p>OpenEd is a great open educational content API blueprint to follow, and we are honored to have it in the commons!</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2013/12/01/adding-the-opened-api-to-the-api-commons/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2013/11/26/adding-the-courtlistener-api-to-the-commons/">Adding The CourtListener API To The Commons</a></h3>
+        <span class="post-date">26 Nov 2013</span>
+        <p><a href="http://freelawproject.org/"><img style="padding: 15px;" src="https://s3.amazonaws.com/kinlane-productions2/api-evangelist/free-law-project/free-law-project-icon.png" alt="" width="200" align="right" /></a></p>
+<p>Last week the <a href="http://freelawproject.org/">Free Law Project</a> launched their <a href="http://freelawproject.org/2013/11/19/free-law-project-unveils-api-for-american-opinions/">CourtListener API</a>, which currently aggregates 2,204,339 court opinions, from 350 jurisdictions in the United States.</p>
+<p>This week, we are honored to have their <a title="API definition" href="https://github.com/freelawproject/court-listener-api-definition/blob/master/court-listener-api.json">API definition</a> added to the <a title="API Commons" href="http://apicommons.org/apis.html">API Commons</a>, setting a precedent for what is one possible design for a court opinion API interface, as well as a supporting data model. &nbsp;</p>
+<p>Next up, is for the community to step up and translate this spec into other formats like <a title="RAML" href="http://raml.org/">RAML</a> or <a title="API Blueprint" href="http://apiblueprint.org/">API Blueprint</a>. With the <a href="https://www.courtlistener.com/api/">CourtListener data</a> being licensed in the <a href="http://creativecommons.org/publicdomain/mark/1.0/">public domain</a>, there is also great opportunity for developers to not just build client libraries and sample applications for the API, but also develop server-side tooling that will enable institutions and companies to deploy other instances of the API.</p>
+<p>The CourtListener API definition is the first official addition to the <a title="API Commons" href="http://apicommons.org">API Commons</a>, after <a href="http://apicommons.org/2013/10/11/after-a-very-successful-launch-of-api-commons-what-is-next/">our launch at Defrag</a>. A big thank you goes out to the <a href="http://freelawproject.org/">Free Law Project</a>, for working with with us to get the API definition added!</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2013/11/26/adding-the-courtlistener-api-to-the-commons/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2013/11/17/api-commons-is-more-than-just-the-definition-specification-or-schema/">API Commons Is More Than Just The Definition, Specification or Schema</a></h3>
+        <span class="post-date">17 Nov 2013</span>
+        <p><a title="API Commons" href="http://apicommons.org/"><img style="padding: 15px;" src="https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-icon.png" alt="" width="200" align="right" /></a></p>
+<p><a title="API Commons" href="http://apicommons.org/">API Commons</a> is about providing a simple and transparent mechanism for the copyright free sharing and collaborative design of API specifications, interfaces and data models. When learning about API Commons it can be easy to focus on the obvious technical deliverables of the project, API definitions, data models, schemas and specifications.</p>
+<p>While API Commons is about providing a place to house these very technical design specifications, the largest benefit of API commons will be the process  , community and culture that will form around it. Bringing API design across government and industries out into the open, focusing on sharing, collaboration, reuse and operability will be the true end product--not just the tangible API definition.</p>
+<p>As I work on a handful of new API designs for various projects, that I plan on putting in the commons when ready, the importance of API Commons becomes ever clearer. While the end goal appears to be populating the commons with API designs, the real work is about bringing everyone out of the shadows, working on their API designs in a collaborative, re-usable way.</p>
+<p>Laying the right foundation for this new API economy.</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2013/11/17/api-commons-is-more-than-just-the-definition-specification-or-schema/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+	 	
+    
+			
+        <h3><a href="/2013/10/11/after-a-very-successful-launch-of-api-commons-what-is-next/">After A Very Successful Launch Of API Commons, What is Next?</a></h3>
+        <span class="post-date">11 Oct 2013</span>
+        <p><img style="padding: 15px;" src="https://s3.amazonaws.com/kinlane-productions2/api-commons/steve-willmott-defrag-api-commons.jpg" alt="" width="200" align="right" /></p>
+<p>We chose to launch <a href="http://apicommons.org">API Commons</a> at <a href="http://defragcon.com/">Defrag</a> because we felt it was precisely the audience that would understand what we are trying to do, and we were right! Attendees of Defrag represent the leading edge of the tech space and provided us with the critical feedback we were looking for, while also helping us spread the word out about the project to all of the people who truly mattered.</p>
+<p>The news coverage of the API Commons launch was everything we hoped for:</p>
+<ul class="mainlist">
+<li><a href="http://techcrunch.com/2013/11/05/3scale-launches-api-commons-to-allow-developers-to-share-apis-under-creative-commons-licenses/">Techcrunch: New API Commons Platform Allows Developers To Share APIs Under Creative Commons Licenses</a></li>
+<li><a href="http://blog.programmableweb.com/2013/11/05/api-commons-launched-share-your-api-code/">ProgrammableWeb: API Commons Launched: Share Your API Code</a></li>
+<li><a href="http://www.zdnet.com/at-last-an-api-commons-7000022849/">ZDNet: At last, an API Commons</a></li>
+<li><a href="http://www.forbes.com/sites/benkepes/2013/11/05/solving-the-tragedy-of-the-api-commons/">Forbes: Solving The Tragedy Of The API Commons</a></li>
+<li><a href="http://www.wired.com/wiredenterprise/2013/11/api-commons/">Wired: Oracle Sued Google Over Android. But There&rsquo;s Hope For the Future</a></li>
+<li><a href="http://sdt.bz/content/article.aspx?ArticleID=65331&amp;page=1">SD Times: SD Times Blog: API Commons allows developers to share APIs under Creative Commons licenses</a></li>
+<li><a href="http://www.drdobbs.com/tools/new-api-commons-free-api-sharing-service/240163742">[Dr. Dobbs: New API Commons Free API Sharing Service</a></li>
+</ul>
+<p>The feedback was 98% positive and we continue to welcome the constructive criticism we received and hope everyone will keep asking the hard questions. The positive feedback was more than we anticipated. We strongly feel that API Commons is a critical piece in moving the API space forward in a meaningful way, but it was great to hear that so many people can immediately see the same vision without any education about what is API Commons. It just speaks for itself.</p>
+<p>Now that we've launched, what is next?  The number one thing is get more API designs hung in the commons. We need you to step up and register your own API definitions, and help spread the word to other API providers about the importance for declaring their API definitions.</p>
+<p>We believe that API Commons will resonate within city, county, state and federal government first, but commercial API providers will quickly see the benefits of putting their valuable designs into the commons.</p>
+<p>If you have any questions, concerns or anything you think would benefit the API Commons community, please post it on the <a href="https://groups.google.com/forum/?hl=en#!forum/api-commons">API Commons Google Group</a>, on Twitter at <a href="https://twitter.com/apicommons">@apicommons</a> or email us directly at <a href="mailto:apicommons@gmail.com">apicommons@gmail.com</a>. The conversation around API definitions and data models is just as important publishing them in the commons.</p>
+<p>API Commons is your project, so please help us make it the place everyone goes to discover, share and collaborate around the best API definitions and data models in the industry.</p>
+
+        <ul class="actions" style="text-align: center;">
+          <li><a href="/2013/10/11/after-a-very-successful-launch-of-api-commons-what-is-next/" class="button big">Details</a></li>
+        </ul>
+      	<center><hr style="width: 75%;" /></center>
+				
+    
+  
+
+	<ul class="pagination" style="text-align: center;">
+		<li style="text-align:left;"><a href="/blog/page" class="button disabled"><< Prev</a></li>
+		<li style="width: 75%"><span></span></li>
+		<li style="text-align:right;"><a href="/blog/page" class="button">Next >></a></li>
+	</ul>
+
+	<p></p>
+
+</section>
+
+    </div>
+
+    <script src="http://localhost:4000/assets/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="http://localhost:4000/assets/js-yaml.min.js"></script>
+
+    <footer class="footer">
+      <div class="container">
+        <table cellspacing="3" cellpadding="2" align="center">
+          <tr>
+            <td><a href="https://apis.io" style="color: #000;">APIs.io</a></td>
+            <td>|</td>
+            <td><a href="https://apisjson.org" style="color: #000;">APIs.json</a></td>
+            <td>|</td>
+            <td><a href="https://github.com/api-commons/api-commons/issues" style="color: #000;">Issues</a></td>
+            <td>|</td>
+            <td><a href="blog/" style="color: #000;">Blog</a></td>
+            <td>|</td>
+            <td><a href="mailto:team@apis.io" style="color: #000;">Email</a></td>
+          </tr>
+        </table>
+      </div>
+    </footer>
+
+  </body>
+</html>

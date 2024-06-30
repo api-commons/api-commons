@@ -1,0 +1,25 @@
+---
+layout: default
+title: Overlays
+---
+
+<h2>What Opportunities Are There for Vendor Overlays?</h2>
+<p>These are the properties we've identified as being the most common properties applied as part of API operations, providing the building blocks needed to onboard consumers--the goal is to not just identify them, but transform from being human-readable to machine-readable to help automate and scale the API economy.</p>
+{% assign properties = site.overlays %}
+<table width="100%">
+{% for property in properties %}      
+	<tr>
+		<td align="center">
+			<a href="{{ property.url }}"><img src="{{ property.image }}" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>{{ property.name }}</strong> - {{ property.description }}
+		</td>
+		<td width="10%" align="center">
+			<a href="{{ property.url }}">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>		
+	</tr>
+{% endfor %}
+</table>

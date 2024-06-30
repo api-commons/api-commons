@@ -1,25 +1,80 @@
-title : API Commons
+name: API Commons
+description: The website for the API Commons of open source machine readable API operation properties.
+url: http://apicommons.org
+image: /images/api-commons-icon.png
+logo: /images/api-commons-logo.png
 
-markdown: kramdown
+version:      1.1.1
+author:
+  name:       'Kin Lane'
+  email:      'info@apievangelist.com'
 
-safe: true
-lsi: false
-pygments: true
-auto: true
+permalink: /:categories/:year/:month/:day/:title/
+paginate:           25
 
-source: api-commons
-destination: api-commons
+paginate_path:      "/blog/:num/"
 
-permalink: /:categories/:year/:month/:day/:title 
-exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
+# Build settings
+markdown:           kramdown
+highlighter:        rouge
 
-paginate: 500
-paginate_path: "/blog/page:num"
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-gist
+  - jekyll-avatar
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
 
-production_url : http://apicommons.org
+sass:
+  style:            compressed
 
-BASE_PATH : http://apicommons.org
+github_repo: api-commons
+github_branch: main
 
-archive_path: /archive.html
-categories_path : /categories.html
-tags_path : /tags.html
+collections:
+  common:
+    output: true
+    permalink: /common/:path/    
+  community:
+    output: true
+    permalink: /community/:path/  
+  overlays:
+    output: true
+    permalink: /overlays/:path/  
+  base:
+    output: true
+    permalink: /base/:path/ 
+  blueprints:
+    output: true
+    permalink: /base/:path/ 
+
+defaults:
+
+  - scope:
+      path:         ""
+      type:         common
+    values:
+      layout:       common
+  - scope:
+      path:         ""
+      type:         community
+    values:
+      layout:       community
+  - scope:
+      path:         ""
+      type:         overlays
+    values:
+      layout:       overlays            
+  - scope:
+      path:         ""
+      type:         base
+    values:
+      layout:       base        
+  - scope:
+      path:         ""
+      type:         blueprints
+    values:
+      layout:       blueprints       

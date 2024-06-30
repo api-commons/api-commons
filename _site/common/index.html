@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>API Commons - Common</title>
+    <link href="http://localhost:4000/assets/bootstrap.min.css" rel="stylesheet">
+    <link href="http://localhost:4000/assets/sticky-footer.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">API Commons</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/">Home</a>
+            </li>   
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="https://apisjson.org" target="_blank">APIs.json</a>
+            </li>             
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/common/">Common</a>
+            </li> 
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/community/">Community</a>
+            </li> 
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/overlays/">Overlays</a>
+            </li>  
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/base/">Base</a>
+            </li>   
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/blueprints/">Blueprints</a>
+            </li>                          
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="http://localhost:4000/about/">About</a>
+            </li>                                                                             
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!--
+    <div class="alert alert-danger" role="alert" style="text-align: center;">
+      This Search is Exploratory -- <a href="https://github.com/api-search/explore/issues">Submit An Issue With Any Questions</a>!
+    </div>
+    -->
+    <div class="container my-5">
+      <h2>What API Properties Are Available in the Commons?</h2>
+<p>These are the properties we've identified as being the most common properties applied as part of API operations, providing the building blocks needed to onboard consumers--the goal is to not just identify them, but transform from being human-readable to machine-readable to help automate and scale the API economy.</p>
+
+<table width="100%">
+      
+	<tr>
+		<td align="center">
+			<a href="/common/authentication/"><img src="/images/authentication.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Authentication</strong> - Authentication is essential for most public APIs and is often the most common point of friction when it comes to onboarding with an API. This API Commons property is often a human-readable affair, and will need to become something that is machine-readable if we are going to scale things.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/authentication/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/blog/"><img src="/images/blog.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Blog</strong> - A blog is an essential communication tool for any API operation, providing a simple self-service way for API producers to keep their consumers up to date on any changes. An active blog is a quick way to get up to speed on what an API does and can easily be syndicated via RSS or Atom feeds, and can be used to broadcast to social media.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/blog/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/change-log/"><img src="/images/change-log.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Change Log</strong> - Communicating change is important for any API provider, and having a simple and up-to-date log of what has changed is a great way to make change self-service. Your change log doesn't have to be verbose, but should be accurate and provide as much useful detail for consumers as possible.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/change-log/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/contact/"><img src="/images/contact.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Contact</strong> - API providers should be afraid to make contact information to consumers, making it easy to access a contact form, email address, or other way to contact. Contact information is often replace with forums and other self-service way to engage with a community, but nothing replaces a form or email.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/contact/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/deprecation-policy/"><img src="/images/deprecation.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Deprecation Policy</strong> - Every API will eventually be deprecated, so having a plan and communicating the deprecation policy with consumers via a dedicated page makes a lot of sense. This page will help API providers think a little bit about the future, and establish some guard rails and channels for communication with consumers.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/deprecation-policy/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/documentation/"><img src="/images/documentation.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Documentation</strong> - A reference to the human readable documentation for an API, that describes the surface area of an API with all the details consumers need. This documentation may or may not be generated from an OpenAPI or other machine-readable artifact, but is published as HTML or Markdown, and mean for human consumption when onboarding with an API.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/documentation/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/error-codes/"><img src="/images/errors.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Error Codes</strong> - Providing a detailed list of error codes that API consumers can expect when integrating with an API, sharing common HTTP status codes, but also custom errors returned. Having a single page helps communicate errors with consumers, but it also helps producers evaluate how errors are handled across many different APIs.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/error-codes/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/forums/"><img src="/images/forums.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Forums</strong> - Forums are a common way for developers to engage in a self-service way within a community. The forum may or may not be owned and managed by a platform, but almost always thrive when they are user supported, providing an opportunity for more advanced API consumers to answer questions and support the needs of newer API consumers.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/forums/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/getting-started/"><img src="/images/getting-started.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Getting Started</strong> - Providing the basic steps of how an API consumer can get started using an API with as few steps as possible is essential for any API. Like other common properties, a getting started isn't just for API consumers to understand how to onboard, and it is about pushing API producers to simply and reduce friction when it comes to onboarding.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/getting-started/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/integrations/"><img src="/images/integrations.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Integrations</strong> - Providing ready to go integrations with other APIs has become commonplace as part of Software as a Service (SaaS) solutions, and help demonstrate the value an API provides. Demonstrating how an API can be used with the existing platforms that API consumers are already using help make your APIs more useful and sticky for developers.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/integrations/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/interface-license/"><img src="/images/interface-license.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Interface License</strong> - Using the API Commons interface license to provide a legal position of the naming, ordering, and overall design of your API, not just the code or other parts. An interface license will help define the legal tone you take with how your API paths are able to be put to work within other applications and integrations.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/interface-license/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/login/"><img src="/images/login.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Login</strong> - Providing what is needed for existing API consumers to login and access their accounts, keys, and other information regarding their API consumption. A login allows any consumer of an API to be able to access the resources they will need to make a decision when it comes to integrating, expanding, or deprecating their usage of an API, providing what consumers will expect.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/login/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/pricing/"><img src="/images/pricing.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Pricing</strong> - Providing a machine-readable scaffolding to define the plans and pricing for APIs, and the common elements of each tier of pricing and access available. Pricing is not just about the financial aspect of access to APIs, it is also about which APIs you will have access to, and how much of a resource you can consume over time. Pricing is about enabling API consumers to have a plan for how they will use digital resources that is in alignment with a platform business strategy.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/pricing/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/privacy-policy/"><img src="/images/privacy-policy.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Privacy Policy</strong> - Breaking up the privacy policy into machine-readable, schema defined properties that allow for the legal side of an API to be understood programmatically. A privacy policy sets the stage when it comes to consumption, helping consumers with what they can expect when it comes to how their data and usage of digital resources will be shared or sold.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/privacy-policy/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/rate-limits/"><img src="/images/rate-limits.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Rate Limits</strong> - All APIs should possess rate limits that govern the amount of any digital resource or capability a consumer be able to access, with well-communicated, consistent, and enforced rate limits. Rate limits are what give API producers control over their digital resources, and are a fundamental aspect of how any type of APIs is publicly made available.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/rate-limits/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/road-map/"><img src="/images/road-map.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Road Map</strong> - Providing visibility as far into the future as possible is a common trait of successful APIs. Maintaining, publishing, and consistently communicating around a road map helps bring alignment between API producer and consumers, providing an essential building block for managing change across any platform.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/road-map/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/security/"><img src="/images/security.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Security</strong> - The security of any API is important to producer and consumer, and no consumer should be using any 3rd party API platform that does not clearly communicate and demonstrate an API is secure. API security is a foundational business building block in any API ecosystem when it comes to building trust and keeping consumers integrated with an API.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/security/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/service-level-agreement/"><img src="/images/service-level-agreement.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Service Level Agreement</strong> - A service level agreement, or simply SLA, defines the level of service you expect from a vendor, laying out the metrics by which service is measured, as well as remedies or penalties should agreed-on service levels not be achieved. A SLA sets the tone between an API producer and consumer and can be communicated as part of API change management practices.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/service-level-agreement/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/signup/"><img src="/images/sign-up.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Sign Up</strong> - Where users can sign up for access to an API, providing what is needed to onboard in a manual or automated way, reducing friction in putting to work. Sign up or registration can utilize existing standards like OpenAPI or native solutions which help make it as easy as possible for consumers to manually or automatically sign up to use an API.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/signup/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/status-page/"><img src="/images/status-page.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Status Page</strong> - A status page provides API consumers with real-time information regarding the up-time and availability of each API being made available. Status pages often provide current as well as historical information regarding stability or outages, helping build trust with consumers over time regarding the health of an API platform.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/status-page/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/support/"><img src="/images/support.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Support</strong> - Offering a standardized set of API support for consumers to tap into helps ensure that onboarding is as frictionless as possible while helping build trust with consumers. Support can be as simple as email, or as structured as a ticketing system, but whatever is offered, it should work to keep API consumers taken care of throughout their journey.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/support/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/terms-of-service/"><img src="/images/terms-of-service.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Terms Of Service</strong> - Breaking up the terms of service into machine-readable, schema defined properties that allow for the legal side of an API to be understood programmatically. Providing a break down of what the legal constraints involved with putting an API to use will help consumers understand if it is a fit for their business needs.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/terms-of-service/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+      
+	<tr>
+		<td align="center">
+			<a href="/common/versioning/"><img src="/images/versioning.png" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>Versioning</strong> - The details of how an API is being versioned with information about how change is being communicated with consumers across multiple channels. Having a formal approach to versioning published and communicated helps lay the ground work for change, but also keeps API consumers aligned with what has changed.
+		</td>
+		<td width="10%" align="center">
+			<a href="/common/versioning/">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+
+</table>
+
+    </div>
+
+    <script src="http://localhost:4000/assets/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="http://localhost:4000/assets/js-yaml.min.js"></script>
+
+    <footer class="footer">
+      <div class="container">
+        <table cellspacing="3" cellpadding="2" align="center">
+          <tr>
+            <td><a href="https://apis.io" style="color: #000;">APIs.io</a></td>
+            <td>|</td>
+            <td><a href="https://apisjson.org" style="color: #000;">APIs.json</a></td>
+            <td>|</td>
+            <td><a href="https://github.com/api-commons/api-commons/issues" style="color: #000;">Issues</a></td>
+            <td>|</td>
+            <td><a href="blog/" style="color: #000;">Blog</a></td>
+            <td>|</td>
+            <td><a href="mailto:team@apis.io" style="color: #000;">Email</a></td>
+          </tr>
+        </table>
+      </div>
+    </footer>
+
+  </body>
+</html>

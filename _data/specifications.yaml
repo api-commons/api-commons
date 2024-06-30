@@ -1,0 +1,16 @@
+---
+- view_sort: A
+  name: OpenAPI
+  identifier: openapi
+  url: https://www.openapis.org/
+  image: https://kinlane-productions2.s3.amazonaws.com/specifications/openapi.png
+- view_sort: B
+  name: AsyncAPI
+  identifier: openapi
+  url: https://www.asyncapi.com/
+  image: https://kinlane-productions2.s3.amazonaws.com/specifications/asyncapi-horiozontal.png
+- view_sort: D
+  name: JSON Schema
+  identifier: json-schema
+  url: https://json-schema.org/
+  image: https://kinlane-productions2.s3.amazonaws.com/specifications/json-schema.png
