@@ -4,9 +4,17 @@ layout: default
 <img src="{{ page.image }}" align="right" width="100">
 <h2>{{ page.title }}</h2>
 <p>{{ page.description }}</p>
+<h3>Links</h3>
+<ul>
+    <li>[Repo]({{ page.url }})</li>
+</ul>
+<h3>Tags</h3>
 <ul>
 {% for tag in page.tags %}
     <li>{{ tag }}</li>
 {% endfor %}
 </ul>
+<h3>Examples</h3>
+<script src="{{ page.gist }}"></script>
+<br>
 <p align="center"><a href="/common/"><strong>All Common Properties</strong></a></p>
