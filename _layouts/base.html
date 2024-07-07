@@ -1,12 +1,24 @@
 ---
 layout: default
 ---
+<style type="text/css">
+    .gist-data {max-height: 500px;}
+  </style>
 <img src="{{ page.image }}" align="right" width="100">
 <h2>{{ page.title }}</h2>
 <p>{{ page.description }}</p>
+<h3>Tags</h3>
 <ul>
 {% for tag in page.tags %}
     <li>{{ tag }}</li>
 {% endfor %}
 </ul>
+{% for api in page.apis %}
+    {% for property in api.properties %}
+<h3>{{ api.name }}</h3>
+<p>{{ api.description }}</p>
+<script src="{{ property.url }}"></script>
+    {% endfor %}
+{% endfor %}
+
 <p align="center"><a href="/base/"><strong>All Base Schema</strong></a></p>
