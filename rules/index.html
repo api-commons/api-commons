@@ -1,0 +1,29 @@
+---
+layout: default
+title: Base
+---
+
+<h2>Rules for Governing API Operations</h2>
+<p>These are variety of rules available for governing the API landscape, leveraging Spectral to define the positive and negative patterns needed.</p>
+{% assign rules = site.rules %}
+<table width="100%">
+{% for rule in rules %}      
+	{% for item in rule %} 
+		{% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}
+			{% assign rule_name = item | replace: "-"," " %}
+			{% assign new_rule_name = "" %}
+			{% assign words = rule_name | split: ' ' %}
+			{% for word in words %}
+				{% assign cword = word | capitalize %}
+				{% assign new_rule_name = new_rule_name | append: " " | append: cword %}
+			{% endfor %}
+			{% assign new_rule_name = new_rule_name | replace:"Api","API" | replace:"Sdk","SDK" | replace:"APIs Json","APIs.json" | replace:"Positive","(Positive)" | replace:"Negative","(Negative)" %}
+			{% assign new_rule_name = new_rule_name | strip %}
+			<tr>
+				<td>{{ new_rule_name }}</td>
+				<td width="20%" align="center"><a href="{{ rule.url }}">View</a></td>
+			</tr>
+		{% endif %}
+	{% endfor %}
+{% endfor %}
+</table>

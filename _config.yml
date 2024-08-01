@@ -1,4 +1,4 @@
-name: API Commons
+title: API Commons
 description: The website for the API Commons of open source machine readable API operation properties.
 url: http://apicommons.org
 image: /images/api-commons-icon.png
@@ -49,7 +49,10 @@ collections:
     permalink: /base/:path/ 
   blueprints:
     output: true
-    permalink: /base/:path/ 
+    permalink: /blueprints/:path/ 
+  rules:
+    output: true
+    permalink: /rules/:path/     
 
 defaults:
 
@@ -77,4 +80,9 @@ defaults:
       path:         ""
       type:         blueprints
     values:
-      layout:       blueprints       
+      layout:       blueprints   
+  - scope:
+      path:         ""
+      type:         rules
+    values:
+      layout:       rules              
