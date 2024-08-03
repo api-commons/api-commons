@@ -52,7 +52,10 @@ collections:
     permalink: /blueprints/:path/ 
   rules:
     output: true
-    permalink: /rules/:path/     
+    permalink: /rules/:path/    
+  rulesets:
+    output: true
+    permalink: /rulesets/:path/      
 
 defaults:
 
@@ -85,4 +88,9 @@ defaults:
       path:         ""
       type:         rules
     values:
-      layout:       rules              
+      layout:       rules     
+  - scope:
+      path:         ""
+      type:         rulesets
+    values:
+      layout:       rulesets                 

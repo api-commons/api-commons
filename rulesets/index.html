@@ -1,0 +1,16 @@
+---
+layout: default
+title: Base
+---
+
+<h2>Rulesets</h2>
+<p>These are different rulesets we are assembling from all of the rules, and being applied to different bases, and other contracts.</p>
+{% assign rulesets = site.rulesets %}
+<table width="100%">
+{% for ruleset in rulesets %}      
+	<tr>
+		<td>{{ ruleset.name }}</td>
+		<td width="20%" align="center"><a href="{{ ruleset.url }}">View</a></td>
+	</tr>
+{% endfor %}
+</table>

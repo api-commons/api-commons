@@ -9,13 +9,19 @@ tags:
 
 apis:
 
-  - name: APIs.json Gist
-    description: The GitHub Gist to display the APIs.json on the website.
+  - name: APIs.json API Contract
+    description: The GitHub Gist to display the APIs.json Contract on the website.
     properties:
       - type: GitHubGist
         url: https://gist.github.com/kinlane/2be2b7f6c2638cbdaab322813f0b19b5.js
 
-  - name: OpenAPI Gist
+  - name: APIs.json API Contract Rules
+    description: The GitHub Gist to display the APIs.json Contract rules on the website.
+    properties:
+      - type: GitHubGist
+        url: https://gist.github.com/kinlane/bb60157440c2665be7c68a4ae2b91bec.js
+
+  - name: OpenAPI
     description: The GitHub Gist to display the OpenAPI on the website.
     properties:
       - type: GitHubGist

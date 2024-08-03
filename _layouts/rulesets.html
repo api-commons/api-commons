@@ -1,0 +1,17 @@
+---
+layout: default
+---
+<h1>{{ page.name }}</h1>
+<p>{{ page.description }}</p>
+<textarea id="ruleset" style="display: none; width: 100%; height: 550px; border: 1px solid #000;">{% for this_rule in page.rules %}{% for rule in site.rules %}{% for item in rule %}{% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}{% if item == this_rule %}"{{ item }}": {{ rule[item] | jsonify }},{% endif %}{% endif %}{% endfor %}{% endfor %}{% endfor %}</textarea>
+<script>
+    var rule = document.getElementById("ruleset").value;
+    rule = rule.substring(0, rule.length-1);
+    this_rule = '{ "rules":{' + rule + '}}';
+    this_rule = JSON.parse(this_rule);
+    var apis_yaml = jsyaml.dump(this_rule);
+    document.getElementById("ruleset").value = apis_yaml;
+    document.getElementById("ruleset").style.display = '';
+</script>
+<br>
+<p align="center"><a href="/rulesets/"><strong>Back to All of the Rulesets</strong></a></p>
