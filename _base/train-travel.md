@@ -26,4 +26,10 @@ apis:
     properties:
       - type: GitHubGist
         url: https://gist.github.com/kinlane/0f06de3136230b7eb7105a2bd1783cae.js
+
+  - name: OpenAPI Contract Rules
+    description: The GitHub Gist to display the OpenAPI Contract rules on the website.
+    properties:
+      - type: GitHubGist
+        url: https://gist.github.com/kinlane/d7af9829a1964c564ae833d2dd513429.js
 ---
