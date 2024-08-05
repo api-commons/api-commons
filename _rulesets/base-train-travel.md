@@ -219,7 +219,6 @@ rules:
   - openapi-schema-properties-allowed-number-format-error
   - openapi-schema-properties-array-items-error
   - openapi-schema-properties-array-items-info
-  - openapi-schema-properties-enum-casing-error
   - openapi-tags-object-error
   - openapi-tags-object-info
   - openapi-tags-name-error
