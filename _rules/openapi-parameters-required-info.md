@@ -6,5 +6,5 @@ openapi-parameters-required-info:
   given: $.paths.*.*.parameters.*
   then:
     field: required
-    function: truthy
+    function: falsy
 ---

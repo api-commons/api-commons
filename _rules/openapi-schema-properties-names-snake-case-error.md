@@ -1,12 +1,12 @@
 ---
 openapi-schema-properties-names-snake-case-error:
-  description: Warn schema property names snake case.
-  message: Schema Property Names Snake Case
+  description: Schema properties are snake case.
+  message: Schema properties names MUST be snake case.
   severity: warn
   given: $.components.schemas.*.properties
   then:
-    field: '@key'
-    function: casing
+    field: "@key"
+    function: pattern
     functionOptions:
-      type: snake
+      match: "[a-z0-9]+(?:_[a-z0-9]+)*"
 ---

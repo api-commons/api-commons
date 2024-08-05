@@ -6,5 +6,5 @@ openapi-schema-properties-descriptions-error:
   given: $.components.schemas.*.properties.*
   then:
     field: description
-    function: falsy
+    function: truthy
 ---
