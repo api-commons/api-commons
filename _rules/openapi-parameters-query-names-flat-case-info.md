@@ -7,5 +7,5 @@ openapi-parameters-query-names-flat-case-info:
   then:
     function: pattern
     functionOptions:
-    match: ^[a-z]+$  
+      match: ^[a-z]+$  
 ---
