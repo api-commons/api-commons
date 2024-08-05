@@ -1,12 +1,8 @@
 ---
-name: Base Train Travel
-description: This is the rule set for the Train Travel base.
+name: Base OpenAPI Train Travel
+description: This is the OpenAPI ruleset for the Train Travel base.
 rules:
   - openapi-openapi-version-310-info
-  - openapi-openapi-version-303-info
-  - openapi-openapi-version-302-info
-  - openapi-openapi-version-301-info
-  - openapi-openapi-version-300-info
   - openapi-x-maturity-error
   - openapi-info-error
   - openapi-info-info
