@@ -8,5 +8,5 @@ openapi-info-license-identifier-cc-by-nc-sa-error:
     field: identifier
     function: pattern
     functionOptions:
-      notMatch: "^\\b(CC-BY-NC-SA-4.0)\\b" 
+      match: ^\b(CC-BY-NC-SA-4.0)\b
 ---

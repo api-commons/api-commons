@@ -112,9 +112,6 @@ rules:
   - openapi-parameters-schema-type-integer-maximum-info
   - openapi-parameters-schema-type-array-error
   - openapi-parameters-schema-items-array-info
-  - openapi-parameters-enum-info
-  - openapi-parameters-enum-casing-error
-  - openapi-parameters-enum-casing-info
   - openapi-response-description-error
   - openapi-response-description-info
   - openapi-response-get-headers-error
