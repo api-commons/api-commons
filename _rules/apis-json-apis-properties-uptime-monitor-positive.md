@@ -10,5 +10,5 @@ apis-json-apis-properties-uptime-monitor-positive:
     - field: type
       function: pattern
       functionOptions:
-        notMatch: \b(api-uptime-monitor|uptime-monitor)\b
+        notMatch: \b(api-uptime-monitor|uptime-monitor|UptimeMonitor)\b
 ---

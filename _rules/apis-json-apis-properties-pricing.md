@@ -1,7 +1,7 @@
 ---
 apis-json-apis-properties-management-plans-positive:
-  description: API Properties Management Plans
-  message: Has a plans page.
+  description: API Properties Pricing
+  message: Has a pricing page.
   severity: info
   given:
     - $.apis.*.properties.*
@@ -10,5 +10,5 @@ apis-json-apis-properties-management-plans-positive:
     - field: type
       function: pattern
       functionOptions:
-        notMatch: \b(api-plans)\b
+        notMatch: \b(Pricing)\b
 ---

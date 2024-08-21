@@ -1,6 +1,6 @@
 ---
 apis-json-apis-properties-documentation-postman-collection-positive:
-  description: API Properties Documentation Postman Collection
+  description: API Properties Postman Collection
   message: Has a Postman Collection.
   severity: info
   given:

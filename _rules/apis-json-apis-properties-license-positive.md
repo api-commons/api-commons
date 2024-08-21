@@ -12,5 +12,5 @@ apis-json-apis-properties-legal-license-positive:
     - field: type
       function: pattern
       functionOptions:
-        notMatch: \b(api-license|License|license)\b
+        notMatch: \b(api-license|License|license|InterfaceLicense)\b
 ---

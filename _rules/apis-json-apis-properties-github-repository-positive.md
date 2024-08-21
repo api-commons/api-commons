@@ -1,6 +1,6 @@
 ---
 apis-json-apis-properties-workspaces-github-public-positive:
-  description: API Properties Workspaces GitHub Public
+  description: API Properties GitHub Repository
   message: Has a GitHub repository.
   severity: info
   given:
@@ -10,5 +10,5 @@ apis-json-apis-properties-workspaces-github-public-positive:
     - field: type
       function: pattern
       functionOptions:
-        notMatch: \b(github-repository)\b
+        notMatch: \b(github-repository|GitHubRepository)\b
 ---

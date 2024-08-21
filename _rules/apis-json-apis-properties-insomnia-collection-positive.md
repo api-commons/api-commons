@@ -1,6 +1,6 @@
 ---
 apis-json-apis-properties-documentation-insomnia-collection-positive:
-  description: API Properties Documentation Insomnia Collection
+  description: API Properties Insomnia Collection
   message: Has a Insomnia Collection.
   severity: info
   given:

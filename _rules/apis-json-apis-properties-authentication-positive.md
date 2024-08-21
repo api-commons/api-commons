@@ -1,6 +1,6 @@
 ---
 apis-json-apis-properties-management-authentication-positive:
-  description: API Properties Management Authentication
+  description: API Properties Authentication
   message: Has authentication.
   severity: info
   given:

@@ -10,5 +10,5 @@ apis-json-apis-properties-status-positive:
     - field: type
       function: pattern
       functionOptions:
-        notMatch: \b(x-status|status|Status)\b
+        notMatch: \b(x-status|status|Status|StatusPage)\b
 ---

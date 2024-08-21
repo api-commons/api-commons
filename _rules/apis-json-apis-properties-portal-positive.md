@@ -10,5 +10,5 @@ apis-json-apis-properties-portal-positive:
     - field: type
       function: pattern
       functionOptions:
-        notMatch: \b(api-developer-portal|developer-portal|portal|Portal|Portals)\b
+        notMatch: \b(api-developer-portal|developer-portal|portal|Portal|Portals|DeveloperPortal)\b
 ---

@@ -1,6 +1,6 @@
 ---
 apis-json-apis-properties-documentation-openapi-positive:
-  description: API Properties Documentation OpenAPI
+  description: API Properties OpenAPI
   message: API has and OpenAPI.
   severity: info
   given:
