@@ -1,5 +1,5 @@
 ---
-apis-json-apis-tags-one-negative:
+apis-json-apis-tags-one-error:
   description: One Tag for API
   message: >-
     Having at least one tag for your APIs helps ensure that it will be more

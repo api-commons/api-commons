@@ -3,110 +3,110 @@ name: All APIs.json Rules
 description:  >-
   This is the catch all of the APIs.json rules.
 rules:
-  - apis-json-name-negative
-  - apis-json-name-positive
-  - apis-json-description-negative
-  - apis-json-description-positive
+  - apis-json-name-error
+  - apis-json-name-info
+  - apis-json-description-error
+  - apis-json-description-info
 
-  - apis-json-image-negative
-  - apis-json-image-positive
+  - apis-json-image-error
+  - apis-json-image-info
 
-  - apis-json-specification-aid-negative
-  - apis-json-specification-aid-positive  
-  - apis-json-url-negative
-  - apis-json-url-positive    
+  - apis-json-specification-aid-error
+  - apis-json-specification-aid-info  
+  - apis-json-url-error
+  - apis-json-url-info    
 
-  - apis-json-created-negative
-  - apis-json-created-positive
-  - apis-json-modified-negative
-  - apis-json-modified-positive  
+  - apis-json-created-error
+  - apis-json-created-info
+  - apis-json-modified-error
+  - apis-json-modified-info  
 
-  - apis-json-specification-type-negative
-  - apis-json-specification-type-positive
-  - apis-json-specification-version-negative
-  - apis-json-specification-version-positive
+  - apis-json-specification-type-error
+  - apis-json-specification-type-info
+  - apis-json-specification-version-error
+  - apis-json-specification-version-info
 
-  - apis-json-tags-negative
-  - apis-json-tags-one-negative
-  - apis-json-tags-positive
+  - apis-json-tags-error
+  - apis-json-tags-one-error
+  - apis-json-tags-info
   - apis-json-tags-upper-case-error
   - apis-json-tags-upper-case-info
 
-  - apis-json-maintainers-email-negative
-  - apis-json-maintainers-email-positive
-  - apis-json-maintainers-fn-negative
-  - apis-json-maintainers-fn-positive
-  - apis-json-maintainers-negative
-  - apis-json-maintainers-positive  
+  - apis-json-maintainers-email-error
+  - apis-json-maintainers-email-info
+  - apis-json-maintainers-fn-error
+  - apis-json-maintainers-fn-info
+  - apis-json-maintainers-error
+  - apis-json-maintainers-info  
 
-  - apis-json-apis-aid-negative
-  - apis-json-apis-aid-positive
+  - apis-json-apis-aid-error
+  - apis-json-apis-aid-info
 
-  - apis-json-apis-name-negative
-  - apis-json-apis-name-positive  
+  - apis-json-apis-name-error
+  - apis-json-apis-name-info  
 
-  - apis-json-apis-description-negative
-  - apis-json-apis-description-positive  
+  - apis-json-apis-description-error
+  - apis-json-apis-description-info  
 
-  - apis-json-apis-image-negative
-  - apis-json-apis-image-positive
+  - apis-json-apis-image-error
+  - apis-json-apis-image-info
 
-  - apis-json-apis-humanURL-negative
-  - apis-json-apis-humanURL-positive
+  - apis-json-apis-humanURL-error
+  - apis-json-apis-humanURL-info
 
-  - apis-json-apis-baseURL-negative
-  - apis-json-apis-baseURL-positive
+  - apis-json-apis-baseURL-error
+  - apis-json-apis-baseURL-info
 
-  - apis-json-apis-contact-negative
-  - apis-json-apis-contact-positive  
-  - apis-json-apis-contact-email-negative
-  - apis-json-apis-contact-email-positive
-  - apis-json-apis-contact-fn-negative
-  - apis-json-apis-contact-fn-positive
+  - apis-json-apis-contact-error
+  - apis-json-apis-contact-info  
+  - apis-json-apis-contact-email-error
+  - apis-json-apis-contact-email-info
+  - apis-json-apis-contact-fn-error
+  - apis-json-apis-contact-fn-info
 
-  - apis-json-apis-negative
-  - apis-json-apis-positive
+  - apis-json-apis-error
+  - apis-json-apis-info
 
-  - apis-json-common-negative
-  - apis-json-common-positive 
+  - apis-json-common-error
+  - apis-json-common-info 
 
-  - apis-json-apis-properties-about-positive
-  - apis-json-apis-properties-change-change-log-positive
-  - apis-json-apis-properties-change-compare-positive
-  - apis-json-apis-properties-change-road-map-positive
-  - apis-json-apis-properties-communications-blog-positive
-  - apis-json-apis-properties-communications-video-positive
-  - apis-json-apis-properties-documentation-insomnia-collection-positive
-  - apis-json-apis-properties-documentation-openapi-positive
-  - apis-json-apis-properties-documentation-positive
-  - apis-json-apis-properties-documentation-postman-collection-positive
-  - apis-json-apis-properties-environments-production-positive
-  - apis-json-apis-properties-environments-sandbox-positive
-  - apis-json-apis-properties-legal-license-positive
-  - apis-json-apis-properties-legal-privacy-policy-positive
-  - apis-json-apis-properties-legal-terms-of-service-positive
-  - apis-json-apis-properties-management-authentication-positive
+  - apis-json-apis-properties-about-info
+  - apis-json-apis-properties-change-change-log-info
+  - apis-json-apis-properties-change-compare-info
+  - apis-json-apis-properties-change-road-map-info
+  - apis-json-apis-properties-communications-blog-info
+  - apis-json-apis-properties-communications-video-info
+  - apis-json-apis-properties-documentation-insomnia-collection-info
+  - apis-json-apis-properties-documentation-openapi-info
+  - apis-json-apis-properties-documentation-info
+  - apis-json-apis-properties-documentation-postman-collection-info
+  - apis-json-apis-properties-environments-production-info
+  - apis-json-apis-properties-environments-sandbox-info
+  - apis-json-apis-properties-legal-license-info
+  - apis-json-apis-properties-legal-privacy-policy-info
+  - apis-json-apis-properties-legal-terms-of-service-info
+  - apis-json-apis-properties-management-authentication-info
   - apis-json-apis-properties-management-getting-started-info
-  - apis-json-apis-properties-management-plans-positive
-  - apis-json-apis-properties-management-signup-positive
-  - apis-json-apis-properties-portal-positive
-  - apis-json-apis-properties-sdk-go-positive
-  - apis-json-apis-properties-sdk-java-positive
-  - apis-json-apis-properties-sdk-node-positive
-  - apis-json-apis-properties-sdk-positive
-  - apis-json-apis-properties-sdk-python-positive
-  - apis-json-apis-properties-status-positive
-  - apis-json-apis-properties-support-email-positive
-  - apis-json-apis-properties-support-issues-positive
-  - apis-json-apis-properties-support-support-positive
-  - apis-json-apis-properties-uptime-monitor-positive
-  - apis-json-apis-properties-url-positive
-  - apis-json-apis-properties-workspaces-github-public-positive
-  - apis-json-apis-properties-workspaces-postman-public-positive
+  - apis-json-apis-properties-management-plans-info
+  - apis-json-apis-properties-management-signup-info
+  - apis-json-apis-properties-portal-info
+  - apis-json-apis-properties-sdk-go-info
+  - apis-json-apis-properties-sdk-java-info
+  - apis-json-apis-properties-sdk-node-info
+  - apis-json-apis-properties-sdk-info
+  - apis-json-apis-properties-sdk-python-info
+  - apis-json-apis-properties-status-info
+  - apis-json-apis-properties-support-email-info
+  - apis-json-apis-properties-support-issues-info
+  - apis-json-apis-properties-support-support-info
+  - apis-json-apis-properties-uptime-monitor-info
+  - apis-json-apis-properties-url-info
+  - apis-json-apis-properties-workspaces-github-public-info
+  - apis-json-apis-properties-workspaces-postman-public-info
 
-  - apis-json-apis-tags-negative
-  - apis-json-apis-tags-one-negative
-  - apis-json-apis-tags-positive
+  - apis-json-apis-tags-error
+  - apis-json-apis-tags-one-error
+  - apis-json-apis-tags-info
   - apis-json-apis-tags-upper-case-error
   - apis-json-apis-tags-upper-case-info
 ---

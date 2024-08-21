@@ -1,5 +1,5 @@
 ---
-apis-json-apis-properties-management-getting-started-info:
+apis-json-apis-properties-getting-started-info:
   description: API Properties Getting Started
   message: Has a getting started.
   severity: info
