@@ -39,6 +39,7 @@ rules:
   - apis-json-apis-properties-github-repository-info
   - apis-json-apis-properties-insomnia-collection-info
   - apis-json-apis-properties-license-info
+  - apis-json-apis-properties-lifecycle-info
   - apis-json-apis-properties-openapi-info
   - apis-json-apis-properties-performance-info
   - apis-json-apis-properties-plans-info
