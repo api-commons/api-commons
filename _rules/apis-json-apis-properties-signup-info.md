@@ -10,5 +10,5 @@ apis-json-apis-properties-signup-info:
     - field: type
       function: pattern
       functionOptions:
-        notMatch: \b(X-signup|signup|Sign Up|SignUp)\b
+        notMatch: \b(X-signup|signup|Sign Up|SignUp|Signup)\b
 ---

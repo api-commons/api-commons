@@ -1,5 +1,5 @@
 ---
-apis-json-apis-properties-communications-blog-info:
+apis-json-apis-properties-blog-info:
   description: API Properties Blog
   message: >-
     Offering a blog that is dedicated to your API helps increase engagement with
