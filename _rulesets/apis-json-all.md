@@ -3,110 +3,105 @@ name: All APIs.json Rules
 description:  >-
   This is the catch all of the APIs.json rules.
 rules:
-  - apis-json-name-error
-  - apis-json-name-info
-  - apis-json-description-error
-  - apis-json-description-info
-
-  - apis-json-image-error
-  - apis-json-image-info
-
-  - apis-json-specification-aid-error
-  - apis-json-specification-aid-info  
-  - apis-json-url-error
-  - apis-json-url-info    
-
-  - apis-json-created-error
-  - apis-json-created-info
-  - apis-json-modified-error
-  - apis-json-modified-info  
-
-  - apis-json-specification-type-error
-  - apis-json-specification-type-info
-  - apis-json-specification-version-error
-  - apis-json-specification-version-info
-
-  - apis-json-tags-error
-  - apis-json-tags-one-error
-  - apis-json-tags-info
-  - apis-json-tags-upper-case-error
-  - apis-json-tags-upper-case-info
-
-  - apis-json-maintainers-email-error
-  - apis-json-maintainers-email-info
-  - apis-json-maintainers-fn-error
-  - apis-json-maintainers-fn-info
-  - apis-json-maintainers-error
-  - apis-json-maintainers-info  
-
   - apis-json-apis-aid-error
   - apis-json-apis-aid-info
-
-  - apis-json-apis-name-error
-  - apis-json-apis-name-info  
-
-  - apis-json-apis-description-error
-  - apis-json-apis-description-info  
-
-  - apis-json-apis-image-error
-  - apis-json-apis-image-info
-
-  - apis-json-apis-humanURL-error
-  - apis-json-apis-humanURL-info
-
   - apis-json-apis-baseURL-error
   - apis-json-apis-baseURL-info
-
-  - apis-json-apis-contact-error
-  - apis-json-apis-contact-info  
   - apis-json-apis-contact-email-error
   - apis-json-apis-contact-email-info
+  - apis-json-apis-contact-error
   - apis-json-apis-contact-fn-error
   - apis-json-apis-contact-fn-info
-
-  - apis-json-apis-error
+  - apis-json-apis-contact-info
+  - apis-json-apis-description-info
+  - apis-json-apis-description-negative
+  - apis-json-apis-humanURL-info
+  - apis-json-apis-humanURL-negative
+  - apis-json-apis-image-info
+  - apis-json-apis-image-negative
   - apis-json-apis-info
-
-  - apis-json-common-error
-  - apis-json-common-info 
-
+  - apis-json-apis-name-info
+  - apis-json-apis-name-negative
+  - apis-json-apis-negative
   - apis-json-apis-properties-about-info
-  - apis-json-apis-properties-change-change-log-info
-  - apis-json-apis-properties-change-compare-info
-  - apis-json-apis-properties-change-road-map-info
-  - apis-json-apis-properties-communications-blog-info
-  - apis-json-apis-properties-communications-video-info
-  - apis-json-apis-properties-documentation-insomnia-collection-info
-  - apis-json-apis-properties-documentation-openapi-info
+  - apis-json-apis-properties-authentication-info
+  - apis-json-apis-properties-blog-feed-info
+  - apis-json-apis-properties-blog-info
+  - apis-json-apis-properties-change-log-info
+  - apis-json-apis-properties-compare-info
+  - apis-json-apis-properties-deprecation-policy-info
   - apis-json-apis-properties-documentation-info
-  - apis-json-apis-properties-documentation-postman-collection-info
   - apis-json-apis-properties-environments-production-info
   - apis-json-apis-properties-environments-sandbox-info
-  - apis-json-apis-properties-legal-license-info
-  - apis-json-apis-properties-legal-privacy-policy-info
-  - apis-json-apis-properties-legal-terms-of-service-info
-  - apis-json-apis-properties-management-authentication-info
-  - apis-json-apis-properties-management-getting-started-info
-  - apis-json-apis-properties-management-plans-info
-  - apis-json-apis-properties-management-signup-info
+  - apis-json-apis-properties-forum-info
+  - apis-json-apis-properties-getting-started-info
+  - apis-json-apis-properties-github-organization-info
+  - apis-json-apis-properties-github-repository-info
+  - apis-json-apis-properties-insomnia-collection-info
+  - apis-json-apis-properties-license-info
+  - apis-json-apis-properties-openapi-info
+  - apis-json-apis-properties-performance-info
+  - apis-json-apis-properties-plans-info
+  - apis-json-apis-properties-policies-info
   - apis-json-apis-properties-portal-info
+  - apis-json-apis-properties-postman-collection-info
+  - apis-json-apis-properties-postman-public-workspace-info
+  - apis-json-apis-properties-pricing-info
+  - apis-json-apis-properties-privacy-policy-info
+  - apis-json-apis-properties-rate-limits-info
+  - apis-json-apis-properties-road-map-info
+  - apis-json-apis-properties-rules-info
   - apis-json-apis-properties-sdk-go-info
+  - apis-json-apis-properties-sdk-info
   - apis-json-apis-properties-sdk-java-info
   - apis-json-apis-properties-sdk-node-info
-  - apis-json-apis-properties-sdk-info
   - apis-json-apis-properties-sdk-python-info
+  - apis-json-apis-properties-security-info
+  - apis-json-apis-properties-signup-info
   - apis-json-apis-properties-status-info
   - apis-json-apis-properties-support-email-info
   - apis-json-apis-properties-support-issues-info
   - apis-json-apis-properties-support-support-info
+  - apis-json-apis-properties-terms-of-service-info
   - apis-json-apis-properties-uptime-monitor-info
   - apis-json-apis-properties-url-info
-  - apis-json-apis-properties-workspaces-github-public-info
-  - apis-json-apis-properties-workspaces-postman-public-info
-
-  - apis-json-apis-tags-error
-  - apis-json-apis-tags-one-error
+  - apis-json-apis-properties-use-cases-info
+  - apis-json-apis-properties-versioning-info
+  - apis-json-apis-properties-video-info
   - apis-json-apis-tags-info
+  - apis-json-apis-tags-negative
+  - apis-json-apis-tags-one-negative
   - apis-json-apis-tags-upper-case-error
   - apis-json-apis-tags-upper-case-info
+  - apis-json-common-info
+  - apis-json-common-negative
+  - apis-json-created-info
+  - apis-json-created-negative
+  - apis-json-description-info
+  - apis-json-description-negative
+  - apis-json-image-info
+  - apis-json-image-negative
+  - apis-json-maintainers-email-info
+  - apis-json-maintainers-email-negative
+  - apis-json-maintainers-fn-info
+  - apis-json-maintainers-fn-negative
+  - apis-json-maintainers-info
+  - apis-json-maintainers-negative
+  - apis-json-modified-info
+  - apis-json-modified-negative
+  - apis-json-name-info
+  - apis-json-name-negative
+  - apis-json-specification-aid-info
+  - apis-json-specification-aid-negative
+  - apis-json-specification-type-info
+  - apis-json-specification-type-negative
+  - apis-json-specification-version-info
+  - apis-json-specification-version-negative
+  - apis-json-tags-info
+  - apis-json-tags-negative
+  - apis-json-tags-one-negative
+  - apis-json-tags-upper-case-error
+  - apis-json-tags-upper-case-info
+  - apis-json-url-info
+  - apis-json-url-negative
 ---
