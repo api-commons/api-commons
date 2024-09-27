@@ -26,9 +26,10 @@ layout: default
 {% for api in page.apis %}
     {% for property in api.properties %}
         {% if property.type == 'GitHubRepository' %}
-            <p align="center"><a href="{{ property.url }}"><strong>Visit on GitHub</strong></a></p>
+            <p align="center"><a href="{{ property.url }}"><strong>Visit this Base on GitHub</strong></a></p>
         {% endif %}
     {% endfor %}
 {% endfor %}
 
-<p align="center"><a href="/base/"><strong>All Base Schema</strong></a></p>
+<p align="center"><a href="/base/"><strong>Return to All Base Schema Page</strong></a></p>
+<br>
