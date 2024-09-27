@@ -15,9 +15,19 @@ layout: default
 </ul>
 {% for api in page.apis %}
     {% for property in api.properties %}
-<h3>{{ api.name }}</h3>
-<p>{{ api.description }}</p>
-<script src="{{ property.url }}"></script>
+        {% if property.type == 'GitHubGist' %}
+        <h3>{{ api.name }}</h3>
+        <p>{{ api.description }}</p>
+        <script src="{{ property.url }}"></script>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+{% for api in page.apis %}
+    {% for property in api.properties %}
+        {% if property.type == 'GitHubRepository' %}
+            <p align="center"><a href="{{ property.url }}"><strong>Visit on GitHub</strong></a></p>
+        {% endif %}
     {% endfor %}
 {% endfor %}
 

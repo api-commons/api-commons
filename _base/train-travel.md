@@ -32,4 +32,10 @@ apis:
     properties:
       - type: GitHubGist
         url: https://gist.github.com/kinlane/d7af9829a1964c564ae833d2dd513429.js
+
+  - name: Repository
+    description: The repository for the base.
+    properties:
+      - type: GitHubRepository
+        url: https://github.com/api-commons/train-travel          
 ---
