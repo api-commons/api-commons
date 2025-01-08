@@ -9,6 +9,9 @@ author:
   name:       'Kin Lane'
   email:      'info@apievangelist.com'
 
+site:
+  name: API Commons
+
 permalink: /:categories/:year/:month/:day/:title/
 paginate:           25
 
