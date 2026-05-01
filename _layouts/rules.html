@@ -4,15 +4,15 @@ layout: default
 
 {% assign rule_name = page.title | replace:"Api","API" | replace:"Sdk","SDK" | replace:"APIs Json","APIs.json" | replace:"Positive","(Positive)" | replace:"Negative","(Negative)" %}
 {% assign rule_name = rule_name | strip %}
-{% for item in page %} 
+{% for item in page %}
     {% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}
         {% assign this_rule = page[item] %}
         <h2>{{ rule_name }} (<a href="https://github.com/api-commons/api-commons/blob/gh-pages/_rules/{{ item }}.md?plain=1" target="_blank">Edit</a>)</h2>
         <p>{{ page[item].description }}</p>
         <h3>JSON Version</h3>
-        <textarea id="rule_json" style=" width: 100%; height: 250px; border: 1px solid #000;">{{ this_rule | jsonify }}</textarea>
+        <textarea id="rule_json" style="width: 100%; height: 250px; border: 1px solid #000;">{{ this_rule | jsonify }}</textarea>
         <h3>YAML Version</h3>
-        <textarea id="rule_yaml" style=" width: 100%; height: 250px; border: 1px solid #000;"></textarea>
+        <textarea id="rule_yaml" style="width: 100%; height: 250px; border: 1px solid #000;"></textarea>
         <script>
             var rule = JSON.parse(document.getElementById("rule_json").value);
             var this_rule = {};
@@ -26,4 +26,4 @@ layout: default
     {% endif %}
 {% endfor %}
 <br>
-<p align="center"><a href="/rules/"><strong>Back to All of the Rules</strong></a></p>
+<p class="text-center"><a href="/rules/"><strong>Back to All of the Rules</strong></a></p>

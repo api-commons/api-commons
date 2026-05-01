@@ -1,10 +1,8 @@
 ---
 layout: default
 ---
-<style type="text/css">
-    .gist-data {max-height: 500px;}
-  </style>
-<img src="{{ page.image }}" align="right" width="100">
+<style>.gist-data { max-height: 500px; }</style>
+<img src="{{ page.image }}" class="float-end ms-3 mb-3" width="100">
 <h2>{{ page.title }}</h2>
 <p>{{ page.description }}</p>
 <h3>Tags</h3>
@@ -26,10 +24,10 @@ layout: default
 {% for api in page.apis %}
     {% for property in api.properties %}
         {% if property.type == 'GitHubRepository' %}
-            <p align="center"><a href="{{ property.url }}"><strong>Visit this Base on GitHub</strong></a></p>
+            <p class="text-center"><a href="{{ property.url }}"><strong>Visit this Base on GitHub</strong></a></p>
         {% endif %}
     {% endfor %}
 {% endfor %}
 
-<p align="center"><a href="/base/"><strong>Return to All Base Schema Page</strong></a></p>
+<p class="text-center"><a href="/base/"><strong>Return to All Base Schema Page</strong></a></p>
 <br>
