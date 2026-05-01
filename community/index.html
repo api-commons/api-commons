@@ -1,25 +1,36 @@
 ---
 layout: default
-title: Community
+title: Community Schema
+description: Community-contributed API operation properties that extend and complement the API Commons core.
 ---
 
-<h2>What API Properties Are Available in the Community?</h2>
-<p>These are the properties we've identified as being the most common properties applied as part of API operations, providing the building blocks needed to onboard consumers--the goal is to not just identify them, but transform from being human-readable to machine-readable to help automate and scale the API economy.</p>
+<style>
+  .page-hero { padding: 1.5rem 0 2rem; }
+  .page-hero h1 { font-size: 1.8rem; font-weight: 800; color: #1a1a2e; margin-bottom: 0.5rem; }
+  .page-hero p { color: #555; font-size: 1rem; max-width: 680px; line-height: 1.7; }
+  .property-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+  .property-row { display: grid; grid-template-columns: 80px 1fr auto; gap: 1.25rem; align-items: center; padding: 1rem 1.25rem; border: 1px solid #e3e7ee; border-radius: 10px; background: white; transition: all 0.15s; }
+  .property-row:hover { border-color: #0d6efd; box-shadow: 0 2px 8px rgba(13,110,253,0.08); }
+  .property-row img { width: 60px; height: 60px; object-fit: contain; border-radius: 6px; }
+  .property-row .property-info strong { display: block; color: #1a1a2e; margin-bottom: 0.2rem; }
+  .property-row .property-info span { font-size: 0.9rem; color: #555; line-height: 1.5; }
+</style>
+
+<div class="page-hero">
+  <h1>Community API Properties</h1>
+  <p>Community-contributed properties that extend the core API Commons vocabulary. These represent patterns emerging from real-world API implementations and contribute to an ever-growing shared vocabulary for API operations.</p>
+</div>
+
+<div class="property-list">
 {% assign properties = site.community %}
-<table width="100%">
-{% for property in properties %}     
-	<tr>
-		<td align="center">
-			<a href="{{ property.url }}"><img src="{{ property.image }}" width="100" style="margin: 15px;" /></a>
-		</td>
-		<td valign="top" style="padding: 30px">
-			<strong>{{ property.name }}</strong> - {{ property.description }}
-		</td>
-		<td width="10%" align="center">
-			<a href="{{ property.url }}">
-				<button type="button" class="btn btn-dark">More Info</button>
-			</a>
-		</td>		
-	</tr>
+{% for property in properties %}
+<div class="property-row">
+  <a href="{{ property.url }}"><img src="{{ property.image }}" alt="{{ property.name }}"></a>
+  <div class="property-info">
+    <strong>{{ property.name }}</strong>
+    <span>{{ property.description }}</span>
+  </div>
+  <a href="{{ property.url }}" class="btn btn-sm btn-outline-dark">View</a>
+</div>
 {% endfor %}
-</table>
+</div>

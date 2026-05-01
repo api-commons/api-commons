@@ -1,16 +1,30 @@
 ---
 layout: default
-title: Base
+title: Rulesets
+description: Bundled Spectral rulesets assembled from API Commons rules, ready to apply to API contracts and indexes.
 ---
 
-<h2>Rulesets</h2>
-<p>These are different rulesets we are assembling from all of the rules, and being applied to different bases, and other contracts.</p>
+<style>
+  .page-hero { padding: 1.5rem 0 2rem; }
+  .page-hero h1 { font-size: 1.8rem; font-weight: 800; color: #1a1a2e; margin-bottom: 0.5rem; }
+  .page-hero p { color: #555; font-size: 1rem; max-width: 680px; line-height: 1.7; }
+  .rules-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.5rem; }
+  .rule-row { display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1.25rem; border: 1px solid #e3e7ee; border-radius: 8px; background: white; transition: all 0.15s; }
+  .rule-row:hover { border-color: #0d6efd; background: #f8f9ff; }
+  .rule-row span { font-size: 0.95rem; color: #1a1a2e; font-weight: 500; }
+</style>
+
+<div class="page-hero">
+  <h1>API Governance Rulesets</h1>
+  <p>Bundled collections of <a href="/rules/">API Commons rules</a> assembled for specific use cases — apply them to your API contracts and indexes to enforce consistency, quality, and compliance across your API landscape.</p>
+</div>
+
+<div class="rules-list">
 {% assign rulesets = site.rulesets %}
-<table width="100%">
-{% for ruleset in rulesets %}      
-	<tr>
-		<td>{{ ruleset.name }}</td>
-		<td width="20%" align="center"><a href="{{ ruleset.url }}">View</a></td>
-	</tr>
+{% for ruleset in rulesets %}
+<div class="rule-row">
+  <span>{{ ruleset.name }}</span>
+  <a href="{{ ruleset.url }}" class="btn btn-sm btn-outline-dark">View</a>
+</div>
 {% endfor %}
-</table>
+</div>

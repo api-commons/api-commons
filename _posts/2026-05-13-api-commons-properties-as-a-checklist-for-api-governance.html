@@ -1,0 +1,50 @@
+---
+layout: post
+title: 'API Commons Properties as a Checklist for API Governance'
+date: 2026-05-13
+image: https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-icon.png
+tags:
+  - API Commons
+  - API governance
+  - API operations
+  - checklist
+  - standards
+---
+
+<p>API governance is one of those topics that organizations talk about a lot and implement inconsistently. Most teams start with an OpenAPI linting ruleset — enforce summary fields, require response schemas, check for consistent naming conventions. That's a good start. But it only covers the technical contract layer. The operational layer — everything around the API, not in it — usually goes unexamined.</p>
+
+<p>API Commons provides a way to bring the same rigor to API operations that Spectral brings to OpenAPI specs. The Common properties collection is, in practical terms, a checklist for API operational completeness.</p>
+
+<h2>The Governance Gap in API Operations</h2>
+
+<p>Ask most API governance teams what they check, and you'll hear answers about OpenAPI quality, naming conventions, versioning schemes, and security headers. Ask what they check about API operations — the documentation, the onboarding experience, the support channels, the change communication — and the answers get vague.</p>
+
+<p>It's not because operational quality doesn't matter. Developers abandon APIs with poor documentation, confusing authentication flows, undocumented rate limits, and no clear upgrade path. The gap exists because operational quality has historically been hard to check automatically. You can validate an OpenAPI spec against a ruleset in two seconds. You can't easily validate whether an API has a genuinely useful getting-started guide.</p>
+
+<p>API Commons doesn't fully solve the qualitative problem, but it solves the structural one. It defines what the operational artifacts are, what they're called, and how to reference them in a machine-readable way. Once you have that, you can check for their presence automatically.</p>
+
+<h2>Using the Common Properties as a Checklist</h2>
+
+<p>The Common properties collection effectively defines the minimum viable operational surface of a production API. Here's how to use it as a governance checklist:</p>
+
+<p><strong>Authentication</strong> — Is there a machine-readable reference to how this API authenticates? Not just documentation, but a property entry in the APIs.json file that says "here is where you find authentication information." If it's absent from the index, it may well be absent from the developer experience too.</p>
+
+<p><strong>Getting Started</strong> — Is there a first-steps resource? A getting-started guide is the most-visited page in any API developer portal for the first six months of an API's life. Its absence from the APIs.json index is a signal worth investigating.</p>
+
+<p><strong>Plans</strong> — Is pricing and quota information published? For internal APIs this might be service-level agreements. For public APIs it's the pricing page. Either way, consumers need to know what they're getting and what the limits are.</p>
+
+<p><strong>Change Log</strong> — Is there a documented history of changes? A change log is the bare minimum of communication that API consumers require to maintain integrations over time. Its absence usually means breaking changes are communicated informally or not at all.</p>
+
+<p><strong>Road Map</strong> — Is there any signal about where the API is heading? This matters more for long-lived integrations than for quick prototypes, but it's the difference between API consumers feeling like partners and feeling like passengers.</p>
+
+<p><strong>Support</strong> — Can consumers find help when things go wrong? A support reference in the APIs.json file doesn't need to be a full support portal — a GitHub issues link or a community forum suffices — but it needs to exist and be findable.</p>
+
+<p><strong>Terms of Service and Privacy Policy</strong> — These are legal requirements for any commercial API and increasingly important for compliance-aware consumers. Their presence in the index means they can be checked and linked automatically.</p>
+
+<h2>Automating the Check</h2>
+
+<p>Once your APIs are publishing APIs.json files, governance automation becomes straightforward. The <a href="https://apicommons.org/rules/">API Commons rules</a> include checks for the presence of these common properties. You can run them in a CI pipeline against your APIs.json files the same way you run OpenAPI linting against your specs.</p>
+
+<p>A failing check doesn't mean the property doesn't exist — it means it isn't being communicated in a machine-readable way. That distinction matters. Often the documentation already exists somewhere; it just isn't indexed. The governance check surfaces the gap and motivates the fix.</p>
+
+<p>The goal isn't compliance for its own sake. It's making sure that when a developer — human or AI — encounters your API, they can find what they need to use it successfully. API Commons gives you a standard vocabulary and a checkable structure for that operational layer. That's the governance value.</p>

@@ -1,28 +1,49 @@
 ---
 layout: default
 title: Home
+description: API Commons is where you find the open source building blocks of API operations — machine-readable properties for licensing, authentication, plans, SDKs, road maps, change logs, and more.
 ---
 
-<h2>What is API Commons?</h2>
-<p style="margin-left; 15px; margin-right: 15px;">API Commons is where you find the open source building blocks of API operations. API Commons began as a machine-readable artifact to define the licensing of your API, but has grown to support getting started, authentication, plans, SDKs, road map, change log, and support. API Commons works in concert with <a href="https://apisjson.org">APIs.json</a> to help translate the human-readable properties of your API operations into machine-readable ones that can be used to help standardize and automate your API ecosystem.</p>
-<div class="container text-center">
-	<div class="row">
-	  <div class="col">
-		<p><a href="common/"><img src="/images/common.png" width="150" style="padding: 15px; border: 3px solid #000; border-radius: 25px;" /></a></p>
-		<p><a href="common/" style="color: #000; font-weight: bold;">Common Schema</a></p>		
-	  </div>
-	  <div class="col">
-		<p><a href="community/"><img src="/images/community.png" width="150" style="padding: 15px; border: 3px solid #000; border-radius: 25px;" /></a></p>
-		<p><a href="community/" style="color: #000; font-weight: bold;">Community Schema</a></p>		
-	  </div>
-	  <div class="col">
-		<p><a href="rules/"><img src="/images/rules.png" width="150" style="padding: 15px; border: 3px solid #000; border-radius: 25px;" /></a></p>
-		<p><a href="rules/" style="color: #000; font-weight: bold;">Rules</a></p>		
-	  </div>	
-	  <div class="col">
-		<p><a href="rulesets/"><img src="/images/rulesets.png" width="150" style="padding: 15px; border: 3px solid #000; border-radius: 25px;" /></a></p>
-		<p><a href="rulesets/" style="color: #000; font-weight: bold;">Rulesets</a></p>		
-	  </div>		      	  
-	</div>
-  </div>
-<p style="margin-left; 15px; margin-right: 15px;">If we are going to take things to the next level with APIs and AI, there are aspects of our API operations we need to stop competing upon and begin using common building blocks. The API Commons is much more than just enabling machine-readable API discovery with APIs.json, it is about making sure all the common aspects of API operations, but also applications and integrations using those APIs is as machine-readable and scalable as possible.</p>
+<style>
+  .page-hero { text-align: center; padding: 2.5rem 0 2rem; }
+  .page-hero h1 { font-size: 2.2rem; font-weight: 800; color: #1a1a2e; margin-bottom: 0.75rem; }
+  .page-hero p { color: #555; font-size: 1.1rem; max-width: 680px; margin: 0 auto 1.5rem; line-height: 1.7; }
+  .section-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+  .section-tile { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1.5rem; border: 1px solid #e3e7ee; border-radius: 12px; background: white; transition: all 0.2s; text-decoration: none; color: inherit; }
+  .section-tile:hover { border-color: #0d6efd; box-shadow: 0 4px 16px rgba(13,110,253,0.1); transform: translateY(-2px); color: inherit; }
+  .section-tile img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 1rem; border-radius: 8px; }
+  .section-tile strong { font-size: 1rem; color: #1a1a2e; display: block; margin-bottom: 0.25rem; }
+  .section-intro { background: #f8f9fb; border-radius: 12px; padding: 1.5rem 2rem; margin: 2rem 0; border-left: 4px solid #0d6efd; font-size: 1rem; line-height: 1.8; color: #444; }
+</style>
+
+<div class="page-hero">
+  <h1>Open Source Building Blocks for API Operations</h1>
+  <p>API Commons provides machine-readable properties that cover every dimension of API operations — from licensing and authentication to SDKs, road maps, and governance rules. Part of the <a href="https://apis.io">APIs.io</a> network.</p>
+</div>
+
+<div class="section-grid">
+  <a href="common/" class="section-tile">
+    <img src="/images/common.png" alt="Common Schema">
+    <strong>Common Schema</strong>
+    <span class="text-muted" style="font-size:0.85rem;">Shared operational properties</span>
+  </a>
+  <a href="community/" class="section-tile">
+    <img src="/images/community.png" alt="Community Schema">
+    <strong>Community Schema</strong>
+    <span class="text-muted" style="font-size:0.85rem;">Community-contributed properties</span>
+  </a>
+  <a href="rules/" class="section-tile">
+    <img src="/images/rules.png" alt="Rules">
+    <strong>Rules</strong>
+    <span class="text-muted" style="font-size:0.85rem;">Spectral governance rules</span>
+  </a>
+  <a href="rulesets/" class="section-tile">
+    <img src="/images/rulesets.png" alt="Rulesets">
+    <strong>Rulesets</strong>
+    <span class="text-muted" style="font-size:0.85rem;">Bundled rule collections</span>
+  </a>
+</div>
+
+<div class="section-intro">
+  If we are going to take things to the next level with APIs and AI, there are aspects of API operations we need to stop competing upon and start sharing. API Commons works in concert with <a href="https://apisjson.org">APIs.json</a> to turn human-readable API properties into machine-readable building blocks that can be used to standardize and automate your API ecosystem at scale.
+</div>

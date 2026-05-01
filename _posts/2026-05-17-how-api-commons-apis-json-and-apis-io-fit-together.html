@@ -1,0 +1,55 @@
+---
+layout: post
+title: 'How API Commons, APIs.json, and APIs.io Fit Together'
+date: 2026-05-17
+image: https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-logo.png
+tags:
+  - API Commons
+  - APIs.json
+  - APIs.io
+  - API ecosystem
+  - API discovery
+  - API operations
+---
+
+<p>API Commons, APIs.json, and APIs.io are three distinct projects that are designed to work together. They solve different parts of the same problem — making APIs discoverable, consistent, and usable at scale — but each one is independently useful. This post explains what each project does, how they connect, and why having all three matters.</p>
+
+<h2>APIs.json: The Format</h2>
+
+<p><a href="https://apisjson.org">APIs.json</a> is a machine-readable format for describing API operations. It's a file you publish alongside your API that indexes everything about it: the OpenAPI spec, the documentation, the authentication guide, the change log, the pricing page, the support channel. Think of it like <code>sitemap.xml</code>, but for APIs instead of web pages.</p>
+
+<p>APIs.json solves the problem of API discoverability at the format level. Without a standard format, every API describes its operations differently — or doesn't describe them at all — and there's no automated way to know where to find the documentation, how to authenticate, or what versions exist. APIs.json gives that information a consistent, parseable structure.</p>
+
+<p>The format is open and independent. You can publish an APIs.json file and use it however you want — as input to internal tooling, as the source of a documentation site, as the basis for an SDK generator — without any dependency on API Commons or apis.io.</p>
+
+<h2>API Commons: The Vocabulary</h2>
+
+<p><a href="https://apicommons.org">API Commons</a> defines what goes in the properties array of an APIs.json entry. The format says "list your API's properties here." API Commons says "here is the standard vocabulary for naming and typing those properties so that tooling can understand them."</p>
+
+<p>Without a shared vocabulary, one provider calls their authentication page an "Auth Guide," another calls it "Authentication," a third lists it under "Security." Tooling that tries to find the authentication reference for any given API has to either guess or give up. API Commons standardizes the vocabulary so that when a property has type <code>Authentication</code>, any tool knows what that means.</p>
+
+<p>API Commons also includes governance rules and rulesets — Spectral-compatible checks that validate whether an API's operations meet a minimum standard of completeness and quality. These rules work against APIs.json files and can be run in CI pipelines alongside OpenAPI linting.</p>
+
+<h2>APIs.io: The Network</h2>
+
+<p><a href="https://apis.io">APIs.io</a> is what you build when you have a format (APIs.json) and a vocabulary (API Commons) — a search engine and discovery network powered by crawling APIs.json files from across the web. When a provider publishes a valid APIs.json file, apis.io indexes it and makes the API searchable by name, capability, provider, and operational properties.</p>
+
+<p>APIs.io is both the proof-of-concept for the format and the infrastructure that makes the format valuable for providers. If you publish an APIs.json file, your API becomes findable by anyone using apis.io — including AI agents and automation tools that need to discover APIs programmatically.</p>
+
+<p>The apis.io network is organized into multiple views: providers, individual APIs, capabilities, tags, schemas, rules, and more. Each view is powered by the same underlying APIs.json data, structured using the API Commons vocabulary.</p>
+
+<h2>How They Connect in Practice</h2>
+
+<p>Here's the flow for a provider who wants to participate in the full ecosystem:</p>
+
+<ol>
+  <li>Publish the operational artifacts: OpenAPI spec, documentation, authentication guide, change log, etc. — wherever they naturally live.</li>
+  <li>Create an <code>apis.json</code> file that indexes those artifacts using the APIs.json format and the API Commons property vocabulary for the <code>type</code> fields.</li>
+  <li>Publish the file at <code>/.well-known/apis.json</code> on your domain.</li>
+  <li>APIs.io crawls it, indexes it, and makes your API discoverable across the network.</li>
+  <li>Run API Commons governance rules against your APIs.json file in CI to catch operational gaps before they affect consumers.</li>
+</ol>
+
+<p>The three projects reinforce each other. APIs.json provides the format that makes APIs.io indexing possible. API Commons provides the vocabulary that makes the indexed data useful and computable. APIs.io provides the discovery infrastructure that gives API providers a reason to publish well-formed APIs.json files.</p>
+
+<p>None of them requires the others to be useful, but together they form the foundation for a machine-readable, governable, discoverable API ecosystem.</p>

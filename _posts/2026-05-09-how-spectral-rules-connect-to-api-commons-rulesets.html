@@ -1,0 +1,62 @@
+---
+layout: post
+title: 'How Spectral Rules Connect to API Commons Rulesets'
+date: 2026-05-09
+image: https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-machine-learning.png
+tags:
+  - API Commons
+  - Spectral
+  - API governance
+  - rules
+  - rulesets
+  - linting
+---
+
+<p>If you work with OpenAPI specs in any serious capacity, you've probably encountered Spectral. It's the linting tool that lets you define rules for what a good API spec looks like — things like "all operations must have a summary," "response codes should follow a specific pattern," or "authentication must be defined." Teams use it in CI pipelines to catch spec quality issues before they reach production.</p>
+
+<p>What's less well known is that Spectral's rule format is the same format that API Commons uses to define its governance rules. This isn't a coincidence — it's a deliberate choice that means API Commons rules are directly usable in Spectral, and Spectral rulesets can be published and shared through API Commons.</p>
+
+<h2>How API Commons Rules Are Structured</h2>
+
+<p>An API Commons rule is a YAML (or JSON) document that defines a pattern to check against an API contract. The structure maps directly to Spectral's rule schema: a name, a description, a severity level, a given (the JSON Path expression that selects what to check), and a then (the function and options that perform the check).</p>
+
+<p>Here's what a simple rule looks like:</p>
+
+<pre><code>apis-json-info-title:
+  description: Ensures that the APIs.json index has a title.
+  message: The APIs.json index must have a non-empty title.
+  given: "$"
+  severity: error
+  then:
+    field: name
+    function: truthy</code></pre>
+
+<p>This rule checks that the root-level <code>name</code> field is present and non-empty in an APIs.json file. You can drop this directly into a Spectral configuration file and it will run as part of your linting process.</p>
+
+<h2>Positive and Negative Rules</h2>
+
+<p>API Commons organizes rules into positive and negative variants. Positive rules check that something is present or correctly formed — "this field should exist," "this value should match this pattern." Negative rules check that something problematic is absent — "this deprecated pattern should not appear," "this field should not be empty."</p>
+
+<p>The distinction matters for governance. A positive rule failure means your API is missing something required. A negative rule failure means your API is doing something it shouldn't. Both are important, but they call for different remediation actions and different severity levels in your CI pipeline.</p>
+
+<h2>Rulesets: Bundling Rules for Use Cases</h2>
+
+<p>Individual rules are useful, but rulesets are where API Commons governance becomes practical at scale. A ruleset is a collection of rules assembled for a specific use case — a minimal viability ruleset, an OpenAPI quality ruleset, an APIs.json completeness ruleset, or a domain-specific ruleset for financial APIs or healthcare APIs.</p>
+
+<p>Rulesets in API Commons are expressed as Spectral-compatible configuration files. You can reference them directly in your <code>.spectral.yaml</code>:</p>
+
+<pre><code>extends:
+  - https://apicommons.org/rulesets/apis-json-completeness
+
+rules:
+  # your additional project-specific rules here</code></pre>
+
+<p>This means the API Commons rulesets are live, runnable governance tools — not just documentation. Any team that wants to validate their APIs.json files or OpenAPI specs against API Commons standards can do so in a CI pipeline with a single configuration line.</p>
+
+<h2>Contributing Rules</h2>
+
+<p>The API Commons rules collection grows through community contribution. If you've identified a governance pattern that's broadly applicable — something that distinguishes well-formed API contracts from poorly-formed ones — you can propose it as an API Commons rule through the <a href="https://github.com/api-commons/api-commons/issues" target="_blank" rel="noopener">GitHub issues</a> or <a href="https://github.com/orgs/api-commons/discussions" target="_blank" rel="noopener">discussions</a>.</p>
+
+<p>The bar for inclusion is that a rule should be objective (it checks a property of the artifact, not a subjective quality judgment), automatable (it can be expressed in Spectral's rule format), and broadly applicable (it's relevant to more than one API type or domain).</p>
+
+<p>If your governance needs are domain-specific — say, rules that only apply to financial services APIs or rules tied to your organization's internal standards — those belong in a community ruleset rather than the core collection, and API Commons supports that use case through its community collection.</p>

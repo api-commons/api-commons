@@ -1,29 +1,39 @@
 ---
 layout: default
-title: Base
+title: Rules
+description: Spectral-compatible rules for governing API operations — positive and negative patterns that define what good API design looks like.
 ---
 
-<h2>Rules for Governing API Operations</h2>
-<p>These are variety of rules available for governing the API landscape, leveraging Spectral to define the positive and negative patterns needed.</p>
+<style>
+  .page-hero { padding: 1.5rem 0 2rem; }
+  .page-hero h1 { font-size: 1.8rem; font-weight: 800; color: #1a1a2e; margin-bottom: 0.5rem; }
+  .page-hero p { color: #555; font-size: 1rem; max-width: 680px; line-height: 1.7; }
+  .rules-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.5rem; }
+  .rule-row { display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1.25rem; border: 1px solid #e3e7ee; border-radius: 8px; background: white; transition: all 0.15s; }
+  .rule-row:hover { border-color: #0d6efd; background: #f8f9ff; }
+  .rule-row span { font-size: 0.95rem; color: #1a1a2e; }
+</style>
+
+<div class="page-hero">
+  <h1>API Governance Rules</h1>
+  <p>Spectral-compatible rules for governing API operations. Each rule defines positive or negative patterns that can be applied to API contracts and indexes to enforce consistency and quality across your API landscape.</p>
+</div>
+
+<div class="rules-list">
 {% assign rules = site.rules %}
-<table width="100%">
-{% for rule in rules %}      
-	{% for item in rule %} 
-		{% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}
-			{% assign rule_name = item | replace: "-"," " %}
-			{% assign new_rule_name = "" %}
-			{% assign words = rule_name | split: ' ' %}
-			{% for word in words %}
-				{% assign cword = word | capitalize %}
-				{% assign new_rule_name = new_rule_name | append: " " | append: cword %}
-			{% endfor %}
-			{% assign new_rule_name = new_rule_name | replace:"Api","API" | replace:"Sdk","SDK" | replace:"APIs Json","APIs.json" | replace:"Positive","(Positive)" | replace:"Negative","(Negative)" %}
-			{% assign new_rule_name = new_rule_name | strip %}
-			<tr>
-				<td>{{ new_rule_name }}</td>
-				<td width="20%" align="center"><a href="{{ rule.url }}">View</a></td>
-			</tr>
-		{% endif %}
-	{% endfor %}
+{% for rule in rules %}
+  {% for item in rule %}
+    {% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}
+      {% assign rule_name = item | replace: "-"," " %}
+      {% assign new_rule_name = "" %}
+      {% assign words = rule_name | split: ' ' %}
+      {% for word in words %}{% assign cword = word | capitalize %}{% assign new_rule_name = new_rule_name | append: " " | append: cword %}{% endfor %}
+      {% assign new_rule_name = new_rule_name | replace:"Api","API" | replace:"Sdk","SDK" | replace:"APIs Json","APIs.json" | replace:"Positive","(Positive)" | replace:"Negative","(Negative)" | strip %}
+      <div class="rule-row">
+        <span>{{ new_rule_name }}</span>
+        <a href="{{ rule.url }}" class="btn btn-sm btn-outline-dark">View</a>
+      </div>
+    {% endif %}
+  {% endfor %}
 {% endfor %}
-</table>
+</div>

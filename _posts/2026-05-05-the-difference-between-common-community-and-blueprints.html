@@ -1,0 +1,52 @@
+---
+layout: post
+title: 'The Difference Between Common, Community, and Blueprints'
+date: 2026-05-05
+image: https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-logo.png
+tags:
+  - API Commons
+  - common properties
+  - community properties
+  - blueprints
+  - API operations
+---
+
+<p>If you've browsed the API Commons site, you've noticed it's organized into several distinct collections: Common, Community, Base, and Blueprints. The names are suggestive but not self-explanatory. This post explains what each one is, why the distinction exists, and when you'd reach for each one.</p>
+
+<h2>Common Properties</h2>
+
+<p>The Common collection is the core. These are the operational properties that appear across virtually every serious API — the things API consumers look for immediately when they encounter a new API and the things API providers build regardless of their domain or business model.</p>
+
+<p>Authentication. Documentation. Getting started guide. SDKs. Rate limits. Change log. Road map. Terms of service. Privacy policy. Support. Status page. Plans and pricing.</p>
+
+<p>What makes a property "common" is not just that it appears frequently — it's that its absence is conspicuous. If an API doesn't have a change log, that's a gap. If it doesn't publish its rate limits in a machine-readable way, that's a gap. Common properties are the ones where the API Commons community has reached consensus that every production API should have them and that they should be expressible in a standard way.</p>
+
+<p>These properties are intended to work directly with <a href="https://apisjson.org">APIs.json</a>: you list them in your index file so that discovery tools can find them, so that AI agents can consume them, and so that governance tooling can verify their presence.</p>
+
+<h2>Community Properties</h2>
+
+<p>Community properties extend the common vocabulary with patterns that are important but more context-specific. A Postman collection is genuinely useful and increasingly expected, but not every API has one. An AsyncAPI spec is critical for event-driven APIs but irrelevant to a purely synchronous REST API. A GraphQL schema matters if you're running GraphQL, not otherwise.</p>
+
+<p>The Community collection captures these patterns without forcing them into the universal core. They're defined with the same rigor as Common properties — machine-readable, typed, compatible with APIs.json — but their presence in any given API is optional and context-dependent.</p>
+
+<p>Contributing to Community is also more open than contributing to Common. If you've identified a pattern that appears across multiple APIs in a particular domain but isn't yet covered by either collection, a Community property is the right place to propose it. Once a Community property achieves wide enough adoption and consensus, it can graduate to Common.</p>
+
+<h2>Base Schema</h2>
+
+<p>Base is where the foundational JSON Schema definitions live. These are the schemas that underpin how API Commons properties are structured — the building blocks that define the shape of a property definition itself, not the properties of an API. If Common and Community describe what an API has, Base describes what an API Commons property looks like.</p>
+
+<p>Most API consumers and producers won't need to engage directly with Base. It matters for tooling authors who are building validators, generators, or parsers that need to understand the structural rules of the API Commons format itself.</p>
+
+<h2>Blueprints</h2>
+
+<p>Blueprints are the most practical artifact in the collection. A blueprint is a complete, working APIs.json file that demonstrates how a particular type of API should look — what properties it should have, what a reasonable structure looks like, and how the various components fit together.</p>
+
+<p>Think of blueprints as templates or reference implementations. If you're publishing an APIs.json file for a payments API for the first time, a payments blueprint shows you what a well-formed APIs.json looks like for that context. If you're building governance tooling that needs to validate API indexes against a type-specific standard, blueprints give you the reference point.</p>
+
+<p>Blueprints are also useful for teams that are new to APIs.json and want to see the format in action before writing their own files from scratch.</p>
+
+<h2>Putting It Together</h2>
+
+<p>The collections aren't competing with each other — they're layers. Common defines the universal vocabulary. Community extends it. Base underpins the structure. Blueprints demonstrate the whole thing in practice. Together they form a system for making API operations machine-readable in a consistent way, regardless of the domain or provider.</p>
+
+<p>If you're starting out with API Commons, begin with the Common properties and check how many of them are present and machine-readable in your current API documentation. That gap analysis usually makes it obvious where to focus first.</p>

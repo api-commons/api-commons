@@ -1,0 +1,46 @@
+---
+layout: post
+title: 'What Belongs in API Commons in 2026'
+date: 2026-05-01
+image: https://kinlane-productions2.s3.amazonaws.com/apis-json/sdi-capability-specs-shared-artifacts.png
+tags:
+  - API Commons
+  - API operations
+  - machine-readable
+  - API lifecycle
+---
+
+<p>When API Commons launched in 2013, the central question was licensing. Could you declare in a machine-readable way that your API's interface was open, reusable, and not encumbered by the kind of intellectual property claims that Oracle was asserting against Google? That was the origin story — a response to a legal threat that had the API industry worried about whether clean-room implementations of HTTP interfaces could be freely built.</p>
+
+<p>That battle has since been settled. Google won at the Supreme Court. But API Commons didn't stop being relevant — it evolved.</p>
+
+<h2>From Licensing to Operations</h2>
+
+<p>Today, what belongs in API Commons is everything that API providers consistently repeat but rarely make machine-readable: the operational layer of an API. That means authentication patterns, onboarding flows, SDK references, rate limit documentation, change logs, road maps, support channels, and terms of service. Not the API itself — not the endpoints and schemas that OpenAPI captures so well — but the surrounding operational context that every provider builds and every consumer needs to navigate.</p>
+
+<p>Think of it this way: OpenAPI describes what your API does. API Commons describes how to work with it. Those are different problems, and conflating them is why so much API onboarding still feels manual and fragile even as the API economy has matured.</p>
+
+<h2>The Machine-Readable Gap</h2>
+
+<p>The frustrating thing is that this information already exists everywhere. Every major API provider has documentation for authentication. They have a change log page. They list their SDKs. They publish a status page. But all of it is HTML, written for humans, structured inconsistently, and invisible to any tooling that might try to automate onboarding, generate client code, or monitor compliance.</p>
+
+<p>API Commons is the project that tries to close that gap — to take the patterns that appear in every serious API operation and define them in a way that can be referenced from an <a href="https://apisjson.org">APIs.json</a> index and parsed by tools, agents, and integrations without requiring a human to read the docs first.</p>
+
+<h2>What the Collections Cover Today</h2>
+
+<p>In 2026, the API Commons collections cover a wide surface area:</p>
+
+<ul>
+  <li><strong>Common properties</strong> — the most universal operational building blocks: authentication, getting started, plans, SDKs, change log, road map, documentation, terms of service, privacy policy, status, and support. These are the things every API consumer looks for, often in the first five minutes.</li>
+  <li><strong>Community properties</strong> — patterns that are important but more specialized: webhooks, sandbox environments, postman collections, OpenAPI specs, AsyncAPI specs, GraphQL schemas. These appear widely enough to deserve a standard definition but aren't universal across every API.</li>
+  <li><strong>Rules</strong> — Spectral-compatible governance rules that enforce API design patterns. Positive rules define what should be present; negative rules flag what should be absent.</li>
+  <li><strong>Rulesets</strong> — bundled collections of rules assembled for specific use cases, ready to drop into a CI pipeline or linting tool.</li>
+</ul>
+
+<h2>What's Coming</h2>
+
+<p>The direction for API Commons in 2026 is deeper integration with AI-assisted API consumption. As large language models increasingly act as API clients — reading documentation, constructing requests, handling auth, navigating errors — the machine-readable layer that API Commons provides becomes critical infrastructure rather than a nice-to-have.</p>
+
+<p>An API that publishes an APIs.json file with well-typed API Commons property references is an API that can be understood, integrated, and monitored without a human in the loop for the routine parts of that process. That's the promise. The work ahead is building enough of the vocabulary that it covers the long tail of API operations, not just the most common cases.</p>
+
+<p>If you're building APIs in 2026 and you're not thinking about the machine-readable operational layer, you're leaving automation on the table. API Commons is where that work happens.</p>

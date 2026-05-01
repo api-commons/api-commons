@@ -1,8 +1,17 @@
 title: API Commons
+name: API Commons
 description: The website for the API Commons of open source machine readable API operation properties.
-url: http://apicommons.org
+url: https://apicommons.org
 image: /images/api-commons-icon.png
 logo: /images/api-commons-logo.png
+keywords:
+  - API Commons
+  - API properties
+  - API governance
+  - API operations
+  - machine-readable APIs
+  - API lifecycle
+future: false
 
 version:      1.1.1
 author:

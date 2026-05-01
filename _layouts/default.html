@@ -5,14 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }} - {{ site.description }}{% endif %}</title>
     <meta name="description" content="{% if page.description %}{{ page.description | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+    <meta name="keywords" content="{% if page.tags %}{{ page.tags | join: ', ' }}, {% endif %}{{ site.keywords | join: ', ' }}">
     <link rel="canonical" href="{{ page.url | absolute_url }}">
+
+    {% if page.image %}{% assign _og_image = page.image %}{% else %}{% assign _og_image = site.image | absolute_url %}{% endif %}
+    {% if page.layout == "post" %}{% assign _og_type = "article" %}{% else %}{% assign _og_type = "website" %}{% endif %}
 
     <!-- Open Graph -->
     <meta property="og:title" content="{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}">
     <meta property="og:description" content="{% if page.description %}{{ page.description | strip_html | strip_newlines | truncate: 200 }}{% else %}{{ site.description }}{% endif %}">
     <meta property="og:url" content="{{ page.url | absolute_url }}">
     <meta property="og:site_name" content="{{ site.title }}">
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="{{ _og_type }}">
+    <meta property="og:image" content="{{ _og_image }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
+    {% if page.layout == "post" and page.date %}<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">{% endif %}
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ _og_image }}">
+    <meta name="twitter:image:alt" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
+    <meta name="twitter:title" content="{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}">
+    <meta name="twitter:description" content="{% if page.description %}{{ page.description | strip_html | strip_newlines | truncate: 200 }}{% else %}{{ site.description }}{% endif %}">
 
     <link href="/assets/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/sticky-footer.css" rel="stylesheet">
@@ -54,9 +70,6 @@
               <a class="nav-link{% if page.url == '/' %} active{% endif %}" href="{{ site.url }}/">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://apisjson.org" target="_blank" rel="noopener">APIs.json</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link{% if page.url contains '/common/' %} active{% endif %}" href="{{ site.url }}/common/">Common</a>
             </li>
             <li class="nav-item">
@@ -73,6 +86,9 @@
             </li>
             <li class="nav-item">
               <a class="nav-link{% if page.url contains '/about/' %} active{% endif %}" href="{{ site.url }}/about/">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://apis.io" target="_blank" rel="noopener">APIs.io</a>
             </li>
           </ul>
         </div>
