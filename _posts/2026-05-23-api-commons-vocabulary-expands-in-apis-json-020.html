@@ -1,0 +1,50 @@
+---
+layout: post
+title: 'API Commons Vocabulary Expands in APIs.json 0.20'
+date: 2026-05-23
+image: https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-icon.png
+tags:
+  - API Commons
+  - APIs.json
+  - API operations
+  - vocabulary
+  - 0.20
+---
+
+<p>APIs.json 0.20 is in draft, and the biggest change is a significant expansion of the reserved word vocabulary — the standard types for naming properties in an APIs.json index. The vocabulary is the bridge between APIs.json as a format and API Commons as a governance standard. When a provider uses a reserved type, it means something specific and checkable. When enough providers use the same types, patterns emerge that governance rules can be written against.</p>
+
+<p>The 0.20 additions are largely drawn from real-world provider usage: types that were appearing frequently as custom <code>X-</code> extensions and are now being promoted to first-class reserved words. Here's what this means for API Commons.</p>
+
+<h2>The Vocabulary Is How Governance Scales</h2>
+
+<p>API Commons rules and rulesets work by checking whether specific types are present in an APIs.json file. A rule that checks for <code>Documentation</code> can only fire if providers are using the word <code>Documentation</code> — not <code>Docs</code>, <code>X-Documentation</code>, or <code>developer-docs</code>. The reserved word list is the shared vocabulary that makes automated governance possible at scale.</p>
+
+<p>Each time a new type is promoted to reserved status, it opens the door to new governance rules. 0.20 adds 24 new types. That means 24 new operational properties that can now be checked automatically.</p>
+
+<h2>What's New and Why It Matters for Operations Coverage</h2>
+
+<p>The 0.20 additions fill gaps that have been visible in governance audits for some time. A few that stand out:</p>
+
+<p><strong>Compliance and License</strong> — Enterprise API consumers increasingly need to verify that the APIs they're integrating with meet specific compliance requirements and have clear licensing terms. <code>Compliance</code> and <code>License</code> are now reserved, so governance rules can check whether these artifacts are indexed and linked. For APIs operating in regulated industries — financial services, healthcare, government — this is a meaningful gap being closed.</p>
+
+<p><strong>CLI and Console</strong> — The developer experience layer has historically been underrepresented in the vocabulary. <code>CLI</code> and <code>Console</code> cover the two most common interactive tools providers offer alongside their API. Indexing them enables governance rules that check whether an API has interactive tooling, not just static documentation.</p>
+
+<p><strong>Community, Slack, Discord, StackOverflow</strong> — Support is one of the most important Common properties, but support has evolved beyond a single URL. Developers in 2026 expect to find help in community channels, not just a support email. These types let providers index where community happens, and governance rules can check whether the community presence is declared and discoverable.</p>
+
+<p><strong>SpectralRules</strong> — This is a particularly interesting addition. A <code>SpectralRules</code> property references the Spectral ruleset that governs the API's own OpenAPI spec. Indexing this means consumers can find not just what the API does but how it was validated. It also enables meta-governance: checking whether a provider has published their governance rules alongside their API.</p>
+
+<p><strong>Vocabulary and JSONLD</strong> — For APIs that publish semantic context — linked data vocabularies, JSON-LD contexts — these types make that context discoverable. Increasingly important as AI agents need structured, interpretable API semantics rather than plain documentation prose.</p>
+
+<p><strong>ReleaseNotes alongside ChangeLog</strong> — Many providers maintain both a narrative release notes document (what changed in this version and why it matters) and a machine-readable or structured change log (what changed specifically). They serve different audiences. Separating them in the vocabulary acknowledges that distinction.</p>
+
+<h2>Updated Rules Coverage</h2>
+
+<p>The API Commons rules and rulesets will be updated to reflect the 0.20 vocabulary once the spec is marked stable. The Common properties ruleset will gain coverage for the new types that belong in the baseline operational surface. The Community properties ruleset will expand to include the new community and social types.</p>
+
+<p>If you're already running API Commons rules in your CI pipeline, the update will be additive — existing passing checks won't break. New checks will be opt-in via the updated rulesets.</p>
+
+<h2>Participating in 0.20</h2>
+
+<p>The 0.20 schema is open for review at <a href="https://github.com/apis-json/api-json/pull/116" target="_blank" rel="noopener">github.com/apis-json/api-json/pull/116</a>. If you maintain APIs that use custom <code>X-</code> types for any of the newly reserved words, now is a good time to review and consider migrating. Both forms will remain valid, but using reserved types gives your API better governance coverage and ensures it's indexed correctly by <a href="https://apis.io">apis.io</a>.</p>
+
+<p>The full updated reserved word list is at <a href="https://apisjson.org/format/reservedwords" target="_blank" rel="noopener">apisjson.org/format/reservedwords</a>. If there are operational properties your APIs commonly publish that aren't yet represented in the vocabulary, <a href="https://github.com/apis-json/api-json/issues" target="_blank" rel="noopener">open an issue</a> — the 0.20 list was built from provider data, and provider input is how it stays accurate.</p>
