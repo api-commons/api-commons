@@ -1,0 +1,129 @@
+name: API Commons
+description: Open source Spectral rules, rulesets, blueprints, and vocabularies for governing API operations at scale across the full API lifecycle.
+url: https://apicommons.org/apis.json
+image: https://apicommons.org/images/api-commons-icon.png
+created: "2014-03-01"
+modified: "2026-05-02"
+specificationVersion: "0.20"
+tags:
+  - API Commons
+  - API Governance
+  - Spectral
+  - Rules
+  - Rulesets
+  - Blueprints
+  - OpenAPI
+  - APIs.json
+maintainers:
+  - FN: Kin Lane
+    email: info@apievangelist.com
+    url: https://kinlane.com
+apis:
+  - name: API Commons Rules
+    description: 1,568 Spectral-compatible governance rules for OpenAPI, APIs.json, and provider-specific API design patterns — covering 588 OpenAPI rules, 130 APIs.json rules, and 628 provider rulesets.
+    humanURL: https://apicommons.org/rules/
+    baseURL: https://apicommons.org
+    image: https://apicommons.org/images/api-commons-icon.png
+    tags:
+      - Rules
+      - Spectral
+      - OpenAPI
+      - APIs.json
+      - Governance
+    properties:
+      - type: Documentation
+        url: https://apicommons.org/rules/
+      - type: GitHubRepository
+        url: https://github.com/api-commons/api-commons/tree/gh-pages/_rules
+
+  - name: API Commons Rulesets
+    description: Bundled Spectral rulesets assembling individual rules into named governance profiles for use in CI/CD pipelines and API design reviews.
+    humanURL: https://apicommons.org/rulesets/
+    baseURL: https://apicommons.org
+    image: https://apicommons.org/images/api-commons-icon.png
+    tags:
+      - Rulesets
+      - Spectral
+      - CI/CD
+      - Governance
+    properties:
+      - type: Documentation
+        url: https://apicommons.org/rulesets/
+      - type: GitHubRepository
+        url: https://github.com/api-commons/api-commons/tree/gh-pages/_rulesets
+
+  - name: API Commons Blueprints
+    description: API design blueprints encoding proven patterns for common API capabilities — reusable templates for paths, operations, schemas, and responses across the API lifecycle.
+    humanURL: https://apicommons.org/blueprints/
+    baseURL: https://apicommons.org
+    image: https://apicommons.org/images/api-commons-icon.png
+    tags:
+      - Blueprints
+      - API Design
+      - Patterns
+      - OpenAPI
+    properties:
+      - type: Documentation
+        url: https://apicommons.org/blueprints/
+      - type: GitHubRepository
+        url: https://github.com/api-commons/api-commons/tree/gh-pages/_blueprints
+
+  - name: API Commons Base Definitions
+    description: Shared base API definitions — common schemas, parameters, headers, and response patterns reusable across any API design.
+    humanURL: https://apicommons.org/base/
+    baseURL: https://apicommons.org
+    image: https://apicommons.org/images/api-commons-icon.png
+    tags:
+      - Base
+      - Schemas
+      - Parameters
+      - API Design
+    properties:
+      - type: Documentation
+        url: https://apicommons.org/base/
+      - type: GitHubRepository
+        url: https://github.com/api-commons/api-commons/tree/gh-pages/_base
+
+  - name: API Commons Overlays
+    description: OpenAPI overlays for extending and customizing API definitions without modifying the original source document.
+    humanURL: https://apicommons.org/overlays/
+    baseURL: https://apicommons.org
+    image: https://apicommons.org/images/api-commons-icon.png
+    tags:
+      - Overlays
+      - OpenAPI
+      - Customization
+    properties:
+      - type: Documentation
+        url: https://apicommons.org/overlays/
+      - type: GitHubRepository
+        url: https://github.com/api-commons/api-commons/tree/gh-pages/_overlays
+
+  - name: API Commons Common Properties
+    description: Shared API property definitions — reusable building blocks for common API operational patterns including authentication, pagination, and error handling.
+    humanURL: https://apicommons.org/common/
+    baseURL: https://apicommons.org
+    image: https://apicommons.org/images/api-commons-icon.png
+    tags:
+      - Common
+      - Properties
+      - API Design
+    properties:
+      - type: Documentation
+        url: https://apicommons.org/common/
+      - type: GitHubRepository
+        url: https://github.com/api-commons/api-commons/tree/gh-pages/_common
+
+common:
+  - type: Website
+    url: https://apicommons.org
+  - type: Blog
+    url: https://apicommons.org/blog/
+  - type: BlogFeed
+    url: https://apicommons.org/atom.xml
+  - type: About
+    url: https://apicommons.org/about/
+  - type: GitHubOrganization
+    url: https://github.com/api-commons
+  - type: GitHubRepository
+    url: https://github.com/api-commons/api-commons
