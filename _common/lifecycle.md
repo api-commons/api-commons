@@ -10,4 +10,7 @@ tags:
   - Stages
   - Rules
   - Governance
+yaml_example: |
+  - type: X-Lifecycle
+    url: https://developers.example.com/lifecycle
 ---

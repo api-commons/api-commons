@@ -8,4 +8,7 @@ tags:
   - Sustainability
   - SCI Report
   - Green Software
+yaml_example: |
+  - type: SCIReport
+    url: https://developers.example.com/sustainability/sci-report
 ---

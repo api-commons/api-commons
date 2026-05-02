@@ -10,4 +10,7 @@ tags:
   - Governance
   - Business
   - Leadership
+yaml_example: |
+  - type: X-Policies
+    url: https://developers.example.com/policies
 ---

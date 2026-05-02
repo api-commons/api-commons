@@ -7,4 +7,7 @@ tags:
   - Authentication 
   - Security
   - Keys
+yaml_example: |
+  - type: Authentication
+    url: https://developers.example.com/authentication
 ---

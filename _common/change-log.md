@@ -9,4 +9,7 @@ tags:
   - Change Log
   - Versioning
   - Communication  
+yaml_example: |
+  - type: ChangeLog
+    url: https://developers.example.com/changelog
 ---

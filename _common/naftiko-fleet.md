@@ -8,4 +8,8 @@ tags:
   - Fleet
   - AI
   - Orchestration
+yaml_example: |
+  - type: NaftikoFleet
+    url: https://developers.example.com/naftiko/fleet.yaml
+    mediaType: application/yaml
 ---

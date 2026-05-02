@@ -8,4 +8,7 @@ source: commons
 tags:
   - Portals
   - Landing Pages
+yaml_example: |
+  - type: Portal
+    url: https://portal.example.com/
 ---

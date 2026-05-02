@@ -8,4 +8,7 @@ source: concepts
 tags:
   - Blog
   - Information 
+yaml_example: |
+  - type: Blog
+    url: https://developers.example.com/blog
 ---

@@ -7,17 +7,34 @@ layout: default
 </div>
 <img src="{{ page.image }}" class="float-end ms-3 mb-3" width="250">
 <p>{{ page.description }}</p>
-<h3>Links</h3>
-<ul>
-    <li><a href="{{ page.url }}">Repo</a></li>
-</ul>
+
+{% if page.yaml_example %}
+<h3>Example</h3>
+<div class="src-widget" data-src-widget data-original-lang="yaml" data-current-lang="yaml" data-original-filename="{{ page.title | downcase | replace: ' ', '-' }}.yaml">
+  <div class="src-widget-head">
+    <span class="src-label" data-src-filename>{{ page.title | downcase | replace: ' ', '-' }}.yaml</span>
+    <span class="src-search">
+      <input type="search" data-src-search placeholder="Search in source… (n / N to navigate)" aria-label="Search source">
+    </span>
+    <span class="src-actions">
+      <button type="button" data-src-toggle data-target="yaml" aria-label="View as YAML">YAML</button>
+      <button type="button" data-src-toggle data-target="json" aria-label="View as JSON">JSON</button>
+      <button type="button" data-src-download aria-label="Download">Download</button>
+      <button type="button" data-src-copy>Copy</button>
+    </span>
+  </div>
+  <pre class="line-numbers language-yaml"><code class="language-yaml" data-src-code>{{ page.yaml_example }}</code></pre>
+</div>
+{% endif %}
+
 <h3>Tags</h3>
 <ul>
 {% for tag in page.tags %}
     <li>{{ tag }}</li>
 {% endfor %}
 </ul>
-<h3>Examples</h3>
-<script src="{{ page.gist }}"></script>
+
+{% include src-widget-scripts.html %}
+
 <br>
 <p class="text-center"><a href="/common/"><strong>All Common Properties</strong></a></p>

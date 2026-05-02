@@ -10,4 +10,7 @@ tags:
   - Code
   - Programming Languages
   - Integration
+yaml_example: |
+  - type: SDKs
+    url: https://developers.example.com/sdks
 ---

@@ -8,4 +8,7 @@ tags:
   - Framework
   - Cloud Financial Management
   - Governance
+yaml_example: |
+  - type: FinOpsFramework
+    url: https://developers.example.com/finops
 ---

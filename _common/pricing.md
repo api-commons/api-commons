@@ -7,4 +7,7 @@ machineReadable: true
 source: commons
 tags:
   - SDKs 
+yaml_example: |
+  - type: Pricing
+    url: https://example.com/pricing
 ---

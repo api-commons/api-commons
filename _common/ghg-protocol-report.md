@@ -8,4 +8,7 @@ tags:
   - Emissions
   - Sustainability
   - Carbon
+yaml_example: |
+  - type: GHGProtocolReport
+    url: https://developers.example.com/sustainability/ghg-report
 ---

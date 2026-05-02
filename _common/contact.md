@@ -8,4 +8,7 @@ source: concept
 tags:
   - Contact
   - Communication 
+yaml_example: |
+  - type: Contact
+    url: https://developers.example.com/contact
 ---

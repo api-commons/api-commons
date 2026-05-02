@@ -8,4 +8,7 @@ tags:
   - FinOps
   - Kubernetes
   - Cost Allocation
+yaml_example: |
+  - type: OpenCostSpecification
+    url: https://developers.example.com/costs/opencost
 ---

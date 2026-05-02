@@ -8,4 +8,7 @@ tags:
   - FinOps
   - Billing
   - Reconciliation
+yaml_example: |
+  - type: InvoiceReconciliation
+    url: https://developers.example.com/billing/reconciliation
 ---

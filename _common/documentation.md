@@ -9,4 +9,7 @@ tags:
   - Onboarding 
   - Documentation
   - Information
+yaml_example: |
+  - type: Documentation
+    url: https://developers.example.com/docs
 ---

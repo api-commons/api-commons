@@ -8,4 +8,7 @@ source: concept
 tags:
   - Errors
   - Status 
+yaml_example: |
+  - type: ErrorCodes
+    url: https://developers.example.com/errors
 ---

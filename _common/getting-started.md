@@ -9,4 +9,7 @@ tags:
   - Onboarding 
   - Authentication
   - Documentation
+yaml_example: |
+  - type: GettingStarted
+    url: https://developers.example.com/getting-started
 ---

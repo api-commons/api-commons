@@ -7,4 +7,7 @@ machineReadable: false
 source: concept
 tags:
   - Legal
+yaml_example: |
+  - type: PrivacyPolicy
+    url: https://example.com/privacy
 ---

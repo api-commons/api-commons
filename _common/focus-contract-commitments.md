@@ -8,4 +8,8 @@ tags:
   - FinOps
   - Commitments
   - Reserved Instances
+yaml_example: |
+  - type: FocusContractCommitments
+    url: https://developers.example.com/billing/commitments
+    mediaType: application/json
 ---

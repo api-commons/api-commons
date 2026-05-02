@@ -9,4 +9,7 @@ tags:
   - Performance
   - Load Testing
   - Latency 
+yaml_example: |
+  - type: X-Performance
+    url: https://developers.example.com/performance
 ---

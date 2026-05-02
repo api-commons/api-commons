@@ -9,4 +9,7 @@ tags:
   - Use Case
   - Business
   - Requirements
+yaml_example: |
+  - type: UseCases
+    url: https://developers.example.com/use-cases
 ---

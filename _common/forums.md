@@ -7,4 +7,7 @@ machineReadable: false
 source: concept
 tags:
   - SDKs 
+yaml_example: |
+  - type: Forums
+    url: https://forum.example.com/
 ---

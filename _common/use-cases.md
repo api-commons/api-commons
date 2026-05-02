@@ -9,4 +9,7 @@ tags:
   - Use Cases 
   - Business
   - Alignment
+yaml_example: |
+  - type: UseCases
+    url: https://developers.example.com/use-cases
 ---

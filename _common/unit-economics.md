@@ -8,4 +8,7 @@ tags:
   - FinOps
   - Pricing
   - Cost
+yaml_example: |
+  - type: UnitEconomics
+    url: https://developers.example.com/billing/unit-economics
 ---

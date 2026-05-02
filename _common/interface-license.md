@@ -12,4 +12,7 @@ tags:
   - Server
   - Data
 gist: https://gist.github.com/kinlane/d4965f2d9a39135f2bfd33f0e9cbc42d.js
+yaml_example: |
+  - type: InterfaceLicense
+    url: https://developers.example.com/license
 ---

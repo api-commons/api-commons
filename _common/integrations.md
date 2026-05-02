@@ -8,4 +8,7 @@ source: concept
 tags:
   - Integrations
   - Interoperability 
+yaml_example: |
+  - type: Integrations
+    url: https://developers.example.com/integrations
 ---

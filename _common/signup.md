@@ -9,4 +9,7 @@ tags:
   - Onboarding 
   - Sign Up
   - Registration
+yaml_example: |
+  - type: Signup
+    url: https://developers.example.com/signup
 ---

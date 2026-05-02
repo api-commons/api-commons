@@ -8,4 +8,7 @@ tags:
   - FinOps
   - Cost Allocation
   - Governance
+yaml_example: |
+  - type: TaggingPolicy
+    url: https://developers.example.com/billing/tagging
 ---

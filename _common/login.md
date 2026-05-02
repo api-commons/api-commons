@@ -8,4 +8,7 @@ source: concept
 tags:
   - Onboarding 
   - Accounts
+yaml_example: |
+  - type: Login
+    url: https://developers.example.com/login
 ---

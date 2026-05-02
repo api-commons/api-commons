@@ -10,4 +10,7 @@ tags:
   - TOS
   - Terms of Service
   - Terms of Use
+yaml_example: |
+  - type: TermsOfService
+    url: https://example.com/terms
 ---

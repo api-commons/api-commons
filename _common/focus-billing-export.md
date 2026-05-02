@@ -8,4 +8,8 @@ tags:
   - FinOps
   - Billing
   - Cost
+yaml_example: |
+  - type: FocusBillingExport
+    url: https://developers.example.com/billing/focus-export
+    mediaType: application/json
 ---

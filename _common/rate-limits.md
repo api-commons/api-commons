@@ -9,4 +9,7 @@ tags:
   - Rate Limits
   - Usage
   - Constraints 
+yaml_example: |
+  - type: RateLimits
+    url: https://developers.example.com/rate-limits
 ---

@@ -8,4 +8,7 @@ tags:
   - FinOps
   - Cost Allocation
   - Showback
+yaml_example: |
+  - type: ChargebackPolicy
+    url: https://developers.example.com/billing/chargeback
 ---

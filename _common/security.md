@@ -8,4 +8,7 @@ source: concept
 tags:
   - Security
   - Trust
+yaml_example: |
+  - type: Security
+    url: https://developers.example.com/security
 ---

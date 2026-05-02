@@ -9,4 +9,7 @@ tags:
   - Support
   - Help
   - Troubleshooting
+yaml_example: |
+  - type: Support
+    url: https://support.example.com/
 ---

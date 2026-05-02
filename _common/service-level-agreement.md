@@ -9,4 +9,7 @@ tags:
   - Change
   - Legal
   - Agreements
+yaml_example: |
+  - type: ServiceLevelAgreement
+    url: https://developers.example.com/sla
 ---

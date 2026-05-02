@@ -9,4 +9,7 @@ tags:
   - Change 
   - Versioning
   - Semantic
+yaml_example: |
+  - type: Versioning
+    url: https://developers.example.com/versioning
 ---

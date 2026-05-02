@@ -7,4 +7,7 @@ machineReadable: true
 source: commons
 tags:
   - SDKs 
+yaml_example: |
+  - type: RoadMap
+    url: https://developers.example.com/roadmap
 ---

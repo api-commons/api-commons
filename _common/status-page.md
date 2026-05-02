@@ -9,4 +9,7 @@ tags:
   - Status
   - Health
   - Reliability  
+yaml_example: |
+  - type: StatusPage
+    url: https://status.example.com/
 ---

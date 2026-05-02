@@ -8,4 +8,7 @@ source: concept
 tags:
   - Deprecation
   - Policies
+yaml_example: |
+  - type: DeprecationPolicy
+    url: https://developers.example.com/deprecation
 ---
