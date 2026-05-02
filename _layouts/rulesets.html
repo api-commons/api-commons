@@ -3,15 +3,39 @@ layout: default
 ---
 <h1>{{ page.name }}</h1>
 <p>{{ page.description }}</p>
-<textarea id="ruleset" style="display: none; width: 100%; height: 550px; border: 1px solid #000;">{% for this_rule in page.rules %}{% for rule in site.rules %}{% for item in rule %}{% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}{% if item == this_rule %}"{{ item }}": {{ rule[item] | jsonify }},{% endif %}{% endif %}{% endfor %}{% endfor %}{% endfor %}</textarea>
+
+<h3 id="source">Ruleset Definition</h3>
+<div class="src-widget" data-src-widget data-original-lang="yaml" data-current-lang="yaml" data-original-filename="{{ page.slug }}.yaml">
+  <div class="src-widget-head">
+    <span class="src-label" data-src-filename>{{ page.slug }}.yaml</span>
+    <span class="src-search">
+      <input type="search" data-src-search placeholder="Search in source… (n / N to navigate)" aria-label="Search source">
+    </span>
+    <span class="src-actions">
+      <button type="button" data-src-toggle data-target="yaml" aria-label="View as YAML">YAML</button>
+      <button type="button" data-src-toggle data-target="json" aria-label="View as JSON">JSON</button>
+      <button type="button" data-src-download aria-label="Download source">Download</button>
+      <button type="button" data-src-copy>Copy</button>
+    </span>
+  </div>
+  <pre class="line-numbers language-yaml"><code class="language-yaml" data-src-code id="ruleset-code"></code></pre>
+</div>
+
+<textarea id="ruleset-raw" style="display:none;">{% for this_rule in page.rules %}{% for rule in site.rules %}{% for item in rule %}{% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}{% if item == this_rule %}"{{ item }}": {{ rule[item] | jsonify }},{% endif %}{% endif %}{% endfor %}{% endfor %}{% endfor %}</textarea>
 <script>
-    var rule = document.getElementById("ruleset").value;
-    rule = rule.substring(0, rule.length-1);
-    this_rule = '{ "rules":{' + rule + '}}';
-    this_rule = JSON.parse(this_rule);
-    var apis_yaml = jsyaml.dump(this_rule);
-    document.getElementById("ruleset").value = apis_yaml;
-    document.getElementById("ruleset").style.display = '';
+(function () {
+  var raw = document.getElementById('ruleset-raw').value;
+  raw = raw.substring(0, raw.length - 1);
+  try {
+    var parsed = JSON.parse('{"rules":{' + raw + '}}');
+    document.getElementById('ruleset-code').textContent = jsyaml.dump(parsed, { indent: 2, lineWidth: 120, noRefs: true });
+  } catch (e) {
+    document.getElementById('ruleset-code').textContent = '# Error assembling ruleset: ' + e.message;
+  }
+})();
 </script>
+
+{% include src-widget-scripts.html %}
+
 <br>
 <p class="text-center"><a href="/rulesets/"><strong>Back to All of the Rulesets</strong></a></p>

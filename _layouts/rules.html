@@ -1,29 +1,34 @@
 ---
 layout: default
 ---
-
 {% assign rule_name = page.title | replace:"Api","API" | replace:"Sdk","SDK" | replace:"APIs Json","APIs.json" | replace:"Positive","(Positive)" | replace:"Negative","(Negative)" %}
 {% assign rule_name = rule_name | strip %}
 {% for item in page %}
-    {% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}
-        {% assign this_rule = page[item] %}
-        <h2>{{ rule_name }} (<a href="https://github.com/api-commons/api-commons/blob/gh-pages/_rules/{{ item }}.md?plain=1" target="_blank">Edit</a>)</h2>
-        <p>{{ page[item].description }}</p>
-        <h3>JSON Version</h3>
-        <textarea id="rule_json" style="width: 100%; height: 250px; border: 1px solid #000;">{{ this_rule | jsonify }}</textarea>
-        <h3>YAML Version</h3>
-        <textarea id="rule_yaml" style="width: 100%; height: 250px; border: 1px solid #000;"></textarea>
-        <script>
-            var rule = JSON.parse(document.getElementById("rule_json").value);
-            var this_rule = {};
-            this_rule['{{ item }}'] = rule;
-            var apis_yaml = jsyaml.dump(this_rule);
-            var apis_json = JSON.stringify(this_rule, null, 2);
-            document.getElementById("rule_json").value = apis_json;
-            document.getElementById("rule_yaml").value = apis_yaml;
-        </script>
+  {% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}
+    {% assign this_rule = page[item] %}
+    <h2>{{ rule_name }} (<a href="https://github.com/api-commons/api-commons/blob/gh-pages/_rules/{{ item }}.md?plain=1" target="_blank" rel="noopener">Edit</a>)</h2>
+    <p>{{ page[item].description }}</p>
 
-    {% endif %}
+    <h3 id="source">Rule Definition</h3>
+    <div class="src-widget" data-src-widget data-original-lang="json" data-current-lang="json" data-original-filename="{{ item }}.json">
+      <div class="src-widget-head">
+        <span class="src-label" data-src-filename>{{ item }}.json</span>
+        <span class="src-search">
+          <input type="search" data-src-search placeholder="Search in source… (n / N to navigate)" aria-label="Search source">
+        </span>
+        <span class="src-actions">
+          <button type="button" data-src-toggle data-target="yaml" aria-label="View as YAML">YAML</button>
+          <button type="button" data-src-toggle data-target="json" aria-label="View as JSON">JSON</button>
+          <button type="button" data-src-download aria-label="Download source">Download</button>
+          <button type="button" data-src-copy>Copy</button>
+        </span>
+      </div>
+      <pre class="line-numbers language-json"><code class="language-json" data-src-code>{ "{{ item }}": {{ this_rule | jsonify | xml_escape }} }</code></pre>
+    </div>
+  {% endif %}
 {% endfor %}
+
+{% include src-widget-scripts.html %}
+
 <br>
 <p class="text-center"><a href="/rules/"><strong>Back to All of the Rules</strong></a></p>

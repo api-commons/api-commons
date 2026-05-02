@@ -1,0 +1,219 @@
+<link rel="stylesheet" href="/assets/prism/prism-coy.min.css">
+<link rel="stylesheet" href="/assets/prism/prism-line-numbers.min.css">
+<style>
+  .src-widget { background: #fdfdfd; border: 1px solid #e3e7ee; border-radius: 10px; overflow: hidden; margin-top: 0.75rem; }
+  .src-widget-head { display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.85rem; background: #f8fafc; border-bottom: 1px solid #e3e7ee; flex-wrap: wrap; }
+  .src-label { color: #475569; font-weight: 600; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.8rem; flex: 0 0 auto; }
+  .src-search { flex: 1 1 200px; min-width: 140px; }
+  .src-search input { width: 100%; padding: 0.3em 0.6em; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.8rem; background: #fff; color: #1a1a2e; }
+  .src-search input:focus { outline: none; border-color: #1e40af; box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.15); }
+  .src-actions { display: flex; gap: 0.25rem; flex: 0 0 auto; }
+  .src-actions a, .src-actions button { background: none; border: 1px solid transparent; padding: 0.25em 0.6em; color: #1e40af; font-size: 0.78rem; font-weight: 500; cursor: pointer; text-decoration: none; border-radius: 4px; line-height: 1.4; }
+  .src-actions a:hover, .src-actions button:hover { background: #eef2f7; }
+  .src-actions button.active { background: #dbeafe; border-color: #93c5fd; }
+  .src-actions button:disabled { color: #94a3b8; cursor: not-allowed; }
+  .src-actions button:disabled:hover { background: none; }
+  .src-widget pre[class*="language-"] { margin: 0; padding: 1rem 0; background: #fdfdfd; box-shadow: none; border: none; max-height: 540px; overflow: auto; font-size: 0.82rem; line-height: 1.5; }
+  .src-widget pre[class*="language-"] > code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; padding-right: 1rem; }
+  .src-widget pre[class*="language-"]::before, .src-widget pre[class*="language-"]::after { display: none; }
+  .src-widget pre.line-numbers { padding-left: 3.5em; counter-reset: linenumber; position: relative; }
+  .src-widget pre.line-numbers > code { position: relative; white-space: inherit; }
+  .src-widget pre.line-numbers .line-numbers-rows { position: absolute; pointer-events: none; top: 1rem; font-size: 100%; left: -3em; width: 2.7em; letter-spacing: -1px; border-right: 1px solid #e3e7ee; user-select: none; }
+  .src-widget pre.line-numbers .line-numbers-rows > span { display: block; counter-increment: linenumber; }
+  .src-widget pre.line-numbers .line-numbers-rows > span:before { content: counter(linenumber); color: #cbd5e1; display: block; padding-right: 0.7em; text-align: right; font-size: 0.78rem; }
+  .src-widget .token.key, .src-widget .token.property, .src-widget .token.atrule { color: #1e40af; font-weight: 600; }
+  .src-widget .token.string { color: #047857; }
+  .src-widget .token.number, .src-widget .token.boolean, .src-widget .token.null { color: #b45309; }
+  .src-widget .token.comment { color: #94a3b8; font-style: italic; }
+  .src-widget .token.punctuation, .src-widget .token.operator { color: #64748b; }
+  .src-widget .token.tag { color: #7c3aed; }
+  .src-widget .token.anchor, .src-widget .token.alias { color: #be185d; }
+  mark.src-hit { background: #fef08a; color: inherit; padding: 0; border-radius: 2px; }
+  mark.src-hit-active { background: #fb923c; color: #fff; }
+  .src-copied { color: #047857 !important; }
+</style>
+<script src="/assets/prism/prism-core.min.js" defer></script>
+<script src="/assets/prism/prism-yaml.min.js" defer></script>
+<script src="/assets/prism/prism-json.min.js" defer></script>
+<script src="/assets/prism/prism-line-numbers.min.js" defer></script>
+<script src="/assets/prism/js-yaml.min.js" defer></script>
+<script>
+  (function () {
+    if (window.__srcWidgetInit) return;
+    window.__srcWidgetInit = true;
+
+    function initWidget(widget) {
+      var codeEl = widget.querySelector('[data-src-code]');
+      var preEl = widget.querySelector('pre');
+      var search = widget.querySelector('[data-src-search]');
+      var toggles = widget.querySelectorAll('[data-src-toggle]');
+      var downloadBtn = widget.querySelector('[data-src-download]');
+      var copyBtn = widget.querySelector('[data-src-copy]');
+      var fileLabel = widget.querySelector('[data-src-filename]');
+      var originalLang = widget.dataset.originalLang;
+      var originalText = codeEl.textContent;
+      var originalFilename = widget.dataset.originalFilename;
+      var currentLang = originalLang;
+      var currentText = originalText;
+      var searchHits = [];
+      var activeHit = -1;
+
+      function highlight() {
+        if (window.Prism) window.Prism.highlightElement(codeEl);
+      }
+
+      function setActiveToggle() {
+        toggles.forEach(function (b) {
+          if (b.dataset.target === currentLang) b.classList.add('active');
+          else b.classList.remove('active');
+        });
+      }
+
+      function updateFilenameForLang() {
+        if (!fileLabel) return;
+        var base = originalFilename.replace(/\.(ya?ml|json)$/i, '');
+        fileLabel.textContent = base + '.' + currentLang;
+      }
+
+      function setLangContent(lang, text) {
+        currentLang = lang;
+        currentText = text;
+        codeEl.textContent = text;
+        codeEl.className = 'language-' + lang;
+        preEl.className = 'line-numbers language-' + lang;
+        highlight();
+        setActiveToggle();
+        updateFilenameForLang();
+        runSearch();
+      }
+
+      function tryConvert(targetLang) {
+        if (targetLang === currentLang) return;
+        if (!window.jsyaml) return;
+        try {
+          var parsed;
+          if (currentLang === 'yaml') parsed = window.jsyaml.load(currentText);
+          else parsed = JSON.parse(currentText);
+          var out;
+          if (targetLang === 'yaml') {
+            out = window.jsyaml.dump(parsed, { indent: 2, lineWidth: 100, noRefs: true });
+          } else {
+            out = JSON.stringify(parsed, null, 2);
+          }
+          setLangContent(targetLang, out);
+        } catch (err) {
+          alert('Cannot convert: source is not valid ' + currentLang.toUpperCase() + '.\n' + err.message);
+        }
+      }
+
+      function clearSearch() {
+        widget.querySelectorAll('mark.src-hit').forEach(function (m) {
+          var parent = m.parentNode;
+          while (m.firstChild) parent.insertBefore(m.firstChild, m);
+          parent.removeChild(m);
+          parent.normalize();
+        });
+        searchHits = [];
+        activeHit = -1;
+      }
+
+      function runSearch() {
+        clearSearch();
+        var q = (search.value || '').trim();
+        if (q.length < 2) return;
+        var qLower = q.toLowerCase();
+        var walker = document.createTreeWalker(codeEl, NodeFilter.SHOW_TEXT, null);
+        var nodes = [];
+        var n;
+        while ((n = walker.nextNode())) nodes.push(n);
+        nodes.forEach(function (node) {
+          var text = node.nodeValue;
+          var lower = text.toLowerCase();
+          var idx = lower.indexOf(qLower);
+          if (idx === -1) return;
+          var frag = document.createDocumentFragment();
+          var cursor = 0;
+          while (idx !== -1) {
+            if (idx > cursor) frag.appendChild(document.createTextNode(text.slice(cursor, idx)));
+            var mark = document.createElement('mark');
+            mark.className = 'src-hit';
+            mark.textContent = text.slice(idx, idx + q.length);
+            frag.appendChild(mark);
+            searchHits.push(mark);
+            cursor = idx + q.length;
+            idx = lower.indexOf(qLower, cursor);
+          }
+          if (cursor < text.length) frag.appendChild(document.createTextNode(text.slice(cursor)));
+          node.parentNode.replaceChild(frag, node);
+        });
+        if (searchHits.length) jumpToHit(0);
+      }
+
+      function jumpToHit(i) {
+        if (!searchHits.length) return;
+        if (activeHit >= 0 && searchHits[activeHit]) searchHits[activeHit].classList.remove('src-hit-active');
+        activeHit = ((i % searchHits.length) + searchHits.length) % searchHits.length;
+        var el = searchHits[activeHit];
+        el.classList.add('src-hit-active');
+        el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+
+      var debounce;
+      search.addEventListener('input', function () {
+        clearTimeout(debounce);
+        debounce = setTimeout(runSearch, 100);
+      });
+      search.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === 'n') { ev.preventDefault(); jumpToHit(activeHit + 1); }
+        else if (ev.key === 'N' || ev.key === 'p') { ev.preventDefault(); jumpToHit(activeHit - 1); }
+        else if (ev.key === 'Escape') { search.value = ''; runSearch(); }
+      });
+
+      toggles.forEach(function (b) {
+        b.addEventListener('click', function () { tryConvert(b.dataset.target); });
+      });
+
+      downloadBtn.addEventListener('click', function () {
+        var blob = new Blob([codeEl.textContent], { type: currentLang === 'json' ? 'application/json' : 'application/yaml' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = fileLabel ? fileLabel.textContent : ('download.' + currentLang);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 0);
+      });
+
+      copyBtn.addEventListener('click', function () {
+        navigator.clipboard.writeText(codeEl.textContent).then(function () {
+          var orig = copyBtn.textContent;
+          copyBtn.textContent = 'Copied';
+          copyBtn.classList.add('src-copied');
+          setTimeout(function () { copyBtn.textContent = orig; copyBtn.classList.remove('src-copied'); }, 1500);
+        });
+      });
+
+      setActiveToggle();
+      var tries = 0;
+      var waitPrism = setInterval(function () {
+        if (window.Prism && window.Prism.plugins) {
+          clearInterval(waitPrism);
+          highlight();
+        } else if (++tries > 80) {
+          clearInterval(waitPrism);
+        }
+      }, 50);
+    }
+
+    function initAll() {
+      document.querySelectorAll('[data-src-widget]').forEach(initWidget);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAll);
+    } else {
+      initAll();
+    }
+  })();
+</script>
