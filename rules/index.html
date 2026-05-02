@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Rules
-description: Spectral-compatible rules for governing API operations — positive and negative patterns that define what good API design looks like.
+description: Spectral-compatible rules for governing API operations — unique, provider-agnostic patterns covering OpenAPI design, APIs.json structure, JSON Schema, AsyncAPI, and OWASP security.
 ---
 
 <style>
@@ -9,54 +9,156 @@ description: Spectral-compatible rules for governing API operations — positive
   .page-hero h1 { font-size: 1.8rem; font-weight: 800; color: #1a1a2e; margin-bottom: 0.5rem; }
   .page-hero p { color: #555; font-size: 1rem; max-width: 720px; line-height: 1.7; }
   .stats-row { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.25rem 0 2rem; }
-  .stat-card { flex: 1; min-width: 150px; padding: 1rem 1.25rem; border: 1px solid #e3e7ee; border-radius: 10px; background: white; text-align: center; }
+  .stat-card { flex: 1; min-width: 130px; padding: 1rem 1.25rem; border: 1px solid #e3e7ee; border-radius: 10px; background: white; text-align: center; }
   .stat-card .stat-num { font-size: 2rem; font-weight: 800; color: #1a1a2e; line-height: 1; }
   .stat-card .stat-label { font-size: 0.82rem; color: #666; margin-top: 0.25rem; }
-  .rules-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.5rem; }
-  .rule-row { display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1.25rem; border: 1px solid #e3e7ee; border-radius: 8px; background: white; transition: all 0.15s; }
-  .rule-row:hover { border-color: #0d6efd; background: #f8f9ff; }
-  .rule-row span { font-size: 0.95rem; color: #1a1a2e; }
+  .rules-list { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 1.5rem; }
+  .rule-item { border: 1px solid #e3e7ee; border-radius: 8px; background: white; overflow: hidden; transition: border-color 0.15s; }
+  .rule-item:hover { border-color: #0d6efd; }
+  .rule-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1rem; }
+  .rule-toggle { background: none; border: none; padding: 0; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; color: #6c757d; }
+  .rule-chevron { display: inline-block; font-size: 1rem; line-height: 1; transition: transform 0.18s; font-style: normal; user-select: none; }
+  .rule-chevron.expanded { transform: rotate(90deg); }
+  .rule-name { flex: 1; font-size: 0.9rem; color: #1a1a2e; }
+  .rule-yaml-wrap { border-top: 1px solid #e3e7ee; }
+  .rule-yaml-pre { margin: 0; padding: 1rem 1.25rem; background: #f8fafc; font-size: 0.78rem; line-height: 1.55; color: #1a1a2e; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; max-height: 320px; overflow: auto; white-space: pre; }
+  .rule-yaml-foot { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 1.25rem; background: #f0f4f8; border-top: 1px solid #e3e7ee; }
+  .rule-yaml-slug { font-size: 0.72rem; color: #6c757d; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  .btn-copy-yaml { background: none; border: 1px solid #cbd5e1; color: #0d6efd; font-size: 0.72rem; padding: 0.15em 0.65em; border-radius: 4px; cursor: pointer; }
+  .btn-copy-yaml:hover { background: #eef2f7; }
 </style>
 
 <div class="page-hero">
   <h1>API Governance Rules</h1>
-  <p>API Commons publishes <strong>1,568 Spectral-compatible rules</strong> across three areas: <strong>588 OpenAPI rules</strong> covering every aspect of REST API design from paths and operations to schemas and security; <strong>130 APIs.json rules</strong> validating the structure and completeness of API index files; and <strong>628 provider spectral rulesets</strong> encoding the specific design conventions used by individual API providers. Rules come in error, warn, and info severity levels and can be applied individually or assembled into rulesets for CI/CD pipelines.</p>
+  <p>API Commons publishes <strong>776 Spectral-compatible rules</strong> — unique, provider-agnostic patterns, each solving a single governance problem. Coverage spans <strong>573 OpenAPI rules</strong> from paths and operations to schemas and security; <strong>128 APIs.json rules</strong> validating index file structure; <strong>47 JSON Schema rules</strong>; <strong>26 OWASP security rules</strong> from the OWASP API Security Top 10; and <strong>2 AsyncAPI rules</strong>. Rules come in error, warn, and info severity levels and can be applied individually or assembled into rulesets for CI/CD pipelines.</p>
 </div>
 
 <div class="stats-row">
   <div class="stat-card">
-    <div class="stat-num">1,568</div>
+    <div class="stat-num">776</div>
     <div class="stat-label">Total Rules</div>
   </div>
   <div class="stat-card">
-    <div class="stat-num">588</div>
+    <div class="stat-num">573</div>
     <div class="stat-label">OpenAPI Rules</div>
   </div>
   <div class="stat-card">
-    <div class="stat-num">130</div>
+    <div class="stat-num">128</div>
     <div class="stat-label">APIs.json Rules</div>
   </div>
   <div class="stat-card">
-    <div class="stat-num">628</div>
-    <div class="stat-label">Provider Rulesets</div>
+    <div class="stat-num">47</div>
+    <div class="stat-label">JSON Schema Rules</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">26</div>
+    <div class="stat-label">OWASP Rules</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">2</div>
+    <div class="stat-label">AsyncAPI Rules</div>
   </div>
 </div>
 
 <div class="rules-list">
 {% assign rules = site.rules %}
 {% for rule in rules %}
-  {% for item in rule %}
-    {% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}
-      {% assign rule_name = item | replace: "-"," " %}
-      {% assign new_rule_name = "" %}
-      {% assign words = rule_name | split: ' ' %}
-      {% for word in words %}{% assign cword = word | capitalize %}{% assign new_rule_name = new_rule_name | append: " " | append: cword %}{% endfor %}
-      {% assign new_rule_name = new_rule_name | replace:"Api","API" | replace:"Sdk","SDK" | replace:"APIs Json","APIs.json" | replace:"Positive","(Positive)" | replace:"Negative","(Negative)" | strip %}
+  {% assign uid = forloop.index %}
+  {% if rule.slug %}
+    <div class="rule-item">
       <div class="rule-row">
-        <span>{{ new_rule_name }}</span>
+        <button class="rule-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#rc-{{ uid }}" aria-expanded="false" aria-controls="rc-{{ uid }}">
+          <span class="rule-chevron" aria-hidden="true">›</span>
+        </button>
+        <span class="rule-name">{{ rule.name }}</span>
         <a href="{{ rule.url }}" class="btn btn-sm btn-outline-dark">View</a>
       </div>
-    {% endif %}
-  {% endfor %}
+      <div class="collapse rule-yaml-wrap" id="rc-{{ uid }}">
+        <script type="application/json" class="rule-json-data">{{ rule.rule | jsonify }}</script>
+        <pre class="rule-yaml-pre"></pre>
+        <div class="rule-yaml-foot">
+          <span class="rule-yaml-slug">{{ rule.slug }}</span>
+          <button type="button" class="btn-copy-yaml">Copy</button>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    {% for item in rule %}
+      {% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}
+        {% assign rule_name = item | replace: "-"," " %}
+        {% assign new_rule_name = "" %}
+        {% assign words = rule_name | split: ' ' %}
+        {% for word in words %}{% assign cword = word | capitalize %}{% assign new_rule_name = new_rule_name | append: " " | append: cword %}{% endfor %}
+        {% assign new_rule_name = new_rule_name | replace:"Api","API" | replace:"Sdk","SDK" | replace:"APIs Json","APIs.json" | replace:"Owasp","OWASP" | strip %}
+        <div class="rule-item">
+          <div class="rule-row">
+            <button class="rule-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#rc-{{ uid }}" aria-expanded="false" aria-controls="rc-{{ uid }}">
+              <span class="rule-chevron" aria-hidden="true">›</span>
+            </button>
+            <span class="rule-name">{{ new_rule_name }}</span>
+            <a href="{{ rule.url }}" class="btn btn-sm btn-outline-dark">View</a>
+          </div>
+          <div class="collapse rule-yaml-wrap" id="rc-{{ uid }}">
+            <script type="application/json" class="rule-json-data">{"{{ item }}":{{ rule[item] | jsonify }}}</script>
+            <pre class="rule-yaml-pre"></pre>
+            <div class="rule-yaml-foot">
+              <span class="rule-yaml-slug">{{ item }}</span>
+              <button type="button" class="btn-copy-yaml">Copy</button>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
 {% endfor %}
 </div>
+
+<script>
+(function () {
+  function initRules() {
+    document.querySelectorAll('.rule-yaml-wrap.collapse').forEach(function (collapseEl) {
+      collapseEl.addEventListener('show.bs.collapse', function () {
+        if (this.dataset.yamlLoaded) return;
+        var scriptEl = this.querySelector('.rule-json-data');
+        var pre = this.querySelector('.rule-yaml-pre');
+        if (!scriptEl || !pre) return;
+        try {
+          var obj = JSON.parse(scriptEl.textContent);
+          pre.textContent = window.jsyaml
+            ? jsyaml.dump(obj, { indent: 2, lineWidth: 120, noRefs: true })
+            : JSON.stringify(obj, null, 2);
+        } catch (e) {
+          pre.textContent = scriptEl.textContent;
+        }
+        this.dataset.yamlLoaded = 'true';
+      });
+    });
+
+    document.querySelectorAll('.rule-toggle').forEach(function (btn) {
+      var targetId = btn.getAttribute('aria-controls');
+      var target = document.getElementById(targetId);
+      if (!target) return;
+      var chevron = btn.querySelector('.rule-chevron');
+      target.addEventListener('show.bs.collapse', function () { chevron.classList.add('expanded'); });
+      target.addEventListener('hide.bs.collapse', function () { chevron.classList.remove('expanded'); });
+    });
+
+    document.querySelectorAll('.btn-copy-yaml').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var pre = this.closest('.rule-yaml-wrap').querySelector('.rule-yaml-pre');
+        if (!pre.textContent) return;
+        navigator.clipboard.writeText(pre.textContent).then(function () {
+          btn.textContent = 'Copied!';
+          setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+        });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRules);
+  } else {
+    initRules();
+  }
+})();
+</script>

@@ -1,35 +1,74 @@
 ---
 layout: default
 ---
-{% assign rule_name = page.title | replace:"Api","API" | replace:"Sdk","SDK" | replace:"APIs Json","APIs.json" | replace:"Positive","(Positive)" | replace:"Negative","(Negative)" %}
-{% assign rule_name = rule_name | strip %}
-{% for item in page %}
-  {% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}
-    {% assign this_rule = page[item] %}
-    <div class="d-flex justify-content-between align-items-start mb-3">
-      <h2 class="mb-0 me-3">{{ rule_name }} (<a href="https://github.com/api-commons/api-commons/blob/gh-pages/_rules/{{ item }}.md?plain=1" target="_blank" rel="noopener">Edit</a>)</h2>
-      {% include ai-toolbar.html %}
-    </div>
-    <p>{{ page[item].description }}</p>
 
-    <h3 id="source">Rule Definition</h3>
-    <div class="src-widget" data-src-widget data-original-lang="json" data-current-lang="yaml" data-original-filename="{{ item }}.yaml">
-      <div class="src-widget-head">
-        <span class="src-label" data-src-filename>{{ item }}.yaml</span>
-        <span class="src-search">
-          <input type="search" data-src-search placeholder="Search in source… (n / N to navigate)" aria-label="Search source">
-        </span>
-        <span class="src-actions">
-          <button type="button" data-src-toggle data-target="yaml" aria-label="View as YAML">YAML</button>
-          <button type="button" data-src-toggle data-target="json" aria-label="View as JSON">JSON</button>
-          <button type="button" data-src-download aria-label="Download source">Download</button>
-          <button type="button" data-src-copy>Copy</button>
-        </span>
-      </div>
-      <pre class="line-numbers language-json"><code class="language-json" data-src-code>{ "{{ item }}": {{ this_rule | jsonify | xml_escape }} }</code></pre>
-    </div>
+{% if page.slug %}
+
+  {% assign rule_display_name = page.name %}
+  {% assign rule_slug = page.slug %}
+
+  <div class="d-flex justify-content-between align-items-start mb-3">
+    <h2 class="mb-0 me-3">{{ rule_display_name }} (<a href="https://github.com/api-commons/api-commons/blob/gh-pages/_rules/{{ rule_slug }}.md?plain=1" target="_blank" rel="noopener">Edit</a>)</h2>
+    {% include ai-toolbar.html %}
+  </div>
+  <p>{{ page.description }}</p>
+
+  {% if page.tags.size > 0 %}
+  <div class="mb-3">
+    {% for tag in page.tags %}<span class="badge bg-secondary me-1">{{ tag }}</span>{% endfor %}
+  </div>
   {% endif %}
-{% endfor %}
+
+  <h3 id="source">Rule Definition</h3>
+  <div class="src-widget" data-src-widget data-original-lang="json" data-current-lang="yaml" data-original-filename="{{ rule_slug }}.yaml">
+    <div class="src-widget-head">
+      <span class="src-label" data-src-filename>{{ rule_slug }}.yaml</span>
+      <span class="src-search">
+        <input type="search" data-src-search placeholder="Search in source… (n / N to navigate)" aria-label="Search source">
+      </span>
+      <span class="src-actions">
+        <button type="button" data-src-toggle data-target="yaml" aria-label="View as YAML">YAML</button>
+        <button type="button" data-src-toggle data-target="json" aria-label="View as JSON">JSON</button>
+        <button type="button" data-src-download aria-label="Download source">Download</button>
+        <button type="button" data-src-copy>Copy</button>
+      </span>
+    </div>
+    <pre class="line-numbers language-json"><code class="language-json" data-src-code>{{ page.rule | jsonify | xml_escape }}</code></pre>
+  </div>
+
+{% else %}
+
+  {% assign rule_name = page.title | replace:"Api","API" | replace:"Sdk","SDK" | replace:"APIs Json","APIs.json" | replace:"Positive","(Positive)" | replace:"Negative","(Negative)" %}
+  {% assign rule_name = rule_name | strip %}
+  {% for item in page %}
+    {% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}
+      {% assign this_rule = page[item] %}
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <h2 class="mb-0 me-3">{{ rule_name }} (<a href="https://github.com/api-commons/api-commons/blob/gh-pages/_rules/{{ item }}.md?plain=1" target="_blank" rel="noopener">Edit</a>)</h2>
+        {% include ai-toolbar.html %}
+      </div>
+      <p>{{ page[item].description }}</p>
+
+      <h3 id="source">Rule Definition</h3>
+      <div class="src-widget" data-src-widget data-original-lang="json" data-current-lang="yaml" data-original-filename="{{ item }}.yaml">
+        <div class="src-widget-head">
+          <span class="src-label" data-src-filename>{{ item }}.yaml</span>
+          <span class="src-search">
+            <input type="search" data-src-search placeholder="Search in source… (n / N to navigate)" aria-label="Search source">
+          </span>
+          <span class="src-actions">
+            <button type="button" data-src-toggle data-target="yaml" aria-label="View as YAML">YAML</button>
+            <button type="button" data-src-toggle data-target="json" aria-label="View as JSON">JSON</button>
+            <button type="button" data-src-download aria-label="Download source">Download</button>
+            <button type="button" data-src-copy>Copy</button>
+          </span>
+        </div>
+        <pre class="line-numbers language-json"><code class="language-json" data-src-code>{ "{{ item }}": {{ this_rule | jsonify | xml_escape }} }</code></pre>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+{% endif %}
 
 {% include src-widget-scripts.html %}
 
