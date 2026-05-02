@@ -7,7 +7,11 @@ description: Spectral-compatible rules for governing API operations — positive
 <style>
   .page-hero { padding: 1.5rem 0 2rem; }
   .page-hero h1 { font-size: 1.8rem; font-weight: 800; color: #1a1a2e; margin-bottom: 0.5rem; }
-  .page-hero p { color: #555; font-size: 1rem; max-width: 680px; line-height: 1.7; }
+  .page-hero p { color: #555; font-size: 1rem; max-width: 720px; line-height: 1.7; }
+  .stats-row { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.25rem 0 2rem; }
+  .stat-card { flex: 1; min-width: 150px; padding: 1rem 1.25rem; border: 1px solid #e3e7ee; border-radius: 10px; background: white; text-align: center; }
+  .stat-card .stat-num { font-size: 2rem; font-weight: 800; color: #1a1a2e; line-height: 1; }
+  .stat-card .stat-label { font-size: 0.82rem; color: #666; margin-top: 0.25rem; }
   .rules-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.5rem; }
   .rule-row { display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1.25rem; border: 1px solid #e3e7ee; border-radius: 8px; background: white; transition: all 0.15s; }
   .rule-row:hover { border-color: #0d6efd; background: #f8f9ff; }
@@ -16,7 +20,26 @@ description: Spectral-compatible rules for governing API operations — positive
 
 <div class="page-hero">
   <h1>API Governance Rules</h1>
-  <p>Spectral-compatible rules for governing API operations. Each rule defines positive or negative patterns that can be applied to API contracts and indexes to enforce consistency and quality across your API landscape.</p>
+  <p>API Commons publishes <strong>1,568 Spectral-compatible rules</strong> across three areas: <strong>588 OpenAPI rules</strong> covering every aspect of REST API design from paths and operations to schemas and security; <strong>130 APIs.json rules</strong> validating the structure and completeness of API index files; and <strong>628 provider spectral rulesets</strong> encoding the specific design conventions used by individual API providers. Rules come in error, warn, and info severity levels and can be applied individually or assembled into rulesets for CI/CD pipelines.</p>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-num">1,568</div>
+    <div class="stat-label">Total Rules</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">588</div>
+    <div class="stat-label">OpenAPI Rules</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">130</div>
+    <div class="stat-label">APIs.json Rules</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">628</div>
+    <div class="stat-label">Provider Rulesets</div>
+  </div>
 </div>
 
 <div class="rules-list">
