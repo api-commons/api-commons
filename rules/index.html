@@ -64,7 +64,7 @@ description: 776 Spectral-compatible API governance rules — single-purpose, pr
 {% assign rules = site.rules %}
 {% for rule in rules %}
   {% assign uid = forloop.index %}
-  {% if rule.slug %}
+  {% if rule.rule %}
     <div class="rule-item">
       <div class="rule-row">
         <button class="rule-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#rc-{{ uid }}" aria-expanded="false" aria-controls="rc-{{ uid }}">
