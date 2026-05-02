@@ -1,7 +1,10 @@
 ---
 layout: default
 ---
-<h2>{{ page.title }}</h2>
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <h2 class="mb-0 me-3">{{ page.title }}</h2>
+  {% include ai-toolbar.html %}
+</div>
 {{ page.description }}
 <br>
 <h3>APIs.json Blueprint</h3>

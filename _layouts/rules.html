@@ -6,7 +6,10 @@ layout: default
 {% for item in page %}
   {% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}
     {% assign this_rule = page[item] %}
-    <h2>{{ rule_name }} (<a href="https://github.com/api-commons/api-commons/blob/gh-pages/_rules/{{ item }}.md?plain=1" target="_blank" rel="noopener">Edit</a>)</h2>
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <h2 class="mb-0 me-3">{{ rule_name }} (<a href="https://github.com/api-commons/api-commons/blob/gh-pages/_rules/{{ item }}.md?plain=1" target="_blank" rel="noopener">Edit</a>)</h2>
+      {% include ai-toolbar.html %}
+    </div>
     <p>{{ page[item].description }}</p>
 
     <h3 id="source">Rule Definition</h3>

@@ -1,8 +1,11 @@
 ---
 layout: default
 ---
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <h2 class="mb-0 me-3">{{ page.title }}</h2>
+  {% include ai-toolbar.html %}
+</div>
 <img src="{{ page.image }}" class="float-end ms-3 mb-3" width="100">
-<h2>{{ page.title }}</h2>
 <p>{{ page.description }}</p>
 <ul>
 {% for tag in page.tags %}

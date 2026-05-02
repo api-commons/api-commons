@@ -45,7 +45,10 @@ layout: default
     <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%B %d, %Y" }}</time>
   </div>
 
-  <h1 class="post-title" itemprop="headline">{{ page.title }}</h1>
+  <div class="d-flex justify-content-between align-items-start mb-2">
+    <h1 class="post-title mb-0 me-3" itemprop="headline">{{ page.title }}</h1>
+    {% include ai-toolbar.html %}
+  </div>
 
   {% if page.tags.size > 0 %}
   <div class="post-tags" itemprop="keywords">
