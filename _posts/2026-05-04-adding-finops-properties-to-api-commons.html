@@ -1,0 +1,53 @@
+---
+layout: post
+title: 'Adding FinOps Properties to API Commons Over the Weekend'
+date: 2026-05-04
+image: https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-icon.png
+tags:
+  - API Commons
+  - FinOps
+  - FOCUS
+  - OpenCost
+  - Cost Management
+  - Sustainability
+---
+
+<p>Spent the weekend pulling FinOps into the API Commons vocabulary. Cost management, billing transparency, and unit economics have always been part of how teams operate APIs in production — they just hadn't been part of how API Commons described an API. That gap is closed now.</p>
+
+<p>The FinOps Foundation has done substantial work standardizing how organizations think about cloud and SaaS financial operations. The 2025 Framework revision expanded the scope to cover public cloud, SaaS, data center, and AI workloads, and the supporting specifications — FOCUS for billing data, OpenCost for allocation — have matured into real interoperability standards. None of that was reflected in API Commons, even though it directly affects how API consumers reason about cost and how providers communicate pricing structure.</p>
+
+<h2>Thirteen New Property Types</h2>
+
+<p>The first pass added thirteen new property types covering three areas:</p>
+
+<p><strong>FOCUS — billing data interoperability.</strong> FocusBillingExport references a billing data export that conforms to the FOCUS specification. FocusConformanceReport links to a provider's conformance evidence. FocusContractCommitments points at the commitment-discount data needed for accurate cost forecasting. Together these let a FinOps tool ingest a provider's billing data without bespoke integration work.</p>
+
+<p><strong>OpenCost — cost allocation.</strong> OpenCostSpecification references the OpenCost spec a provider implements. OpenCostAllocationAPI points at the allocation API that exposes per-workload, per-namespace, or per-team cost attribution. This matters most for platform APIs where customers need to allocate costs back to internal cost centers.</p>
+
+<p><strong>FinOps practice properties.</strong> UnitEconomics references the per-unit cost model — cost per call, per gigabyte, per token, per transaction. ChargebackPolicy describes how the provider supports internal cost recovery. TaggingPolicy describes the tagging model that makes allocation work. InvoiceReconciliation points at the reconciliation tooling. FinOpsFramework references how a provider aligns to the FinOps Framework as a whole.</p>
+
+<p>The build also picked up three sustainability properties — SoftwareCarbonIntensity, SCIReport, and GHGProtocolReport — because cost and carbon are increasingly the same conversation. A provider publishing unit economics alongside an SCI report gives the consumer enough information to make both the financial and environmental case for an integration.</p>
+
+<h2>Then Sorting Them: Common vs. Community</h2>
+
+<p>Adding the properties was the easy part. The harder question, and the one that took most of Saturday afternoon, was where each one belonged.</p>
+
+<p>API Commons distinguishes between <em>common</em> properties — things any API provider can have and that don't reference an external standards body — and <em>community</em> properties, which are tied to a specific specification, framework, or ecosystem effort. The distinction matters because the common collection is meant to be a stable vocabulary that providers can adopt without picking a side. The community collection is where ecosystem-specific properties live.</p>
+
+<p>By that test, the FinOps properties split cleanly:</p>
+
+<p><strong>Stayed in <code>_common</code>:</strong> UnitEconomics, ChargebackPolicy, and TaggingPolicy. These describe practices any API provider implements regardless of whether they use the FinOps Foundation's framework. A provider can publish unit economics without joining FinOps; a provider can have a tagging policy without aligning to FOCUS. These are practice properties, not standards properties.</p>
+
+<p><strong>Moved to <code>_community</code>:</strong> FinOpsFramework, FocusBillingExport, FocusConformanceReport, FocusContractCommitments, OpenCostSpecification, OpenCostAllocationAPI, InvoiceReconciliation, SoftwareCarbonIntensity, SCIReport, and GHGProtocolReport. Each of these references a specific external specification or framework — FinOps Foundation, FOCUS, OpenCost, Green Software Foundation, GHG Protocol. They belong with the other ecosystem properties in community, not in the core common vocabulary.</p>
+
+<p>It's the same shape as how SoftwareDevelopmentKits sits in common but a Postman collection lives in community: the abstract operational concept is common, the specific tooling implementation is community.</p>
+
+<h2>What This Enables</h2>
+
+<p>For API providers, this means there's now a standard, machine-readable way to publish cost and FinOps information alongside the rest of the API description. Adding a single property entry to an APIs.json file says "here is our unit economics document" or "here is our FOCUS conformance report" in a way other tools can parse without scraping a portal.</p>
+
+<p>For API consumers — particularly enterprise procurement, platform engineering, and FinOps practitioners — the structural benefit is that the cost-relevant artifacts of an API are now discoverable through the same index that surfaces documentation, authentication, and SDKs. A FinOps tool building a vendor inventory can pull FOCUS conformance status from APIs.json. A procurement workflow can check for a published chargeback policy. A platform team evaluating two providers for the same capability can compare their unit economics side by side.</p>
+
+<p>For API Commons, it means the vocabulary now reflects a part of API operations that has historically been undocumented at the index level. Cost is part of the operational surface of an API. It belongs in the common description format alongside support, documentation, and SLAs.</p>
+
+<p>The weekend's net result: thirteen new property types, three of them now part of the core common collection and ten in community, and the API Commons vocabulary now has something useful to say about how an API costs money.</p>
