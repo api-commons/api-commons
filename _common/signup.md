@@ -15,7 +15,7 @@ aliases:
   - Account Creation
   - Provisioning
 yaml_example: |
-  - type: Signup
+  - type: SignUp
     url: https://developers.example.com/signup
 
 standards:
