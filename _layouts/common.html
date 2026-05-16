@@ -8,6 +8,10 @@ layout: default
 <img src="{{ page.image }}" class="float-end ms-3 mb-3" width="250">
 <p>{{ page.description }}</p>
 
+{% if page.aliases %}
+<p class="text-muted"><strong>Also known as:</strong> {{ page.aliases | join: ', ' }}</p>
+{% endif %}
+
 {% if page.yaml_example %}
 <h3>Example</h3>
 <div class="src-widget" data-src-widget data-original-lang="yaml" data-current-lang="yaml" data-original-filename="{{ page.title | downcase | replace: ' ', '-' }}.yaml">
@@ -25,6 +29,155 @@ layout: default
   </div>
   <pre class="line-numbers language-yaml"><code class="language-yaml" data-src-code>{{ page.yaml_example }}</code></pre>
 </div>
+{% endif %}
+
+{% if page.standards %}
+<h3>Standards</h3>
+<ul class="list-unstyled">
+{% for s in page.standards %}
+  <li class="mb-1">
+    {% if s.kind %}<span class="badge bg-secondary me-1">{{ s.kind }}</span>{% endif %}
+    {% if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener">{{ s.name }}</a>{% else %}{{ s.name }}{% endif %}
+  </li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if page.headers %}
+<h3>HTTP Headers</h3>
+<table class="table table-sm">
+  <thead><tr><th>Header</th><th>Direction</th><th>Spec</th><th>Description</th></tr></thead>
+  <tbody>
+  {% for h in page.headers %}
+    <tr>
+      <td><code>{{ h.name }}</code></td>
+      <td>{{ h.direction }}</td>
+      <td>{{ h.spec }}{{ h.rfc }}</td>
+      <td>{{ h.description }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if page.status_codes %}
+<h3>Status Codes</h3>
+<ul>
+{% for c in page.status_codes %}
+  <li><code>{{ c.code }} {{ c.name }}</code>{% if c.spec %} — {{ c.spec }}{% endif %}{% if c.description %} — {{ c.description }}{% endif %}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if page.well_known %}
+<h3>Well-Known Paths</h3>
+<ul>
+{% for w in page.well_known %}
+  <li><code>{{ w.path }}</code>{% if w.spec %} — {{ w.spec }}{% endif %}{% if w.description %} — {{ w.description }}{% endif %}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if page.media_types %}
+<h3>Media Types</h3>
+<ul>
+{% for m in page.media_types %}
+  <li><code>{{ m.type }}</code>{% if m.spec %} — {{ m.spec }}{% endif %}{% if m.note %} — {{ m.note }}{% endif %}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if page.openapi_expression %}
+<h3>OpenAPI Expression</h3>
+<ul>
+{% for e in page.openapi_expression %}
+  <li>
+    <code>{{ e.field }}</code>{% if e.spec %} <small class="text-muted">({{ e.spec }})</small>{% endif %}
+    {% if e.description %} — {{ e.description }}{% endif %}
+    {% if e.types %}<br><small>Types: {{ e.types | join: ', ' }}</small>{% endif %}
+  </li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if page.link_relations %}
+<h3>Link Relations</h3>
+<ul>
+{% for r in page.link_relations %}
+  <li><code>{{ r.rel }}</code>{% if r.spec %} — {{ r.spec }}{% endif %}{% if r.note %} — {{ r.note }}{% endif %}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if page.governance_rules %}
+<h3>Governance Rules</h3>
+<ul>
+{% for g in page.governance_rules %}
+  <li><code>{{ g.id }}</code>{% if g.source %} <small class="text-muted">({{ g.source }})</small>{% endif %} — {{ g.description }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if page.risk %}
+<h3>Risk &amp; Compliance</h3>
+{% if page.risk.owasp %}
+<p class="mb-1"><strong>OWASP:</strong></p>
+<ul class="mb-2">
+{% for o in page.risk.owasp %}<li>{{ o }}</li>{% endfor %}
+</ul>
+{% endif %}
+{% if page.risk.compliance %}
+<p class="mb-1"><strong>Compliance:</strong></p>
+<ul class="mb-2">
+{% for c in page.risk.compliance %}<li>{{ c }}</li>{% endfor %}
+</ul>
+{% endif %}
+{% if page.risk.security_implications %}
+<p><strong>Security:</strong> {{ page.risk.security_implications }}</p>
+{% endif %}
+{% endif %}
+
+{% if page.tools %}
+<h3>Tools</h3>
+<ul>
+{% for t in page.tools %}
+  <li>
+    {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener">{{ t.name }}</a>{% else %}{{ t.name }}{% endif %}
+    {% if t.category %} <small class="text-muted">— {{ t.category }}</small>{% endif %}
+    {% if t.license %} <small class="text-muted">({{ t.license }})</small>{% endif %}
+  </li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if page.metrics %}
+<h3>Suggested Metrics</h3>
+<ul>
+{% for m in page.metrics %}
+  <li><code>{{ m.name }}</code> — {{ m.description }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if page.examples %}
+<h3>Example Implementations</h3>
+<ul>
+{% for e in page.examples %}
+  <li>
+    {% if e.url %}<a href="{{ e.url }}" target="_blank" rel="noopener">{{ e.provider }}</a>{% else %}{{ e.provider }}{% endif %}
+    {% if e.note %} — {{ e.note }}{% endif %}
+  </li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if page.related_properties %}
+<h3>Related Properties</h3>
+<ul>
+{% for r in page.related_properties %}
+  <li><a href="/common/{{ r }}/">{{ r | replace: '-', ' ' | capitalize }}</a></li>
+{% endfor %}
+</ul>
 {% endif %}
 
 <h3>Tags</h3>
