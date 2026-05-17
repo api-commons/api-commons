@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Expanding the API Commons Beyond Just Licensing'
-image: https://s3.amazonaws.com/kinlane-productions2/api-commons/api-commons-logo.png
+image: /assets/images/blog/expanding-the-api-commons-beyond-just-licensing.png
 ---
 With the recent renewed investment in [APIs.io](https://apis.io/), [APIs.json](https://apisjson.org/blog/), as well as here at API Commons we are looking to expand the API Commons to apply beyond just licensing and support as many open source building blocks as we can. The API Commons emerged in 2014 during the Oracle vs Google Copyright fight, and with this court battle settled in 2021, we wanted to revisit the purpose of the API Commons here in 2024, and a decade later we feel like it is important that we support a suite of open-source building blocks—not just interface licensing.
 

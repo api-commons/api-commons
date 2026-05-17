@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Spec-Driven Integration: Capability Specs as Shared Integration Artifacts'
-image: /assets/images/sdi-capability-specs-shared-artifacts.png
+image: /assets/images/blog/spec-driven-integration-capability-specs-as-shared-integration-artifacts.png
 ---
 The API Commons principle has always been that specifications are shareable artifacts. An OpenAPI document published to the commons can be consumed, implemented, forked, and composed by anyone. The specification exists independently of any particular implementation.
 

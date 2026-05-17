@@ -2,7 +2,7 @@
 layout: post
 title: 'How Spectral Rules Connect to API Commons Rulesets'
 date: 2026-05-09
-image: https://s3.amazonaws.com/kinlane-productions2/bw-icons/bw-machine-learning.png
+image: /assets/images/blog/how-spectral-rules-connect-to-api-commons-rulesets.png
 tags:
   - API Commons
   - Spectral
@@ -11,7 +11,6 @@ tags:
   - rulesets
   - linting
 ---
-
 <p>If you work with OpenAPI specs in any serious capacity, you've probably encountered Spectral. It's the linting tool that lets you define rules for what a good API spec looks like — things like "all operations must have a summary," "response codes should follow a specific pattern," or "authentication must be defined." Teams use it in CI pipelines to catch spec quality issues before they reach production.</p>
 
 <p>What's less well known is that Spectral's rule format is the same format that API Commons uses to define its governance rules. This isn't a coincidence — it's a deliberate choice that means API Commons rules are directly usable in Spectral, and Spectral rulesets can be published and shared through API Commons.</p>

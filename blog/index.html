@@ -14,8 +14,11 @@ title: Blog
   .post-card:hover { border-color: #0d6efd; box-shadow: 0 4px 16px rgba(13,110,253,0.1); transform: translateY(-2px); }
   @media (max-width: 768px) { .post-card { grid-template-columns: 1fr; } }
 
+  .post-card-image-link { display: block; }
   .post-card-image { width: 100%; height: 200px; object-fit: cover; display: block; }
-  @media (min-width: 769px) { .post-card-image { height: 100%; min-height: 200px; } }
+  .post-card-image-placeholder { background: linear-gradient(135deg, #f8f9fb 0%, #eef2f7 100%); position: relative; }
+  .post-card-image-placeholder::after { content: '\1F4D6'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; opacity: 0.25; }
+  @media (min-width: 769px) { .post-card-image, .post-card-image-placeholder { height: 100%; min-height: 200px; } }
 
   .post-card-body { padding: 1.5rem 1.5rem 1.5rem 0; display: flex; flex-direction: column; justify-content: center; }
   @media (max-width: 768px) { .post-card-body { padding: 0 1.5rem 1.5rem; } }
@@ -39,14 +42,19 @@ title: Blog
 <div class="post-grid">
   {% assign sorted_posts = site.posts | sort: 'date' | reverse %}
   {% for post in sorted_posts %}
+  {% assign words = post.content | strip_html | split: " " | size %}
+  {% assign rt = words | divided_by: 200 %}
+  {% if rt == 0 %}{% assign rt = 1 %}{% endif %}
   <div class="post-card">
-    {% if post.image %}
-    <a href="{{ post.url }}">
+    <a href="{{ post.url }}" class="post-card-image-link">
+      {% if post.image %}
       <img src="{{ post.image }}" alt="{{ post.title }}" class="post-card-image" loading="lazy">
+      {% else %}
+      <div class="post-card-image post-card-image-placeholder"></div>
+      {% endif %}
     </a>
-    {% endif %}
     <div class="post-card-body">
-      <div class="post-card-date">{{ post.date | date: "%B %d, %Y" }}</div>
+      <div class="post-card-date">{{ post.date | date: "%B %d, %Y" }} &middot; {{ rt }} min read</div>
       <h2 class="post-card-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
       <div class="post-card-excerpt">{{ post.content | strip_html | truncate: 220 }}</div>
       {% if post.tags.size > 0 %}

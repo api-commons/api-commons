@@ -2,15 +2,21 @@
 layout: default
 ---
 <style>
-  .post-hero { margin-bottom: 2.5rem; }
-  .post-hero img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; border: 1px solid #e3e7ee; margin-bottom: 1.5rem; }
-  .post-meta { font-size: 0.85rem; color: #6c757d; margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; }
+  .post-wrap { max-width: 760px; margin: 0 auto; }
+  .post-crumb { font-size: 0.8rem; color: #6c757d; margin-bottom: 1.5rem; }
+  .post-crumb a { color: #6c757d; text-decoration: none; }
+  .post-crumb a:hover { color: #0d6efd; text-decoration: underline; }
+  .post-crumb .sep { margin: 0 0.4rem; color: #b8bfc7; }
+  .post-hero img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 12px; margin-bottom: 2rem; display: block; }
+  .post-meta { font-size: 0.85rem; color: #6c757d; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem; }
   .post-meta time { font-weight: 500; }
-  .post-title { font-size: 2.2rem; font-weight: 800; color: #1a1a2e; line-height: 1.2; margin-bottom: 1rem; }
-  .post-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 2rem; }
+  .post-meta .dot { color: #c8ced6; }
+  .post-title { font-size: 2.2rem; font-weight: 800; color: #1a1a2e; line-height: 1.2; margin: 0 0 1rem; }
+  .post-title-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.5rem; }
+  .post-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 2.5rem; }
   .post-tag { display: inline-block; padding: 0.25em 0.75em; background: #eef2f7; color: #4a5568; border-radius: 999px; font-size: 0.8rem; font-weight: 500; text-decoration: none; }
   .post-tag:hover { background: #0d6efd; color: white; }
-  .post-body { font-size: 1.05rem; line-height: 1.8; color: #333; }
+  .post-body { font-size: 1.05rem; line-height: 1.75; color: #333; }
   .post-body h2 { font-size: 1.5rem; font-weight: 700; color: #1a1a2e; margin: 2rem 0 0.75rem; }
   .post-body h3 { font-size: 1.25rem; font-weight: 700; color: #1a1a2e; margin: 1.75rem 0 0.5rem; }
   .post-body p { margin-bottom: 1.25rem; }
@@ -24,16 +30,17 @@ layout: default
   .post-body ul, .post-body ol { margin-bottom: 1.25rem; padding-left: 1.5rem; }
   .post-body li { margin-bottom: 0.4rem; }
   .post-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e3e7ee; }
-  .post-nav a { color: #0d6efd; text-decoration: none; font-weight: 500; font-size: 0.9rem; }
+  .post-nav a { color: #0d6efd; text-decoration: none; font-weight: 500; font-size: 0.9rem; max-width: 45%; }
   .post-nav a:hover { text-decoration: underline; }
 </style>
 
-<nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
-  <ol class="breadcrumb" style="font-size: 0.85rem;">
-    <li class="breadcrumb-item"><a href="{{ site.url }}/">Home</a></li>
-    <li class="breadcrumb-item"><a href="{{ site.url }}/blog/">Blog</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ page.title }}</li>
-  </ol>
+{% assign words = content | strip_html | split: " " | size %}
+{% assign rt = words | divided_by: 200 %}
+{% if rt == 0 %}{% assign rt = 1 %}{% endif %}
+
+<div class="post-wrap">
+<nav class="post-crumb" aria-label="breadcrumb">
+  <a href="{{ site.url }}/">Home</a><span class="sep">/</span><a href="{{ site.url }}/blog/">Blog</a>
 </nav>
 
 <article class="post-hero" itemscope itemtype="https://schema.org/BlogPosting">
@@ -43,10 +50,12 @@ layout: default
 
   <div class="post-meta">
     <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%B %d, %Y" }}</time>
+    <span class="dot">·</span>
+    <span>{{ rt }} min read</span>
   </div>
 
-  <div class="d-flex justify-content-between align-items-start mb-2">
-    <h1 class="post-title mb-0 me-3" itemprop="headline">{{ page.title }}</h1>
+  <div class="post-title-row">
+    <h1 class="post-title" itemprop="headline">{{ page.title }}</h1>
     {% include ai-toolbar.html %}
   </div>
 
@@ -74,4 +83,5 @@ layout: default
     <a href="{{ page.next.url }}">{{ page.next.title }} &rarr;</a>
     {% endif %}
   </div>
+</div>
 </div>
