@@ -9,6 +9,7 @@ tags:
   - API operations
   - capabilities
   - spec-driven integration
+image: /assets/images/blog/the-integrations-page-as-an-api-commons-artifact.png
 ---
 
 Most "integrations" pages in the API economy are screenshots. A grid of partner logos. Sometimes a sentence or two. Almost never anything an agent — or another developer — can actually *run*. The page exists to convince a human reader that the integration ecosystem is real. It is marketing. It is not a contract.
