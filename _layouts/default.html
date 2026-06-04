@@ -3,42 +3,96 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }} - {{ site.description }}{% endif %}</title>
-    <meta name="description" content="{% if page.description %}{{ page.description | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+    {% comment %}
+      Title strategy: pull keywords into the <title> per page type so each
+      result in SERPs telegraphs what the page actually is. Falls through to
+      the bare name when the layout isn't recognized.
+    {% endcomment %}
+    {% assign _title_suffix = '' %}
+    {% comment %} Prefer page.collection (always populated for collection items
+       in Jekyll); fall back to page.layout for ordinary pages. {% endcomment %}
+    {% case page.collection %}
+      {% when 'providers' %}{% assign _title_suffix = ' — API Provider, Schemas' %}
+      {% when 'apis' %}{% assign _title_suffix = ' — Documentation, OpenAPI' %}
+      {% when 'schemas' %}{% assign _title_suffix = ' — JSON Schema' %}
+      {% when 'asyncapis' %}{% assign _title_suffix = ' — Event-Driven AsyncAPI' %}
+      {% when 'jsonld' %}{% assign _title_suffix = ' — JSON-LD Context' %}
+      {% when 'rules' %}{% assign _title_suffix = ' — Spectral Governance Ruleset' %}
+      {% when 'plans' %}{% assign _title_suffix = ' — API Pricing Plans' %}
+      {% when 'ratelimits' %}{% assign _title_suffix = ' — API Rate Limits' %}
+      {% when 'finops' %}{% assign _title_suffix = ' — API FinOps Profile' %}
+      {% when 'industries' %}{% assign _title_suffix = ' — Industry Vertical, API Providers' %}
+      {% when 'regions' %}{% assign _title_suffix = ' — Sales Region, API Providers' %}
+      {% when 'skills' %}{% assign _title_suffix = ' — Official Agent Skill' %}
+      {% when 'servers' %}{% assign _title_suffix = ' — Official MCP Server' %}
+      {% when 'channels' %}{% assign _title_suffix = ' — Event-Driven Channel' %}
+      {% when 'channel_providers' %}{% assign _title_suffix = ' — Event-Driven API Provider' %}
+    {% endcase %}
+    {% if _title_suffix == '' %}
+      {% case page.layout %}
+        {% when 'provider' %}{% assign _title_suffix = ' — API Provider, Schemas' %}
+        {% when 'api' %}{% assign _title_suffix = ' — Documentation, OpenAPI' %}
+        {% when 'schema' %}{% assign _title_suffix = ' — JSON Schema' %}
+        {% when 'asyncapi' %}{% assign _title_suffix = ' — Event-Driven AsyncAPI' %}
+        {% when 'jsonld' %}{% assign _title_suffix = ' — JSON-LD Context' %}
+        {% when 'rules' %}{% assign _title_suffix = ' — Spectral Governance Ruleset' %}
+        {% when 'plan' %}{% assign _title_suffix = ' — API Pricing Plans' %}
+        {% when 'ratelimit' %}{% assign _title_suffix = ' — API Rate Limits' %}
+        {% when 'finops' %}{% assign _title_suffix = ' — API FinOps Profile' %}
+        {% when 'industry' %}{% assign _title_suffix = ' — Industry Vertical, API Providers' %}
+        {% when 'region' %}{% assign _title_suffix = ' — Sales Region, API Providers' %}
+        {% when 'skill' %}{% assign _title_suffix = ' — Official Agent Skill' %}
+        {% when 'skill-provider' %}{% assign _title_suffix = ' — Official Agent Skills' %}
+        {% when 'mcp-server' %}{% assign _title_suffix = ' — Official MCP Server' %}
+        {% when 'channel' %}{% assign _title_suffix = ' — Event-Driven Channel' %}
+        {% when 'channel-provider' %}{% assign _title_suffix = ' — Event-Driven API Provider' %}
+      {% endcase %}
+    {% endif %}
+    <title>{% if page.meta_title %}{{ page.meta_title }}{% elsif page.name %}{{ page.name }}{{ _title_suffix }} | {{ site.name }}{% elsif page.title %}{{ page.title }} | {{ site.name }}{% else %}{{ site.name }} - {{ site.description }}{% endif %}</title>
+    <meta name="description" content="{% if page.meta_description %}{{ page.meta_description }}{% elsif page.overview %}{{ page.overview | markdownify | strip_html | strip_newlines | truncate: 160 }}{% elsif page.description %}{{ page.description | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
     <meta name="keywords" content="{% if page.tags %}{{ page.tags | join: ', ' }}, {% endif %}{{ site.keywords | join: ', ' }}">
-    <link rel="canonical" href="{{ page.url | absolute_url }}">
+    <link rel="canonical" href="{% if page.canonical %}{{ page.canonical }}{% else %}{{ page.url | absolute_url }}{% endif %}">
+    <link rel="api-catalog" href="https://apis.apis.io/.well-known/api-catalog" type="application/linkset+json">
+    <link rel="agent-skills" href="https://apis.io/skills/" type="application/json">
 
-    {% if page.image %}{% assign _og_image = page.image %}{% else %}{% assign _og_image = site.image | absolute_url %}{% endif %}
+    {% if page.layout == "post" and page.image %}{% assign _og_image = page.image | absolute_url %}{% else %}{% assign _og_image = site.image %}{% endif %}
     {% if page.layout == "post" %}{% assign _og_type = "article" %}{% else %}{% assign _og_type = "website" %}{% endif %}
 
     <!-- Open Graph -->
-    <meta property="og:title" content="{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}">
-    <meta property="og:description" content="{% if page.description %}{{ page.description | strip_html | strip_newlines | truncate: 200 }}{% else %}{{ site.description }}{% endif %}">
+    <meta property="og:title" content="{% if page.title %}{{ page.title }} | {{ site.name }}{% elsif page.name %}{{ page.name }} | {{ site.name }}{% else %}{{ site.name }}{% endif %}">
+    <meta property="og:description" content="{% if page.overview %}{{ page.overview | markdownify | strip_html | strip_newlines | truncate: 200 }}{% elsif page.description %}{{ page.description | strip_html | strip_newlines | truncate: 200 }}{% else %}{{ site.description }}{% endif %}">
     <meta property="og:url" content="{{ page.url | absolute_url }}">
-    <meta property="og:site_name" content="{{ site.title }}">
+    <meta property="og:site_name" content="{{ site.name }}">
     <meta property="og:type" content="{{ _og_type }}">
     <meta property="og:image" content="{{ _og_image }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
+    <meta property="og:image:alt" content="{% if page.title %}{{ page.title }}{% else %}{{ site.name }}{% endif %}">
     {% if page.layout == "post" and page.date %}<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">{% endif %}
+    {% if page.layout == "post" and page.tags %}{% for tag in page.tags %}<meta property="article:tag" content="{{ tag }}">
+    {% endfor %}{% endif %}
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="{{ _og_image }}">
-    <meta name="twitter:image:alt" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
-    <meta name="twitter:title" content="{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}">
-    <meta name="twitter:description" content="{% if page.description %}{{ page.description | strip_html | strip_newlines | truncate: 200 }}{% else %}{{ site.description }}{% endif %}">
+    <meta name="twitter:image:alt" content="{% if page.title %}{{ page.title }}{% else %}{{ site.name }}{% endif %}">
+    <meta name="twitter:title" content="{% if page.title %}{{ page.title }} | {{ site.name }}{% elsif page.name %}{{ page.name }} | {{ site.name }}{% else %}{{ site.name }}{% endif %}">
+    <meta name="twitter:description" content="{% if page.overview %}{{ page.overview | markdownify | strip_html | strip_newlines | truncate: 200 }}{% elsif page.description %}{{ page.description | strip_html | strip_newlines | truncate: 200 }}{% else %}{{ site.description }}{% endif %}">
+
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
 
     <link href="/assets/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/sticky-footer.css" rel="stylesheet">
+    <script src="/assets/jquery-3.7.1.min.js"></script>
     <script src="/assets/bootstrap.bundle.min.js"></script>
     <script src="/assets/js-yaml.min.js"></script>
 
     <style>
       body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: #333; }
       .navbar { padding: 0.75rem 0; }
-      .navbar-brand { font-weight: 700; font-size: 1.4rem; letter-spacing: -0.5px; }
+      .navbar-brand { font-weight: 700; font-size: 1.4rem; letter-spacing: -0.5px; padding-top: 0; padding-bottom: 0; }
+      .navbar-brand img { display: block; height: 28px; width: auto; }
       .nav-link { font-size: 0.95rem; padding: 0.5rem 1rem !important; }
       .container.my-5 { max-width: 960px; }
       .footer { background-color: #f8f9fa; border-top: 1px solid #e9ecef; }
@@ -46,54 +100,167 @@
       .footer a:hover { color: #000; text-decoration: underline; }
       a { color: #0d6efd; }
       a:hover { color: #0a58ca; }
+
+      /* Desktop: tighten dropdown so the 4 sections read as one card. */
+      @media (min-width: 992px) {
+        .navbar .dropdown-menu { padding: 0.4rem 0; min-width: 12rem; }
+        .navbar .dropdown-header { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #6c757d; padding: 0.4rem 1rem 0.2rem; }
+        .navbar .dropdown-item { font-size: 0.9rem; padding: 0.35rem 1rem; }
+        .navbar .dropdown-item.active, .navbar .dropdown-item:active { background-color: #0d6efd; color: #fff; }
+      }
+
+      /* Mobile: when the navbar is collapsed, render the dropdown inline
+         (no separate light card on top of the dark navbar) and match the
+         dark navbar styling so the More menu reads as a continuation of
+         the main nav rather than a popover. */
+      @media (max-width: 991px) {
+        .navbar-collapse { padding: 0.5rem 0 0.25rem; }
+        .navbar-nav .nav-link { padding: 0.6rem 0 !important; }
+        .navbar .dropdown-menu {
+          position: static; float: none; display: block;
+          background-color: transparent; border: 0; box-shadow: none;
+          padding: 0.25rem 0 0.5rem 0.75rem;
+          margin: 0; width: auto;
+        }
+        .navbar .dropdown-toggle::after { display: none; }
+        .navbar .dropdown-header {
+          color: rgba(255,255,255,0.55);
+          font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.6px;
+          padding: 0.75rem 0 0.25rem; font-weight: 600;
+        }
+        .navbar-dark .dropdown-menu .dropdown-item {
+          color: rgba(255,255,255,0.85);
+          padding: 0.5rem 0; font-size: 0.95rem;
+        }
+        .navbar-dark .dropdown-menu .dropdown-item:hover,
+        .navbar-dark .dropdown-menu .dropdown-item:focus {
+          color: #fff; background-color: rgba(255,255,255,0.06); border-radius: 4px;
+          padding-left: 0.5rem; padding-right: 0.5rem;
+        }
+        .navbar-dark .dropdown-menu .dropdown-item.active {
+          color: #fff; background-color: rgba(13,110,253,0.6); border-radius: 4px;
+          padding-left: 0.5rem; padding-right: 0.5rem;
+        }
+        .navbar .dropdown-divider {
+          border-top: 1px solid rgba(255,255,255,0.08); margin: 0.5rem 0;
+        }
+        .navbar form[role="search"] { margin-top: 0.5rem; }
+      }
     </style>
+    <script>
+      // Mobile: expand the More dropdown automatically when the navbar is
+      // toggled open, so the Browse-by / Specs / Operations groups are
+      // immediately visible without a second tap.
+      document.addEventListener('DOMContentLoaded', function () {
+        var collapseEl = document.getElementById('navbarSupportedContent');
+        if (!collapseEl) return;
+        collapseEl.addEventListener('show.bs.collapse', function () {
+          if (window.matchMedia('(max-width: 991px)').matches) {
+            collapseEl.querySelectorAll('.dropdown-menu').forEach(function (m) {
+              m.classList.add('show');
+            });
+          }
+        });
+        collapseEl.addEventListener('hidden.bs.collapse', function () {
+          collapseEl.querySelectorAll('.dropdown-menu.show').forEach(function (m) {
+            m.classList.remove('show');
+          });
+        });
+      });
+    </script>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNSPT4B4S8"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6H4KFSEF6P"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-WNSPT4B4S8');
+      gtag('config', 'G-6H4KFSEF6P');
+
+      function getQueryVariable(variable) {
+          var query = window.location.search.substring(1);
+          var vars = query.split('&');
+          for (var i = 0; i < vars.length; i++) {
+              var pair = vars[i].split('=');
+              if (decodeURIComponent(pair[0]) == variable) {
+                  return decodeURIComponent(pair[1]);
+              }
+          }
+      }
     </script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" href="{{ site.url }}/">API Commons</a>
+        <a class="navbar-brand" href="https://apis.io/" aria-label="apis.io home"><img src="/assets/branding/apisio-wordmark-white.png" alt="apis.io"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link{% if page.url == '/' %} active{% endif %}" href="{{ site.url }}/">Home</a>
+              <a class="nav-link{% if site.nav_active == 'search' %} active{% endif %}" href="https://apis.io/">Search</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link{% if page.url contains '/common/' %} active{% endif %}" href="{{ site.url }}/common/">Common</a>
+              <a class="nav-link{% if site.nav_active == 'providers' %} active{% endif %}" href="https://providers.apis.io/">Providers</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link{% if page.url contains '/community/' %} active{% endif %}" href="{{ site.url }}/community/">Community</a>
+              <a class="nav-link{% if site.nav_active == 'apis' %} active{% endif %}" href="https://apis.apis.io/">APIs</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link{% if page.url contains '/rules/' %} active{% endif %}" href="{{ site.url }}/rules/">Rules</a>
+              <a class="nav-link{% if site.nav_active == 'tags' %} active{% endif %}" href="https://tags.apis.io/">Tags</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle{% if site.nav_active == 'more' or site.nav_active == 'industries' or site.nav_active == 'regions' or site.nav_active == 'skills' or site.nav_active == 'mcp' or site.nav_active == 'events' or site.nav_active == 'arazzo' %} active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">More</a>
+              <ul class="dropdown-menu">
+                <li><h6 class="dropdown-header">Browse by</h6></li>
+                <li><a class="dropdown-item{% if site.nav_active == 'industries' %} active{% endif %}" href="https://industries.apis.io/">Industries</a></li>
+                <li><a class="dropdown-item{% if site.nav_active == 'regions' %} active{% endif %}" href="https://regions.apis.io/">Regions</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><h6 class="dropdown-header">Agent surfaces</h6></li>
+                <li><a class="dropdown-item{% if site.nav_active == 'skills' %} active{% endif %}" href="https://skills.apis.io/">Skills</a></li>
+                <li><a class="dropdown-item{% if site.nav_active == 'mcp' %} active{% endif %}" href="https://mcp.apis.io/">MCP</a></li>
+                <li><a class="dropdown-item{% if site.nav_active == 'events' %} active{% endif %}" href="https://events.apis.io/">Events</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><h6 class="dropdown-header">Specifications</h6></li>
+                <li><a class="dropdown-item" href="https://schemas.apis.io/">Schemas</a></li>
+                <li><a class="dropdown-item" href="https://asyncapi.apis.io/">AsyncAPI</a></li>
+                <li><a class="dropdown-item" href="https://json-ld.apis.io/">JSON-LD</a></li>
+                <li><a class="dropdown-item" href="https://rules.apis.io/">Rules</a></li>
+                <li><a class="dropdown-item" href="https://vocabularies.apis.io/">Vocabularies</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><h6 class="dropdown-header">Workflows</h6></li>
+                <li><a class="dropdown-item{% if site.nav_active == 'arazzo' %} active{% endif %}" href="https://arazzo.apis.io/">Arazzo</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><h6 class="dropdown-header">Operations</h6></li>
+                <li><a class="dropdown-item" href="https://plans.apis.io/">Plans</a></li>
+                <li><a class="dropdown-item" href="https://rate-limits.apis.io/">Rate Limits</a></li>
+                <li><a class="dropdown-item" href="https://finops.apis.io/">FinOps</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="https://apis.io/about/">About</a></li>
+                <li><a class="dropdown-item" href="https://apis.io/support/">Support</a></li>
+                <li><a class="dropdown-item" href="https://apis.io/blog/">Blog</a></li>
+              </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link{% if page.url contains '/rulesets/' %} active{% endif %}" href="{{ site.url }}/rulesets/">Rulesets</a>
+              <a class="nav-link{% if site.nav_active == 'blog' %} active{% endif %}" href="https://apis.io/blog/">Blog</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link{% if page.url contains '/blog/' %} active{% endif %}" href="{{ site.url }}/blog/">Blog</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link{% if page.url contains '/about/' %} active{% endif %}" href="{{ site.url }}/about/">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="https://apis.io" target="_blank" rel="noopener">APIs.io</a>
+              <a class="nav-link" href="https://github.com/api-search/network/issues/new?labels=new&assignees=kinlane&title=%5BNew+API%5D+&body=URL%3A+%5Byour+api+url%5D" target="_blank" rel="noopener">Add API</a>
             </li>
           </ul>
+          <form class="d-flex" role="search" action="https://apis.io/" method="get">
+            <input class="form-control form-control-sm me-2" type="search" name="search" placeholder="Search APIs..." aria-label="Search APIs">
+            <button class="btn btn-sm btn-outline-light" type="submit">Search</button>
+          </form>
         </div>
       </div>
     </nav>
+    {% if site.alert.enabled %}
+    <div class="alert alert-{{ site.alert.type }} mb-0 rounded-0 text-center" role="alert">
+      {{ site.alert.message }}
+    </div>
+    {% endif %}
     <main class="container my-5" role="main">
       {{ content }}
     </main>
@@ -101,10 +268,10 @@
     <footer class="footer">
       <div class="container">
         <div class="d-flex justify-content-center gap-4 align-items-center" style="height: 60px;">
-          <a href="https://apis.io">APIs.io</a>
-          <a href="https://apisjson.org">APIs.json</a>
-          <a href="https://github.com/api-commons/api-commons/issues">GitHub Issues</a>
-          <a href="https://github.com/api-commons/api-commons">GitHub</a>
+          <a href="http://apisjson.org">APIs.json</a>
+          <a href="http://apicommons.org">API Commons</a>
+          <a href="https://developer.apis.io">Developers</a>
+          <a href="https://github.com/api-search">GitHub</a>
         </div>
       </div>
     </footer>
