@@ -21,12 +21,15 @@ IMAGES_DIR = os.path.join(SITE_DIR, 'assets', 'images', 'blog')
 
 
 def load_api_key():
-    env_path = os.path.join(ROOT_DIR, '.env')
-    if os.path.exists(env_path):
-        with open(env_path) as f:
-            for line in f:
-                if line.startswith('GEMINI_KEY='):
-                    return line.strip().split('=', 1)[1]
+    # Walk up from the site dir looking for a .env with GEMINI_KEY; the commons
+    # repos live one level below the GitHub root that holds the shared .env.
+    for d in (ROOT_DIR, os.path.dirname(ROOT_DIR)):
+        env_path = os.path.join(d, '.env')
+        if os.path.exists(env_path):
+            with open(env_path) as f:
+                for line in f:
+                    if line.startswith('GEMINI_KEY='):
+                        return line.strip().split('=', 1)[1]
     return os.environ.get('GEMINI_KEY')
 
 

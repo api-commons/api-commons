@@ -8,6 +8,7 @@ tags:
   - Standards
   - Vocabulary
   - Governance
+image: /assets/images/blog/api-commons-properties-across-10000-providers.png
 ---
 The API Evangelist catalog has crossed 10,000 provider repositories, and running a count of which API Commons property types appear across those repos produces something worth looking at closely. Not because the numbers are impressive — though some of them are — but because of what they reveal about how API providers actually describe what they offer and where the machine-readable gaps still are.
 
