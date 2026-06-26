@@ -192,68 +192,37 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" href="https://apis.io/" aria-label="apis.io home"><img src="/assets/branding/apisio-wordmark-white.png" alt="apis.io"></a>
+        <a class="navbar-brand" href="{{ site.url }}/">{{ site.name }}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link{% if site.nav_active == 'search' %} active{% endif %}" href="https://apis.io/">Search</a>
+              <a class="nav-link{% if site.nav_active == 'home' %} active{% endif %}" href="{{ site.url }}/">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link{% if site.nav_active == 'providers' %} active{% endif %}" href="https://providers.apis.io/">Providers</a>
+              <a class="nav-link" href="https://apisjson.org" target="_blank" rel="noopener">APIs.json</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link{% if site.nav_active == 'apis' %} active{% endif %}" href="https://apis.apis.io/">APIs</a>
+              <a class="nav-link{% if site.nav_active == 'common' %} active{% endif %}" href="{{ site.url }}/common/">Common</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link{% if site.nav_active == 'tags' %} active{% endif %}" href="https://tags.apis.io/">Tags</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle{% if site.nav_active == 'more' or site.nav_active == 'industries' or site.nav_active == 'regions' or site.nav_active == 'skills' or site.nav_active == 'mcp' or site.nav_active == 'events' or site.nav_active == 'arazzo' %} active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">More</a>
-              <ul class="dropdown-menu">
-                <li><h6 class="dropdown-header">Browse by</h6></li>
-                <li><a class="dropdown-item{% if site.nav_active == 'industries' %} active{% endif %}" href="https://industries.apis.io/">Industries</a></li>
-                <li><a class="dropdown-item{% if site.nav_active == 'regions' %} active{% endif %}" href="https://regions.apis.io/">Regions</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><h6 class="dropdown-header">Agent surfaces</h6></li>
-                <li><a class="dropdown-item{% if site.nav_active == 'skills' %} active{% endif %}" href="https://skills.apis.io/">Skills</a></li>
-                <li><a class="dropdown-item{% if site.nav_active == 'mcp' %} active{% endif %}" href="https://mcp.apis.io/">MCP</a></li>
-                <li><a class="dropdown-item{% if site.nav_active == 'events' %} active{% endif %}" href="https://events.apis.io/">Events</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><h6 class="dropdown-header">Specifications</h6></li>
-                <li><a class="dropdown-item" href="https://schemas.apis.io/">Schemas</a></li>
-                <li><a class="dropdown-item" href="https://asyncapi.apis.io/">AsyncAPI</a></li>
-                <li><a class="dropdown-item" href="https://json-ld.apis.io/">JSON-LD</a></li>
-                <li><a class="dropdown-item" href="https://rules.apis.io/">Rules</a></li>
-                <li><a class="dropdown-item" href="https://vocabularies.apis.io/">Vocabularies</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><h6 class="dropdown-header">Workflows</h6></li>
-                <li><a class="dropdown-item{% if site.nav_active == 'arazzo' %} active{% endif %}" href="https://arazzo.apis.io/">Arazzo</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><h6 class="dropdown-header">Operations</h6></li>
-                <li><a class="dropdown-item" href="https://plans.apis.io/">Plans</a></li>
-                <li><a class="dropdown-item" href="https://rate-limits.apis.io/">Rate Limits</a></li>
-                <li><a class="dropdown-item" href="https://finops.apis.io/">FinOps</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="https://apis.io/about/">About</a></li>
-                <li><a class="dropdown-item" href="https://apis.io/support/">Support</a></li>
-                <li><a class="dropdown-item" href="https://apis.io/blog/">Blog</a></li>
-                <li><a class="dropdown-item{% if site.nav_active == 'analytics' %} active{% endif %}" href="https://apis.io/analytics/">Analytics</a></li>
-              </ul>
+              <a class="nav-link{% if site.nav_active == 'community' %} active{% endif %}" href="{{ site.url }}/community/">Community</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link{% if site.nav_active == 'blog' %} active{% endif %}" href="https://apis.io/blog/">Blog</a>
+              <a class="nav-link{% if site.nav_active == 'rules' %} active{% endif %}" href="{{ site.url }}/rules/">Rules</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://github.com/api-search/network/issues/new?labels=new&assignees=kinlane&title=%5BNew+API%5D+&body=URL%3A+%5Byour+api+url%5D" target="_blank" rel="noopener">Add API</a>
+              <a class="nav-link{% if site.nav_active == 'rulesets' %} active{% endif %}" href="{{ site.url }}/rulesets/">Rulesets</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link{% if site.nav_active == 'blog' %} active{% endif %}" href="{{ site.url }}/blog/">Blog</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link{% if site.nav_active == 'about' %} active{% endif %}" href="{{ site.url }}/about/">About</a>
             </li>
           </ul>
-          <form class="d-flex" role="search" action="https://apis.io/" method="get">
-            <input class="form-control form-control-sm me-2" type="search" name="search" placeholder="Search APIs..." aria-label="Search APIs">
-            <button class="btn btn-sm btn-outline-light" type="submit">Search</button>
-          </form>
         </div>
       </div>
     </nav>
@@ -269,11 +238,11 @@
     <footer class="footer">
       <div class="container">
         <div class="d-flex justify-content-center gap-4 align-items-center" style="height: 60px;">
-          <a href="http://apisjson.org">APIs.json</a>
-          <a href="http://apicommons.org">API Commons</a>
-          <a href="https://developer.apis.io">Developers</a>
-          <a href="https://github.com/api-search">GitHub</a>
-          <a href="mailto:info@apis.io">info@apis.io</a>
+          <a href="https://apis.io">APIs.io</a>
+          <a href="https://apisjson.org">APIs.json</a>
+          <a href="https://github.com/api-commons/api-commons/issues">GitHub Issues</a>
+          <a href="https://github.com/orgs/api-commons/discussions">GitHub Discussions</a>
+          <a href="https://github.com/api-commons/api-commons">GitHub Org</a>
         </div>
       </div>
     </footer>
