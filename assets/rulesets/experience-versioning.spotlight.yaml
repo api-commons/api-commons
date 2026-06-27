@@ -1,0 +1,650 @@
+documentationUrl: https://spotlight-rules.com/spec/
+functions:
+- trimble-valid-version-checker
+functionsDir: ./functions
+rules:
+  openapi-info-require-openapi-version-3x:
+    title: Info Require Openapi Version 3x
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-require-openapi-version-3x/
+    description: APIs should use OpenAPI 3.x specification. Analysis of 773 API specs shows 97% use OpenAPI 3.x, with 86%
+      on 3.1.0, making it the dominant standard for modern API definitions.
+    message: OpenAPI MUST Be Version 3.x
+    severity: info
+    given: $
+    then:
+      field: openapi
+      function: pattern
+      functionOptions:
+        match: ^3\.
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:versioning
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-require-openapi-version-3x''
+      (Info Require Openapi Version 3x). Requirement: APIs should use OpenAPI 3.x specification. Analysis of 773 API specs
+      shows 97% use OpenAPI 3.x, with 86% on 3.1.0, making it the dominant standard for modern API definitions. To fix: Ensure
+      `openapi` matches the regular expression `^3\.`; rewrite any value that does not. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-info-skill-require-version:
+    title: Info Require Version
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-skill-require-version/
+    description: Publishing a version for your OpenAPI technical contract helps you communicate change with consumers using
+      Semantic or date-based versioning published to the info version property.
+    message: Info MUST Have Version
+    severity: info
+    given: $.info
+    then:
+      field: version
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:info
+    - experience:versioning
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-skill-require-version''
+      (Info Require Version). Requirement: Publishing a version for your OpenAPI technical contract helps you communicate
+      change with consumers using Semantic or date-based versioning published to the info version property. To fix: Ensure
+      `version` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.info` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-info-version-must-be-semver:
+    title: Info Version Must Be Semver
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-version-must-be-semver/
+    description: The API version field should follow [semantic versioning](https://semver.org/#semantic-versioning-specification-semver).
+    message: Specs should follow semantic versioning. {{value}} is not a valid version.
+    severity: info
+    given: $.info.version
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[0-9]+.[0-9]+.[0-9]+(-[a-z0-9+.-]+)?
+    tags:
+    - format:openapi
+    - spec:info
+    - experience:versioning
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-version-must-be-semver''
+      (Info Version Must Be Semver). Requirement: The API version field should follow [semantic versioning](https://semver.org/#semantic-versioning-specification-semver).
+      To fix: Ensure the targeted value matches the regular expression `^[0-9]+.[0-9]+.[0-9]+(-[a-z0-9+.-]+)?`; rewrite any
+      value that does not. This rule is evaluated at the JSONPath `$.info.version` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-info-version-must-use-semver:
+    title: Info Version Must Use Semver
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-version-must-use-semver/
+    description: Version should use semantic versioning. {{value}} is not a valid version.
+    message: Version should use semantic versioning. {{value}} is not a valid version.
+    severity: info
+    given: $.info.version
+    then:
+      function: pattern
+      functionOptions:
+        match: ^([0-9]+.[0-9]+.[0-9]+)$
+    tags:
+    - format:openapi
+    - spec:info
+    - experience:versioning
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-version-must-use-semver''
+      (Info Version Must Use Semver). Requirement: Version should use semantic versioning. {{value}} is not a valid version.
+      To fix: Ensure the targeted value matches the regular expression `^([0-9]+.[0-9]+.[0-9]+)$`; rewrite any value that
+      does not. This rule is evaluated at the JSONPath `$.info.version` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-info-version-semantic-and-stable:
+    title: Info Version Semantic And Stable
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-version-semantic-and-stable/
+    description: The API contract MUST have a stable version and MUST follow semantic versioning (e.g., '1.0.0'). Words like
+      'SNAPSHOT' or 'RELEASE' are not allowed.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.info.version
+    then:
+      function: pattern
+      functionOptions:
+        match: ^(?!.*\b(SNAPSHOT|RELEASE)\b)(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:info
+    - experience:versioning
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-version-semantic-and-stable''
+      (Info Version Semantic And Stable). Requirement: The API contract MUST have a stable version and MUST follow semantic
+      versioning (e.g., ''1.0.0''). Words like ''SNAPSHOT'' or ''RELEASE'' are not allowed. To fix: Ensure the targeted value
+      matches the regular expression `^(?!.*\b(SNAPSHOT|RELEASE)\b)(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$`; rewrite any
+      value that does not. This rule is evaluated at the JSONPath `$.info.version` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-operation-deprecated-require-description:
+    title: Operation Deprecated Require Description
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-deprecated-require-description/
+    description: Deprecated operations should have a description explaining the deprecation and the migration path / successor.
+    message: Deprecated operation should describe the deprecation and successor.
+    given: $.paths[*][?(@ && @.deprecated == true)]
+    severity: info
+    then:
+      field: description
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - topic:deprecation
+    - experience:versioning
+    - experience:documentation
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-deprecated-require-description''
+      (Operation Deprecated Require Description). Requirement: Deprecated operations should have a description explaining
+      the deprecation and the migration path / successor. To fix: Ensure `description` is present and non-empty at each matching
+      location. This rule is evaluated at the JSONPath `$.paths[*][?(@ && @.deprecated == true)]` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-parameter-deprecated-require-description:
+    title: Parameter Deprecated Require Description
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-deprecated-require-description/
+    description: Deprecated parameters should have a description explaining the deprecation and what to use instead.
+    message: Deprecated parameter should describe the deprecation.
+    given: $..parameters[?(@ && @.deprecated == true)]
+    severity: info
+    then:
+      field: description
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:deprecation
+    - experience:versioning
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-deprecated-require-description''
+      (Parameter Deprecated Require Description). Requirement: Deprecated parameters should have a description explaining
+      the deprecation and what to use instead. To fix: Ensure `description` is present and non-empty at each matching location.
+      This rule is evaluated at the JSONPath `$..parameters[?(@ && @.deprecated == true)]` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-path-include-version:
+    title: Path Include Version
+    reference: https://spotlight-rules.com/spec/rules/openapi/path-include-version/
+    description: Path must include the version.
+    message: '{{description}}; {{property}} incorrect'
+    severity: info
+    given: $.paths[?(@property!='/<upload_url>')]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^(/v[12]/.*|/api/v[12]/.*)$
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:versioning
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''path-include-version'' (Path
+      Include Version). Requirement: Path must include the version. To fix: Ensure the targeted value matches the regular
+      expression `^(/v[12]/.*|/api/v[12]/.*)$`; rewrite any value that does not. This rule is evaluated at the JSONPath `$.paths[?(@property!=''/<upload_url>'')]~`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-path-no-version-segment:
+    title: Path No Version Segment
+    reference: https://spotlight-rules.com/spec/rules/openapi/path-no-version-segment/
+    description: API paths should not contain version numbers like v1 or v2. API versioning should be handled through headers,
+      query parameters, or server URLs rather than embedded in resource paths.
+    message: Paths MUST NOT Contain API Version
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /v[0-9]
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:versioning
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''path-no-version-segment''
+      (Path No Version Segment). Requirement: API paths should not contain version numbers like v1 or v2. API versioning should
+      be handled through headers, query parameters, or server URLs rather than embedded in resource paths. To fix: Ensure
+      the targeted value does NOT match the regular expression `/v[0-9]`; rename or rewrite any value that does. This rule
+      is evaluated at the JSONPath `$.paths` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-path-uri-versioning-single-version:
+    title: Path URI Versioning Single Version
+    reference: https://spotlight-rules.com/spec/rules/openapi/path-uri-versioning-single-version/
+    description: CAN use correct URI versioning [115a].
+    message: Path can contain correct URI versioning
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^((?!.*\/v\d+(\/.*)?\/v\d+)\/.*)$
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:versioning
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''path-uri-versioning-single-version''
+      (Path URI Versioning Single Version). Requirement: CAN use correct URI versioning [115a]. To fix: Ensure the targeted
+      value matches the regular expression `^((?!.*\/v\d+(\/.*)?\/v\d+)\/.*)$`; rewrite any value that does not. This rule
+      is evaluated at the JSONPath `$.paths.*~` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-deprecated-operation-deprecation-header:
+    title: Response Deprecated Operation Deprecation Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-deprecated-operation-deprecation-header/
+    description: Deprecated operations should document a Deprecation response header (RFC 9745) signalling that the resource
+      is deprecated.
+    message: Deprecated operation should document a Deprecation header.
+    given: $.paths[*][?(@ && @.deprecated == true)].responses[*].headers
+    severity: info
+    then:
+      field: Deprecation
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:deprecation
+    - experience:versioning
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-deprecated-operation-deprecation-header''
+      (Response Deprecated Operation Deprecation Header). Requirement: Deprecated operations should document a Deprecation
+      response header (RFC 9745) signalling that the resource is deprecated. To fix: Ensure `Deprecation` is present and non-empty
+      at each matching location. This rule is evaluated at the JSONPath `$.paths[*][?(@ && @.deprecated == true)].responses[*].headers`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-deprecated-operation-sunset-header:
+    title: Response Deprecated Operation Sunset Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-deprecated-operation-sunset-header/
+    description: Deprecated operations should document a Sunset response header (RFC 8594) telling clients when the operation
+      will be removed.
+    message: Deprecated operation should document a Sunset header.
+    given: $.paths[*][?(@ && @.deprecated == true)].responses[*].headers
+    severity: info
+    then:
+      field: Sunset
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:deprecation
+    - experience:versioning
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-deprecated-operation-sunset-header''
+      (Response Deprecated Operation Sunset Header). Requirement: Deprecated operations should document a Sunset response
+      header (RFC 8594) telling clients when the operation will be removed. To fix: Ensure `Sunset` is present and non-empty
+      at each matching location. This rule is evaluated at the JSONPath `$.paths[*][?(@ && @.deprecated == true)].responses[*].headers`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-schema-deprecated-property-require-description:
+    title: Schema Deprecated Property Require Description
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-deprecated-property-require-description/
+    description: Deprecated schema properties should have a description explaining the deprecation and the replacement field.
+    message: Deprecated property should describe the deprecation.
+    given: $..properties[?(@ && @.deprecated == true)]
+    severity: info
+    then:
+      field: description
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - topic:deprecation
+    - experience:versioning
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-deprecated-property-require-description''
+      (Schema Deprecated Property Require Description). Requirement: Deprecated schema properties should have a description
+      explaining the deprecation and the replacement field. To fix: Ensure `description` is present and non-empty at each
+      matching location. This rule is evaluated at the JSONPath `$..properties[?(@ && @.deprecated == true)]` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-server-url-include-version:
+    title: Server URL Include Version
+    reference: https://spotlight-rules.com/spec/rules/openapi/server-url-include-version/
+    description: API URLs versions should meet the Trimble API Standards.
+    message: '{{error}}'
+    severity: info
+    given: $.servers
+    then:
+      function: trimble-valid-version-checker
+    tags:
+    - format:openapi
+    - spec:servers
+    - experience:versioning
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''server-url-include-version''
+      (Server URL Include Version). Requirement: API URLs versions should meet the Trimble API Standards. This rule is evaluated
+      at the JSONPath `$.servers` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-tag-no-version-info:
+    title: Tag No Version Info
+    reference: https://spotlight-rules.com/spec/rules/openapi/tag-no-version-info/
+    description: Tag names cannot have version information {{value}}. Consider versioning your API.
+    message: Tag names cannot have version information {{value}}. Consider versioning your API.
+    severity: info
+    given:
+    - $.tags[*].name
+    - $.paths[*][*].tags[*]
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /(V|v)\s?[0-9]+/g
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:tags
+    - experience:naming
+    - experience:versioning
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''tag-no-version-info'' (Tag
+      No Version Info). Requirement: Tag names cannot have version information {{value}}. Consider versioning your API. To
+      fix: Ensure the targeted value does NOT match the regular expression `/(V|v)\s?[0-9]+/g`; rename or rewrite any value
+      that does. This rule is evaluated at the JSONPath `$.tags[*].name | $.paths[*][*].tags[*]` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  apis-json-api-property-skill-require-versioning:
+    title: API Property Require Versioning
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-skill-require-versioning/
+    description: This property ensures there is a reference to how APIs are versioned, providing a single place where teams
+      can learn about how change is communicated.
+    message: Has Versioning for API
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(versions|Versions|Versioning|versioning)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:versioning
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-skill-require-versioning''
+      (API Property Require Versioning). Requirement: This property ensures there is a reference to how APIs are versioned,
+      providing a single place where teams can learn about how change is communicated. To fix: Ensure `type` does NOT match
+      the regular expression `\b(versions|Versions|Versioning|versioning)\b`; rename or rewrite any value that does. This
+      rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document,
+      with no commentary.'
+  apis-json-info-apis-json-specification-version-format:
+    title: Info APIs JSON Specification Version Format
+    reference: https://spotlight-rules.com/spec/rules/apis-json/info-apis-json-specification-version-format/
+    description: specificationVersion should be a major.minor version (e.g. 0.21).
+    message: specificationVersion should be major.minor.
+    given: $.specificationVersion
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d+\.\d+$
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:versioning
+    - experience:consistency
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''info-apis-json-specification-version-format''
+      (Info APIs JSON Specification Version Format). Requirement: specificationVersion should be a major.minor version (e.g.
+      0.21). To fix: Ensure the targeted value matches the regular expression `^\d+\.\d+$`; rewrite any value that does not.
+      This rule is evaluated at the JSONPath `$.specificationVersion` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document, with no
+      commentary.'
+  apis-json-schema-include-api-lifecycle:
+    title: Schema Include API Lifecycle
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-api-lifecycle/
+    description: This property makes sure there is an API lifecycle schema defining all of the stages of a lifecycle and which
+      policies get applied at each stage of the API lifecycle.
+    message: Has an API Lifecycle
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(lifecycle|Lifecycle)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:governance
+    - experience:versioning
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-api-lifecycle''
+      (Schema Include API Lifecycle). Requirement: This property makes sure there is an API lifecycle schema defining all
+      of the stages of a lifecycle and which policies get applied at each stage of the API lifecycle. To fix: Ensure `type`
+      does NOT match the regular expression `\b(lifecycle|Lifecycle)\b`; rename or rewrite any value that does. This rule
+      is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document, with no
+      commentary.'
+  apis-json-schema-include-change-log:
+    title: Schema Include Change Log
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-change-log/
+    description: This property ensures that than an individual API or API operations possesses a change log that catalogs
+      all the changes that have occurred in a recent time frame, with historical and version information available if possible.
+    message: Has Change Log
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-change-log|change-log|Change Log|Changelog|ChangeLog)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:versioning
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-change-log''
+      (Schema Include Change Log). Requirement: This property ensures that than an individual API or API operations possesses
+      a change log that catalogs all the changes that have occurred in a recent time frame, with historical and version information
+      available if possible. To fix: Ensure `type` does NOT match the regular expression `\b(api-change-log|change-log|Change
+      Log|Changelog|ChangeLog)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.*
+      | $.common.*` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-deprecation-policy:
+    title: Schema Include Deprecation Policy
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-deprecation-policy/
+    description: This property ensures that an API has a deprecation policy shared as part of the contract, communicating
+      what the lifespan of APIs are, each individual version, as well as communication around the deprecation of APIs.
+    message: Has Deprecation Policy
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-deprecation-policy|deprecation-policy|Deprecation|Deprecation Policy|DeprecationPolicy)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - topic:deprecation
+    - experience:versioning
+    - experience:governance
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-deprecation-policy''
+      (Schema Include Deprecation Policy). Requirement: This property ensures that an API has a deprecation policy shared
+      as part of the contract, communicating what the lifespan of APIs are, each individual version, as well as communication
+      around the deprecation of APIs. To fix: Ensure `type` does NOT match the regular expression `\b(api-deprecation-policy|deprecation-policy|Deprecation|Deprecation
+      Policy|DeprecationPolicy)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.*
+      | $.common.*` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-version-comparison:
+    title: Schema Include Version Comparison
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-version-comparison/
+    description: This property ensures that an API has the ability to compare two different versions of an API and see what
+      the difference are between them.
+    message: Has an API Comparison
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(compare|Compare)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:versioning
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-version-comparison''
+      (Schema Include Version Comparison). Requirement: This property ensures that an API has the ability to compare two different
+      versions of an API and see what the difference are between them. To fix: Ensure `type` does NOT match the regular expression
+      `\b(compare|Compare)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.*
+      | $.common.*` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid APIs.json. Return only the complete corrected document, with no commentary.'
+  asyncapi-info-asyncapi-version-semver:
+    title: Info Asyncapi Version Semver
+    reference: https://spotlight-rules.com/spec/rules/asyncapi/info-asyncapi-version-semver/
+    description: info.version should be semantic (e.g. 1.0.0).
+    message: AsyncAPI version should be semantic.
+    given: $.info.version
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d+\.\d+\.\d+
+    tags:
+    - format:asyncapi
+    - spec:info
+    - experience:versioning
+    prompt: 'You are editing an AsyncAPI document to satisfy the Spotlight API governance rule ''info-asyncapi-version-semver''
+      (Info Asyncapi Version Semver). Requirement: info.version should be semantic (e.g. 1.0.0). To fix: Ensure the targeted
+      value matches the regular expression `^\d+\.\d+\.\d+`; rewrite any value that does not. This rule is evaluated at the
+      JSONPath `$.info.version` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid AsyncAPI. Return only the complete corrected document, with no commentary.'
+  mcp-info-mcp-protocol-version-dated:
+    title: Info MCP Protocol Version Dated
+    reference: https://spotlight-rules.com/spec/rules/mcp/info-mcp-protocol-version-dated/
+    description: protocolVersion should be a dated MCP revision (YYYY-MM-DD).
+    message: protocolVersion should be a dated revision (YYYY-MM-DD).
+    given: $.protocolVersion
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d{4}-\d{2}-\d{2}$
+    tags:
+    - format:mcp
+    - spec:document
+    - experience:versioning
+    - experience:consistency
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''info-mcp-protocol-version-dated''
+      (Info MCP Protocol Version Dated). Requirement: protocolVersion should be a dated MCP revision (YYYY-MM-DD). To fix:
+      Ensure the targeted value matches the regular expression `^\d{4}-\d{2}-\d{2}$`; rewrite any value that does not. This
+      rule is evaluated at the JSONPath `$.protocolVersion` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid MCP. Return only the complete corrected document, with no commentary.'
+  mcp-info-mcp-version-semver:
+    title: Info MCP Version Semver
+    reference: https://spotlight-rules.com/spec/rules/mcp/info-mcp-version-semver/
+    description: The server version should be semantic (e.g. 1.0.0).
+    message: MCP version should be semantic.
+    given: $.version
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d+\.\d+\.\d+
+    tags:
+    - format:mcp
+    - spec:document
+    - experience:versioning
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''info-mcp-version-semver'' (Info
+      MCP Version Semver). Requirement: The server version should be semantic (e.g. 1.0.0). To fix: Ensure the targeted value
+      matches the regular expression `^\d+\.\d+\.\d+`; rewrite any value that does not. This rule is evaluated at the JSONPath
+      `$.version` — inspect every location it matches and correct only what violates the rule. Make the smallest change that
+      satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid MCP. Return only the complete corrected document, with no commentary.'
+  mcp-info-require-protocol-version:
+    title: Info Require Protocol Version
+    reference: https://spotlight-rules.com/spec/rules/mcp/info-require-protocol-version/
+    description: The `protocolVersion` property should be present.
+    message: protocolVersion should be present
+    severity: info
+    given: $
+    then:
+      field: protocolVersion
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:servers
+    - experience:versioning
+    - experience:consistency
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''info-require-protocol-version''
+      (Info Require Protocol Version). Requirement: The `protocolVersion` property should be present. To fix: Ensure `protocolVersion`
+      is present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid MCP. Return only the complete corrected
+      document, with no commentary.'
+  mcp-info-skill-require-version:
+    title: Info Require Version
+    reference: https://spotlight-rules.com/spec/rules/mcp/info-skill-require-version/
+    description: The `version` property should be present.
+    message: version should be present
+    severity: info
+    given: $
+    then:
+      field: version
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:servers
+    - experience:versioning
+    - experience:data-modeling
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''info-skill-require-version'' (Info
+      Require Version). Requirement: The `version` property should be present. To fix: Ensure `version` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid MCP. Return only the complete corrected document, with
+      no commentary.'
+  agent-skill-skill-version-semver:
+    title: Skill Version Semver
+    reference: https://spotlight-rules.com/spec/rules/agent-skill/skill-version-semver/
+    description: If a skill declares a version, it should be semantic (e.g. 1.0.0) so consumers can reason about changes between
+      releases.
+    message: Skill version should be semantic (e.g. 1.0.0).
+    severity: info
+    given: $.frontmatter.version
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$
+    tags:
+    - format:agent-skill
+    - spec:frontmatter
+    - experience:versioning
+    prompt: 'You are editing an Agent Skill document to satisfy the Spotlight API governance rule ''skill-version-semver''
+      (Skill Version Semver). Requirement: If a skill declares a version, it should be semantic (e.g. 1.0.0) so consumers
+      can reason about changes between releases. To fix: Ensure the targeted value matches the regular expression `^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$`;
+      rewrite any value that does not. This rule is evaluated at the JSONPath `$.frontmatter.version` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid Agent Skill. Return only the complete
+      corrected document, with no commentary.'

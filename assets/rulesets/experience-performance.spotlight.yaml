@@ -1,0 +1,950 @@
+documentationUrl: https://spotlight-rules.com/spec/
+rules:
+  openapi-document-cache-control-parameter:
+    title: Document Cache Control Parameter
+    reference: https://spotlight-rules.com/spec/rules/openapi/document-cache-control-parameter/
+    description: 'Cache usage SHOULD be extensively detailed in the `description` property to avoid data leaks or the usage
+      of stale data. This rule should ensure in some way that the api provider documented extensively the cache usage to avoid
+      data leaks or usage of stale data. For now this ruleset tests: * the presence of following keywords in the `description`:
+      `max-age`, `private`, `no-store`, `no-cache`. * that one and only one between Expires and Cache-Control is used. `Cache-Control`
+      and `Expires` should not be used in conjuction, because `Cache-Control` overrides `Expires` when `max-age` is set. Instead
+      if neither `Cache-Control` or `Expires` are set, clients MAY use euristic cache like described in RFC7234.'
+    message: Cache usage SHOULD be documented when used.
+    severity: info
+    given: $..[parameters][?(@.in == "header" && @.name.match(/Cache-Control/i))]
+    then:
+    - field: description
+      function: truthy
+    - field: description
+      function: pattern
+      functionOptions:
+        match: .*(max-age|private|no-store|no-cache).*
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:parameters
+    - spec:headers
+    - topic:caching
+    - experience:documentation
+    - experience:reliability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''document-cache-control-parameter''
+      (Document Cache Control Parameter). Requirement: Cache usage SHOULD be extensively detailed in the `description` property
+      to avoid data leaks or the usage of stale data. This rule should ensure in some way that the api provider documented
+      extensively the cache usage to avoid data leaks or usage of stale data. For now this ruleset tests: * the presence of
+      following keywords in the `description`: `max-age`, `private`, `no-store`, `no-cache`. * that one and only one between
+      Expires and Cache-Control is used. `Cache-Control` and `Expires` should not be used in conjuction, because `Cache-Control`
+      overrides `Expires` when `max-age` is set. Instead if neither `Cache-Control` or `Expires` are set, clients MAY use
+      euristic cache like described in RFC7234. To fix: Ensure `description` is present and non-empty at each matching location.
+      Also: Ensure `description` matches the regular expression `.*(max-age|private|no-store|no-cache).*`; rewrite any value
+      that does not. This rule is evaluated at the JSONPath `$..[parameters][?(@.in == "header" && @.name.match(/Cache-Control/i))]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-document-cache-response-header:
+    title: Document Cache Response Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/document-cache-response-header/
+    description: 'Cache usage SHOULD be extensively detailed in the `description` property to avoid data leaks or the usage
+      of stale data. This rule should ensure in some way that the api provider documented extensively the cache usage to avoid
+      data leaks or usage of stale data. For now this ruleset tests: * the presence of following keywords in the `description`:
+      `max-age`, `private`, `no-store`, `no-cache`. * that one and only one between Expires and Cache-Control is used. `Cache-Control`
+      and `Expires` should not be used in conjuction, because `Cache-Control` overrides `Expires` when `max-age` is set. Instead
+      if neither `Cache-Control` or `Expires` are set, clients MAY use euristic cache like described in RFC7234.'
+    message: Cache usage in responses SHOULD be documented in Cache-Control and/or Expires. {{error}}
+    severity: info
+    given: $.[responses][?(@property[0] == "2" )][headers].[?(@property.match(/Cache-Control|Expires/i))]]
+    then:
+    - field: description
+      function: truthy
+    - field: description
+      function: pattern
+      functionOptions:
+        match: .*(max-age|private|no-store|no-cache).*
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:responses
+    - spec:headers
+    - topic:caching
+    - experience:documentation
+    - experience:reliability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''document-cache-response-header''
+      (Document Cache Response Header). Requirement: Cache usage SHOULD be extensively detailed in the `description` property
+      to avoid data leaks or the usage of stale data. This rule should ensure in some way that the api provider documented
+      extensively the cache usage to avoid data leaks or usage of stale data. For now this ruleset tests: * the presence of
+      following keywords in the `description`: `max-age`, `private`, `no-store`, `no-cache`. * that one and only one between
+      Expires and Cache-Control is used. `Cache-Control` and `Expires` should not be used in conjuction, because `Cache-Control`
+      overrides `Expires` when `max-age` is set. Instead if neither `Cache-Control` or `Expires` are set, clients MAY use
+      euristic cache like described in RFC7234. To fix: Ensure `description` is present and non-empty at each matching location.
+      Also: Ensure `description` matches the regular expression `.*(max-age|private|no-store|no-cache).*`; rewrite any value
+      that does not. This rule is evaluated at the JSONPath `$.[responses][?(@property[0] == "2" )][headers].[?(@property.match(/Cache-Control|Expires/i))]]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-operation-collection-support-filtering:
+    title: Operation Collection Support Filtering
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-collection-support-filtering/
+    description: Collection GET operations should support filtering via a filter query parameter (e.g. filter or filter[field]).
+    message: Collection should support a filter query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^filter
+              in:
+                const: query
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:pagination
+    - experience:usability
+    - experience:discoverability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-collection-support-filtering''
+      (Operation Collection Support Filtering). Requirement: Collection GET operations should support filtering via a filter
+      query parameter (e.g. filter or filter[field]). To fix: Adjust `parameters` so it conforms to the schema this rule requires.
+      This rule is evaluated at the JSONPath `$.paths[*].get` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-operation-collection-support-sorting:
+    title: Operation Collection Support Sorting
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-collection-support-sorting/
+    description: Collection GET operations should support sorting via a sort or order query parameter.
+    message: Collection should support a sort/order query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^(sort|order)
+              in:
+                const: query
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:pagination
+    - experience:usability
+    - experience:discoverability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-collection-support-sorting''
+      (Operation Collection Support Sorting). Requirement: Collection GET operations should support sorting via a sort or
+      order query parameter. To fix: Adjust `parameters` so it conforms to the schema this rule requires. This rule is evaluated
+      at the JSONPath `$.paths[*].get` — inspect every location it matches and correct only what violates the rule. Make the
+      smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-operation-collection-support-sparse-fieldsets:
+    title: Operation Collection Support Sparse Fieldsets
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-collection-support-sparse-fieldsets/
+    description: GET operations should support sparse fieldsets via a fields query parameter so clients can request only the
+      fields they need.
+    message: Operation should support a fields (sparse fieldset) query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^fields
+              in:
+                const: query
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:pagination
+    - experience:usability
+    - experience:reliability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-collection-support-sparse-fieldsets''
+      (Operation Collection Support Sparse Fieldsets). Requirement: GET operations should support sparse fieldsets via a fields
+      query parameter so clients can request only the fields they need. To fix: Adjust `parameters` so it conforms to the
+      schema this rule requires. This rule is evaluated at the JSONPath `$.paths[*].get` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-operation-define-429-response:
+    title: Operation Define 429 Response
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-define-429-response/
+    description: APIs should define a 429 Too Many Requests response to document rate limiting behavior. Analysis shows 429
+      appears in 671 operations, confirming rate limiting is a common API pattern.
+    message: Operations MUST Have 429 Response
+    severity: info
+    given: $.paths.*[get,post,put,patch,delete].responses
+    then:
+      field: '429'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - topic:rate-limiting
+    - experience:error-handling
+    - experience:reliability
+    - experience:performance
+    - owasp:api4
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-define-429-response''
+      (Operation Define 429 Response). Requirement: APIs should define a 429 Too Many Requests response to document rate limiting
+      behavior. Analysis shows 429 appears in 671 operations, confirming rate limiting is a common API pattern. To fix: Ensure
+      `429` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths.*[get,post,put,patch,delete].responses`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-parameter-collection-limit-param-default:
+    title: Parameter Collection Limit Param Default
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-collection-limit-param-default/
+    description: The limit / page-size query parameter should declare a default so the page size is predictable when the caller
+      omits it.
+    message: limit parameter should declare a default.
+    given: $.paths[*].get.parameters[?(@ && @.in == 'query' && (@.name == 'limit' || @.name == 'per_page' || @.name == 'page_size'
+      || @.name == 'pageSize'))].schema
+    severity: info
+    then:
+      field: default
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:pagination
+    - experience:pagination
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-collection-limit-param-default''
+      (Parameter Collection Limit Param Default). Requirement: The limit / page-size query parameter should declare a default
+      so the page size is predictable when the caller omits it. To fix: Ensure `default` is present and non-empty at each
+      matching location. This rule is evaluated at the JSONPath `$.paths[*].get.parameters[?(@ && @.in == ''query'' && (@.name
+      == ''limit'' || @.name == ''per_page'' || @.name == ''page_size'' || @.name == ''pageSize''))].schema` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-parameter-collection-limit-param-maximum:
+    title: Parameter Collection Limit Param Maximum
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-collection-limit-param-maximum/
+    description: The limit / page-size query parameter should declare a maximum so a caller cannot request an unbounded page
+      (OWASP API4 — unrestricted resource consumption).
+    message: limit parameter should declare a maximum.
+    given: $.paths[*].get.parameters[?(@ && @.in == 'query' && (@.name == 'limit' || @.name == 'per_page' || @.name == 'page_size'
+      || @.name == 'pageSize'))].schema
+    severity: info
+    then:
+      field: maximum
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:pagination
+    - experience:pagination
+    - experience:reliability
+    - experience:performance
+    - owasp:api4
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-collection-limit-param-maximum''
+      (Parameter Collection Limit Param Maximum). Requirement: The limit / page-size query parameter should declare a maximum
+      so a caller cannot request an unbounded page (OWASP API4 — unrestricted resource consumption). To fix: Ensure `maximum`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*].get.parameters[?(@
+      && @.in == ''query'' && (@.name == ''limit'' || @.name == ''per_page'' || @.name == ''page_size'' || @.name == ''pageSize''))].schema`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-parameter-pagination-params-in-query:
+    title: Parameter Pagination Params In Query
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-pagination-params-in-query/
+    description: Pagination parameters like page, limit, offset, and cursor should be passed as query parameters, not in headers
+      or path segments. Analysis confirms 100% of pagination parameters observed are query parameters.
+    message: Pagination Parameters MUST Be Query Parameters
+    severity: info
+    given: $.paths[*].get.parameters[?(@.name == 'page' || @.name == 'limit' || @.name == 'offset' || @.name == 'cursor' ||
+      @.name == 'per_page' || @.name == 'page_size')]
+    then:
+      field: in
+      function: pattern
+      functionOptions:
+        match: query
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:parameters
+    - topic:pagination
+    - experience:pagination
+    - experience:consistency
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-pagination-params-in-query''
+      (Parameter Pagination Params In Query). Requirement: Pagination parameters like page, limit, offset, and cursor should
+      be passed as query parameters, not in headers or path segments. Analysis confirms 100% of pagination parameters observed
+      are query parameters. To fix: Ensure `in` matches the regular expression `query`; rewrite any value that does not. This
+      rule is evaluated at the JSONPath `$.paths[*].get.parameters[?(@.name == ''page'' || @.name == ''limit'' || @.name ==
+      ''offset'' || @.name == ''cursor'' || @.name == ''per_page'' || @.name == ''page_size'')]` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-request-post-collection-require-paging-object:
+    title: Request Post Collection Require Paging Object
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-post-collection-require-paging-object/
+    description: POST collection endpoints MUST have a request body schema that includes paging parameters.
+    message: POST collection endpoints MUST have a request body schema that includes paging parameters.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].post.requestBody.content.application/json.schema.properties.paging
+    then:
+      field: type
+      function: pattern
+      functionOptions:
+        match: object
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:request-body
+    - spec:media-types
+    - spec:schemas
+    - topic:pagination
+    - experience:pagination
+    - experience:data-modeling
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-post-collection-require-paging-object''
+      (Request Post Collection Require Paging Object). Requirement: POST collection endpoints MUST have a request body schema
+      that includes paging parameters. To fix: Ensure `type` matches the regular expression `object`; rewrite any value that
+      does not. This rule is evaluated at the JSONPath `$.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].post.requestBody.content.application/json.schema.properties.paging`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-request-support-accept-encoding:
+    title: Request Support Accept Encoding
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-accept-encoding/
+    description: Operations should accept an Accept-Encoding request header so clients can negotiate a compressed (e.g. gzip)
+      response.
+    message: Operation should accept an Accept-Encoding header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: Accept-Encoding
+              in:
+                const: header
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:content-negotiation
+    - experience:usability
+    - experience:reliability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-accept-encoding''
+      (Request Support Accept Encoding). Requirement: Operations should accept an Accept-Encoding request header so clients
+      can negotiate a compressed (e.g. gzip) response. To fix: Adjust `parameters` so it conforms to the schema this rule
+      requires. This rule is evaluated at the JSONPath `$.paths[*][get,post,put,patch,delete]` — inspect every location it
+      matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-response-202-retry-after:
+    title: Response 202 Retry After
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-202-retry-after/
+    description: 202 Accepted responses should document a Retry-After header suggesting how long clients should wait before
+      polling the status resource.
+    message: 202 Accepted responses should document a Retry-After header.
+    given: $.paths[*][*].responses['202'].headers
+    severity: info
+    then:
+      field: Retry-After
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:rate-limiting
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-202-retry-after''
+      (Response 202 Retry After). Requirement: 202 Accepted responses should document a Retry-After header suggesting how
+      long clients should wait before polling the status resource. To fix: Ensure `Retry-After` is present and non-empty at
+      each matching location. This rule is evaluated at the JSONPath `$.paths[*][*].responses[''202''].headers` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-response-cache-header-no-conflict:
+    title: Response Cache Header No Conflict
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-cache-header-no-conflict/
+    description: 'Cache usage SHOULD be extensively detailed in the `description` property to avoid data leaks or the usage
+      of stale data. This rule should ensure in some way that the api provider documented extensively the cache usage to avoid
+      data leaks or usage of stale data. For now this ruleset tests: * the presence of following keywords in the `description`:
+      `max-age`, `private`, `no-store`, `no-cache`. * that one and only one between Expires and Cache-Control is used. `Cache-Control`
+      and `Expires` should not be used in conjuction, because `Cache-Control` overrides `Expires` when `max-age` is set. Instead
+      if neither `Cache-Control` or `Expires` are set, clients MAY use euristic cache like described in RFC7234.'
+    message: '{{error}}'
+    severity: info
+    given: $.[responses][?(@property[0] == "2" )][headers]
+    then:
+    - function: xor
+      functionOptions:
+        properties:
+        - Expires
+        - Cache-Control
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:responses
+    - spec:headers
+    - topic:caching
+    - experience:reliability
+    - experience:consistency
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-cache-header-no-conflict''
+      (Response Cache Header No Conflict). Requirement: Cache usage SHOULD be extensively detailed in the `description` property
+      to avoid data leaks or the usage of stale data. This rule should ensure in some way that the api provider documented
+      extensively the cache usage to avoid data leaks or usage of stale data. For now this ruleset tests: * the presence of
+      following keywords in the `description`: `max-age`, `private`, `no-store`, `no-cache`. * that one and only one between
+      Expires and Cache-Control is used. `Cache-Control` and `Expires` should not be used in conjuction, because `Cache-Control`
+      overrides `Expires` when `max-age` is set. Instead if neither `Cache-Control` or `Expires` are set, clients MAY use
+      euristic cache like described in RFC7234. To fix: Include exactly one of: Expires, Cache-Control. This rule is evaluated
+      at the JSONPath `$.[responses][?(@property[0] == "2" )][headers]` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-collection-require-results-array:
+    title: Response Collection Require Results Array
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-collection-require-results-array/
+    description: Response bodies must have a root element called results and is an array of objects.
+    message: Response bodies must have a root element called results and is an array of objects.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].get.responses['200'].content.application/json.schema.properties.results
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        match: array
+    - field: items.type
+      function: pattern
+      functionOptions:
+        match: object
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - spec:media-types
+    - spec:schemas
+    - topic:pagination
+    - experience:pagination
+    - experience:data-modeling
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-collection-require-results-array''
+      (Response Collection Require Results Array). Requirement: Response bodies must have a root element called results and
+      is an array of objects. To fix: Ensure `type` matches the regular expression `array`; rewrite any value that does not.
+      Also: Ensure `items.type` matches the regular expression `object`; rewrite any value that does not. This rule is evaluated
+      at the JSONPath `$.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].get.responses[''200''].content.application/json.schema.properties.results`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-collection-support-paging:
+    title: Response Collection Support Paging
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-collection-support-paging/
+    description: Response bodies from collection endpoints SHOULD offer paging capability.
+    message: Response bodies from collection endpoints SHOULD offer paging capability.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}.*$/))].get.responses['200'].content.application/json.schema.properties
+    then:
+    - field: paging
+      function: truthy
+    - field: paging
+      function: pattern
+      functionOptions:
+        match: object
+    - field: paging.type
+      function: pattern
+      functionOptions:
+        match: object
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - spec:media-types
+    - spec:schemas
+    - topic:pagination
+    - experience:pagination
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-collection-support-paging''
+      (Response Collection Support Paging). Requirement: Response bodies from collection endpoints SHOULD offer paging capability.
+      To fix: Ensure `paging` is present and non-empty at each matching location. Also: Ensure `paging` matches the regular
+      expression `object`; rewrite any value that does not. Also: Ensure `paging.type` matches the regular expression `object`;
+      rewrite any value that does not. This rule is evaluated at the JSONPath `$.paths[?(!@property.match(/.*\/\{[^}]+\}.*$/))].get.responses[''200''].content.application/json.schema.properties`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-define-429:
+    title: Response Define 429
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-define-429/
+    description: Responses should contain common response - 429 (too many requests).
+    message: '{{description}}. Missing {{property}}'
+    severity: info
+    given: $.paths..responses
+    then:
+      field: '429'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - topic:rate-limiting
+    - experience:error-handling
+    - experience:reliability
+    - experience:performance
+    - owasp:api4
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-define-429'' (Response
+      Define 429). Requirement: Responses should contain common response - 429 (too many requests). To fix: Ensure `429` is
+      present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths..responses` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-response-get-cache-control:
+    title: Response Get Cache Control
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-cache-control/
+    description: GET success responses should define a Cache-Control header so clients and intermediaries know how to cache
+      the representation.
+    message: GET success responses should define a `Cache-Control` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Cache-Control
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:caching
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-cache-control''
+      (Response Get Cache Control). Requirement: GET success responses should define a Cache-Control header so clients and
+      intermediaries know how to cache the representation. To fix: Ensure `Cache-Control` is present and non-empty at each
+      matching location. Guidance: GET success responses should define a `Cache-Control` header. This rule is evaluated at
+      the JSONPath `$.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-response-get-etag:
+    title: Response Get ETag
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-etag/
+    description: GET success responses should define an ETag header to enable validation-based caching and conditional requests.
+    message: GET success responses should define a `ETag` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: ETag
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:caching
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-etag'' (Response
+      Get ETag). Requirement: GET success responses should define an ETag header to enable validation-based caching and conditional
+      requests. To fix: Ensure `ETag` is present and non-empty at each matching location. Guidance: GET success responses
+      should define a `ETag` header. This rule is evaluated at the JSONPath `$.paths[*].get.responses[?( @property >= 200
+      && @property < 300 && @property != 204 )].headers` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-get-last-modified:
+    title: Response Get Last Modified
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-last-modified/
+    description: GET success responses should define a Last-Modified header to enable date-based conditional requests.
+    message: GET success responses should define a `Last-Modified` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Last-Modified
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:caching
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-last-modified''
+      (Response Get Last Modified). Requirement: GET success responses should define a Last-Modified header to enable date-based
+      conditional requests. To fix: Ensure `Last-Modified` is present and non-empty at each matching location. Guidance: GET
+      success responses should define a `Last-Modified` header. This rule is evaluated at the JSONPath `$.paths[*].get.responses[?(
+      @property >= 200 && @property < 300 && @property != 204 )].headers` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-response-get-link-header:
+    title: Response Get Link Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-link-header/
+    description: GET success responses should provide a Link header (RFC 8288) with rel next/prev/first/last for pagination
+      and navigation — the header-based alternative to an in-body paging object.
+    message: GET responses should provide a Link header (RFC 8288) for pagination/navigation.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Link
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:pagination
+    - experience:pagination
+    - experience:discoverability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-link-header''
+      (Response Get Link Header). Requirement: GET success responses should provide a Link header (RFC 8288) with rel next/prev/first/last
+      for pagination and navigation — the header-based alternative to an in-body paging object. To fix: Ensure `Link` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*].get.responses[?( @property
+      >= 200 && @property < 300 && @property != 204 )].headers` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-get-vary:
+    title: Response Get Vary
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-vary/
+    description: GET success responses should define a Vary header so caches key correctly on the request headers that affect
+      the representation.
+    message: GET success responses should define a `Vary` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Vary
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:caching
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-vary'' (Response
+      Get Vary). Requirement: GET success responses should define a Vary header so caches key correctly on the request headers
+      that affect the representation. To fix: Ensure `Vary` is present and non-empty at each matching location. Guidance:
+      GET success responses should define a `Vary` header. This rule is evaluated at the JSONPath `$.paths[*].get.responses[?(
+      @property >= 200 && @property < 300 && @property != 204 )].headers` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-response-include-ratelimit-header:
+    title: Response Include Ratelimit Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-include-ratelimit-header/
+    description: Response must include ratelimit-x headers.
+    message: '{{description}}; missing {{property}}'
+    severity: info
+    given: $..responses.*
+    then:
+    - field: headers.ratelimit-limit
+      function: truthy
+    - field: headers.ratelimit-remaining
+      function: truthy
+    - field: headers.ratelimit-reset
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:rate-limiting
+    - experience:reliability
+    - experience:documentation
+    - experience:performance
+    - owasp:api4
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-include-ratelimit-header''
+      (Response Include Ratelimit Header). Requirement: Response must include ratelimit-x headers. To fix: Ensure `headers.ratelimit-limit`
+      is present and non-empty at each matching location. Also: Ensure `headers.ratelimit-remaining` is present and non-empty
+      at each matching location. Also: Ensure `headers.ratelimit-reset` is present and non-empty at each matching location.
+      This rule is evaluated at the JSONPath `$..responses.*` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-ratelimit-header:
+    title: Response Ratelimit Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-ratelimit-header/
+    description: Responses should define the structured RateLimit header (current IETF draft) conveying quota, remaining,
+      and reset in one field — the modern successor to the RateLimit-Limit/Remaining/Reset triplet.
+    message: Responses should define a `RateLimit` header.
+    given: $..responses.*
+    severity: info
+    then:
+      field: headers.RateLimit
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:rate-limiting
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-ratelimit-header''
+      (Response Ratelimit Header). Requirement: Responses should define the structured RateLimit header (current IETF draft)
+      conveying quota, remaining, and reset in one field — the modern successor to the RateLimit-Limit/Remaining/Reset triplet.
+      To fix: Ensure `headers.RateLimit` is present and non-empty at each matching location. Guidance: Responses should define
+      a `RateLimit` header. This rule is evaluated at the JSONPath `$..responses.*` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-response-ratelimit-policy:
+    title: Response Ratelimit Policy
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-ratelimit-policy/
+    description: Responses should define a RateLimit-Policy header documenting the quota policy and window (e.g. 100;w=60),
+      so clients understand the limits in effect.
+    message: Responses should define a `RateLimit-Policy` header.
+    given: $..responses.*
+    severity: info
+    then:
+      field: headers.RateLimit-Policy
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:rate-limiting
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-ratelimit-policy''
+      (Response Ratelimit Policy). Requirement: Responses should define a RateLimit-Policy header documenting the quota policy
+      and window (e.g. 100;w=60), so clients understand the limits in effect. To fix: Ensure `headers.RateLimit-Policy` is
+      present and non-empty at each matching location. Guidance: Responses should define a `RateLimit-Policy` header. This
+      rule is evaluated at the JSONPath `$..responses.*` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-success-require-ratelimit-header:
+    title: Response Success Require Ratelimit Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-success-require-ratelimit-header/
+    description: 'Ratelimiting API preserves a service and limits attack scenario [see API4:2019 Lack of Resources & Rate
+      Limiting](https://owasp.org/www-project-api-security). APIs should use the following headers at least on successful
+      responses: - `X-RateLimit-Limit`: number of total requests in a give time window - `X-RateLimit-Remaining`: remaining
+      requests in the current window - `X-RateLimit-Reset`: number of seconds before the window resets An example set of headers
+      is the following ``` X-Ratelimit-Limit: 100 X-Ratelimit-Remaining: 40 X-Ratelimit-Reset: 12 ``` A standardization proposal
+      for ratelimit headers is ongoning inside the IETF HTTPAPI Workgroup. See [the draft](https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/).'
+    message: Missing ratelimit headers. {{property}} {{error}} {{path}}
+    severity: info
+    given: $.[responses][?(@property[0] == "2" )][headers]
+    then:
+    - functionOptions:
+        properties:
+        - X-RateLimit-Limit
+        - RateLimit-Limit
+      function: xor
+    - functionOptions:
+        properties:
+        - X-RateLimit-Remaining
+        - RateLimit-Remaining
+      function: xor
+    - functionOptions:
+        properties:
+        - X-RateLimit-Reset
+        - RateLimit-Reset
+      function: xor
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:responses
+    - spec:headers
+    - topic:rate-limiting
+    - experience:reliability
+    - experience:security
+    - experience:performance
+    - owasp:api4
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-success-require-ratelimit-header''
+      (Response Success Require Ratelimit Header). Requirement: Ratelimiting API preserves a service and limits attack scenario
+      [see API4:2019 Lack of Resources & Rate Limiting](https://owasp.org/www-project-api-security). APIs should use the following
+      headers at least on successful responses: - `X-RateLimit-Limit`: number of total requests in a give time window - `X-RateLimit-Remaining`:
+      remaining requests in the current window - `X-RateLimit-Reset`: number of seconds before the window resets An example
+      set of headers is the following ``` X-Ratelimit-Limit: 100 X-Ratelimit-Remaining: 40 X-Ratelimit-Reset: 12 ``` A standardization
+      proposal for ratelimit headers is ongoning inside the IETF HTTPAPI Workgroup. See [the draft](https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/).
+      To fix: Include exactly one of: X-RateLimit-Limit, RateLimit-Limit. Also: Include exactly one of: X-RateLimit-Remaining,
+      RateLimit-Remaining. Also: Include exactly one of: X-RateLimit-Reset, RateLimit-Reset. This rule is evaluated at the
+      JSONPath `$.[responses][?(@property[0] == "2" )][headers]` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-throttled-require-retry-after:
+    title: Response Throttled Require Retry After
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-throttled-require-retry-after/
+    description: 'When a client is either: * throttled out with a 429 status code; * warned about a temporary server issue
+      with a 503 status code; the server should explicitly communicate how long to wait before issuing further requests using
+      the Retry-After header. Retry-After is defined in RFC7231.'
+    message: 'Missing ratelimit header: {{property}} in {{path}}'
+    severity: info
+    given: $.[responses][?(@property == "429" || @property == "503"  )][headers]
+    then:
+      field: Retry-After
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:responses
+    - spec:headers
+    - topic:rate-limiting
+    - experience:reliability
+    - experience:error-handling
+    - experience:performance
+    - owasp:api4
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-throttled-require-retry-after''
+      (Response Throttled Require Retry After). Requirement: When a client is either: * throttled out with a 429 status code;
+      * warned about a temporary server issue with a 503 status code; the server should explicitly communicate how long to
+      wait before issuing further requests using the Retry-After header. Retry-After is defined in RFC7231. To fix: Ensure
+      `Retry-After` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.[responses][?(@property
+      == "429" || @property == "503" )][headers]` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-write-etag:
+    title: Response Write ETag
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-write-etag/
+    description: Write success responses (POST/PUT/PATCH) should define an ETag header so clients receive the new entity tag
+      after a write and can make subsequent conditional requests.
+    message: Write success responses should define a `ETag` header.
+    given: $.paths[*][post,put,patch].responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: ETag
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:caching
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-write-etag'' (Response
+      Write ETag). Requirement: Write success responses (POST/PUT/PATCH) should define an ETag header so clients receive the
+      new entity tag after a write and can make subsequent conditional requests. To fix: Ensure `ETag` is present and non-empty
+      at each matching location. Guidance: Write success responses should define a `ETag` header. This rule is evaluated at
+      the JSONPath `$.paths[*][post,put,patch].responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-schema-collection-require-pagination-params:
+    title: Schema Collection Require Pagination Params
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-collection-require-pagination-params/
+    description: Collection GET endpoints SHOULD support pagination using query parameters. Offset or cursor based pagination
+      is required.
+    message: Collection GET endpoints SHOULD support pagination using query parameters.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}\/*.*/))].get
+    then:
+    - field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          items:
+            type: object
+          contains:
+            type: object
+            properties:
+              name:
+                const: limit
+              in:
+                const: query
+          allOf:
+          - anyOf:
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: offset
+                  in:
+                    const: query
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: cursor
+                  in:
+                    const: query
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: page
+                  in:
+                    const: query
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - topic:pagination
+    - experience:pagination
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-collection-require-pagination-params''
+      (Schema Collection Require Pagination Params). Requirement: Collection GET endpoints SHOULD support pagination using
+      query parameters. Offset or cursor based pagination is required. To fix: Adjust `parameters` so it conforms to the schema
+      this rule requires. This rule is evaluated at the JSONPath `$.paths[?(!@property.match(/.*\/\{[^}]+\}\/*.*/))].get`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-rate-limit-reference:
+    title: Schema Include Rate Limit Reference
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-rate-limit-reference/
+    description: This property ensures there is an API rate limits reference associated with API, ensuring the rate limits
+      applied to an API are clearly communicated.
+    message: Has an API Terms of Services
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(rate-limits|RateLimits|Rate Limits)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - topic:rate-limiting
+    - experience:reliability
+    - experience:documentation
+    - experience:performance
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-rate-limit-reference''
+      (Schema Include Rate Limit Reference). Requirement: This property ensures there is an API rate limits reference associated
+      with API, ensuring the rate limits applied to an API are clearly communicated. To fix: Ensure `type` does NOT match
+      the regular expression `\b(rate-limits|RateLimits|Rate Limits)\b`; rename or rewrite any value that does. This rule
+      is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document, with no
+      commentary.'

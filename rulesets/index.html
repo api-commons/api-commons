@@ -1,30 +1,39 @@
 ---
 layout: default
 title: Rulesets
-description: Bundled Spectral rulesets assembled from API Commons rules, ready to apply to API contracts and indexes.
+description: Experience rulesets — the Spotlight rule catalog bundled by the experience each rule creates for API consumers, from consistency and documentation to security and reliability. Download any ruleset and run it with the Spotlight CLI, validator, API, or CI.
 ---
 
+{% assign cat = site.data.spotlight_rules %}
+
 <style>
-  .page-hero { padding: 1.5rem 0 2rem; }
+  .page-hero { padding: 1.5rem 0 1rem; }
   .page-hero h1 { font-size: 1.8rem; font-weight: 800; color: #1a1a2e; margin-bottom: 0.5rem; }
-  .page-hero p { color: #555; font-size: 1rem; max-width: 680px; line-height: 1.7; }
-  .rules-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.5rem; }
-  .rule-row { display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1.25rem; border: 1px solid #e3e7ee; border-radius: 8px; background: white; transition: all 0.15s; }
-  .rule-row:hover { border-color: #0d6efd; background: #f8f9ff; }
-  .rule-row span { font-size: 0.95rem; color: #1a1a2e; font-weight: 500; }
+  .page-hero p { color: #555; font-size: 1rem; max-width: 720px; line-height: 1.7; }
+  .rs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .rs-card { border: 1px solid #e3e7ee; border-radius: 10px; background: #fff; padding: 1.1rem 1.25rem; display: flex; flex-direction: column; text-decoration: none; color: inherit; transition: border-color 0.15s, box-shadow 0.15s; }
+  .rs-card:hover { border-color: #0d6efd; box-shadow: 0 2px 10px rgba(13,110,253,0.08); }
+  .rs-card .rs-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; }
+  .rs-card h3 { font-size: 1.05rem; font-weight: 800; color: #1a1a2e; margin: 0; }
+  .rs-card .rs-count { font-size: 0.78rem; font-weight: 700; color: #0d6efd; background: #eef4ff; border-radius: 999px; padding: 0.1em 0.6em; white-space: nowrap; }
+  .rs-card p { font-size: 0.86rem; color: #666; line-height: 1.55; margin: 0.5rem 0 0; }
+  .rs-card .rs-go { margin-top: auto; padding-top: 0.75rem; font-size: 0.82rem; color: #0d6efd; font-weight: 600; }
 </style>
 
 <div class="page-hero">
-  <h1>API Governance Rulesets</h1>
-  <p>Bundled collections of <a href="/rules/">API Commons rules</a> assembled for specific use cases — apply them to your API contracts and indexes to enforce consistency, quality, and compliance across your API landscape.</p>
+  <h1>Experience Rulesets</h1>
+  <p>The <a href="/rules/">Spotlight catalog</a> bundled by <strong>experience</strong> — the outcome each rule creates for the people who consume your API. Pick the experience you want to enforce — consistency, documentation, security, reliability — and run that ruleset across every artifact type with the <a href="https://github.com/api-commons/spotlight-cli">Spotlight CLI</a>, the <a href="https://validator.spotlight-rules.com">browser validator</a>, the <a href="https://github.com/api-commons/spotlight-api">HTTP API</a>, or a <a href="https://github.com/api-commons/spotlight-pipeline">CI gate</a>. Each ruleset is downloadable and ready to run.</p>
 </div>
 
-<div class="rules-list">
-{% assign rulesets = site.rulesets %}
-{% for ruleset in rulesets %}
-<div class="rule-row">
-  <span>{{ ruleset.name }}</span>
-  <a href="{{ ruleset.url }}" class="btn btn-sm btn-outline-dark">View</a>
-</div>
-{% endfor %}
+<div class="rs-grid">
+  {% for exp in cat.experiences %}
+  <a class="rs-card" href="/rulesets/experience-{{ exp.id }}/">
+    <div class="rs-head">
+      <h3>{{ exp.label }}</h3>
+      <span class="rs-count">{{ exp.count }} rules</span>
+    </div>
+    <p>{{ exp.description }}</p>
+    <span class="rs-go">View &amp; download →</span>
+  </a>
+  {% endfor %}
 </div>

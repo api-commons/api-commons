@@ -1,164 +1,136 @@
 ---
 layout: default
 title: Rules
-description: 776 Spectral-compatible API governance rules — single-purpose, provider-agnostic assertions for OpenAPI design, APIs.json structure, JSON Schema data models, OWASP API security, and AsyncAPI event channels. Drop any rule into a .spectral.yaml and run it in CI/CD.
+description: The Spotlight rule catalog — 733 openly-governed API governance rules across 12 artifact types (OpenAPI, AsyncAPI, Arazzo, JSON Schema, APIs.json, MCP, and more). Each rule is a single testable assertion you can run with the Spotlight CLI, the browser validator, the HTTP API, an MCP server, or in CI.
 ---
 
+{% assign cat = site.data.spotlight_rules %}
+
 <style>
-  .page-hero { padding: 1.5rem 0 2rem; }
+  .page-hero { padding: 1.5rem 0 1rem; }
   .page-hero h1 { font-size: 1.8rem; font-weight: 800; color: #1a1a2e; margin-bottom: 0.5rem; }
-  .page-hero p { color: #555; font-size: 1rem; max-width: 720px; line-height: 1.7; }
-  .stats-row { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.25rem 0 2rem; }
-  .stat-card { flex: 1; min-width: 130px; padding: 1rem 1.25rem; border: 1px solid #e3e7ee; border-radius: 10px; background: white; text-align: center; }
+  .page-hero p { color: #555; font-size: 1rem; max-width: 760px; line-height: 1.7; }
+  .stats-row { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.25rem 0 1.5rem; }
+  .stat-card { flex: 1; min-width: 120px; padding: 1rem 1.25rem; border: 1px solid #e3e7ee; border-radius: 10px; background: #fff; text-align: center; }
   .stat-card .stat-num { font-size: 2rem; font-weight: 800; color: #1a1a2e; line-height: 1; }
   .stat-card .stat-label { font-size: 0.82rem; color: #666; margin-top: 0.25rem; }
-  .rules-list { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 1.5rem; }
-  .rule-item { border: 1px solid #e3e7ee; border-radius: 8px; background: white; overflow: hidden; transition: border-color 0.15s; }
+  .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; margin: 0.5rem 0 1rem; }
+  .tool-card { border: 1px solid #e3e7ee; border-radius: 10px; background: #fff; padding: 0.9rem 1rem; }
+  .tool-card h4 { font-size: 0.95rem; font-weight: 700; margin: 0 0 0.2rem; color: #1a1a2e; }
+  .tool-card p { font-size: 0.82rem; color: #666; margin: 0 0 0.5rem; line-height: 1.5; }
+  .tool-card code { font-size: 0.75rem; background: #f3f5f9; padding: 0.1em 0.4em; border-radius: 4px; }
+  .art-nav { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.75rem 0 1.25rem; }
+  .art-nav a { font-size: 0.8rem; padding: 0.25em 0.7em; border: 1px solid #cbd5e1; border-radius: 999px; color: #1a1a2e; text-decoration: none; }
+  .art-nav a:hover { border-color: #0d6efd; color: #0d6efd; }
+  .art-sec { margin-top: 2rem; }
+  .art-sec h2 { font-size: 1.25rem; font-weight: 800; color: #1a1a2e; margin-bottom: 0.15rem; }
+  .art-sec .art-desc { color: #666; font-size: 0.88rem; margin-bottom: 0.9rem; }
+  .rules-list { display: flex; flex-direction: column; gap: 0.25rem; }
+  .rule-item { border: 1px solid #e3e7ee; border-radius: 8px; background: #fff; overflow: hidden; }
   .rule-item:hover { border-color: #0d6efd; }
-  .rule-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1rem; }
-  .rule-toggle { background: none; border: none; padding: 0; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; color: #6c757d; }
-  .rule-chevron { display: inline-block; font-size: 1rem; line-height: 1; transition: transform 0.18s; font-style: normal; user-select: none; }
+  .rule-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 0.9rem; }
+  .rule-toggle { background: none; border: none; padding: 0; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; color: #6c757d; }
+  .rule-chevron { font-size: 1rem; line-height: 1; transition: transform 0.18s; font-style: normal; }
   .rule-chevron.expanded { transform: rotate(90deg); }
   .rule-name { flex: 1; font-size: 0.9rem; color: #1a1a2e; }
+  .rule-sev { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.03em; color: #6c757d; border: 1px solid #e3e7ee; border-radius: 4px; padding: 0.05em 0.4em; }
   .rule-yaml-wrap { border-top: 1px solid #e3e7ee; }
-  .rule-yaml-pre { margin: 0; padding: 1rem 1.25rem; background: #f8fafc; font-size: 0.78rem; line-height: 1.55; color: #1a1a2e; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; max-height: 320px; overflow: auto; white-space: pre; }
+  .rule-yaml-pre { margin: 0; padding: 1rem 1.25rem; background: #f8fafc; font-size: 0.78rem; line-height: 1.55; color: #1a1a2e; font-family: ui-monospace, Menlo, Consolas, monospace; max-height: 360px; overflow: auto; white-space: pre; }
   .rule-yaml-foot { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 1.25rem; background: #f0f4f8; border-top: 1px solid #e3e7ee; }
-  .rule-yaml-slug { font-size: 0.72rem; color: #6c757d; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
   .btn-copy-yaml { background: none; border: 1px solid #cbd5e1; color: #0d6efd; font-size: 0.72rem; padding: 0.15em 0.65em; border-radius: 4px; cursor: pointer; }
-  .btn-copy-yaml:hover { background: #eef2f7; }
+  .no-match { color: #888; font-size: 0.9rem; padding: 1rem 0; display: none; }
 </style>
 
 <div class="page-hero">
-  <h1>API Governance Rules</h1>
-  <p>776 Spectral rules — each one a single, testable assertion about an API artifact you can copy directly into a <code>.spectral.yaml</code> and run in any CI/CD pipeline. Rules target five artifact types: <strong>OpenAPI</strong> covers the full surface of a REST API definition — info metadata, paths, operations, parameters, request bodies, responses, schemas, and security schemes; <strong>APIs.json</strong> checks the structure and completeness of API index files; <strong>JSON Schema</strong> enforces data model quality; <strong>OWASP</strong> encodes the OWASP API Security Top 10 as machine-checkable assertions; and <strong>AsyncAPI</strong> governs event-driven channel and message definitions. Rules use three severity levels: <strong>error</strong> for blocking issues, <strong>warn</strong> for advisory guidance, and <strong>info</strong> for informational checks. Expand any rule below to preview its Spectral YAML, or click View for the full definition with copy and download.</p>
+  <h1>Spotlight API Governance Rules</h1>
+  <p>The <strong>{{ cat.total }}</strong> rules of the openly-governed <a href="https://spotlight-rules.com">Spotlight</a> catalog — a progressive build of the Spectral API linter. Each rule is a single, testable assertion about an API artifact, spanning <strong>{{ cat.artifact_count }} artifact types</strong> from OpenAPI and AsyncAPI to APIs.json, JSON Schema, Arazzo, MCP, and agent skills. Rules ship at <code>info</code> by default — educate first, then raise to <code>warn</code> or <code>error</code> to enforce. Expand any rule for its full definition, or open it on spotlight-rules.com for detail and an AI fix prompt.</p>
 </div>
 
 <div class="stats-row">
-  <div class="stat-card">
-    <div class="stat-num">776</div>
-    <div class="stat-label">Total Rules</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">573</div>
-    <div class="stat-label">OpenAPI Rules</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">128</div>
-    <div class="stat-label">APIs.json Rules</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">47</div>
-    <div class="stat-label">JSON Schema Rules</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">26</div>
-    <div class="stat-label">OWASP Rules</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">2</div>
-    <div class="stat-label">AsyncAPI Rules</div>
-  </div>
+  <div class="stat-card"><div class="stat-num">{{ cat.total }}</div><div class="stat-label">Total Rules</div></div>
+  <div class="stat-card"><div class="stat-num">{{ cat.artifact_count }}</div><div class="stat-label">Artifact Types</div></div>
+  <div class="stat-card"><div class="stat-num">{{ cat.experience_count }}</div><div class="stat-label">Experience Rulesets</div></div>
+  <div class="stat-card"><div class="stat-num">{{ cat.artifacts[0].count }}</div><div class="stat-label">{{ cat.artifacts[0].label }} Rules</div></div>
 </div>
 
-<div class="rules-list">
-{% assign rules = site.rules %}
-{% for rule in rules %}
-  {% assign uid = forloop.index %}
-  {% if rule.rule %}
-    <div class="rule-item">
+<h2 style="font-size:1.25rem;font-weight:800;color:#1a1a2e;">Run these rules with Spotlight</h2>
+<p style="color:#555;max-width:760px;">The same catalog runs everywhere — on the command line, in the browser, over HTTP, from an AI client, or as a CI gate. Bundle rules by <a href="/rulesets/">experience ruleset</a>, or extend the built-ins.</p>
+<div class="tool-grid">
+  <div class="tool-card"><h4>CLI</h4><p>Lint locally or in CI.</p><code>npm i -g @spotlight-rules/spotlight-cli</code><br><code>spotlight lint api.yaml --ruleset spotlight:oas</code><p style="margin-top:.5rem;"><a href="https://github.com/api-commons/spotlight-cli">spotlight-cli →</a></p></div>
+  <div class="tool-card"><h4>Browser validator</h4><p>Lint in the browser — no install — with AI fixes and utilities.</p><a href="https://validator.spotlight-rules.com">validator.spotlight-rules.com →</a></div>
+  <div class="tool-card"><h4>HTTP API</h4><p>An OpenAPI-first service over the engine.</p><code>POST /lint</code><p style="margin-top:.5rem;"><a href="https://github.com/api-commons/spotlight-api">spotlight-api →</a></p></div>
+  <div class="tool-card"><h4>MCP server</h4><p>Expose linting and rulesets to any AI client.</p><a href="https://github.com/api-commons/spotlight-mcp">spotlight-mcp →</a></div>
+  <div class="tool-card"><h4>CI pipeline</h4><p>A governance gate for GitHub, GitLab, Bitbucket, Azure, and AWS.</p><a href="https://github.com/api-commons/spotlight-pipeline">spotlight-pipeline →</a></div>
+  <div class="tool-card"><h4>VS Code</h4><p>Lint while you edit, with ruleset autocomplete.</p><a href="https://github.com/api-commons/spotlight-vscode">spotlight-vscode →</a></div>
+</div>
+
+<hr style="margin:1.5rem 0;">
+
+<input id="rule-filter" type="search" class="form-control mb-2" placeholder="Filter {{ cat.total }} rules by name or tag…" autocomplete="off">
+<div class="art-nav">
+  {% for a in cat.artifacts %}<a href="#art-{{ a.id }}">{{ a.label }} ({{ a.count }})</a>{% endfor %}
+</div>
+<p class="no-match" id="no-match">No rules match that filter.</p>
+
+{% for a in cat.artifacts %}
+<section class="art-sec" id="art-{{ a.id }}" data-art>
+  <h2>{{ a.label }} <span style="font-weight:600;color:#6c757d;font-size:1rem;">· {{ a.count }} rules</span></h2>
+  <p class="art-desc">{{ a.description }}</p>
+  <div class="rules-list">
+    {% for rule in a.rules %}
+    <div class="rule-item" data-rule data-text="{{ rule.name | downcase }} {{ rule.slug }} {{ rule.experience | join: ' ' }} {{ rule.spec | join: ' ' }} {{ rule.topic | join: ' ' }} {{ rule.owasp | join: ' ' }}">
       <div class="rule-row">
-        <button class="rule-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#rc-{{ uid }}" aria-expanded="false" aria-controls="rc-{{ uid }}">
-          <span class="rule-chevron" aria-hidden="true">›</span>
-        </button>
+        <button class="rule-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#rc-{{ a.id }}-{{ forloop.index }}" aria-controls="rc-{{ a.id }}-{{ forloop.index }}"><span class="rule-chevron">›</span></button>
         <span class="rule-name">{{ rule.name }}</span>
-        <a href="{{ rule.url }}" class="btn btn-sm btn-outline-dark">View</a>
+        <span class="rule-sev">{{ rule.severity }}</span>
+        <a href="{{ rule.detail_url }}" class="btn btn-sm btn-outline-dark" target="_blank" rel="noopener">View</a>
       </div>
-      <div class="collapse rule-yaml-wrap" id="rc-{{ uid }}">
+      <div class="collapse rule-yaml-wrap" id="rc-{{ a.id }}-{{ forloop.index }}">
         <script type="application/json" class="rule-json-data">{{ rule.rule | jsonify }}</script>
         <pre class="rule-yaml-pre"></pre>
-        <div class="rule-yaml-foot">
-          <span class="rule-yaml-slug">{{ rule.slug }}</span>
-          <button type="button" class="btn-copy-yaml">Copy</button>
-        </div>
+        <div class="rule-yaml-foot"><span style="font-size:.72rem;color:#6c757d;font-family:monospace;">{{ rule.slug }}</span><button type="button" class="btn-copy-yaml">Copy</button></div>
       </div>
     </div>
-  {% else %}
-    {% for item in rule %}
-      {% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}
-        {% assign rule_name = item | replace: "-"," " %}
-        {% assign new_rule_name = "" %}
-        {% assign words = rule_name | split: ' ' %}
-        {% for word in words %}{% assign cword = word | capitalize %}{% assign new_rule_name = new_rule_name | append: " " | append: cword %}{% endfor %}
-        {% assign new_rule_name = new_rule_name | replace:"Api","API" | replace:"Sdk","SDK" | replace:"APIs Json","APIs.json" | replace:"Owasp","OWASP" | strip %}
-        <div class="rule-item">
-          <div class="rule-row">
-            <button class="rule-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#rc-{{ uid }}" aria-expanded="false" aria-controls="rc-{{ uid }}">
-              <span class="rule-chevron" aria-hidden="true">›</span>
-            </button>
-            <span class="rule-name">{{ new_rule_name }}</span>
-            <a href="{{ rule.url }}" class="btn btn-sm btn-outline-dark">View</a>
-          </div>
-          <div class="collapse rule-yaml-wrap" id="rc-{{ uid }}">
-            <script type="application/json" class="rule-json-data">{"{{ item }}":{{ rule[item] | jsonify }}}</script>
-            <pre class="rule-yaml-pre"></pre>
-            <div class="rule-yaml-foot">
-              <span class="rule-yaml-slug">{{ item }}</span>
-              <button type="button" class="btn-copy-yaml">Copy</button>
-            </div>
-          </div>
-        </div>
-      {% endif %}
     {% endfor %}
-  {% endif %}
+  </div>
+</section>
 {% endfor %}
-</div>
 
 <script>
 (function () {
-  function initRules() {
-    document.querySelectorAll('.rule-yaml-wrap.collapse').forEach(function (collapseEl) {
-      collapseEl.addEventListener('show.bs.collapse', function () {
-        if (this.dataset.yamlLoaded) return;
-        var scriptEl = this.querySelector('.rule-json-data');
-        var pre = this.querySelector('.rule-yaml-pre');
-        if (!scriptEl || !pre) return;
-        try {
-          var obj = JSON.parse(scriptEl.textContent);
-          pre.textContent = window.jsyaml
-            ? jsyaml.dump(obj, { indent: 2, lineWidth: 120, noRefs: true })
-            : JSON.stringify(obj, null, 2);
-        } catch (e) {
-          pre.textContent = scriptEl.textContent;
-        }
-        this.dataset.yamlLoaded = 'true';
+  function init() {
+    document.querySelectorAll('.rule-yaml-wrap.collapse').forEach(function (el) {
+      el.addEventListener('show.bs.collapse', function () {
+        if (this.dataset.loaded) return;
+        var s = this.querySelector('.rule-json-data'), pre = this.querySelector('.rule-yaml-pre');
+        try { pre.textContent = window.jsyaml ? jsyaml.dump(JSON.parse(s.textContent), { indent: 2, lineWidth: 120, noRefs: true }) : s.textContent; }
+        catch (e) { pre.textContent = s.textContent; }
+        this.dataset.loaded = '1';
       });
     });
-
     document.querySelectorAll('.rule-toggle').forEach(function (btn) {
-      var targetId = btn.getAttribute('aria-controls');
-      var target = document.getElementById(targetId);
-      if (!target) return;
-      var chevron = btn.querySelector('.rule-chevron');
-      target.addEventListener('show.bs.collapse', function () { chevron.classList.add('expanded'); });
-      target.addEventListener('hide.bs.collapse', function () { chevron.classList.remove('expanded'); });
+      var t = document.getElementById(btn.getAttribute('aria-controls')); if (!t) return;
+      var c = btn.querySelector('.rule-chevron');
+      t.addEventListener('show.bs.collapse', function () { c.classList.add('expanded'); });
+      t.addEventListener('hide.bs.collapse', function () { c.classList.remove('expanded'); });
     });
-
     document.querySelectorAll('.btn-copy-yaml').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var pre = this.closest('.rule-yaml-wrap').querySelector('.rule-yaml-pre');
-        if (!pre.textContent) return;
-        navigator.clipboard.writeText(pre.textContent).then(function () {
-          btn.textContent = 'Copied!';
-          setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
-        });
+        if (pre.textContent) navigator.clipboard.writeText(pre.textContent).then(function () { btn.textContent = 'Copied!'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); });
       });
     });
+    var input = document.getElementById('rule-filter');
+    var rules = Array.prototype.slice.call(document.querySelectorAll('[data-rule]'));
+    var secs = Array.prototype.slice.call(document.querySelectorAll('[data-art]'));
+    var none = document.getElementById('no-match');
+    input.addEventListener('input', function () {
+      var q = this.value.trim().toLowerCase(), total = 0;
+      rules.forEach(function (r) { var hit = !q || r.getAttribute('data-text').indexOf(q) !== -1; r.style.display = hit ? '' : 'none'; if (hit) total++; });
+      secs.forEach(function (s) { s.style.display = s.querySelector('[data-rule]:not([style*="none"])') ? '' : 'none'; });
+      none.style.display = total ? 'none' : 'block';
+    });
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initRules);
-  } else {
-    initRules();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>

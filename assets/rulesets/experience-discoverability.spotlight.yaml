@@ -1,0 +1,2592 @@
+documentationUrl: https://spotlight-rules.com/spec/
+rules:
+  openapi-document-require-external-docs:
+    title: Document Require External Docs
+    reference: https://spotlight-rules.com/spec/rules/openapi/document-require-external-docs/
+    description: Defining external documentation provides a link to detailed API guides, tutorials, and reference material
+      beyond the OpenAPI spec. Analysis shows 57.1% of APIs include external docs.
+    message: External Docs MUST Be Defined
+    severity: info
+    given: $
+    then:
+      field: externalDocs
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:documentation
+    - experience:discoverability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''document-require-external-docs''
+      (Document Require External Docs). Requirement: Defining external documentation provides a link to detailed API guides,
+      tutorials, and reference material beyond the OpenAPI spec. Analysis shows 57.1% of APIs include external docs. To fix:
+      Ensure `externalDocs` is present and non-empty at each matching location. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-document-require-jsonschemadialect:
+    title: Document Require Jsonschemadialect
+    reference: https://spotlight-rules.com/spec/rules/openapi/document-require-jsonschemadialect/
+    description: openapi document should declare a `jsonSchemaDialect` property.
+    message: Missing `jsonSchemaDialect`.
+    given: $
+    severity: info
+    then:
+      field: jsonSchemaDialect
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''document-require-jsonschemadialect''
+      (Document Require Jsonschemadialect). Requirement: openapi document should declare a `jsonSchemaDialect` property. To
+      fix: Ensure `jsonSchemaDialect` is present and non-empty at each matching location. Guidance: Missing `jsonSchemaDialect`.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-document-require-openapi:
+    title: Document Require Openapi
+    reference: https://spotlight-rules.com/spec/rules/openapi/document-require-openapi/
+    description: openapi document should declare a `openapi` property.
+    message: Missing `openapi`.
+    given: $
+    severity: info
+    then:
+      field: openapi
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''document-require-openapi''
+      (Document Require Openapi). Requirement: openapi document should declare a `openapi` property. To fix: Ensure `openapi`
+      is present and non-empty at each matching location. Guidance: Missing `openapi`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-document-require-path:
+    title: Document Require Path
+    reference: https://spotlight-rules.com/spec/rules/openapi/document-require-path/
+    description: openapi document should declare a `paths` property.
+    message: Missing `paths`.
+    given: $
+    severity: info
+    then:
+      field: paths
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''document-require-path'' (Document
+      Require Path). Requirement: openapi document should declare a `paths` property. To fix: Ensure `paths` is present and
+      non-empty at each matching location. Guidance: Missing `paths`. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-document-require-server-defined:
+    title: Document Require Server Defined
+    reference: https://spotlight-rules.com/spec/rules/openapi/document-require-server-defined/
+    description: Every OpenAPI should define at least one server URL. Analysis shows 97.2% of APIs define servers, providing
+      consumers with the base URL needed to make requests.
+    message: Servers MUST Be Defined
+    severity: info
+    given: $
+    then:
+      field: servers
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''document-require-server-defined''
+      (Document Require Server Defined). Requirement: Every OpenAPI should define at least one server URL. Analysis shows
+      97.2% of APIs define servers, providing consumers with the base URL needed to make requests. To fix: Ensure `servers`
+      is present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-document-require-webhooks:
+    title: Document Require Webhooks
+    reference: https://spotlight-rules.com/spec/rules/openapi/document-require-webhooks/
+    description: openapi document should declare a `webhooks` property.
+    message: Missing `webhooks`.
+    given: $
+    severity: info
+    then:
+      field: webhooks
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''document-require-webhooks''
+      (Document Require Webhooks). Requirement: openapi document should declare a `webhooks` property. To fix: Ensure `webhooks`
+      is present and non-empty at each matching location. Guidance: Missing `webhooks`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-info-contact-require-email:
+    title: Info Contact Require Email
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-contact-require-email/
+    description: Having a contact email address associated with the technical contract ensures that anyone who comes across
+      the API has someone to email and get more information.
+    message: Info MUST Have Contact Email
+    severity: info
+    given: $.info.contact
+    then:
+      field: email
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:info
+    - experience:discoverability
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-contact-require-email''
+      (Info Contact Require Email). Requirement: Having a contact email address associated with the technical contract ensures
+      that anyone who comes across the API has someone to email and get more information. To fix: Ensure `email` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.info.contact` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-info-contact-require-name:
+    title: Info Contact Require Name
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-contact-require-name/
+    description: Having a contact name associated with the technical contract ensures that anyone who comes across the API
+      knows who to contact.
+    message: Info MUST Have Contact Name
+    severity: info
+    given: $.info.contact
+    then:
+      field: name
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:info
+    - experience:discoverability
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-contact-require-name''
+      (Info Contact Require Name). Requirement: Having a contact name associated with the technical contract ensures that
+      anyone who comes across the API knows who to contact. To fix: Ensure `name` is present and non-empty at each matching
+      location. This rule is evaluated at the JSONPath `$.info.contact` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-info-contact-require-url:
+    title: Info Contact Require URL
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-contact-require-url/
+    description: Having a contact url associated with the technical contract ensures that anyone who comes across the API
+      knows where to go to contact someone.
+    message: Info MUST Have Contact URL
+    severity: info
+    given: $.info.contact
+    then:
+      field: url
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:info
+    - experience:discoverability
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-contact-require-url''
+      (Info Contact Require URL). Requirement: Having a contact url associated with the technical contract ensures that anyone
+      who comes across the API knows where to go to contact someone. To fix: Ensure `url` is present and non-empty at each
+      matching location. This rule is evaluated at the JSONPath `$.info.contact` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-info-require-api-identifier:
+    title: Info Require API Identifier
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-require-api-identifier/
+    description: The `#/info/x-api-id` field can be used to associate an identifier to an API. This is useful to track an
+      API even when its `#/info/title` changes.
+    message: 'API must have an unique identifier in x-api-id in #/info/x-api-id.'
+    severity: info
+    given: $
+    then:
+      field: info.x-api-id
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:discoverability
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-require-api-identifier''
+      (Info Require API Identifier). Requirement: The `#/info/x-api-id` field can be used to associate an identifier to an
+      API. This is useful to track an API even when its `#/info/title` changes. To fix: Ensure `info.x-api-id` is present
+      and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-info-require-contact-2:
+    title: Info Require Contact 2
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-require-contact-2/
+    description: Having a contact object associated with the technical contract ensures that anyone who comes across the API
+      has someone to contact and get more information.
+    message: Info MUST Have Contact Object
+    severity: info
+    given: $.info
+    then:
+      field: contact
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:info
+    - experience:discoverability
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-require-contact-2'' (Info
+      Require Contact 2). Requirement: Having a contact object associated with the technical contract ensures that anyone
+      who comes across the API has someone to contact and get more information. To fix: Ensure `contact` is present and non-empty
+      at each matching location. This rule is evaluated at the JSONPath `$.info` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-info-require-summary:
+    title: Info Require Summary
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-require-summary/
+    description: 'The `#/info/x-summary` can be used to specify a brief, one-liner description of your API: this is very useful
+      for catalog purposes (eg. this can be shown as your API subtitle in catalogs and developer portals). In OAS3.1 you can
+      use the standard `#/info/summary` field.'
+    message: 'API MUST have an one-liner #/info/x-summary field containing a brief description.'
+    severity: info
+    given: $
+    then:
+      field: info.x-summary
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:documentation
+    - experience:discoverability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-require-summary'' (Info
+      Require Summary). Requirement: The `#/info/x-summary` can be used to specify a brief, one-liner description of your
+      API: this is very useful for catalog purposes (eg. this can be shown as your API subtitle in catalogs and developer
+      portals). In OAS3.1 you can use the standard `#/info/summary` field. To fix: Ensure `info.x-summary` is present and
+      non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-info-require-title:
+    title: Info Require Title
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-require-title/
+    description: Having a intuitive and helpful title for your API using the OpenAPI info title is the first impression you
+      will make on the consumers of your API.
+    message: Info MUST Have Title
+    severity: info
+    given: $.info
+    then:
+      field: title
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:info
+    - experience:documentation
+    - experience:discoverability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-require-title'' (Info
+      Require Title). Requirement: Having a intuitive and helpful title for your API using the OpenAPI info title is the first
+      impression you will make on the consumers of your API. To fix: Ensure `title` is present and non-empty at each matching
+      location. This rule is evaluated at the JSONPath `$.info` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-operation-collection-support-filtering:
+    title: Operation Collection Support Filtering
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-collection-support-filtering/
+    description: Collection GET operations should support filtering via a filter query parameter (e.g. filter or filter[field]).
+    message: Collection should support a filter query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^filter
+              in:
+                const: query
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:pagination
+    - experience:usability
+    - experience:discoverability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-collection-support-filtering''
+      (Operation Collection Support Filtering). Requirement: Collection GET operations should support filtering via a filter
+      query parameter (e.g. filter or filter[field]). To fix: Adjust `parameters` so it conforms to the schema this rule requires.
+      This rule is evaluated at the JSONPath `$.paths[*].get` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-operation-collection-support-sorting:
+    title: Operation Collection Support Sorting
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-collection-support-sorting/
+    description: Collection GET operations should support sorting via a sort or order query parameter.
+    message: Collection should support a sort/order query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^(sort|order)
+              in:
+                const: query
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:pagination
+    - experience:usability
+    - experience:discoverability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-collection-support-sorting''
+      (Operation Collection Support Sorting). Requirement: Collection GET operations should support sorting via a sort or
+      order query parameter. To fix: Adjust `parameters` so it conforms to the schema this rule requires. This rule is evaluated
+      at the JSONPath `$.paths[*].get` — inspect every location it matches and correct only what violates the rule. Make the
+      smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-operation-require-one-tag:
+    title: Operation Require One Tag
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-require-one-tag/
+    description: Having tags applied to each API operations helps organize and group APIs in portals, documentation, search,
+      and other ways in which APIs are made available.
+    message: MUST Be At Least One Operation Tag
+    severity: info
+    given: $.paths.*[get,post,patch,put,delete]
+    then:
+      field: tags
+      function: length
+      functionOptions:
+        min: 1
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - experience:discoverability
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-require-one-tag''
+      (Operation Require One Tag). Requirement: Having tags applied to each API operations helps organize and group APIs in
+      portals, documentation, search, and other ways in which APIs are made available. To fix: Ensure the length of `tags`
+      is at least 1. This rule is evaluated at the JSONPath `$.paths.*[get,post,patch,put,delete]` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-operation-require-tag:
+    title: Operation Require Tag
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-require-tag/
+    description: Having tags applied to each API operations helps organize and group APIs in portals, documentation, search,
+      and other ways in which APIs are made available.
+    message: Operations MUST Have Tags
+    severity: info
+    given: $.paths.*[get,post,patch,put,delete]
+    then:
+    - field: tags
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - experience:discoverability
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-require-tag'' (Operation
+      Require Tag). Requirement: Having tags applied to each API operations helps organize and group APIs in portals, documentation,
+      search, and other ways in which APIs are made available. To fix: Ensure `tags` is present and non-empty at each matching
+      location. This rule is evaluated at the JSONPath `$.paths.*[get,post,patch,put,delete]` — inspect every location it
+      matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-response-get-link-header:
+    title: Response Get Link Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-link-header/
+    description: GET success responses should provide a Link header (RFC 8288) with rel next/prev/first/last for pagination
+      and navigation — the header-based alternative to an in-body paging object.
+    message: GET responses should provide a Link header (RFC 8288) for pagination/navigation.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Link
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:pagination
+    - experience:pagination
+    - experience:discoverability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-link-header''
+      (Response Get Link Header). Requirement: GET success responses should provide a Link header (RFC 8288) with rel next/prev/first/last
+      for pagination and navigation — the header-based alternative to an in-body paging object. To fix: Ensure `Link` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*].get.responses[?( @property
+      >= 200 && @property < 300 && @property != 204 )].headers` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-include-hypermedia-links:
+    title: Response Include Hypermedia Links
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-include-hypermedia-links/
+    description: The API contract MAY include hypermedia links to represent the state of resources and be navigable.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths[*][*].responses[*]
+    then:
+      field: links
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - experience:discoverability
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-include-hypermedia-links''
+      (Response Include Hypermedia Links). Requirement: The API contract MAY include hypermedia links to represent the state
+      of resources and be navigable. To fix: Ensure `links` is present and non-empty at each matching location. This rule
+      is evaluated at the JSONPath `$.paths[*][*].responses[*]` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-require-status-health-check-path:
+    title: Response Require Status Health Check Path
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-require-status-health-check-path/
+    description: You must define a `/status` path that can be used to health-check the API. Using this path avoids the arbitrary
+      usage of a server URL for health-check scope. The `/status` endpoint should return a `application/problem+json` response
+      containing a successful status code if the service is working correctly. The service provider is free to define the
+      implementation logic for this path.
+    message: The "/status" path used to health-check the API must be defined. {{error}}
+    severity: info
+    given: $
+    then:
+      field: paths./status.get.responses.200
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:reliability
+    - experience:discoverability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-require-status-health-check-path''
+      (Response Require Status Health Check Path). Requirement: You must define a `/status` path that can be used to health-check
+      the API. Using this path avoids the arbitrary usage of a server URL for health-check scope. The `/status` endpoint should
+      return a `application/problem+json` response containing a successful status code if the service is working correctly.
+      The service provider is free to define the implementation logic for this path. To fix: Ensure `paths./status.get.responses.200`
+      is present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-schema-require-tag-object:
+    title: Schema Require Tag Object
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-require-tag-object/
+    description: There needs to be a central tags object applied to the OpenAPI, providing central tags that can be applied
+      across all operations within an OpenAPI.
+    message: OpenAPIs MUST Have a Tag Object
+    severity: info
+    given: $
+    then:
+      field: tags
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:discoverability
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-require-tag-object''
+      (Schema Require Tag Object). Requirement: There needs to be a central tags object applied to the OpenAPI, providing
+      central tags that can be applied across all operations within an OpenAPI. To fix: Ensure `tags` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-tag-require-at-least-one:
+    title: Tag Require At Least One
+    reference: https://spotlight-rules.com/spec/rules/openapi/tag-require-at-least-one/
+    description: There needs to be at least one tag applied to an OpenAPI, providing a key word or phrase that can be applied
+      to API operations.
+    message: MUST Be At Least One Tag
+    severity: info
+    given: $
+    then:
+      field: tags
+      function: length
+      functionOptions:
+        min: 1
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:discoverability
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''tag-require-at-least-one''
+      (Tag Require At Least One). Requirement: There needs to be at least one tag applied to an OpenAPI, providing a key word
+      or phrase that can be applied to API operations. To fix: Ensure the length of `tags` is at least 1. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-tag-require-name:
+    title: Tag Require Name
+    reference: https://spotlight-rules.com/spec/rules/openapi/tag-require-name/
+    description: Tags used as part of an OpenAPI should have names, providing a simple key word or phrase that represents
+      the tag being applied to APIs.
+    message: Tags MUST Have a Name
+    severity: info
+    given: $.tags[*]
+    then:
+      field: name
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:tags
+    - experience:discoverability
+    - experience:naming
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''tag-require-name'' (Tag Require
+      Name). Requirement: Tags used as part of an OpenAPI should have names, providing a simple key word or phrase that represents
+      the tag being applied to APIs. To fix: Ensure `name` is present and non-empty at each matching location. This rule is
+      evaluated at the JSONPath `$.tags[*]` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  apis-json-api-contact-include-email:
+    title: API Contact Include Email
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-contact-include-email/
+    description: The contact object in an APIs.json file allows for referencing the email address of a person or group. This
+      property provides a convenient way for users to seek support for an API, using email as the default method to reach
+      the team managing the API in production.
+    message: API contact COULD have email.
+    severity: info
+    given: $.apis.*.contact.*
+    then:
+      field: email
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:apis
+    - experience:documentation
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-contact-include-email''
+      (API Contact Include Email). Requirement: The contact object in an APIs.json file allows for referencing the email address
+      of a person or group. This property provides a convenient way for users to seek support for an API, using email as the
+      default method to reach the team managing the API in production. To fix: Ensure `email` is present and non-empty at
+      each matching location. This rule is evaluated at the JSONPath `$.apis.*.contact.*` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected
+      document, with no commentary.'
+  apis-json-api-contact-include-full-name:
+    title: API Contact Include Full Name
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-contact-include-full-name/
+    description: The contact object in an APIs.json file includes a full name (FN) property, which specifies the formatted
+      text corresponding to the contact name in the vCard for an API. This provides a quick and clear way to assign a person,
+      group, or other point of contact to an API for addressing questions and providing support.
+    message: Contact Could Have FN
+    severity: info
+    given: $.apis.*.contact.*
+    then:
+      field: FN
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:apis
+    - experience:documentation
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-contact-include-full-name''
+      (API Contact Include Full Name). Requirement: The contact object in an APIs.json file includes a full name (FN) property,
+      which specifies the formatted text corresponding to the contact name in the vCard for an API. This provides a quick
+      and clear way to assign a person, group, or other point of contact to an API for addressing questions and providing
+      support. To fix: Ensure `FN` is present and non-empty at each matching location. This rule is evaluated at the JSONPath
+      `$.apis.*.contact.*` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-entry-require-tag:
+    title: API Entry Require Tag
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-entry-require-tag/
+    description: Each API defined in an APIs.json artifact includes a property for adding one or more tags. These tags provide
+      additional context about the resources or capabilities offered by the API, highlighting its business value and the domain
+      in which it is applied.
+    message: API MUST Have a Tags Object
+    severity: info
+    given: $.apis.*
+    then:
+      field: tags
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:apis
+    - experience:discoverability
+    - experience:data-modeling
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-entry-require-tag''
+      (API Entry Require Tag). Requirement: Each API defined in an APIs.json artifact includes a property for adding one or
+      more tags. These tags provide additional context about the resources or capabilities offered by the API, highlighting
+      its business value and the domain in which it is applied. To fix: Ensure `tags` is present and non-empty at each matching
+      location. This rule is evaluated at the JSONPath `$.apis.*` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document, with no
+      commentary.'
+  apis-json-api-include-about-page:
+    title: API Include About Page
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-include-about-page/
+    description: This property ensures provides a reference to an about page, either for the company, organization, or government
+      agency behind an API, or specifically about the domain, team, and the APIs they produce.
+    message: Has About
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(about|About)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:documentation
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-include-about-page''
+      (API Include About Page). Requirement: This property ensures provides a reference to an about page, either for the company,
+      organization, or government agency behind an API, or specifically about the domain, team, and the APIs they produce.
+      To fix: Ensure `type` does NOT match the regular expression `\b(about|About)\b`; rename or rewrite any value that does.
+      This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected
+      document, with no commentary.'
+  apis-json-api-include-contact:
+    title: API Include Contact
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-include-contact/
+    description: The contact object in an APIs.json file allows for associating a vCard that represents an individual or organizational
+      entity. It includes common contact information such as a name, email, or other references, offering a standardized method
+      for providing support for an API.
+    message: API COULD have a contact.
+    severity: info
+    given: $.apis.*
+    then:
+      field: contact
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:apis
+    - experience:discoverability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-include-contact'' (API
+      Include Contact). Requirement: The contact object in an APIs.json file allows for associating a vCard that represents
+      an individual or organizational entity. It includes common contact information such as a name, email, or other references,
+      offering a standardized method for providing support for an API. To fix: Ensure `contact` is present and non-empty at
+      each matching location. This rule is evaluated at the JSONPath `$.apis.*` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document,
+      with no commentary.'
+  apis-json-api-property-require-go-sdk:
+    title: API Property Require Go SDK
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-go-sdk/
+    description: This property ensures that there is a Go SDK available for an API, making it easier for Go developers to
+      integrate an API into their applications.
+    message: Has Go SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-go)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-go-sdk''
+      (API Property Require Go SDK). Requirement: This property ensures that there is a Go SDK available for an API, making
+      it easier for Go developers to integrate an API into their applications. To fix: Ensure `type` does NOT match the regular
+      expression `\b(api-sdk-go)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.*
+      | $.common.*` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-java-sdk:
+    title: API Property Require Java SDK
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-java-sdk/
+    description: This property ensures that there is a Java SDK available for an API, making it easier for Java developers
+      to integrate an API into their applications.
+    message: Has Java SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-java)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-java-sdk''
+      (API Property Require Java SDK). Requirement: This property ensures that there is a Java SDK available for an API, making
+      it easier for Java developers to integrate an API into their applications. To fix: Ensure `type` does NOT match the
+      regular expression `\b(api-sdk-java)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath
+      `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-node-sdk:
+    title: API Property Require Node SDK
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-node-sdk/
+    description: This property ensures that there is a Node SDK available for an API, making it easier for Node developers
+      to integrate an API into their applications.
+    message: Has Node SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-node)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-node-sdk''
+      (API Property Require Node SDK). Requirement: This property ensures that there is a Node SDK available for an API, making
+      it easier for Node developers to integrate an API into their applications. To fix: Ensure `type` does NOT match the
+      regular expression `\b(api-sdk-node)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath
+      `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-python-sdk:
+    title: API Property Require Python SDK
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-python-sdk/
+    description: This property ensures that there is a Python SDK available for an API, making it easier for Python developers
+      to integrate an API into their applications.
+    message: Has Python SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-python)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-python-sdk''
+      (API Property Require Python SDK). Requirement: This property ensures that there is a Python SDK available for an API,
+      making it easier for Python developers to integrate an API into their applications. To fix: Ensure `type` does NOT match
+      the regular expression `\b(api-sdk-python)\b`; rename or rewrite any value that does. This rule is evaluated at the
+      JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only what violates the
+      rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-road-map:
+    title: API Property Require Road Map
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-road-map/
+    description: This property ensures there is a reference to the road map for an API or for the entire API operations within
+      domain, line of business, or teams.
+    message: Has a Road Map
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-road-map|road-map|Roadmap|Road Map|RoadMap)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:discoverability
+    - experience:documentation
+    - experience:governance
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-road-map''
+      (API Property Require Road Map). Requirement: This property ensures there is a reference to the road map for an API
+      or for the entire API operations within domain, line of business, or teams. To fix: Ensure `type` does NOT match the
+      regular expression `\b(api-road-map|road-map|Roadmap|Road Map|RoadMap)\b`; rename or rewrite any value that does. This
+      rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document,
+      with no commentary.'
+  apis-json-api-property-require-sdk:
+    title: API Property Require SDK
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-sdk/
+    description: This property ensures that there is an SDK available for an API, making it easier for developers to integrate
+      an API into their applications.
+    message: Has SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(sdk|sdks|SDKs)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-sdk''
+      (API Property Require SDK). Requirement: This property ensures that there is an SDK available for an API, making it
+      easier for developers to integrate an API into their applications. To fix: Ensure `type` does NOT match the regular
+      expression `\b(sdk|sdks|SDKs)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.*
+      | $.common.*` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-signup:
+    title: API Property Require Signup
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-signup/
+    description: This property ensures there is a link to where you sign up for an API, making sure API consumers can access
+      in a single click.
+    message: Has a Sign Up
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(X-signup|signup|Sign Up|SignUp)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-signup''
+      (API Property Require Signup). Requirement: This property ensures there is a link to where you sign up for an API, making
+      sure API consumers can access in a single click. To fix: Ensure `type` does NOT match the regular expression `\b(X-signup|signup|Sign
+      Up|SignUp)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.*
+      | $.common.*` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-status-page:
+    title: API Property Require Status Page
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-status-page/
+    description: This property ensures that there is a status page available for each API, providing the uptime status for
+      any given moment, as well as historical data.
+    message: Has a Status Page
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(x-status|status|Status|StatusPage)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:reliability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-status-page''
+      (API Property Require Status Page). Requirement: This property ensures that there is a status page available for each
+      API, providing the uptime status for any given moment, as well as historical data. To fix: Ensure `type` does NOT match
+      the regular expression `\b(x-status|status|Status|StatusPage)\b`; rename or rewrite any value that does. This rule is
+      evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document, with no
+      commentary.'
+  apis-json-api-property-require-use-cases:
+    title: API Property Require Use Cases
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-use-cases/
+    description: This property ensures there is a reference to the use cases for an API, helping align an API with the who,
+      what, how, and why of putting an API to work.
+    message: Has Use Cases
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(UseCases)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:documentation
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-use-cases''
+      (API Property Require Use Cases). Requirement: This property ensures there is a reference to the use cases for an API,
+      helping align an API with the who, what, how, and why of putting an API to work. To fix: Ensure `type` does NOT match
+      the regular expression `\b(UseCases)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath
+      `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-valid-url:
+    title: API Property Require Valid URL
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-valid-url/
+    description: This property ensures that properties of an API or API contract all have valid URLs, checking if any of the
+      URLs are not properly formed, or could be other formats.
+    message: Property URLs Are Valid
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: url
+      function: pattern
+      functionOptions:
+        notMatch: ^((http|https)://)[-a-zA-Z0-9@:%._\+~#?&//=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%._\+~#?&//=]*)$
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:consistency
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-valid-url''
+      (API Property Require Valid URL). Requirement: This property ensures that properties of an API or API contract all have
+      valid URLs, checking if any of the URLs are not properly formed, or could be other formats. To fix: Ensure `url` does
+      NOT match the regular expression `^((http|https)://)[-a-zA-Z0-9@:%._\+~#?&//=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%._\+~#?&//=]*)$`;
+      rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-video:
+    title: API Property Require Video
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-video/
+    description: This property ensures there is a reference to a video page or channel for an API.
+    message: Has Videos for API
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(videos|Videos)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:documentation
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-video''
+      (API Property Require Video). Requirement: This property ensures there is a reference to a video page or channel for
+      an API. To fix: Ensure `type` does NOT match the regular expression `\b(videos|Videos)\b`; rename or rewrite any value
+      that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected
+      document, with no commentary.'
+  apis-json-api-require-aid:
+    title: API Require Aid
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-require-aid/
+    description: Every API should have a unique identifier, known as an AID (API Identifier). The APIs.json file, contract,
+      or collection contains its own AID, which the API uses as part of its reference. Additionally, the API applies a slugified
+      version of its name, resulting in a unique, human-readable identifier for the API.
+    message: APIs MUST have an aid property.
+    severity: info
+    given: $.apis.*
+    then:
+      field: aid
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:apis
+    - experience:discoverability
+    - experience:governance
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-require-aid'' (API Require
+      Aid). Requirement: Every API should have a unique identifier, known as an AID (API Identifier). The APIs.json file,
+      contract, or collection contains its own AID, which the API uses as part of its reference. Additionally, the API applies
+      a slugified version of its name, resulting in a unique, human-readable identifier for the API. To fix: Ensure `aid`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.apis.*` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return
+      only the complete corrected document, with no commentary.'
+  apis-json-api-require-base-url:
+    title: API Require Base URL
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-require-base-url/
+    description: Each API defined within an APIs.json artifact can specify the base URL for the API. This URL serves as a
+      reference point for developers during onboarding and when making API calls. Additionally, it helps identify the API
+      and validate the domain it is associated with.
+    message: APIs MUST Have a Base URL
+    severity: info
+    given: $.apis.*
+    then:
+      field: baseURL
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:apis
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-require-base-url'' (API
+      Require Base URL). Requirement: Each API defined within an APIs.json artifact can specify the base URL for the API.
+      This URL serves as a reference point for developers during onboarding and when making API calls. Additionally, it helps
+      identify the API and validate the domain it is associated with. To fix: Ensure `baseURL` is present and non-empty at
+      each matching location. This rule is evaluated at the JSONPath `$.apis.*` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document,
+      with no commentary.'
+  apis-json-api-tag-require-upper-case:
+    title: API Tag Require Upper Case
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-tag-require-upper-case/
+    description: Maintaining consistent casing for tags applied to individual APIs ensures a uniform appearance and enhances
+      search and discovery. Each word in a tag should be capitalized, with the first letter of every word in a phrase treated
+      the same way.
+    message: API Tags MUST Be Upper Case
+    severity: info
+    given: $.apis.*.tags.*
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:tags
+    - experience:naming
+    - experience:consistency
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-tag-require-upper-case''
+      (API Tag Require Upper Case). Requirement: Maintaining consistent casing for tags applied to individual APIs ensures
+      a uniform appearance and enhances search and discovery. Each word in a tag should be capitalized, with the first letter
+      of every word in a phrase treated the same way. To fix: Ensure the targeted value matches the regular expression `[A-Z]\w*`;
+      rewrite any value that does not. This rule is evaluated at the JSONPath `$.apis.*.tags.*` — inspect every location it
+      matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete
+      corrected document, with no commentary.'
+  apis-json-document-apis-json-url-https:
+    title: Document APIs JSON URL HTTPS
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-apis-json-url-https/
+    description: The APIs.json url should be an https URL.
+    message: APIs.json url should use https.
+    given: $.url
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^https://
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:security
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-apis-json-url-https''
+      (Document APIs JSON URL HTTPS). Requirement: The APIs.json url should be an https URL. To fix: Ensure the targeted value
+      matches the regular expression `^https://`; rewrite any value that does not. This rule is evaluated at the JSONPath
+      `$.url` — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-access:
+    title: Document Require Access
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-access/
+    description: apis-json document should declare a `access` property.
+    message: Missing `access`.
+    given: $
+    severity: info
+    then:
+      field: access
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-access''
+      (Document Require Access). Requirement: apis-json document should declare a `access` property. To fix: Ensure `access`
+      is present and non-empty at each matching location. Guidance: Missing `access`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-aid:
+    title: Document Require Aid
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-aid/
+    description: apis-json document should declare a `aid` property.
+    message: Missing `aid`.
+    given: $
+    severity: info
+    then:
+      field: aid
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-aid'' (Document
+      Require Aid). Requirement: apis-json document should declare a `aid` property. To fix: Ensure `aid` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document,
+      with no commentary.'
+  apis-json-document-require-apis:
+    title: Document Require APIs
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-apis/
+    description: apis-json document should declare a `apis` property.
+    message: Missing `apis`.
+    given: $
+    severity: info
+    then:
+      field: apis
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-apis''
+      (Document Require APIs). Requirement: apis-json document should declare a `apis` property. To fix: Ensure `apis` is
+      present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete
+      corrected document, with no commentary.'
+  apis-json-document-require-common:
+    title: Document Require Common
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-common/
+    description: apis-json document should declare a `common` property.
+    message: Missing `common`.
+    given: $
+    severity: info
+    then:
+      field: common
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-common''
+      (Document Require Common). Requirement: apis-json document should declare a `common` property. To fix: Ensure `common`
+      is present and non-empty at each matching location. Guidance: Missing `common`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-created:
+    title: Document Require Created
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-created/
+    description: apis-json document should declare a `created` property.
+    message: Missing `created`.
+    given: $
+    severity: info
+    then:
+      field: created
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-created''
+      (Document Require Created). Requirement: apis-json document should declare a `created` property. To fix: Ensure `created`
+      is present and non-empty at each matching location. Guidance: Missing `created`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-description:
+    title: Document Require Description
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-description/
+    description: apis-json document should declare a `description` property.
+    message: Missing `description`.
+    given: $
+    severity: info
+    then:
+      field: description
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-description''
+      (Document Require Description). Requirement: apis-json document should declare a `description` property. To fix: Ensure
+      `description` is present and non-empty at each matching location. Guidance: Missing `description`. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-image:
+    title: Document Require Image
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-image/
+    description: apis-json document should declare a `image` property.
+    message: Missing `image`.
+    given: $
+    severity: info
+    then:
+      field: image
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-image''
+      (Document Require Image). Requirement: apis-json document should declare a `image` property. To fix: Ensure `image`
+      is present and non-empty at each matching location. Guidance: Missing `image`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-include:
+    title: Document Require Include
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-include/
+    description: apis-json document should declare a `include` property.
+    message: Missing `include`.
+    given: $
+    severity: info
+    then:
+      field: include
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-include''
+      (Document Require Include). Requirement: apis-json document should declare a `include` property. To fix: Ensure `include`
+      is present and non-empty at each matching location. Guidance: Missing `include`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-kind:
+    title: Document Require Kind
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-kind/
+    description: apis-json document should declare a `kind` property.
+    message: Missing `kind`.
+    given: $
+    severity: info
+    then:
+      field: kind
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-kind''
+      (Document Require Kind). Requirement: apis-json document should declare a `kind` property. To fix: Ensure `kind` is
+      present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete
+      corrected document, with no commentary.'
+  apis-json-document-require-maintainer:
+    title: Document Require Maintainer
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-maintainer/
+    description: apis-json document should declare a `maintainers` property.
+    message: Missing `maintainers`.
+    given: $
+    severity: info
+    then:
+      field: maintainers
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-maintainer''
+      (Document Require Maintainer). Requirement: apis-json document should declare a `maintainers` property. To fix: Ensure
+      `maintainers` is present and non-empty at each matching location. Guidance: Missing `maintainers`. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-modified:
+    title: Document Require Modified
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-modified/
+    description: apis-json document should declare a `modified` property.
+    message: Missing `modified`.
+    given: $
+    severity: info
+    then:
+      field: modified
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-modified''
+      (Document Require Modified). Requirement: apis-json document should declare a `modified` property. To fix: Ensure `modified`
+      is present and non-empty at each matching location. Guidance: Missing `modified`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-name:
+    title: Document Require Name
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-name/
+    description: apis-json document should declare a `name` property.
+    message: Missing `name`.
+    given: $
+    severity: info
+    then:
+      field: name
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-name''
+      (Document Require Name). Requirement: apis-json document should declare a `name` property. To fix: Ensure `name` is
+      present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete
+      corrected document, with no commentary.'
+  apis-json-document-require-network:
+    title: Document Require Network
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-network/
+    description: apis-json document should declare a `network` property.
+    message: Missing `network`.
+    given: $
+    severity: info
+    then:
+      field: network
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-network''
+      (Document Require Network). Requirement: apis-json document should declare a `network` property. To fix: Ensure `network`
+      is present and non-empty at each matching location. Guidance: Missing `network`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-overlays:
+    title: Document Require Overlays
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-overlays/
+    description: apis-json document should declare a `overlays` property.
+    message: Missing `overlays`.
+    given: $
+    severity: info
+    then:
+      field: overlays
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-overlays''
+      (Document Require Overlays). Requirement: apis-json document should declare a `overlays` property. To fix: Ensure `overlays`
+      is present and non-empty at each matching location. Guidance: Missing `overlays`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-position:
+    title: Document Require Position
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-position/
+    description: apis-json document should declare a `position` property.
+    message: Missing `position`.
+    given: $
+    severity: info
+    then:
+      field: position
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-position''
+      (Document Require Position). Requirement: apis-json document should declare a `position` property. To fix: Ensure `position`
+      is present and non-empty at each matching location. Guidance: Missing `position`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-prompts:
+    title: Document Require Prompts
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-prompts/
+    description: apis-json document should declare a `prompts` property.
+    message: Missing `prompts`.
+    given: $
+    severity: info
+    then:
+      field: prompts
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-prompts''
+      (Document Require Prompts). Requirement: apis-json document should declare a `prompts` property. To fix: Ensure `prompts`
+      is present and non-empty at each matching location. Guidance: Missing `prompts`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-rating:
+    title: Document Require Rating
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-rating/
+    description: apis-json document should declare a `rating` property.
+    message: Missing `rating`.
+    given: $
+    severity: info
+    then:
+      field: rating
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-rating''
+      (Document Require Rating). Requirement: apis-json document should declare a `rating` property. To fix: Ensure `rating`
+      is present and non-empty at each matching location. Guidance: Missing `rating`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-rules:
+    title: Document Require Rules
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-rules/
+    description: apis-json document should declare a `rules` property.
+    message: Missing `rules`.
+    given: $
+    severity: info
+    then:
+      field: rules
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-rules''
+      (Document Require Rules). Requirement: apis-json document should declare a `rules` property. To fix: Ensure `rules`
+      is present and non-empty at each matching location. Guidance: Missing `rules`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-specificationversion:
+    title: Document Require Specificationversion
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-specificationversion/
+    description: apis-json document should declare a `specificationVersion` property.
+    message: Missing `specificationVersion`.
+    given: $
+    severity: info
+    then:
+      field: specificationVersion
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-specificationversion''
+      (Document Require Specificationversion). Requirement: apis-json document should declare a `specificationVersion` property.
+      To fix: Ensure `specificationVersion` is present and non-empty at each matching location. Guidance: Missing `specificationVersion`.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-tag:
+    title: Document Require Tag
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-tag/
+    description: apis-json document should declare a `tags` property.
+    message: Missing `tags`.
+    given: $
+    severity: info
+    then:
+      field: tags
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-tag'' (Document
+      Require Tag). Requirement: apis-json document should declare a `tags` property. To fix: Ensure `tags` is present and
+      non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected
+      document, with no commentary.'
+  apis-json-document-require-type:
+    title: Document Require Type
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-type/
+    description: apis-json document should declare a `type` property.
+    message: Missing `type`.
+    given: $
+    severity: info
+    then:
+      field: type
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-type''
+      (Document Require Type). Requirement: apis-json document should declare a `type` property. To fix: Ensure `type` is
+      present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete
+      corrected document, with no commentary.'
+  apis-json-document-require-url:
+    title: Document Require URL
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-url/
+    description: apis-json document should declare a `url` property.
+    message: Missing `url`.
+    given: $
+    severity: info
+    then:
+      field: url
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-url'' (Document
+      Require URL). Requirement: apis-json document should declare a `url` property. To fix: Ensure `url` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document,
+      with no commentary.'
+  apis-json-document-require-visibility:
+    title: Document Require Visibility
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-visibility/
+    description: apis-json document should declare a `visibility` property.
+    message: Missing `visibility`.
+    given: $
+    severity: info
+    then:
+      field: visibility
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-visibility''
+      (Document Require Visibility). Requirement: apis-json document should declare a `visibility` property. To fix: Ensure
+      `visibility` is present and non-empty at each matching location. Guidance: Missing `visibility`. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-document-require-workflow:
+    title: Document Require Workflow
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-require-workflow/
+    description: apis-json document should declare a `workflows` property.
+    message: Missing `workflows`.
+    given: $
+    severity: info
+    then:
+      field: workflows
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-require-workflow''
+      (Document Require Workflow). Requirement: apis-json document should declare a `workflows` property. To fix: Ensure `workflows`
+      is present and non-empty at each matching location. Guidance: Missing `workflows`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-blog:
+    title: Schema Include Blog
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-blog/
+    description: This property ensures that an API has a reference to a blog where anyone can find updates and other stories
+      that will help keep API consumers and other stakeholders up to speed on what is happening with an API, and the larger
+      operations.
+    message: Has a Blog
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(blog|Blogs)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:documentation
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-blog'' (Schema
+      Include Blog). Requirement: This property ensures that an API has a reference to a blog where anyone can find updates
+      and other stories that will help keep API consumers and other stakeholders up to speed on what is happening with an
+      API, and the larger operations. To fix: Ensure `type` does NOT match the regular expression `\b(blog|Blogs)\b`; rename
+      or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return
+      only the complete corrected document, with no commentary.'
+  apis-json-schema-include-blog-feed:
+    title: Schema Include Blog Feed
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-blog-feed/
+    description: This property ensures that blogs in support of APIs have an Atom or RSS feed of posts, allowing for the syndication
+      of updates and information around individual APIs and the operations around them.
+    message: Has a Blog Feed
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(blog-feed|BlogFeeds)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:documentation
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-blog-feed''
+      (Schema Include Blog Feed). Requirement: This property ensures that blogs in support of APIs have an Atom or RSS feed
+      of posts, allowing for the syndication of updates and information around individual APIs and the operations around them.
+      To fix: Ensure `type` does NOT match the regular expression `\b(blog-feed|BlogFeeds)\b`; rename or rewrite any value
+      that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected
+      document, with no commentary.'
+  apis-json-schema-include-developer-portal:
+    title: Schema Include Developer Portal
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-developer-portal/
+    description: This property ensures there a developer portal associated with an API and that you can find a landing page
+      for the API, documentation, SDKs, and other resources.
+    message: Has Developer Portal
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-developer-portal|developer-portal|portal|Portal|Portals|DeveloperPortal)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:discoverability
+    - experience:usability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-developer-portal''
+      (Schema Include Developer Portal). Requirement: This property ensures there a developer portal associated with an API
+      and that you can find a landing page for the API, documentation, SDKs, and other resources. To fix: Ensure `type` does
+      NOT match the regular expression `\b(api-developer-portal|developer-portal|portal|Portal|Portals|DeveloperPortal)\b`;
+      rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-discussion-forum:
+    title: Schema Include Discussion Forum
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-discussion-forum/
+    description: This property ensures that there is a link to a discussion forum, providing a way for consumers and producers
+      to engage and support either other throughout the lifecycle.
+    message: Has Discussion Forum
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(Forums|Forums|Discussions)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-discussion-forum''
+      (Schema Include Discussion Forum). Requirement: This property ensures that there is a link to a discussion forum, providing
+      a way for consumers and producers to engage and support either other throughout the lifecycle. To fix: Ensure `type`
+      does NOT match the regular expression `\b(Forums|Forums|Discussions)\b`; rename or rewrite any value that does. This
+      rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document,
+      with no commentary.'
+  apis-json-schema-include-gateway-reference:
+    title: Schema Include Gateway Reference
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-gateway-reference/
+    description: This property ensures that there is a reference to the gateway for an API, referencing where you can manage
+      the configuration for each API.
+    message: Has Staging Gateway for API
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(gateway|Gateway)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-gateway-reference''
+      (Schema Include Gateway Reference). Requirement: This property ensures that there is a reference to the gateway for
+      an API, referencing where you can manage the configuration for each API. To fix: Ensure `type` does NOT match the regular
+      expression `\b(gateway|Gateway)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.*
+      | $.common.*` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-github-organization:
+    title: Schema Include Github Organization
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-github-organization/
+    description: This property ensures that an API is associated with GitHub organization, providing the URL to where you
+      can engage with the operations surrounding an API.
+    message: Has a GitHub Organization
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(github-organization|GitHubOrganization)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:discoverability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-github-organization''
+      (Schema Include Github Organization). Requirement: This property ensures that an API is associated with GitHub organization,
+      providing the URL to where you can engage with the operations surrounding an API. To fix: Ensure `type` does NOT match
+      the regular expression `\b(github-organization|GitHubOrganization)\b`; rename or rewrite any value that does. This rule
+      is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document, with no
+      commentary.'
+  apis-json-schema-include-github-repository:
+    title: Schema Include Github Repository
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-github-repository/
+    description: This property ensures that an API possess a reference to a dedicated GitHub repository that is used to manage
+      the Open, but also possible server and client code.
+    message: Has a GitHub Repository
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(github-repository|GitHubRepository)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:discoverability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-github-repository''
+      (Schema Include Github Repository). Requirement: This property ensures that an API possess a reference to a dedicated
+      GitHub repository that is used to manage the Open, but also possible server and client code. To fix: Ensure `type` does
+      NOT match the regular expression `\b(github-repository|GitHubRepository)\b`; rename or rewrite any value that does.
+      This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected
+      document, with no commentary.'
+  apis-json-schema-include-openapi-definition:
+    title: Schema Include Openapi Definition
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-openapi-definition/
+    description: This property ensures that there is an OpenAPI present for an API, providing the technical contract that
+      describes the surface area of an API.
+    message: Has An OpenAPI
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(openapi|OpenAPI)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:documentation
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-openapi-definition''
+      (Schema Include Openapi Definition). Requirement: This property ensures that there is an OpenAPI present for an API,
+      providing the technical contract that describes the surface area of an API. To fix: Ensure `type` does NOT match the
+      regular expression `\b(openapi|OpenAPI)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath
+      `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-postman-public-workspace:
+    title: Schema Include Postman Public Workspace
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-postman-public-workspace/
+    description: This property ensures that an API is associated with a Postman Workspace, providing a single location that
+      API producers and/or API consumers can engage around an API.
+    message: Has Public Postman Workspace
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(postman-public-workspace|PostmanPublicWorkspace|PostmanWorkspace)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-postman-public-workspace''
+      (Schema Include Postman Public Workspace). Requirement: This property ensures that an API is associated with a Postman
+      Workspace, providing a single location that API producers and/or API consumers can engage around an API. To fix: Ensure
+      `type` does NOT match the regular expression `\b(postman-public-workspace|PostmanPublicWorkspace|PostmanWorkspace)\b`;
+      rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-tag-apis-json-not-empty:
+    title: Tag APIs JSON Not Empty
+    reference: https://spotlight-rules.com/spec/rules/apis-json/tag-apis-json-not-empty/
+    description: If tags are declared they should not be empty — tags drive discovery in the catalog.
+    message: tags should not be empty.
+    given: $.tags
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          minItems: 1
+    tags:
+    - format:apis-json
+    - spec:tags
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''tag-apis-json-not-empty''
+      (Tag APIs JSON Not Empty). Requirement: If tags are declared they should not be empty — tags drive discovery in the
+      catalog. To fix: Adjust the targeted value so it conforms to the schema this rule requires. This rule is evaluated at
+      the JSONPath `$.tags` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-tag-require-upper-case:
+    title: Tag Require Upper Case
+    reference: https://spotlight-rules.com/spec/rules/apis-json/tag-require-upper-case/
+    description: Maintaining consistent casing for tags applied to APIs.json contracts ensures a uniform appearance and enhances
+      search and discovery. Each word in a tag should be capitalized, with the first letter of every word in a phrase treated
+      the same way.
+    message: Tags Upper Case
+    severity: info
+    given: $.tags.*
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    tags:
+    - format:apis-json
+    - spec:tags
+    - experience:naming
+    - experience:consistency
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''tag-require-upper-case''
+      (Tag Require Upper Case). Requirement: Maintaining consistent casing for tags applied to APIs.json contracts ensures
+      a uniform appearance and enhances search and discovery. Each word in a tag should be capitalized, with the first letter
+      of every word in a phrase treated the same way. To fix: Ensure the targeted value matches the regular expression `[A-Z]\w*`;
+      rewrite any value that does not. This rule is evaluated at the JSONPath `$.tags.*` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected
+      document, with no commentary.'
+  asyncapi-document-require-asyncapi:
+    title: Document Require Asyncapi
+    reference: https://spotlight-rules.com/spec/rules/asyncapi/document-require-asyncapi/
+    description: asyncapi document should declare a `asyncapi` property.
+    message: Missing `asyncapi`.
+    given: $
+    severity: info
+    then:
+      field: asyncapi
+      function: truthy
+    tags:
+    - format:asyncapi
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an AsyncAPI document to satisfy the Spotlight API governance rule ''document-require-asyncapi''
+      (Document Require Asyncapi). Requirement: asyncapi document should declare a `asyncapi` property. To fix: Ensure `asyncapi`
+      is present and non-empty at each matching location. Guidance: Missing `asyncapi`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid AsyncAPI.
+      Return only the complete corrected document, with no commentary.'
+  asyncapi-document-require-channel:
+    title: Document Require Channel
+    reference: https://spotlight-rules.com/spec/rules/asyncapi/document-require-channel/
+    description: asyncapi document should declare a `channels` property.
+    message: Missing `channels`.
+    given: $
+    severity: info
+    then:
+      field: channels
+      function: truthy
+    tags:
+    - format:asyncapi
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an AsyncAPI document to satisfy the Spotlight API governance rule ''document-require-channel''
+      (Document Require Channel). Requirement: asyncapi document should declare a `channels` property. To fix: Ensure `channels`
+      is present and non-empty at each matching location. Guidance: Missing `channels`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid AsyncAPI.
+      Return only the complete corrected document, with no commentary.'
+  asyncapi-document-require-component:
+    title: Document Require Component
+    reference: https://spotlight-rules.com/spec/rules/asyncapi/document-require-component/
+    description: asyncapi document should declare a `components` property.
+    message: Missing `components`.
+    given: $
+    severity: info
+    then:
+      field: components
+      function: truthy
+    tags:
+    - format:asyncapi
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an AsyncAPI document to satisfy the Spotlight API governance rule ''document-require-component''
+      (Document Require Component). Requirement: asyncapi document should declare a `components` property. To fix: Ensure
+      `components` is present and non-empty at each matching location. Guidance: Missing `components`. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid AsyncAPI. Return only the complete corrected document, with no commentary.'
+  asyncapi-document-require-defaultcontenttype:
+    title: Document Require Defaultcontenttype
+    reference: https://spotlight-rules.com/spec/rules/asyncapi/document-require-defaultcontenttype/
+    description: asyncapi document should declare a `defaultContentType` property.
+    message: Missing `defaultContentType`.
+    given: $
+    severity: info
+    then:
+      field: defaultContentType
+      function: truthy
+    tags:
+    - format:asyncapi
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an AsyncAPI document to satisfy the Spotlight API governance rule ''document-require-defaultcontenttype''
+      (Document Require Defaultcontenttype). Requirement: asyncapi document should declare a `defaultContentType` property.
+      To fix: Ensure `defaultContentType` is present and non-empty at each matching location. Guidance: Missing `defaultContentType`.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid AsyncAPI. Return only the complete corrected document, with no commentary.'
+  asyncapi-document-require-id:
+    title: Document Require ID
+    reference: https://spotlight-rules.com/spec/rules/asyncapi/document-require-id/
+    description: asyncapi document should declare a `id` property.
+    message: Missing `id`.
+    given: $
+    severity: info
+    then:
+      field: id
+      function: truthy
+    tags:
+    - format:asyncapi
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an AsyncAPI document to satisfy the Spotlight API governance rule ''document-require-id'' (Document
+      Require ID). Requirement: asyncapi document should declare a `id` property. To fix: Ensure `id` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid AsyncAPI. Return only the complete corrected document,
+      with no commentary.'
+  asyncapi-document-require-info:
+    title: Document Require Info
+    reference: https://spotlight-rules.com/spec/rules/asyncapi/document-require-info/
+    description: asyncapi document should declare a `info` property.
+    message: Missing `info`.
+    given: $
+    severity: info
+    then:
+      field: info
+      function: truthy
+    tags:
+    - format:asyncapi
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an AsyncAPI document to satisfy the Spotlight API governance rule ''document-require-info'' (Document
+      Require Info). Requirement: asyncapi document should declare a `info` property. To fix: Ensure `info` is present and
+      non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid AsyncAPI. Return only the complete corrected
+      document, with no commentary.'
+  asyncapi-document-require-operation:
+    title: Document Require Operation
+    reference: https://spotlight-rules.com/spec/rules/asyncapi/document-require-operation/
+    description: asyncapi document should declare a `operations` property.
+    message: Missing `operations`.
+    given: $
+    severity: info
+    then:
+      field: operations
+      function: truthy
+    tags:
+    - format:asyncapi
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an AsyncAPI document to satisfy the Spotlight API governance rule ''document-require-operation''
+      (Document Require Operation). Requirement: asyncapi document should declare a `operations` property. To fix: Ensure
+      `operations` is present and non-empty at each matching location. Guidance: Missing `operations`. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid AsyncAPI. Return only the complete corrected document, with no commentary.'
+  asyncapi-document-require-server:
+    title: Document Require Server
+    reference: https://spotlight-rules.com/spec/rules/asyncapi/document-require-server/
+    description: asyncapi document should declare a `servers` property.
+    message: Missing `servers`.
+    given: $
+    severity: info
+    then:
+      field: servers
+      function: truthy
+    tags:
+    - format:asyncapi
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an AsyncAPI document to satisfy the Spotlight API governance rule ''document-require-server''
+      (Document Require Server). Requirement: asyncapi document should declare a `servers` property. To fix: Ensure `servers`
+      is present and non-empty at each matching location. Guidance: Missing `servers`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid AsyncAPI.
+      Return only the complete corrected document, with no commentary.'
+  asyncapi-operation-asyncapi-require-tag:
+    title: Operation Asyncapi Require Tag
+    reference: https://spotlight-rules.com/spec/rules/asyncapi/operation-asyncapi-require-tag/
+    description: Operations should declare tags for grouping.
+    message: Operation should declare tags.
+    given: $.operations[*]
+    severity: info
+    then:
+      field: tags
+      function: truthy
+    tags:
+    - format:asyncapi
+    - spec:operations
+    - experience:documentation
+    - experience:discoverability
+    prompt: 'You are editing an AsyncAPI document to satisfy the Spotlight API governance rule ''operation-asyncapi-require-tag''
+      (Operation Asyncapi Require Tag). Requirement: Operations should declare tags for grouping. To fix: Ensure `tags` is
+      present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.operations[*]` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid AsyncAPI. Return
+      only the complete corrected document, with no commentary.'
+  arazzo-document-require-arazzo:
+    title: Document Require Arazzo
+    reference: https://spotlight-rules.com/spec/rules/arazzo/document-require-arazzo/
+    description: arazzo document should declare a `arazzo` property.
+    message: Missing `arazzo`.
+    given: $
+    severity: info
+    then:
+      field: arazzo
+      function: truthy
+    tags:
+    - format:arazzo
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an Arazzo document to satisfy the Spotlight API governance rule ''document-require-arazzo'' (Document
+      Require Arazzo). Requirement: arazzo document should declare a `arazzo` property. To fix: Ensure `arazzo` is present
+      and non-empty at each matching location. Guidance: Missing `arazzo`. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid Arazzo. Return
+      only the complete corrected document, with no commentary.'
+  arazzo-document-require-component:
+    title: Document Require Component
+    reference: https://spotlight-rules.com/spec/rules/arazzo/document-require-component/
+    description: arazzo document should declare a `components` property.
+    message: Missing `components`.
+    given: $
+    severity: info
+    then:
+      field: components
+      function: truthy
+    tags:
+    - format:arazzo
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an Arazzo document to satisfy the Spotlight API governance rule ''document-require-component''
+      (Document Require Component). Requirement: arazzo document should declare a `components` property. To fix: Ensure `components`
+      is present and non-empty at each matching location. Guidance: Missing `components`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid Arazzo.
+      Return only the complete corrected document, with no commentary.'
+  arazzo-document-require-info:
+    title: Document Require Info
+    reference: https://spotlight-rules.com/spec/rules/arazzo/document-require-info/
+    description: arazzo document should declare a `info` property.
+    message: Missing `info`.
+    given: $
+    severity: info
+    then:
+      field: info
+      function: truthy
+    tags:
+    - format:arazzo
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an Arazzo document to satisfy the Spotlight API governance rule ''document-require-info'' (Document
+      Require Info). Requirement: arazzo document should declare a `info` property. To fix: Ensure `info` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid Arazzo. Return only the complete corrected document,
+      with no commentary.'
+  arazzo-document-require-sourcedescriptions:
+    title: Document Require Sourcedescriptions
+    reference: https://spotlight-rules.com/spec/rules/arazzo/document-require-sourcedescriptions/
+    description: arazzo document should declare a `sourceDescriptions` property.
+    message: Missing `sourceDescriptions`.
+    given: $
+    severity: info
+    then:
+      field: sourceDescriptions
+      function: truthy
+    tags:
+    - format:arazzo
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an Arazzo document to satisfy the Spotlight API governance rule ''document-require-sourcedescriptions''
+      (Document Require Sourcedescriptions). Requirement: arazzo document should declare a `sourceDescriptions` property.
+      To fix: Ensure `sourceDescriptions` is present and non-empty at each matching location. Guidance: Missing `sourceDescriptions`.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid Arazzo. Return only the complete corrected document, with no commentary.'
+  arazzo-document-require-workflow:
+    title: Document Require Workflow
+    reference: https://spotlight-rules.com/spec/rules/arazzo/document-require-workflow/
+    description: arazzo document should declare a `workflows` property.
+    message: Missing `workflows`.
+    given: $
+    severity: info
+    then:
+      field: workflows
+      function: truthy
+    tags:
+    - format:arazzo
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an Arazzo document to satisfy the Spotlight API governance rule ''document-require-workflow''
+      (Document Require Workflow). Requirement: arazzo document should declare a `workflows` property. To fix: Ensure `workflows`
+      is present and non-empty at each matching location. Guidance: Missing `workflows`. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid Arazzo.
+      Return only the complete corrected document, with no commentary.'
+  arazzo-source-arazzo-description-require-url:
+    title: Source Arazzo Description Require URL
+    reference: https://spotlight-rules.com/spec/rules/arazzo/source-arazzo-description-require-url/
+    description: Each source description should declare a url to the referenced OpenAPI/Arazzo document.
+    message: Source description should have a url.
+    given: $.sourceDescriptions[*]
+    severity: info
+    then:
+      field: url
+      function: truthy
+    tags:
+    - format:arazzo
+    - spec:source-descriptions
+    - experience:discoverability
+    prompt: 'You are editing an Arazzo document to satisfy the Spotlight API governance rule ''source-arazzo-description-require-url''
+      (Source Arazzo Description Require URL). Requirement: Each source description should declare a url to the referenced
+      OpenAPI/Arazzo document. To fix: Ensure `url` is present and non-empty at each matching location. This rule is evaluated
+      at the JSONPath `$.sourceDescriptions[*]` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid Arazzo. Return only the complete corrected document, with no commentary.'
+  json-structure-document-json-structure-id-uri:
+    title: Document JSON Structure ID URI
+    reference: https://spotlight-rules.com/spec/rules/json-structure/document-json-structure-id-uri/
+    description: $id should be a stable absolute URI (https:// or urn:) identifying the schema.
+    message: $id should be an absolute URI.
+    given: $.$id
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: '^https?://|^urn:'
+    tags:
+    - format:json-structure
+    - spec:document
+    - experience:consistency
+    - experience:discoverability
+    prompt: 'You are editing a JSON Structure document to satisfy the Spotlight API governance rule ''document-json-structure-id-uri''
+      (Document JSON Structure ID URI). Requirement: $id should be a stable absolute URI (https:// or urn:) identifying the
+      schema. To fix: Ensure the targeted value matches the regular expression `^https?://|^urn:`; rewrite any value that
+      does not. This rule is evaluated at the JSONPath `$.$id` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid JSON Structure. Return only the complete corrected document, with no commentary.'
+  json-structure-schema-json-structure-uri:
+    title: Schema JSON Structure URI
+    reference: https://spotlight-rules.com/spec/rules/json-structure/schema-json-structure-uri/
+    description: $schema should be the URI of the JSON Structure meta-schema.
+    message: $schema should be a URI.
+    given: $.$schema
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^https?://
+    tags:
+    - format:json-structure
+    - spec:schemas
+    - experience:consistency
+    - experience:discoverability
+    prompt: 'You are editing a JSON Structure document to satisfy the Spotlight API governance rule ''schema-json-structure-uri''
+      (Schema JSON Structure URI). Requirement: $schema should be the URI of the JSON Structure meta-schema. To fix: Ensure
+      the targeted value matches the regular expression `^https?://`; rewrite any value that does not. This rule is evaluated
+      at the JSONPath `$.$schema` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid JSON Structure. Return only the complete corrected document, with no commentary.'
+  json-ld-document-json-ld-id-iri:
+    title: Document JSON LD ID IRI
+    reference: https://spotlight-rules.com/spec/rules/json-ld/document-json-ld-id-iri/
+    description: '@id should be an IRI (https://, urn:, did:) or a blank-node identifier.'
+    message: '@id should be an IRI.'
+    given: $['@id']
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: '^https?://|^urn:|^did:|^_:'
+    tags:
+    - format:json-ld
+    - spec:document
+    - experience:consistency
+    - experience:discoverability
+    prompt: 'You are editing a JSON-LD document to satisfy the Spotlight API governance rule ''document-json-ld-id-iri'' (Document
+      JSON LD ID IRI). Requirement: @id should be an IRI (https://, urn:, did:) or a blank-node identifier. To fix: Ensure
+      the targeted value matches the regular expression `^https?://|^urn:|^did:|^_:`; rewrite any value that does not. This
+      rule is evaluated at the JSONPath `$.@id` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid JSON-LD. Return only the complete corrected document, with no commentary.'
+  json-ld-document-require-context:
+    title: Document Require Context
+    reference: https://spotlight-rules.com/spec/rules/json-ld/document-require-context/
+    description: The `@context` property should be present.
+    message: '@context should be present'
+    severity: info
+    given: $
+    then:
+      field: '@context'
+      function: truthy
+    tags:
+    - format:json-ld
+    - spec:document
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a JSON-LD document to satisfy the Spotlight API governance rule ''document-require-context''
+      (Document Require Context). Requirement: The `@context` property should be present. To fix: Ensure `@context` is present
+      and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid JSON-LD. Return only the complete corrected
+      document, with no commentary.'
+  json-ld-document-require-id:
+    title: Document Require ID
+    reference: https://spotlight-rules.com/spec/rules/json-ld/document-require-id/
+    description: The `@id` property should be present.
+    message: '@id should be present'
+    severity: info
+    given: $
+    then:
+      field: '@id'
+      function: truthy
+    tags:
+    - format:json-ld
+    - spec:document
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a JSON-LD document to satisfy the Spotlight API governance rule ''document-require-id'' (Document
+      Require ID). Requirement: The `@id` property should be present. To fix: Ensure `@id` is present and non-empty at each
+      matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid JSON-LD. Return only the complete corrected document, with no
+      commentary.'
+  json-ld-document-require-type:
+    title: Document Require Type
+    reference: https://spotlight-rules.com/spec/rules/json-ld/document-require-type/
+    description: The `@type` property should be present.
+    message: '@type should be present'
+    severity: info
+    given: $
+    then:
+      field: '@type'
+      function: truthy
+    tags:
+    - format:json-ld
+    - spec:document
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a JSON-LD document to satisfy the Spotlight API governance rule ''document-require-type'' (Document
+      Require Type). Requirement: The `@type` property should be present. To fix: Ensure `@type` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid JSON-LD. Return only the complete corrected document,
+      with no commentary.'
+  mcp-capability-mcp-capabilities-not-empty:
+    title: Capability MCP Capabilities Not Empty
+    reference: https://spotlight-rules.com/spec/rules/mcp/capability-mcp-capabilities-not-empty/
+    description: capabilities should declare at least one of tools, resources, or prompts.
+    message: capabilities should not be empty.
+    given: $.capabilities
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          minProperties: 1
+    tags:
+    - format:mcp
+    - spec:capabilities
+    - experience:discoverability
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''capability-mcp-capabilities-not-empty''
+      (Capability MCP Capabilities Not Empty). Requirement: capabilities should declare at least one of tools, resources,
+      or prompts. To fix: Adjust the targeted value so it conforms to the schema this rule requires. This rule is evaluated
+      at the JSONPath `$.capabilities` — inspect every location it matches and correct only what violates the rule. Make the
+      smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid MCP. Return only the complete corrected document, with no commentary.'
+  mcp-capability-require-prompts:
+    title: Capability Require Prompts
+    reference: https://spotlight-rules.com/spec/rules/mcp/capability-require-prompts/
+    description: The `prompts` property of each capability should be present.
+    message: prompts should be present
+    severity: info
+    given: $.capabilities
+    then:
+      field: prompts
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:capabilities
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''capability-require-prompts'' (Capability
+      Require Prompts). Requirement: The `prompts` property of each capability should be present. To fix: Ensure `prompts`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.capabilities` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid MCP. Return
+      only the complete corrected document, with no commentary.'
+  mcp-capability-require-resources:
+    title: Capability Require Resources
+    reference: https://spotlight-rules.com/spec/rules/mcp/capability-require-resources/
+    description: The `resources` property of each capability should be present.
+    message: resources should be present
+    severity: info
+    given: $.capabilities
+    then:
+      field: resources
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:capabilities
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''capability-require-resources''
+      (Capability Require Resources). Requirement: The `resources` property of each capability should be present. To fix:
+      Ensure `resources` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.capabilities`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid MCP.
+      Return only the complete corrected document, with no commentary.'
+  mcp-capability-require-tools:
+    title: Capability Require Tools
+    reference: https://spotlight-rules.com/spec/rules/mcp/capability-require-tools/
+    description: The `tools` property of each capability should be present.
+    message: tools should be present
+    severity: info
+    given: $.capabilities
+    then:
+      field: tools
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:capabilities
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''capability-require-tools'' (Capability
+      Require Tools). Requirement: The `tools` property of each capability should be present. To fix: Ensure `tools` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.capabilities` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid MCP. Return only the complete corrected
+      document, with no commentary.'
+  mcp-document-mcp-description-meaningful:
+    title: Document MCP Description Meaningful
+    reference: https://spotlight-rules.com/spec/rules/mcp/document-mcp-description-meaningful/
+    description: The server description should be specific (at least 40 characters) so agents can decide when to use it.
+    message: MCP description should be at least 40 characters.
+    given: $.description
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: string
+          minLength: 40
+    tags:
+    - format:mcp
+    - spec:document
+    - experience:discoverability
+    - experience:documentation
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''document-mcp-description-meaningful''
+      (Document MCP Description Meaningful). Requirement: The server description should be specific (at least 40 characters)
+      so agents can decide when to use it. To fix: Adjust the targeted value so it conforms to the schema this rule requires.
+      This rule is evaluated at the JSONPath `$.description` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid MCP. Return only the complete corrected document, with no commentary.'
+  mcp-document-require-capabilities:
+    title: Document Require Capabilities
+    reference: https://spotlight-rules.com/spec/rules/mcp/document-require-capabilities/
+    description: The `capabilities` property should be present.
+    message: capabilities should be present
+    severity: info
+    given: $
+    then:
+      field: capabilities
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:servers
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''document-require-capabilities''
+      (Document Require Capabilities). Requirement: The `capabilities` property should be present. To fix: Ensure `capabilities`
+      is present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid MCP. Return only the complete corrected
+      document, with no commentary.'
+  mcp-document-require-name:
+    title: Document Require Name
+    reference: https://spotlight-rules.com/spec/rules/mcp/document-require-name/
+    description: The `name` property should be present.
+    message: name should be present
+    severity: info
+    given: $
+    then:
+      field: name
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:servers
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''document-require-name'' (Document
+      Require Name). Requirement: The `name` property should be present. To fix: Ensure `name` is present and non-empty at
+      each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid MCP. Return only the complete corrected document, with no commentary.'
+  agent-skill-skill-require-allowed-tools:
+    title: Skill Require Allowed Tools
+    reference: https://spotlight-rules.com/spec/rules/agent-skill/skill-require-allowed-tools/
+    description: agent-skill document should declare a `allowed-tools` property.
+    message: Missing `allowed-tools`.
+    given: $.frontmatter
+    severity: info
+    then:
+      field: allowed-tools
+      function: truthy
+    tags:
+    - format:agent-skill
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an Agent Skill document to satisfy the Spotlight API governance rule ''skill-require-allowed-tools''
+      (Require Allowed Tools). Requirement: agent-skill document should declare a `allowed-tools` property. To fix: Ensure
+      `allowed-tools` is present and non-empty at each matching location. Guidance: Missing `allowed-tools`. This rule is
+      evaluated at the JSONPath `$.frontmatter` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid Agent Skill. Return only the complete corrected document, with no commentary.'
+  agent-skill-skill-require-metadata:
+    title: Skill Require Metadata
+    reference: https://spotlight-rules.com/spec/rules/agent-skill/skill-require-metadata/
+    description: agent-skill document should declare a `metadata` property.
+    message: Missing `metadata`.
+    given: $.frontmatter
+    severity: info
+    then:
+      field: metadata
+      function: truthy
+    tags:
+    - format:agent-skill
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an Agent Skill document to satisfy the Spotlight API governance rule ''skill-require-metadata''
+      (Require Metadata). Requirement: agent-skill document should declare a `metadata` property. To fix: Ensure `metadata`
+      is present and non-empty at each matching location. Guidance: Missing `metadata`. This rule is evaluated at the JSONPath
+      `$.frontmatter` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid Agent Skill. Return only the complete corrected document, with no commentary.'
+  agent-skill-skill-require-version:
+    title: Skill Require Version
+    reference: https://spotlight-rules.com/spec/rules/agent-skill/skill-require-version/
+    description: agent-skill document should declare a `version` property.
+    message: Missing `version`.
+    given: $.frontmatter
+    severity: info
+    then:
+      field: version
+      function: truthy
+    tags:
+    - format:agent-skill
+    - spec:document
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an Agent Skill document to satisfy the Spotlight API governance rule ''skill-require-version''
+      (Require Version). Requirement: agent-skill document should declare a `version` property. To fix: Ensure `version` is
+      present and non-empty at each matching location. Guidance: Missing `version`. This rule is evaluated at the JSONPath
+      `$.frontmatter` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid Agent Skill. Return only the complete corrected document, with no commentary.'
+  agent-skill-skill-description:
+    title: Skill Description
+    reference: https://spotlight-rules.com/spec/rules/agent-skill/skill-description/
+    description: A skill must declare a description — it is the primary signal an agent uses to decide when to invoke the
+      skill.
+    message: A skill must declare a description.
+    severity: info
+    given: $.frontmatter
+    then:
+      field: description
+      function: truthy
+    tags:
+    - format:agent-skill
+    - spec:frontmatter
+    - experience:discoverability
+    prompt: 'You are editing an Agent Skill document to satisfy the Spotlight API governance rule ''skill-description'' (Skill
+      Description). Requirement: A skill must declare a description — it is the primary signal an agent uses to decide when
+      to invoke the skill. To fix: Ensure `description` is present and non-empty at each matching location. This rule is evaluated
+      at the JSONPath `$.frontmatter` — inspect every location it matches and correct only what violates the rule. Make the
+      smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid Agent Skill. Return only the complete corrected document, with no commentary.'
+  agent-skill-skill-description-length:
+    title: Skill Description Length
+    reference: https://spotlight-rules.com/spec/rules/agent-skill/skill-description-length/
+    description: Skill descriptions should be specific enough to drive good selection — at least 40 characters of meaningful
+      intent.
+    message: Skill description should be at least 40 characters.
+    severity: info
+    given: $.frontmatter.description
+    then:
+      function: length
+      functionOptions:
+        min: 40
+        max: 1024
+    tags:
+    - format:agent-skill
+    - spec:frontmatter
+    - experience:discoverability
+    - experience:usability
+    prompt: 'You are editing an Agent Skill document to satisfy the Spotlight API governance rule ''skill-description-length''
+      (Skill Description Length). Requirement: Skill descriptions should be specific enough to drive good selection — at least
+      40 characters of meaningful intent. To fix: Ensure the length of the targeted value is at least 40 and at most 1024.
+      This rule is evaluated at the JSONPath `$.frontmatter.description` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid Agent Skill. Return only the complete corrected document, with
+      no commentary.'
+  agent-skill-skill-name:
+    title: Skill Name
+    reference: https://spotlight-rules.com/spec/rules/agent-skill/skill-name/
+    description: A skill must declare a name in its frontmatter — it identifies the skill to agents and tooling.
+    message: A skill must declare a name.
+    severity: info
+    given: $.frontmatter
+    then:
+      field: name
+      function: truthy
+    tags:
+    - format:agent-skill
+    - spec:frontmatter
+    - experience:governance
+    - experience:discoverability
+    prompt: 'You are editing an Agent Skill document to satisfy the Spotlight API governance rule ''skill-name'' (Skill Name).
+      Requirement: A skill must declare a name in its frontmatter — it identifies the skill to agents and tooling. To fix:
+      Ensure `name` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.frontmatter`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid Agent
+      Skill. Return only the complete corrected document, with no commentary.'

@@ -1,0 +1,2970 @@
+documentationUrl: https://spotlight-rules.com/spec/
+functions:
+- digitalocean-ensurePropertiesExample
+- microcks-aas-verify-mocks
+- microcks-oas-verify-mocks
+- trimble-check-for-query-parameter-in-every-path
+functionsDir: ./functions
+rules:
+  openapi-channel-parameter-require-examples:
+    title: Channel Parameter Require Examples
+    reference: https://spotlight-rules.com/spec/rules/openapi/channel-parameter-require-examples/
+    description: Parameter must have examples.
+    message: Parameter must have examples
+    severity: info
+    given: $.channels.*.parameters.*.schema
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - aas2
+    tags:
+    - format:openapi
+    - spec:channels
+    - spec:parameters
+    - spec:schemas
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''channel-parameter-require-examples''
+      (Channel Parameter Require Examples). Requirement: Parameter must have examples. To fix: Ensure `examples` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.channels.*.parameters.*.schema` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-component-message-require-examples:
+    title: Component Message Require Examples
+    reference: https://spotlight-rules.com/spec/rules/openapi/component-message-require-examples/
+    description: Message must have examples.
+    message: Message must have examples
+    severity: info
+    given: $.components.messages.*
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - aas3
+    tags:
+    - format:openapi
+    - spec:messages
+    - spec:components
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''component-message-require-examples''
+      (Component Message Require Examples). Requirement: Message must have examples. To fix: Ensure `examples` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.components.messages.*` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-document-require-realistic-examples:
+    title: Document Require Realistic Examples
+    reference: https://spotlight-rules.com/spec/rules/openapi/document-require-realistic-examples/
+    description: API design SHOULD include real-like examples for request and response definitions.
+    message: The {{property}} SHOULD include a real-like example. Add realistic examples to improve API usability.
+    severity: info
+    given: $..[?(@.example || @.examples)]
+    then:
+      field: example
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:examples
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''document-require-realistic-examples''
+      (Document Require Realistic Examples). Requirement: API design SHOULD include real-like examples for request and response
+      definitions. To fix: Ensure `example` is present and non-empty at each matching location. This rule is evaluated at
+      the JSONPath `$..[?(@.example || @.examples)]` — inspect every location it matches and correct only what violates the
+      rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-document-require-server-defined:
+    title: Document Require Server Defined
+    reference: https://spotlight-rules.com/spec/rules/openapi/document-require-server-defined/
+    description: Every OpenAPI should define at least one server URL. Analysis shows 97.2% of APIs define servers, providing
+      consumers with the base URL needed to make requests.
+    message: Servers MUST Be Defined
+    severity: info
+    given: $
+    then:
+      field: servers
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''document-require-server-defined''
+      (Document Require Server Defined). Requirement: Every OpenAPI should define at least one server URL. Analysis shows
+      97.2% of APIs define servers, providing consumers with the base URL needed to make requests. To fix: Ensure `servers`
+      is present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-header-require-examples:
+    title: Header Require Examples
+    reference: https://spotlight-rules.com/spec/rules/openapi/header-require-examples/
+    description: Headers must include examples.
+    message: '{{description}}; missing {{property}}'
+    severity: info
+    given: $..headers.*
+    then:
+      function: digitalocean-ensurePropertiesExample
+    tags:
+    - format:openapi
+    - spec:headers
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''header-require-examples''
+      (Header Require Examples). Requirement: Headers must include examples. This rule is evaluated at the JSONPath `$..headers.*`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-limit-nested-sub-resources:
+    title: Limit Nested Sub Resources
+    reference: https://spotlight-rules.com/spec/rules/openapi/limit-nested-sub-resources/
+    description: The hierarchy of nested resources SHOULD NOT contain more than 8 resource names in the path.
+    message: The hierarchy of nested resources SHOULD NOT contain more than 8 resource names in the path.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^([^/]*/){9,}
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:usability
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''limit-nested-sub-resources''
+      (Limit Nested Sub Resources). Requirement: The hierarchy of nested resources SHOULD NOT contain more than 8 resource
+      names in the path. To fix: Ensure the targeted value does NOT match the regular expression `^([^/]*/){9,}`; rename or
+      rewrite any value that does. This rule is evaluated at the JSONPath `$.paths.*~` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-limit-path-length:
+    title: Limit Path Length
+    reference: https://spotlight-rules.com/spec/rules/openapi/limit-path-length/
+    description: APIs SHOULD NOT expand their total URL length beyond a few hundred characters.
+    message: APIs SHOULD NOT expand their total URL length beyond a few hundred characters.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: length
+      functionOptions:
+        max: 100
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:usability
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''limit-path-length'' (Limit
+      Path Length). Requirement: APIs SHOULD NOT expand their total URL length beyond a few hundred characters. To fix: Ensure
+      the length of the targeted value is at most 100. This rule is evaluated at the JSONPath `$.paths.*~` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-limit-path-parameter:
+    title: Limit Path Parameter
+    reference: https://spotlight-rules.com/spec/rules/openapi/limit-path-parameter/
+    description: The URL path should not contain more than 3 dynamic path parameters.
+    message: The URL path should not contain more than 3 dynamic path parameters.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(.*{{1}.*){4,}
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:usability
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''limit-path-parameter'' (Limit
+      Path Parameter). Requirement: The URL path should not contain more than 3 dynamic path parameters. To fix: Ensure the
+      targeted value does NOT match the regular expression `^(.*{{1}.*){4,}`; rename or rewrite any value that does. This
+      rule is evaluated at the JSONPath `$.paths.*~` — inspect every location it matches and correct only what violates the
+      rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-message-examples-form-complete-mocks:
+    title: Message Examples Form Complete Mocks
+    reference: https://spotlight-rules.com/spec/rules/openapi/message-examples-form-complete-mocks/
+    description: Message example must match params examples to form full mocks.
+    message: '{{error}}'
+    severity: info
+    given: $.channels.*
+    then:
+      function: microcks-aas-verify-mocks
+    formats:
+    - aas2
+    tags:
+    - format:openapi
+    - spec:channels
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''message-examples-form-complete-mocks''
+      (Message Examples Form Complete Mocks). Requirement: Message example must match params examples to form full mocks.
+      This rule is evaluated at the JSONPath `$.channels.*` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-message-require-examples:
+    title: Message Require Examples
+    reference: https://spotlight-rules.com/spec/rules/openapi/message-require-examples/
+    description: Message must have examples.
+    message: Message must have examples
+    severity: info
+    given: $.channels.*.[publish,subscribe].message
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - aas2
+    tags:
+    - format:openapi
+    - spec:channels
+    - spec:messages
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''message-require-examples''
+      (Message Require Examples). Requirement: Message must have examples. To fix: Ensure `examples` is present and non-empty
+      at each matching location. This rule is evaluated at the JSONPath `$.channels.*.[publish,subscribe].message` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-operation-collection-support-filtering:
+    title: Operation Collection Support Filtering
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-collection-support-filtering/
+    description: Collection GET operations should support filtering via a filter query parameter (e.g. filter or filter[field]).
+    message: Collection should support a filter query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^filter
+              in:
+                const: query
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:pagination
+    - experience:usability
+    - experience:discoverability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-collection-support-filtering''
+      (Operation Collection Support Filtering). Requirement: Collection GET operations should support filtering via a filter
+      query parameter (e.g. filter or filter[field]). To fix: Adjust `parameters` so it conforms to the schema this rule requires.
+      This rule is evaluated at the JSONPath `$.paths[*].get` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-operation-collection-support-sorting:
+    title: Operation Collection Support Sorting
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-collection-support-sorting/
+    description: Collection GET operations should support sorting via a sort or order query parameter.
+    message: Collection should support a sort/order query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^(sort|order)
+              in:
+                const: query
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:pagination
+    - experience:usability
+    - experience:discoverability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-collection-support-sorting''
+      (Operation Collection Support Sorting). Requirement: Collection GET operations should support sorting via a sort or
+      order query parameter. To fix: Adjust `parameters` so it conforms to the schema this rule requires. This rule is evaluated
+      at the JSONPath `$.paths[*].get` — inspect every location it matches and correct only what violates the rule. Make the
+      smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-operation-collection-support-sparse-fieldsets:
+    title: Operation Collection Support Sparse Fieldsets
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-collection-support-sparse-fieldsets/
+    description: GET operations should support sparse fieldsets via a fields query parameter so clients can request only the
+      fields they need.
+    message: Operation should support a fields (sparse fieldset) query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^fields
+              in:
+                const: query
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:pagination
+    - experience:usability
+    - experience:reliability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-collection-support-sparse-fieldsets''
+      (Operation Collection Support Sparse Fieldsets). Requirement: GET operations should support sparse fieldsets via a fields
+      query parameter so clients can request only the fields they need. To fix: Adjust `parameters` so it conforms to the
+      schema this rule requires. This rule is evaluated at the JSONPath `$.paths[*].get` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-operation-examples-form-complete-mocks:
+    title: Operation Examples Form Complete Mocks
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-examples-form-complete-mocks/
+    description: Response example must match required params examples to form full mocks.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*.*
+    then:
+      function: microcks-oas-verify-mocks
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-examples-form-complete-mocks''
+      (Operation Examples Form Complete Mocks). Requirement: Response example must match required params examples to form
+      full mocks. This rule is evaluated at the JSONPath `$.paths.*.*` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-operation-get-support-if-modified-since:
+    title: Operation Get Support If Modified Since
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-get-support-if-modified-since/
+    description: GET operations should accept an If-Modified-Since request header to enable date-based conditional requests.
+    message: Operation should accept a `If-Modified-Since` request header.
+    given: $.paths[*][get]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                const: If-Modified-Since
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:conditional-requests
+    - experience:reliability
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-get-support-if-modified-since''
+      (Operation Get Support If Modified Since). Requirement: GET operations should accept an If-Modified-Since request header
+      to enable date-based conditional requests. To fix: Adjust `parameters` so it conforms to the schema this rule requires.
+      Guidance: Operation should accept a `If-Modified-Since` request header. This rule is evaluated at the JSONPath `$.paths[*][get]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-operation-get-support-if-none-match:
+    title: Operation Get Support If None Match
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-get-support-if-none-match/
+    description: GET operations should accept an If-None-Match request header to enable ETag-based conditional requests (304
+      responses).
+    message: Operation should accept a `If-None-Match` request header.
+    given: $.paths[*][get]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                const: If-None-Match
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:conditional-requests
+    - experience:reliability
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-get-support-if-none-match''
+      (Operation Get Support If None Match). Requirement: GET operations should accept an If-None-Match request header to
+      enable ETag-based conditional requests (304 responses). To fix: Adjust `parameters` so it conforms to the schema this
+      rule requires. Guidance: Operation should accept a `If-None-Match` request header. This rule is evaluated at the JSONPath
+      `$.paths[*][get]` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-operation-post-not-for-retrieval:
+    title: Operation Post Not For Retrieval
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-post-not-for-retrieval/
+    description: POST requests SHOULD NOT be used for retrieving information. Use GET instead.
+    message: POST requests SHOULD NOT be used for retrieving information.
+    severity: info
+    given: $.paths[*].post
+    then:
+      field: summary
+      function: pattern
+      functionOptions:
+        notMatch: (retrieve|fetch|get|read)
+      message: '{{description}}: {{error}}'
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-post-not-for-retrieval''
+      (Operation Post Not For Retrieval). Requirement: POST requests SHOULD NOT be used for retrieving information. Use GET
+      instead. To fix: Ensure `summary` does NOT match the regular expression `(retrieve|fetch|get|read)`; rename or rewrite
+      any value that does. This rule is evaluated at the JSONPath `$.paths[*].post` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-operation-put-require-request-body:
+    title: Operation Put Require Request Body
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-put-require-request-body/
+    description: PUT requests MUST have a request body.
+    message: PUT requests MUST have a request body.
+    severity: info
+    given: $.paths[*].put
+    then:
+      field: requestBody
+      function: truthy
+      message: '{{description}}: {{error}}'
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-put-require-request-body''
+      (Operation Put Require Request Body). Requirement: PUT requests MUST have a request body. To fix: Ensure `requestBody`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*].put` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-operation-require-id:
+    title: Operation Require ID
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-require-id/
+    description: Every operation should have an operationId for SDK generation and documentation linking. Analysis shows operationId
+      styles across 8878 operations with camelCase dominant at 92%.
+    message: Operation MUST Have operationId
+    severity: info
+    given: $.paths.*[get,post,put,patch,delete]
+    then:
+      field: operationId
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-require-id'' (Operation
+      Require ID). Requirement: Every operation should have an operationId for SDK generation and documentation linking. Analysis
+      shows operationId styles across 8878 operations with camelCase dominant at 92%. To fix: Ensure `operationId` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths.*[get,post,put,patch,delete]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-operation-require-identifier:
+    title: Operation Require Identifier
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-require-identifier/
+    description: Operation identifiers provide a unique way to identify each individual API, which then used for SDK generation
+      and other automation.
+    message: Operation MUST Have Identifier
+    severity: info
+    given: $.paths.*[get,post,patch,put,delete]
+    then:
+    - field: operationId
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-require-identifier''
+      (Operation Require Identifier). Requirement: Operation identifiers provide a unique way to identify each individual
+      API, which then used for SDK generation and other automation. To fix: Ensure `operationId` is present and non-empty
+      at each matching location. This rule is evaluated at the JSONPath `$.paths.*[get,post,patch,put,delete]` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-operation-write-support-if-match:
+    title: Operation Write Support If Match
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-write-support-if-match/
+    description: Write operations should accept an If-Match request header to enable optimistic concurrency / conditional
+      writes.
+    message: Operation should accept a `If-Match` request header.
+    given: $.paths[*][put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                const: If-Match
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:conditional-requests
+    - experience:reliability
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-write-support-if-match''
+      (Operation Write Support If Match). Requirement: Write operations should accept an If-Match request header to enable
+      optimistic concurrency / conditional writes. To fix: Adjust `parameters` so it conforms to the schema this rule requires.
+      Guidance: Operation should accept a `If-Match` request header. This rule is evaluated at the JSONPath `$.paths[*][put,patch,delete]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-operation-write-support-if-unmodified-since:
+    title: Operation Write Support If Unmodified Since
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-write-support-if-unmodified-since/
+    description: Write operations should accept an If-Unmodified-Since request header to enable date-based optimistic concurrency
+      / conditional writes.
+    message: Operation should accept a `If-Unmodified-Since` request header.
+    given: $.paths[*][put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                const: If-Unmodified-Since
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:conditional-requests
+    - experience:reliability
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-write-support-if-unmodified-since''
+      (Operation Write Support If Unmodified Since). Requirement: Write operations should accept an If-Unmodified-Since request
+      header to enable date-based optimistic concurrency / conditional writes. To fix: Adjust `parameters` so it conforms
+      to the schema this rule requires. Guidance: Operation should accept a `If-Unmodified-Since` request header. This rule
+      is evaluated at the JSONPath `$.paths[*][put,patch,delete]` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-parameter-collection-limit-param-default:
+    title: Parameter Collection Limit Param Default
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-collection-limit-param-default/
+    description: The limit / page-size query parameter should declare a default so the page size is predictable when the caller
+      omits it.
+    message: limit parameter should declare a default.
+    given: $.paths[*].get.parameters[?(@ && @.in == 'query' && (@.name == 'limit' || @.name == 'per_page' || @.name == 'page_size'
+      || @.name == 'pageSize'))].schema
+    severity: info
+    then:
+      field: default
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:pagination
+    - experience:pagination
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-collection-limit-param-default''
+      (Parameter Collection Limit Param Default). Requirement: The limit / page-size query parameter should declare a default
+      so the page size is predictable when the caller omits it. To fix: Ensure `default` is present and non-empty at each
+      matching location. This rule is evaluated at the JSONPath `$.paths[*].get.parameters[?(@ && @.in == ''query'' && (@.name
+      == ''limit'' || @.name == ''per_page'' || @.name == ''page_size'' || @.name == ''pageSize''))].schema` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-parameter-filter-param-only-on-get:
+    title: Parameter Filter Param Only On Get
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-filter-param-only-on-get/
+    description: Only GET-based endpoints SHOULD have have the query parameter 'filter'.
+    message: Only GET-based endpoints SHOULD have have the query parameter 'filter'.
+    severity: info
+    given: $.paths.*[?(@property!='get')].parameters.[?(@.in=='query' && @.name=='filter')].name
+    then:
+      function: falsy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:parameters
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-filter-param-only-on-get''
+      (Parameter Filter Param Only On Get). Requirement: Only GET-based endpoints SHOULD have have the query parameter ''filter''.
+      To fix: Ensure the targeted value is absent or empty (falsy) at each matching location. This rule is evaluated at the
+      JSONPath `$.paths.*[?(@property!=''get'')].parameters.[?(@.in==''query'' && @.name==''filter'')].name` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-parameter-no-hybrid-and-root-filtering:
+    title: Parameter No Hybrid And Root Filtering
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-no-hybrid-and-root-filtering/
+    description: Hybrid filtering MAY be offered on multiple attributes, but MUST never exist if a root "filter" query parameter
+      is present.
+    message: Hybrid filtering MAY be offered on multiple attributes, but MUST never exist if a root "filter" query parameter
+      is present.
+    severity: info
+    given: $.paths..get.parameters^
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            parameters:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  in:
+                    type: string
+          allOf:
+          - if:
+              properties:
+                parameters:
+                  type: array
+                  contains:
+                    type: object
+                    properties:
+                      name:
+                        const: filter
+            then:
+              not:
+                properties:
+                  parameters:
+                    type: array
+                    contains:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          pattern: \w+Filter
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:parameters
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-no-hybrid-and-root-filtering''
+      (Parameter No Hybrid And Root Filtering). Requirement: Hybrid filtering MAY be offered on multiple attributes, but MUST
+      never exist if a root "filter" query parameter is present. To fix: Adjust the targeted value so it conforms to the schema
+      this rule requires. This rule is evaluated at the JSONPath `$.paths..get.parameters^` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-parameter-no-id-query:
+    title: Parameter No ID Query
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-no-id-query/
+    description: Resource identifier filtering is not allowed as a query parameter. Use the resource identifier in the URL
+      path.
+    message: Resource identifier filtering is not allowed as a query parameter.
+    severity: info
+    given: $.paths..get.parameters.[?(@.in=='query' && @.name=='id')]
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        notMatch: ^id$
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:parameters
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-no-id-query'' (Parameter
+      No ID Query). Requirement: Resource identifier filtering is not allowed as a query parameter. Use the resource identifier
+      in the URL path. To fix: Ensure `name` does NOT match the regular expression `^id$`; rename or rewrite any value that
+      does. This rule is evaluated at the JSONPath `$.paths..get.parameters.[?(@.in==''query'' && @.name==''id'')]` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-parameter-optional-include-examples:
+    title: Parameter Optional Include Examples
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-optional-include-examples/
+    description: Optional param should have examples.
+    message: Optional param should have examples
+    severity: info
+    given: $..parameters[?(@ && @.required != true)]
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:parameters
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-optional-include-examples''
+      (Parameter Optional Include Examples). Requirement: Optional param should have examples. To fix: Ensure `examples` is
+      present and non-empty at each matching location. This rule is evaluated at the JSONPath `$..parameters[?(@ && @.required
+      != true)]` — inspect every location it matches and correct only what violates the rule. Make the smallest change that
+      satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-parameter-query-must-be-optional:
+    title: Parameter Query Must Be Optional
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-query-must-be-optional/
+    description: Query parameters MUST be optional.
+    message: Query parameters MUST be optional.
+    severity: info
+    given: $.paths.*.*.parameters[?(@.in=='query')].required
+    then:
+      function: falsy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:parameters
+    - experience:usability
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-query-must-be-optional''
+      (Parameter Query Must Be Optional). Requirement: Query parameters MUST be optional. To fix: Ensure the targeted value
+      is absent or empty (falsy) at each matching location. This rule is evaluated at the JSONPath `$.paths.*.*.parameters[?(@.in==''query'')].required`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-parameter-require-examples:
+    title: Parameter Require Examples
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-require-examples/
+    description: Parameters must include examples.
+    message: '{{description}}; missing {{property}}'
+    severity: info
+    given: $..parameters.*
+    then:
+      function: xor
+      functionOptions:
+        properties:
+        - example
+        - examples
+    tags:
+    - format:openapi
+    - spec:parameters
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-require-examples''
+      (Parameter Require Examples). Requirement: Parameters must include examples. To fix: Include exactly one of: example,
+      examples. This rule is evaluated at the JSONPath `$..parameters.*` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-parameter-required-require-examples:
+    title: Parameter Required Require Examples
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-required-require-examples/
+    description: Required param must have examples.
+    message: Required param must have examples
+    severity: info
+    given: $..parameters[?(@ && @.required == true)]
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:parameters
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-required-require-examples''
+      (Parameter Required Require Examples). Requirement: Required param must have examples. To fix: Ensure `examples` is
+      present and non-empty at each matching location. This rule is evaluated at the JSONPath `$..parameters[?(@ && @.required
+      == true)]` — inspect every location it matches and correct only what violates the rule. Make the smallest change that
+      satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-parameter-sort-param-only-on-get:
+    title: Parameter Sort Param Only On Get
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-sort-param-only-on-get/
+    description: Non-GET endpoints MUST NOT have sorting query parameters. Parameter names such as sort, sorting, orderBy,
+      etc.
+    message: Non-GET endpoints MUST NOT have sorting query parameters.
+    severity: info
+    given: $.paths.*[?(@property!='get')].parameters.[?(@.in=='query')]
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        notMatch: ^sort|sorting|sortBy|order|ordering|orderBy$
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:parameters
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-sort-param-only-on-get''
+      (Parameter Sort Param Only On Get). Requirement: Non-GET endpoints MUST NOT have sorting query parameters. Parameter
+      names such as sort, sorting, orderBy, etc. To fix: Ensure `name` does NOT match the regular expression `^sort|sorting|sortBy|order|ordering|orderBy$`;
+      rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.paths.*[?(@property!=''get'')].parameters.[?(@.in==''query'')]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-path-cors-support-options-preflight:
+    title: Path CORS Support Options Preflight
+    reference: https://spotlight-rules.com/spec/rules/openapi/path-cors-support-options-preflight/
+    description: Resources should expose an OPTIONS operation so browsers can complete a CORS preflight. (Many teams handle
+      preflight at the gateway and treat CORS as operational — enable this only if you document CORS in the spec.).
+    message: Path should expose an OPTIONS operation for CORS preflight.
+    given: $.paths[*]
+    severity: info
+    then:
+      field: options
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - topic:cors
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''path-cors-support-options-preflight''
+      (Path CORS Support Options Preflight). Requirement: Resources should expose an OPTIONS operation so browsers can complete
+      a CORS preflight. (Many teams handle preflight at the gateway and treat CORS as operational — enable this only if you
+      document CORS in the spec.). To fix: Ensure `options` is present and non-empty at each matching location. This rule
+      is evaluated at the JSONPath `$.paths[*]` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-path-max-nesting-depth:
+    title: Path Max Nesting Depth
+    reference: https://spotlight-rules.com/spec/rules/openapi/path-max-nesting-depth/
+    description: API paths should not exceed 4 levels of nesting depth. Analysis of 6627 paths across 773 specs shows an average
+      depth of 3.04 segments, with deeper paths indicating overly complex resource hierarchies.
+    message: Path Nesting MUST NOT Exceed 4 Levels
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(/[^/]+){5,}
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''path-max-nesting-depth'' (Path
+      Max Nesting Depth). Requirement: API paths should not exceed 4 levels of nesting depth. Analysis of 6627 paths across
+      773 specs shows an average depth of 3.04 segments, with deeper paths indicating overly complex resource hierarchies.
+      To fix: Ensure the targeted value does NOT match the regular expression `^(/[^/]+){5,}`; rename or rewrite any value
+      that does. This rule is evaluated at the JSONPath `$.paths` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-path-parameter-not-empty:
+    title: Path Parameter Not Empty
+    reference: https://spotlight-rules.com/spec/rules/openapi/path-parameter-not-empty/
+    description: Path parameter declarations must not be empty ex. `/api/{}` is invalid.
+    message: Path parameter declarations must not be empty ex.
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: '{}'
+    formats:
+    - oas3
+    - oas3_1
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''path-parameter-not-empty''
+      (Path Parameter Not Empty). Requirement: Path parameter declarations must not be empty ex. `/api/{}` is invalid. To
+      fix: Ensure the targeted value does NOT match the regular expression `{}`; rename or rewrite any value that does. This
+      rule is evaluated at the JSONPath `$.paths` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-path-require-query-parameter:
+    title: Path Require Query Parameter
+    reference: https://spotlight-rules.com/spec/rules/openapi/path-require-query-parameter/
+    description: Check if the given resource path has queryparameter.
+    message: '{{error}}'
+    severity: info
+    given: $.paths[*]~
+    then:
+      function: trimble-check-for-query-parameter-in-every-path
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:usability
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''path-require-query-parameter''
+      (Path Require Query Parameter). Requirement: Check if the given resource path has queryparameter. This rule is evaluated
+      at the JSONPath `$.paths` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-request-body-must-use-json-content-type:
+    title: Request Body Must Use JSON Content Type
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-body-must-use-json-content-type/
+    description: Request bodies should use application/json as the primary content type for consistency across API operations
+      and client implementations.
+    message: Request Body MUST Use application/json Content Type
+    severity: info
+    given: $.paths.*[post,put,patch].requestBody.content
+    then:
+      field: application/json
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:request-body
+    - spec:media-types
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-body-must-use-json-content-type''
+      (Request Body Must Use JSON Content Type). Requirement: Request bodies should use application/json as the primary content
+      type for consistency across API operations and client implementations. To fix: Ensure `application/json` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths.*[post,put,patch].requestBody.content`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-request-content-require-examples:
+    title: Request Content Require Examples
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-content-require-examples/
+    description: Request with content must have examples.
+    message: Request with content must have examples
+    severity: info
+    given: $.paths..requestBody..content.*
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:request-body
+    - spec:media-types
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-content-require-examples''
+      (Request Content Require Examples). Requirement: Request with content must have examples. To fix: Ensure `examples`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths..requestBody..content.*`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-request-delete-no-body:
+    title: Request Delete No Body
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-delete-no-body/
+    description: DELETE requests MUST NOT have a request body.
+    message: DELETE requests MUST NOT have a request body.
+    severity: info
+    given: $.paths[*].delete.requestBody
+    then:
+      function: falsy
+      message: '{{description}}: {{error}}'
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:request-body
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-delete-no-body'' (Request
+      Delete No Body). Requirement: DELETE requests MUST NOT have a request body. To fix: Ensure the targeted value is absent
+      or empty (falsy) at each matching location. This rule is evaluated at the JSONPath `$.paths[*].delete.requestBody` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-request-get-no-body:
+    title: Request Get No Body
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-get-no-body/
+    description: GET requests MUST NOT have a request body.
+    message: GET requests MUST NOT have a request body.
+    severity: info
+    given: $.paths[*].get.requestBody
+    then:
+      function: falsy
+      message: '{{description}}: {{error}}'
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:request-body
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-get-no-body'' (Request
+      Get No Body). Requirement: GET requests MUST NOT have a request body. To fix: Ensure the targeted value is absent or
+      empty (falsy) at each matching location. This rule is evaluated at the JSONPath `$.paths[*].get.requestBody` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-request-support-accept-encoding:
+    title: Request Support Accept Encoding
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-accept-encoding/
+    description: Operations should accept an Accept-Encoding request header so clients can negotiate a compressed (e.g. gzip)
+      response.
+    message: Operation should accept an Accept-Encoding header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: Accept-Encoding
+              in:
+                const: header
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:content-negotiation
+    - experience:usability
+    - experience:reliability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-accept-encoding''
+      (Request Support Accept Encoding). Requirement: Operations should accept an Accept-Encoding request header so clients
+      can negotiate a compressed (e.g. gzip) response. To fix: Adjust `parameters` so it conforms to the schema this rule
+      requires. This rule is evaluated at the JSONPath `$.paths[*][get,post,put,patch,delete]` — inspect every location it
+      matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-request-support-accept-language:
+    title: Request Support Accept Language
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-accept-language/
+    description: Operations should accept an Accept-Language request header so clients can negotiate a localized response
+      (i18n).
+    message: Operation should accept an Accept-Language header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: Accept-Language
+              in:
+                const: header
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:content-negotiation
+    - experience:usability
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-accept-language''
+      (Request Support Accept Language). Requirement: Operations should accept an Accept-Language request header so clients
+      can negotiate a localized response (i18n). To fix: Adjust `parameters` so it conforms to the schema this rule requires.
+      This rule is evaluated at the JSONPath `$.paths[*][get,post,put,patch,delete]` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-request-support-baggage:
+    title: Request Support Baggage
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-baggage/
+    description: Operations should accept a baggage request header (W3C Baggage / OpenTelemetry) so application-defined context
+      propagates across services.
+    message: Operation should accept a `baggage` request header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: baggage
+              in:
+                const: header
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:tracing
+    - experience:reliability
+    - experience:usability
+    - experience:observability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-baggage''
+      (Request Support Baggage). Requirement: Operations should accept a baggage request header (W3C Baggage / OpenTelemetry)
+      so application-defined context propagates across services. To fix: Adjust `parameters` so it conforms to the schema
+      this rule requires. Guidance: Operation should accept a `baggage` request header. This rule is evaluated at the JSONPath
+      `$.paths[*][get,post,put,patch,delete]` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-request-support-correlation-id:
+    title: Request Support Correlation ID
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-correlation-id/
+    description: Operations should accept a correlation / request ID request header (e.g. Correlation-Id or X-Request-Id)
+      so a caller-supplied id can be traced end to end.
+    message: Operation should accept a `Correlation-Id` request header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^([Xx]-)?([Cc]orrelation|[Rr]equest)-[Ii][Dd]$
+              in:
+                const: header
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:tracing
+    - experience:reliability
+    - experience:usability
+    - experience:observability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-correlation-id''
+      (Request Support Correlation ID). Requirement: Operations should accept a correlation / request ID request header (e.g.
+      Correlation-Id or X-Request-Id) so a caller-supplied id can be traced end to end. To fix: Adjust `parameters` so it
+      conforms to the schema this rule requires. Guidance: Operation should accept a `Correlation-Id` request header. This
+      rule is evaluated at the JSONPath `$.paths[*][get,post,put,patch,delete]` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-request-support-form-urlencoded-media-type:
+    title: Request Support Form Urlencoded Media Type
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-form-urlencoded-media-type/
+    description: Every request MUST support `application/x-www-form-urlencoded` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('urlencoded') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:request-body
+    - spec:media-types
+    - topic:content-negotiation
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-form-urlencoded-media-type''
+      (Request Support Form Urlencoded Media Type). Requirement: Every request MUST support `application/x-www-form-urlencoded`
+      media type. To fix: Ensure the targeted value is absent or empty (falsy) at each matching location. This rule is evaluated
+      at the JSONPath `$.paths.[*].requestBody.content[?(@property.indexOf(''urlencoded'') === -1)]^` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-request-support-json-media-type:
+    title: Request Support JSON Media Type
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-json-media-type/
+    description: Every request MUST support `application/json` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('json') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:request-body
+    - spec:media-types
+    - topic:content-negotiation
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-json-media-type''
+      (Request Support JSON Media Type). Requirement: Every request MUST support `application/json` media type. To fix: Ensure
+      the targeted value is absent or empty (falsy) at each matching location. This rule is evaluated at the JSONPath `$.paths.[*].requestBody.content[?(@property.indexOf(''json'')
+      === -1)]^` — inspect every location it matches and correct only what violates the rule. Make the smallest change that
+      satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-request-support-json-media-type-2:
+    title: Request Support JSON Media Type 2
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-json-media-type-2/
+    description: Every request MUST support `application/json` media type.
+    message: Every request MUST support `application/json` media type.
+    severity: info
+    given: $.paths[*][*].requestBody.content
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            application/json: true
+          required:
+          - application/json
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:request-body
+    - spec:media-types
+    - topic:content-negotiation
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-json-media-type-2''
+      (Request Support JSON Media Type 2). Requirement: Every request MUST support `application/json` media type. To fix:
+      Adjust the targeted value so it conforms to the schema this rule requires. This rule is evaluated at the JSONPath `$.paths[*][*].requestBody.content`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-request-support-multipart-media-type:
+    title: Request Support Multipart Media Type
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-multipart-media-type/
+    description: Every request MUST support `multipart/form-data` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('multipart') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:request-body
+    - spec:media-types
+    - topic:content-negotiation
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-multipart-media-type''
+      (Request Support Multipart Media Type). Requirement: Every request MUST support `multipart/form-data` media type. To
+      fix: Ensure the targeted value is absent or empty (falsy) at each matching location. This rule is evaluated at the JSONPath
+      `$.paths.[*].requestBody.content[?(@property.indexOf(''multipart'') === -1)]^` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-request-support-text-plain-media-type:
+    title: Request Support Text Plain Media Type
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-text-plain-media-type/
+    description: Every request MUST support `text/plain` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('plain') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:request-body
+    - spec:media-types
+    - topic:content-negotiation
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-text-plain-media-type''
+      (Request Support Text Plain Media Type). Requirement: Every request MUST support `text/plain` media type. To fix: Ensure
+      the targeted value is absent or empty (falsy) at each matching location. This rule is evaluated at the JSONPath `$.paths.[*].requestBody.content[?(@property.indexOf(''plain'')
+      === -1)]^` — inspect every location it matches and correct only what violates the rule. Make the smallest change that
+      satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-request-support-tracestate:
+    title: Request Support Tracestate
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-tracestate/
+    description: Operations should accept a tracestate request header (W3C Trace Context) so vendor-specific trace state propagates
+      alongside traceparent.
+    message: Operation should accept a `tracestate` request header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: tracestate
+              in:
+                const: header
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:tracing
+    - experience:reliability
+    - experience:usability
+    - experience:observability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-tracestate''
+      (Request Support Tracestate). Requirement: Operations should accept a tracestate request header (W3C Trace Context)
+      so vendor-specific trace state propagates alongside traceparent. To fix: Adjust `parameters` so it conforms to the schema
+      this rule requires. Guidance: Operation should accept a `tracestate` request header. This rule is evaluated at the JSONPath
+      `$.paths[*][get,post,put,patch,delete]` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-request-support-xml-media-type:
+    title: Request Support XML Media Type
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-xml-media-type/
+    description: Every request MUST support `application/xml` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('xml') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:request-body
+    - spec:media-types
+    - topic:content-negotiation
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-xml-media-type''
+      (Request Support XML Media Type). Requirement: Every request MUST support `application/xml` media type. To fix: Ensure
+      the targeted value is absent or empty (falsy) at each matching location. This rule is evaluated at the JSONPath `$.paths.[*].requestBody.content[?(@property.indexOf(''xml'')
+      === -1)]^` — inspect every location it matches and correct only what violates the rule. Make the smallest change that
+      satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-202-location-header:
+    title: Response 202 Location Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-202-location-header/
+    description: 202 Accepted responses should document a Location header pointing at the status or result resource clients
+      can poll for the long-running operation.
+    message: 202 Accepted responses should document a Location header.
+    given: $.paths[*][*].responses['202'].headers
+    severity: info
+    then:
+      field: Location
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - experience:reliability
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-202-location-header''
+      (Response 202 Location Header). Requirement: 202 Accepted responses should document a Location header pointing at the
+      status or result resource clients can poll for the long-running operation. To fix: Ensure `Location` is present and
+      non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*][*].responses[''202''].headers`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-202-retry-after:
+    title: Response 202 Retry After
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-202-retry-after/
+    description: 202 Accepted responses should document a Retry-After header suggesting how long clients should wait before
+      polling the status resource.
+    message: 202 Accepted responses should document a Retry-After header.
+    given: $.paths[*][*].responses['202'].headers
+    severity: info
+    then:
+      field: Retry-After
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:rate-limiting
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-202-retry-after''
+      (Response 202 Retry After). Requirement: 202 Accepted responses should document a Retry-After header suggesting how
+      long clients should wait before polling the status resource. To fix: Ensure `Retry-After` is present and non-empty at
+      each matching location. This rule is evaluated at the JSONPath `$.paths[*][*].responses[''202''].headers` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-response-collection-support-paging:
+    title: Response Collection Support Paging
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-collection-support-paging/
+    description: Response bodies from collection endpoints SHOULD offer paging capability.
+    message: Response bodies from collection endpoints SHOULD offer paging capability.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}.*$/))].get.responses['200'].content.application/json.schema.properties
+    then:
+    - field: paging
+      function: truthy
+    - field: paging
+      function: pattern
+      functionOptions:
+        match: object
+    - field: paging.type
+      function: pattern
+      functionOptions:
+        match: object
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - spec:media-types
+    - spec:schemas
+    - topic:pagination
+    - experience:pagination
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-collection-support-paging''
+      (Response Collection Support Paging). Requirement: Response bodies from collection endpoints SHOULD offer paging capability.
+      To fix: Ensure `paging` is present and non-empty at each matching location. Also: Ensure `paging` matches the regular
+      expression `object`; rewrite any value that does not. Also: Ensure `paging.type` matches the regular expression `object`;
+      rewrite any value that does not. This rule is evaluated at the JSONPath `$.paths[?(!@property.match(/.*\/\{[^}]+\}.*$/))].get.responses[''200''].content.application/json.schema.properties`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-content-require-examples:
+    title: Response Content Require Examples
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-content-require-examples/
+    description: Response with content must have examples.
+    message: Response with content must have examples
+    severity: info
+    given: $.paths..responses..content.*
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - spec:media-types
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-content-require-examples''
+      (Response Content Require Examples). Requirement: Response with content must have examples. To fix: Ensure `examples`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths..responses..content.*`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-default-content-language-en-us:
+    title: Response Default Content Language En Us
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-default-content-language-en-us/
+    description: Content-Language is optional but MUST default locale to en-US when none provided.
+    message: Content-Language is optional but MUST default locale to en-US when none provided.
+    severity: info
+    given: $.paths[*][*].responses[*].headers.Content-Language.schema.default
+    then:
+      function: pattern
+      functionOptions:
+        match: en-US
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - spec:headers
+    - spec:media-types
+    - spec:schemas
+    - topic:content-negotiation
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-default-content-language-en-us''
+      (Response Default Content Language En Us). Requirement: Content-Language is optional but MUST default locale to en-US
+      when none provided. To fix: Ensure the targeted value matches the regular expression `en-US`; rewrite any value that
+      does not. This rule is evaluated at the JSONPath `$.paths[*][*].responses[*].headers.Content-Language.schema.default`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-get-cache-control:
+    title: Response Get Cache Control
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-cache-control/
+    description: GET success responses should define a Cache-Control header so clients and intermediaries know how to cache
+      the representation.
+    message: GET success responses should define a `Cache-Control` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Cache-Control
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:caching
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-cache-control''
+      (Response Get Cache Control). Requirement: GET success responses should define a Cache-Control header so clients and
+      intermediaries know how to cache the representation. To fix: Ensure `Cache-Control` is present and non-empty at each
+      matching location. Guidance: GET success responses should define a `Cache-Control` header. This rule is evaluated at
+      the JSONPath `$.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-response-get-document-304-not-modified:
+    title: Response Get Document 304 Not Modified
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-document-304-not-modified/
+    description: GET operations should document a 304 Not Modified response so ETag/Last-Modified conditional requests are
+      handled.
+    message: Operation should document a `304` response.
+    given: $.paths[*][get].responses
+    severity: info
+    then:
+      field: '304'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:conditional-requests
+    - experience:reliability
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-document-304-not-modified''
+      (Response Get Document 304 Not Modified). Requirement: GET operations should document a 304 Not Modified response so
+      ETag/Last-Modified conditional requests are handled. To fix: Ensure `304` is present and non-empty at each matching
+      location. Guidance: Operation should document a `304` response. This rule is evaluated at the JSONPath `$.paths[*][get].responses`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-get-etag:
+    title: Response Get ETag
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-etag/
+    description: GET success responses should define an ETag header to enable validation-based caching and conditional requests.
+    message: GET success responses should define a `ETag` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: ETag
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:caching
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-etag'' (Response
+      Get ETag). Requirement: GET success responses should define an ETag header to enable validation-based caching and conditional
+      requests. To fix: Ensure `ETag` is present and non-empty at each matching location. Guidance: GET success responses
+      should define a `ETag` header. This rule is evaluated at the JSONPath `$.paths[*].get.responses[?( @property >= 200
+      && @property < 300 && @property != 204 )].headers` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-get-last-modified:
+    title: Response Get Last Modified
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-last-modified/
+    description: GET success responses should define a Last-Modified header to enable date-based conditional requests.
+    message: GET success responses should define a `Last-Modified` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Last-Modified
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:caching
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-last-modified''
+      (Response Get Last Modified). Requirement: GET success responses should define a Last-Modified header to enable date-based
+      conditional requests. To fix: Ensure `Last-Modified` is present and non-empty at each matching location. Guidance: GET
+      success responses should define a `Last-Modified` header. This rule is evaluated at the JSONPath `$.paths[*].get.responses[?(
+      @property >= 200 && @property < 300 && @property != 204 )].headers` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-response-get-link-header:
+    title: Response Get Link Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-link-header/
+    description: GET success responses should provide a Link header (RFC 8288) with rel next/prev/first/last for pagination
+      and navigation — the header-based alternative to an in-body paging object.
+    message: GET responses should provide a Link header (RFC 8288) for pagination/navigation.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Link
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:pagination
+    - experience:pagination
+    - experience:discoverability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-link-header''
+      (Response Get Link Header). Requirement: GET success responses should provide a Link header (RFC 8288) with rel next/prev/first/last
+      for pagination and navigation — the header-based alternative to an in-body paging object. To fix: Ensure `Link` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*].get.responses[?( @property
+      >= 200 && @property < 300 && @property != 204 )].headers` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-get-vary:
+    title: Response Get Vary
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-vary/
+    description: GET success responses should define a Vary header so caches key correctly on the request headers that affect
+      the representation.
+    message: GET success responses should define a `Vary` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Vary
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:caching
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-vary'' (Response
+      Get Vary). Requirement: GET success responses should define a Vary header so caches key correctly on the request headers
+      that affect the representation. To fix: Ensure `Vary` is present and non-empty at each matching location. Guidance:
+      GET success responses should define a `Vary` header. This rule is evaluated at the JSONPath `$.paths[*].get.responses[?(
+      @property >= 200 && @property < 300 && @property != 204 )].headers` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-response-include-hypermedia-links:
+    title: Response Include Hypermedia Links
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-include-hypermedia-links/
+    description: The API contract MAY include hypermedia links to represent the state of resources and be navigable.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths[*][*].responses[*]
+    then:
+      field: links
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - experience:discoverability
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-include-hypermedia-links''
+      (Response Include Hypermedia Links). Requirement: The API contract MAY include hypermedia links to represent the state
+      of resources and be navigable. To fix: Ensure `links` is present and non-empty at each matching location. This rule
+      is evaluated at the JSONPath `$.paths[*][*].responses[*]` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-must-use-json-content-type:
+    title: Response Must Use JSON Content Type
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-must-use-json-content-type/
+    description: API responses should use application/json as the primary content type. Analysis of 773 specs shows application/json
+      is used by 92% of APIs, making it the universal standard for modern REST APIs.
+    message: Response MUST Use application/json Content Type
+    severity: info
+    given: $.paths.*[get,post,put,patch,delete].responses[*].content
+    then:
+      field: application/json
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - spec:media-types
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-must-use-json-content-type''
+      (Response Must Use JSON Content Type). Requirement: API responses should use application/json as the primary content
+      type. Analysis of 773 specs shows application/json is used by 92% of APIs, making it the universal standard for modern
+      REST APIs. To fix: Ensure `application/json` is present and non-empty at each matching location. This rule is evaluated
+      at the JSONPath `$.paths.*[get,post,put,patch,delete].responses[*].content` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-response-ratelimit-header:
+    title: Response Ratelimit Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-ratelimit-header/
+    description: Responses should define the structured RateLimit header (current IETF draft) conveying quota, remaining,
+      and reset in one field — the modern successor to the RateLimit-Limit/Remaining/Reset triplet.
+    message: Responses should define a `RateLimit` header.
+    given: $..responses.*
+    severity: info
+    then:
+      field: headers.RateLimit
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:rate-limiting
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-ratelimit-header''
+      (Response Ratelimit Header). Requirement: Responses should define the structured RateLimit header (current IETF draft)
+      conveying quota, remaining, and reset in one field — the modern successor to the RateLimit-Limit/Remaining/Reset triplet.
+      To fix: Ensure `headers.RateLimit` is present and non-empty at each matching location. Guidance: Responses should define
+      a `RateLimit` header. This rule is evaluated at the JSONPath `$..responses.*` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-response-ratelimit-policy:
+    title: Response Ratelimit Policy
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-ratelimit-policy/
+    description: Responses should define a RateLimit-Policy header documenting the quota policy and window (e.g. 100;w=60),
+      so clients understand the limits in effect.
+    message: Responses should define a `RateLimit-Policy` header.
+    given: $..responses.*
+    severity: info
+    then:
+      field: headers.RateLimit-Policy
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:rate-limiting
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-ratelimit-policy''
+      (Response Ratelimit Policy). Requirement: Responses should define a RateLimit-Policy header documenting the quota policy
+      and window (e.g. 100;w=60), so clients understand the limits in effect. To fix: Ensure `headers.RateLimit-Policy` is
+      present and non-empty at each matching location. Guidance: Responses should define a `RateLimit-Policy` header. This
+      rule is evaluated at the JSONPath `$..responses.*` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-return-correlation-id:
+    title: Response Return Correlation ID
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-return-correlation-id/
+    description: Responses should return a correlation / request ID header (e.g. Request-Id or X-Correlation-Id) so callers
+      can correlate a response with their request and with server-side logs.
+    message: Responses should return a correlation / request ID header.
+    given: $..responses.*
+    severity: info
+    then:
+      field: headers
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          anyOf:
+          - required:
+            - Request-Id
+          - required:
+            - X-Request-Id
+          - required:
+            - X-Request-ID
+          - required:
+            - Correlation-Id
+          - required:
+            - X-Correlation-Id
+          - required:
+            - X-Correlation-ID
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:tracing
+    - experience:reliability
+    - experience:usability
+    - experience:observability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-return-correlation-id''
+      (Response Return Correlation ID). Requirement: Responses should return a correlation / request ID header (e.g. Request-Id
+      or X-Correlation-Id) so callers can correlate a response with their request and with server-side logs. To fix: Adjust
+      `headers` so it conforms to the schema this rule requires. This rule is evaluated at the JSONPath `$..responses.*` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-write-document-412-precondition-failed:
+    title: Response Write Document 412 Precondition Failed
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-write-document-412-precondition-failed/
+    description: Write operations should document a 412 Precondition Failed response for failed conditional (If-Match) writes.
+    message: Operation should document a `412` response.
+    given: $.paths[*][put,patch,delete].responses
+    severity: info
+    then:
+      field: '412'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:conditional-requests
+    - experience:reliability
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-write-document-412-precondition-failed''
+      (Response Write Document 412 Precondition Failed). Requirement: Write operations should document a 412 Precondition
+      Failed response for failed conditional (If-Match) writes. To fix: Ensure `412` is present and non-empty at each matching
+      location. Guidance: Operation should document a `412` response. This rule is evaluated at the JSONPath `$.paths[*][put,patch,delete].responses`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-write-etag:
+    title: Response Write ETag
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-write-etag/
+    description: Write success responses (POST/PUT/PATCH) should define an ETag header so clients receive the new entity tag
+      after a write and can make subsequent conditional requests.
+    message: Write success responses should define a `ETag` header.
+    given: $.paths[*][post,put,patch].responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: ETag
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:caching
+    - experience:reliability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-write-etag'' (Response
+      Write ETag). Requirement: Write success responses (POST/PUT/PATCH) should define an ETag header so clients receive the
+      new entity tag after a write and can make subsequent conditional requests. To fix: Ensure `ETag` is present and non-empty
+      at each matching location. Guidance: Write success responses should define a `ETag` header. This rule is evaluated at
+      the JSONPath `$.paths[*][post,put,patch].responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-schema-collection-require-pagination-params:
+    title: Schema Collection Require Pagination Params
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-collection-require-pagination-params/
+    description: Collection GET endpoints SHOULD support pagination using query parameters. Offset or cursor based pagination
+      is required.
+    message: Collection GET endpoints SHOULD support pagination using query parameters.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}\/*.*/))].get
+    then:
+    - field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          items:
+            type: object
+          contains:
+            type: object
+            properties:
+              name:
+                const: limit
+              in:
+                const: query
+          allOf:
+          - anyOf:
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: offset
+                  in:
+                    const: query
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: cursor
+                  in:
+                    const: query
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: page
+                  in:
+                    const: query
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - topic:pagination
+    - experience:pagination
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-collection-require-pagination-params''
+      (Schema Collection Require Pagination Params). Requirement: Collection GET endpoints SHOULD support pagination using
+      query parameters. Offset or cursor based pagination is required. To fix: Adjust `parameters` so it conforms to the schema
+      this rule requires. This rule is evaluated at the JSONPath `$.paths[?(!@property.match(/.*\/\{[^}]+\}\/*.*/))].get`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-schema-property-require-examples:
+    title: Schema Property Require Examples
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-property-require-examples/
+    description: Object properties must include examples.
+    message: '{{description}}; {{property}}'
+    severity: info
+    given: $..properties..properties.*
+    then:
+      function: digitalocean-ensurePropertiesExample
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-property-require-examples''
+      (Schema Property Require Examples). Requirement: Object properties must include examples. This rule is evaluated at
+      the JSONPath `$..properties..properties.*` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-server-must-not-specify-port:
+    title: Server Must Not Specify Port
+    reference: https://spotlight-rules.com/spec/rules/openapi/server-must-not-specify-port/
+    description: Port MUST NOT be specified or required to use the API, except for 'localhost' testing in a spec.
+    message: Port MUST NOT be specified or required to use the API, except for 'localhost' testing in a spec.
+    severity: info
+    given: $.servers..url
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: (?!https?://localhost)(https?://.*):(\d*)\/?(.*)
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:servers
+    - experience:usability
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''server-must-not-specify-port''
+      (Server Must Not Specify Port). Requirement: Port MUST NOT be specified or required to use the API, except for ''localhost''
+      testing in a spec. To fix: Ensure the targeted value does NOT match the regular expression `(?!https?://localhost)(https?://.*):(\d*)\/?(.*)`;
+      rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.servers..url` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  apis-json-api-property-require-go-sdk:
+    title: API Property Require Go SDK
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-go-sdk/
+    description: This property ensures that there is a Go SDK available for an API, making it easier for Go developers to
+      integrate an API into their applications.
+    message: Has Go SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-go)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-go-sdk''
+      (API Property Require Go SDK). Requirement: This property ensures that there is a Go SDK available for an API, making
+      it easier for Go developers to integrate an API into their applications. To fix: Ensure `type` does NOT match the regular
+      expression `\b(api-sdk-go)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.*
+      | $.common.*` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-java-sdk:
+    title: API Property Require Java SDK
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-java-sdk/
+    description: This property ensures that there is a Java SDK available for an API, making it easier for Java developers
+      to integrate an API into their applications.
+    message: Has Java SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-java)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-java-sdk''
+      (API Property Require Java SDK). Requirement: This property ensures that there is a Java SDK available for an API, making
+      it easier for Java developers to integrate an API into their applications. To fix: Ensure `type` does NOT match the
+      regular expression `\b(api-sdk-java)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath
+      `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-node-sdk:
+    title: API Property Require Node SDK
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-node-sdk/
+    description: This property ensures that there is a Node SDK available for an API, making it easier for Node developers
+      to integrate an API into their applications.
+    message: Has Node SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-node)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-node-sdk''
+      (API Property Require Node SDK). Requirement: This property ensures that there is a Node SDK available for an API, making
+      it easier for Node developers to integrate an API into their applications. To fix: Ensure `type` does NOT match the
+      regular expression `\b(api-sdk-node)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath
+      `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-python-sdk:
+    title: API Property Require Python SDK
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-python-sdk/
+    description: This property ensures that there is a Python SDK available for an API, making it easier for Python developers
+      to integrate an API into their applications.
+    message: Has Python SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-python)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-python-sdk''
+      (API Property Require Python SDK). Requirement: This property ensures that there is a Python SDK available for an API,
+      making it easier for Python developers to integrate an API into their applications. To fix: Ensure `type` does NOT match
+      the regular expression `\b(api-sdk-python)\b`; rename or rewrite any value that does. This rule is evaluated at the
+      JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only what violates the
+      rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-sandbox:
+    title: API Property Require Sandbox
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-sandbox/
+    description: This property ensures that an API has a reference to a sandbox for individual APIs or as part of common properties,
+      providing sandbox, synthetic data, and mock servers for use in making test requests.
+    message: Has a Blog
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(sandbox|Sandbox)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-sandbox''
+      (API Property Require Sandbox). Requirement: This property ensures that an API has a reference to a sandbox for individual
+      APIs or as part of common properties, providing sandbox, synthetic data, and mock servers for use in making test requests.
+      To fix: Ensure `type` does NOT match the regular expression `\b(sandbox|Sandbox)\b`; rename or rewrite any value that
+      does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected
+      document, with no commentary.'
+  apis-json-api-property-require-sdk:
+    title: API Property Require SDK
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-sdk/
+    description: This property ensures that there is an SDK available for an API, making it easier for developers to integrate
+      an API into their applications.
+    message: Has SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(sdk|sdks|SDKs)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-sdk''
+      (API Property Require SDK). Requirement: This property ensures that there is an SDK available for an API, making it
+      easier for developers to integrate an API into their applications. To fix: Ensure `type` does NOT match the regular
+      expression `\b(sdk|sdks|SDKs)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.*
+      | $.common.*` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-signup:
+    title: API Property Require Signup
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-signup/
+    description: This property ensures there is a link to where you sign up for an API, making sure API consumers can access
+      in a single click.
+    message: Has a Sign Up
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(X-signup|signup|Sign Up|SignUp)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-signup''
+      (API Property Require Signup). Requirement: This property ensures there is a link to where you sign up for an API, making
+      sure API consumers can access in a single click. To fix: Ensure `type` does NOT match the regular expression `\b(X-signup|signup|Sign
+      Up|SignUp)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.*
+      | $.common.*` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-support-email:
+    title: API Property Require Support Email
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-support-email/
+    description: This property ensures that an API has email support, providing a valid email address that can be used to
+      get API support.
+    message: Has Support Email
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(support-email|SupportEmail)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-support-email''
+      (API Property Require Support Email). Requirement: This property ensures that an API has email support, providing a
+      valid email address that can be used to get API support. To fix: Ensure `type` does NOT match the regular expression
+      `\b(support-email|SupportEmail)\b`; rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.*
+      | $.common.*` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-support-issues-url:
+    title: API Property Require Support Issues URL
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-support-issues-url/
+    description: This property ensures that there are Git issues available to support an API, using the issues capability
+      of GitHub, GitLab, or Bitbucket to support API consumers.
+    message: Has Support Issues URL
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(SupportIssues|SupportGitHubIssues)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-support-issues-url''
+      (API Property Require Support Issues URL). Requirement: This property ensures that there are Git issues available to
+      support an API, using the issues capability of GitHub, GitLab, or Bitbucket to support API consumers. To fix: Ensure
+      `type` does NOT match the regular expression `\b(SupportIssues|SupportGitHubIssues)\b`; rename or rewrite any value
+      that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected
+      document, with no commentary.'
+  apis-json-api-property-require-support-page:
+    title: API Property Require Support Page
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-support-page/
+    description: This property ensures that there is a support page available for an API, providing direct and in-direct support
+      opportunities for each API or for entire API platform.
+    message: Has Support Page
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(support|Support)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-support-page''
+      (API Property Require Support Page). Requirement: This property ensures that there is a support page available for an
+      API, providing direct and in-direct support opportunities for each API or for entire API platform. To fix: Ensure `type`
+      does NOT match the regular expression `\b(support|Support)\b`; rename or rewrite any value that does. This rule is evaluated
+      at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-api-require-base-url:
+    title: API Require Base URL
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-require-base-url/
+    description: Each API defined within an APIs.json artifact can specify the base URL for the API. This URL serves as a
+      reference point for developers during onboarding and when making API calls. Additionally, it helps identify the API
+      and validate the domain it is associated with.
+    message: APIs MUST Have a Base URL
+    severity: info
+    given: $.apis.*
+    then:
+      field: baseURL
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:apis
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-require-base-url'' (API
+      Require Base URL). Requirement: Each API defined within an APIs.json artifact can specify the base URL for the API.
+      This URL serves as a reference point for developers during onboarding and when making API calls. Additionally, it helps
+      identify the API and validate the domain it is associated with. To fix: Ensure `baseURL` is present and non-empty at
+      each matching location. This rule is evaluated at the JSONPath `$.apis.*` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document,
+      with no commentary.'
+  apis-json-schema-include-api-plan:
+    title: Schema Include API Plan
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-api-plan/
+    description: This property provides a link to the dedicated plans page that applies to an API, providing information about
+      access tiers, rate limits, and features available for an API as part of a wider API business plan.
+    message: Has API Plans
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-plans|Plans)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-api-plan''
+      (Schema Include API Plan). Requirement: This property provides a link to the dedicated plans page that applies to an
+      API, providing information about access tiers, rate limits, and features available for an API as part of a wider API
+      business plan. To fix: Ensure `type` does NOT match the regular expression `\b(api-plans|Plans)\b`; rename or rewrite
+      any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete
+      corrected document, with no commentary.'
+  apis-json-schema-include-developer-portal:
+    title: Schema Include Developer Portal
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-developer-portal/
+    description: This property ensures there a developer portal associated with an API and that you can find a landing page
+      for the API, documentation, SDKs, and other resources.
+    message: Has Developer Portal
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-developer-portal|developer-portal|portal|Portal|Portals|DeveloperPortal)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:discoverability
+    - experience:usability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-developer-portal''
+      (Schema Include Developer Portal). Requirement: This property ensures there a developer portal associated with an API
+      and that you can find a landing page for the API, documentation, SDKs, and other resources. To fix: Ensure `type` does
+      NOT match the regular expression `\b(api-developer-portal|developer-portal|portal|Portal|Portals|DeveloperPortal)\b`;
+      rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-discussion-forum:
+    title: Schema Include Discussion Forum
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-discussion-forum/
+    description: This property ensures that there is a link to a discussion forum, providing a way for consumers and producers
+      to engage and support either other throughout the lifecycle.
+    message: Has Discussion Forum
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(Forums|Forums|Discussions)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-discussion-forum''
+      (Schema Include Discussion Forum). Requirement: This property ensures that there is a link to a discussion forum, providing
+      a way for consumers and producers to engage and support either other throughout the lifecycle. To fix: Ensure `type`
+      does NOT match the regular expression `\b(Forums|Forums|Discussions)\b`; rename or rewrite any value that does. This
+      rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document,
+      with no commentary.'
+  apis-json-schema-include-documentation:
+    title: Schema Include Documentation
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-documentation/
+    description: This property ensures that there is documentation published for an API, and API consumers will have a set
+      of human-readable instructions for onboarding and integrating with HTTP APIs in their applications.
+    message: Has Documentation
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(documentation|Documentation)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-documentation''
+      (Schema Include Documentation). Requirement: This property ensures that there is documentation published for an API,
+      and API consumers will have a set of human-readable instructions for onboarding and integrating with HTTP APIs in their
+      applications. To fix: Ensure `type` does NOT match the regular expression `\b(documentation|Documentation)\b`; rename
+      or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return
+      only the complete corrected document, with no commentary.'
+  apis-json-schema-include-examples:
+    title: Schema Include Examples
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-examples/
+    description: This property ensures that an API has a reference to a examples for individual APIs or as part of common
+      properties, providing examples and synthentic data that can be used for APIs.
+    message: Has a Blog
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(examples|Examples)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-examples''
+      (Schema Include Examples). Requirement: This property ensures that an API has a reference to a examples for individual
+      APIs or as part of common properties, providing examples and synthentic data that can be used for APIs. To fix: Ensure
+      `type` does NOT match the regular expression `\b(examples|Examples)\b`; rename or rewrite any value that does. This
+      rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document,
+      with no commentary.'
+  apis-json-schema-include-feedback-email:
+    title: Schema Include Feedback Email
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-feedback-email/
+    description: This property ensures that there is an email available for API consumers to provide feedback.
+    message: Has Feedback Email
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(feedback-email|FeedbackEmail)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-feedback-email''
+      (Schema Include Feedback Email). Requirement: This property ensures that there is an email available for API consumers
+      to provide feedback. To fix: Ensure `type` does NOT match the regular expression `\b(feedback-email|FeedbackEmail)\b`;
+      rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-feedback-issues-url:
+    title: Schema Include Feedback Issues URL
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-feedback-issues-url/
+    description: This property ensures there is a URL to Git issues specifically for providing feedback.
+    message: Has Feedback Issues URL
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(FeedbackIssues|FeedbackGitHubIssues)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-feedback-issues-url''
+      (Schema Include Feedback Issues URL). Requirement: This property ensures there is a URL to Git issues specifically for
+      providing feedback. To fix: Ensure `type` does NOT match the regular expression `\b(FeedbackIssues|FeedbackGitHubIssues)\b`;
+      rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-getting-started:
+    title: Schema Include Getting Started
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-getting-started/
+    description: This property ensures that there is a getting started link available, providing a reference for API consumers
+      to get started with an API is as few steps as possible.
+    message: Has Getting Started
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(GettingStarted)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-getting-started''
+      (Schema Include Getting Started). Requirement: This property ensures that there is a getting started link available,
+      providing a reference for API consumers to get started with an API is as few steps as possible. To fix: Ensure `type`
+      does NOT match the regular expression `\b(GettingStarted)\b`; rename or rewrite any value that does. This rule is evaluated
+      at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-insomnia-collection:
+    title: Schema Include Insomnia Collection
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-insomnia-collection/
+    description: This property defines an Insomnia collection available for each API, providing executable artifacts that
+      can be used in the Insomnia client for making calls, and executing automation workflows.
+    message: Has Insomnia Collection
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(RunInInsomnia)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-insomnia-collection''
+      (Schema Include Insomnia Collection). Requirement: This property defines an Insomnia collection available for each API,
+      providing executable artifacts that can be used in the Insomnia client for making calls, and executing automation workflows.
+      To fix: Ensure `type` does NOT match the regular expression `\b(RunInInsomnia)\b`; rename or rewrite any value that
+      does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected
+      document, with no commentary.'
+  apis-json-schema-include-mock-server:
+    title: Schema Include Mock Server
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-mock-server/
+    description: This property ensures that an API has a reference to a mock servers for individual APIs or as part of common
+      properties, providing mocked deployments of an API that can be used for making test API calls.
+    message: Has a Mock Server
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(mocks|Mocks|MockServers)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-mock-server''
+      (Schema Include Mock Server). Requirement: This property ensures that an API has a reference to a mock servers for individual
+      APIs or as part of common properties, providing mocked deployments of an API that can be used for making test API calls.
+      To fix: Ensure `type` does NOT match the regular expression `\b(mocks|Mocks|MockServers)\b`; rename or rewrite any value
+      that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected
+      document, with no commentary.'
+  apis-json-schema-include-postman-collection:
+    title: Schema Include Postman Collection
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-postman-collection/
+    description: This property ensures that an API has at least one Postman Collection associated with it, providing automation,
+      tests, and other executable derivatives of an APIs OpenAPI.
+    message: Has a Postman Collection
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(PostmanCollection)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-postman-collection''
+      (Schema Include Postman Collection). Requirement: This property ensures that an API has at least one Postman Collection
+      associated with it, providing automation, tests, and other executable derivatives of an APIs OpenAPI. To fix: Ensure
+      `type` does NOT match the regular expression `\b(PostmanCollection)\b`; rename or rewrite any value that does. This
+      rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document,
+      with no commentary.'
+  apis-json-schema-include-postman-public-workspace:
+    title: Schema Include Postman Public Workspace
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-postman-public-workspace/
+    description: This property ensures that an API is associated with a Postman Workspace, providing a single location that
+      API producers and/or API consumers can engage around an API.
+    message: Has Public Postman Workspace
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(postman-public-workspace|PostmanPublicWorkspace|PostmanWorkspace)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-postman-public-workspace''
+      (Schema Include Postman Public Workspace). Requirement: This property ensures that an API is associated with a Postman
+      Workspace, providing a single location that API producers and/or API consumers can engage around an API. To fix: Ensure
+      `type` does NOT match the regular expression `\b(postman-public-workspace|PostmanPublicWorkspace|PostmanWorkspace)\b`;
+      rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-pricing:
+    title: Schema Include Pricing
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-pricing/
+    description: This property provides a link to a pricing page that applies to an API, providing a breakdown of the costs
+      associated with using an API.
+    message: Has Pricing
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(Pricing)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-pricing''
+      (Schema Include Pricing). Requirement: This property provides a link to a pricing page that applies to an API, providing
+      a breakdown of the costs associated with using an API. To fix: Ensure `type` does NOT match the regular expression `\b(Pricing)\b`;
+      rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-production-environment:
+    title: Schema Include Production Environment
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-production-environment/
+    description: This property ensures that there is a production environment available for an API, providing base URL, tokens,
+      keys, and other key / value pairs that are needed to integrate with an API.
+    message: Has a Production Environment
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(ProductionEnvironment)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:reliability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-production-environment''
+      (Schema Include Production Environment). Requirement: This property ensures that there is a production environment available
+      for an API, providing base URL, tokens, keys, and other key / value pairs that are needed to integrate with an API.
+      To fix: Ensure `type` does NOT match the regular expression `\b(ProductionEnvironment)\b`; rename or rewrite any value
+      that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected
+      document, with no commentary.'
+  apis-json-schema-include-questions-issues-url:
+    title: Schema Include Questions Issues URL
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-questions-issues-url/
+    description: This property ensures that an API has a dedicated link to Git issues for asking questions.
+    message: Has Questions Issues URL
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(QuestionsIssues|QuestionsGitHubIssues)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-questions-issues-url''
+      (Schema Include Questions Issues URL). Requirement: This property ensures that an API has a dedicated link to Git issues
+      for asking questions. To fix: Ensure `type` does NOT match the regular expression `\b(QuestionsIssues|QuestionsGitHubIssues)\b`;
+      rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-staging-environment:
+    title: Schema Include Staging Environment
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-staging-environment/
+    description: This property ensures that there is a staging environment available for an API, providing base URL, tokens,
+      keys, and other key / value pairs that are needed to integrate with an API.
+    message: Has a Stage Environment
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(StagingEnvironment)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:usability
+    - experience:reliability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-staging-environment''
+      (Schema Include Staging Environment). Requirement: This property ensures that there is a staging environment available
+      for an API, providing base URL, tokens, keys, and other key / value pairs that are needed to integrate with an API.
+      To fix: Ensure `type` does NOT match the regular expression `\b(StagingEnvironment)\b`; rename or rewrite any value
+      that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected
+      document, with no commentary.'
+  mcp-document-require-instructions:
+    title: Document Require Instructions
+    reference: https://spotlight-rules.com/spec/rules/mcp/document-require-instructions/
+    description: The `instructions` property should be present.
+    message: instructions should be present
+    severity: info
+    given: $
+    then:
+      field: instructions
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:servers
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''document-require-instructions''
+      (Document Require Instructions). Requirement: The `instructions` property should be present. To fix: Ensure `instructions`
+      is present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid MCP. Return only the complete corrected
+      document, with no commentary.'
+  plans-document-require-currency:
+    title: Document Require Currency
+    reference: https://spotlight-rules.com/spec/rules/plans/document-require-currency/
+    description: The `currency` property should be present.
+    message: currency should be present
+    severity: info
+    given: $
+    then:
+      field: currency
+      function: truthy
+    tags:
+    - format:plans
+    - spec:document
+    - experience:governance
+    - experience:usability
+    prompt: 'You are editing a Plans document to satisfy the Spotlight API governance rule ''document-require-currency'' (Document
+      Require Currency). Requirement: The `currency` property should be present. To fix: Ensure `currency` is present and
+      non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid Plans. Return only the complete corrected
+      document, with no commentary.'
+  plans-plan-require-description:
+    title: Plan Require Description
+    reference: https://spotlight-rules.com/spec/rules/plans/plan-require-description/
+    description: The `description` property of each plan should be present.
+    message: description should be present
+    severity: info
+    given: $.plans[*]
+    then:
+      field: description
+      function: truthy
+    tags:
+    - format:plans
+    - spec:plans
+    - experience:documentation
+    - experience:usability
+    prompt: 'You are editing a Plans document to satisfy the Spotlight API governance rule ''plan-require-description'' (Plan
+      Require Description). Requirement: The `description` property of each plan should be present. To fix: Ensure `description`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.plans[*]` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid Plans. Return only
+      the complete corrected document, with no commentary.'
+  plans-plan-require-features:
+    title: Plan Require Features
+    reference: https://spotlight-rules.com/spec/rules/plans/plan-require-features/
+    description: The `features` property of each plan should be present.
+    message: features should be present
+    severity: info
+    given: $.plans[*]
+    then:
+      field: features
+      function: truthy
+    tags:
+    - format:plans
+    - spec:plans
+    - experience:usability
+    - experience:documentation
+    prompt: 'You are editing a Plans document to satisfy the Spotlight API governance rule ''plan-require-features'' (Plan
+      Require Features). Requirement: The `features` property of each plan should be present. To fix: Ensure `features` is
+      present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.plans[*]` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid Plans. Return only
+      the complete corrected document, with no commentary.'
+  plans-plan-require-interval:
+    title: Plan Require Interval
+    reference: https://spotlight-rules.com/spec/rules/plans/plan-require-interval/
+    description: Each plan should declare a billing interval (e.g. month, year).
+    message: Plan should declare a billing interval.
+    given: $.plans[*]
+    severity: info
+    then:
+      field: interval
+      function: truthy
+    tags:
+    - format:plans
+    - spec:plans
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing a Plans document to satisfy the Spotlight API governance rule ''plan-require-interval'' (Plan
+      Require Interval). Requirement: Each plan should declare a billing interval (e.g. month, year). To fix: Ensure `interval`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.plans[*]` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid Plans. Return only
+      the complete corrected document, with no commentary.'
+  plans-plan-require-price:
+    title: Plan Require Price
+    reference: https://spotlight-rules.com/spec/rules/plans/plan-require-price/
+    description: The `price` property of each plan should be present.
+    message: price should be present
+    severity: info
+    given: $.plans[*]
+    then:
+      field: price
+      function: truthy
+    tags:
+    - format:plans
+    - spec:plans
+    - experience:governance
+    - experience:usability
+    prompt: 'You are editing a Plans document to satisfy the Spotlight API governance rule ''plan-require-price'' (Plan Require
+      Price). Requirement: The `price` property of each plan should be present. To fix: Ensure `price` is present and non-empty
+      at each matching location. This rule is evaluated at the JSONPath `$.plans[*]` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid Plans. Return only the complete corrected
+      document, with no commentary.'
+  agent-skill-skill-body-length:
+    title: Skill Body Length
+    reference: https://spotlight-rules.com/spec/rules/agent-skill/skill-body-length/
+    description: Skill bodies should stay focused — very long instructions degrade agent performance. Keep the body under
+      ~5000 words.
+    message: Skill body is very long (over ~5000 words).
+    severity: info
+    given: $.words
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: integer
+          maximum: 5000
+    tags:
+    - format:agent-skill
+    - spec:body
+    - experience:usability
+    - experience:reliability
+    prompt: 'You are editing an Agent Skill document to satisfy the Spotlight API governance rule ''skill-body-length'' (Skill
+      Body Length). Requirement: Skill bodies should stay focused — very long instructions degrade agent performance. Keep
+      the body under ~5000 words. To fix: Adjust the targeted value so it conforms to the schema this rule requires. This
+      rule is evaluated at the JSONPath `$.words` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid Agent Skill. Return only the complete corrected document, with no commentary.'
+  agent-skill-skill-description-length:
+    title: Skill Description Length
+    reference: https://spotlight-rules.com/spec/rules/agent-skill/skill-description-length/
+    description: Skill descriptions should be specific enough to drive good selection — at least 40 characters of meaningful
+      intent.
+    message: Skill description should be at least 40 characters.
+    severity: info
+    given: $.frontmatter.description
+    then:
+      function: length
+      functionOptions:
+        min: 40
+        max: 1024
+    tags:
+    - format:agent-skill
+    - spec:frontmatter
+    - experience:discoverability
+    - experience:usability
+    prompt: 'You are editing an Agent Skill document to satisfy the Spotlight API governance rule ''skill-description-length''
+      (Skill Description Length). Requirement: Skill descriptions should be specific enough to drive good selection — at least
+      40 characters of meaningful intent. To fix: Ensure the length of the targeted value is at least 40 and at most 1024.
+      This rule is evaluated at the JSONPath `$.frontmatter.description` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid Agent Skill. Return only the complete corrected document, with
+      no commentary.'
+  agent-skill-skill-description-single-line:
+    title: Skill Description Single Line
+    reference: https://spotlight-rules.com/spec/rules/agent-skill/skill-description-single-line/
+    description: A skill description should be a single line (no embedded line breaks) so it renders cleanly in pickers.
+    message: Skill description should be a single line.
+    given: $.frontmatter.description
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \n
+    tags:
+    - format:agent-skill
+    - spec:frontmatter
+    - experience:consistency
+    - experience:usability
+    prompt: 'You are editing an Agent Skill document to satisfy the Spotlight API governance rule ''skill-description-single-line''
+      (Skill Description Single Line). Requirement: A skill description should be a single line (no embedded line breaks)
+      so it renders cleanly in pickers. To fix: Ensure the targeted value does NOT match the regular expression `\n`; rename
+      or rewrite any value that does. This rule is evaluated at the JSONPath `$.frontmatter.description` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid Agent Skill. Return only the complete
+      corrected document, with no commentary.'
+  agent-skill-skill-name-max-length:
+    title: Skill Name Max Length
+    reference: https://spotlight-rules.com/spec/rules/agent-skill/skill-name-max-length/
+    description: A skill name should be concise (64 characters or fewer).
+    message: Skill name should be 64 characters or fewer.
+    given: $.frontmatter.name
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: string
+          maxLength: 64
+    tags:
+    - format:agent-skill
+    - spec:frontmatter
+    - experience:naming
+    - experience:usability
+    prompt: 'You are editing an Agent Skill document to satisfy the Spotlight API governance rule ''skill-name-max-length''
+      (Skill Name Max Length). Requirement: A skill name should be concise (64 characters or fewer). To fix: Adjust the targeted
+      value so it conforms to the schema this rule requires. This rule is evaluated at the JSONPath `$.frontmatter.name` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid Agent
+      Skill. Return only the complete corrected document, with no commentary.'

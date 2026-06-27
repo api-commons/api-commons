@@ -1,44 +1,79 @@
 ---
 layout: default
 ---
-<div class="d-flex justify-content-between align-items-start mb-3">
-  <h1 class="mb-0 me-3">{{ page.name }}</h1>
-  {% include ai-toolbar.html %}
-</div>
-<p>{{ page.description }}</p>
 
-<h3 id="source">Ruleset Definition</h3>
-<div class="src-widget" data-src-widget data-original-lang="yaml" data-current-lang="yaml" data-original-filename="{{ page.slug }}.yaml">
-  <div class="src-widget-head">
-    <span class="src-label" data-src-filename>{{ page.slug }}.yaml</span>
-    <span class="src-search">
-      <input type="search" data-src-search placeholder="Search in source… (n / N to navigate)" aria-label="Search source">
-    </span>
-    <span class="src-actions">
-      <button type="button" data-src-toggle data-target="yaml" aria-label="View as YAML">YAML</button>
-      <button type="button" data-src-toggle data-target="json" aria-label="View as JSON">JSON</button>
-      <button type="button" data-src-download aria-label="Download source">Download</button>
-      <button type="button" data-src-copy>Copy</button>
-    </span>
+<style>
+  .rs-detail h1 { font-size: 1.7rem; font-weight: 800; color: #1a1a2e; }
+  .rs-detail .lead { color: #555; font-size: 1rem; max-width: 740px; line-height: 1.7; }
+  .rs-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 0 1.25rem; }
+  .rs-meta .badge { font-size: 0.8rem; }
+  .run-box { border: 1px solid #e3e7ee; border-radius: 10px; background: #f8fafc; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; }
+  .run-box h3 { font-size: 1.05rem; font-weight: 700; margin: 0 0 0.5rem; }
+  .run-box pre { background: #1a1a2e; color: #e8edf5; padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.8rem; overflow-x: auto; margin: 0.4rem 0; white-space: pre; }
+  .run-box .muted { color: #666; font-size: 0.84rem; }
+  .yaml-pre { margin: 0; padding: 1rem 1.25rem; background: #f8fafc; border: 1px solid #e3e7ee; border-radius: 8px; font-size: 0.78rem; line-height: 1.55; font-family: ui-monospace, Menlo, Consolas, monospace; max-height: 420px; overflow: auto; white-space: pre; }
+  .rule-line { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.2rem; border-bottom: 1px solid #eef1f6; }
+  .rule-line .rl-name { flex: 1; font-size: 0.9rem; }
+  .rule-line .rl-art { font-size: 0.72rem; color: #6c757d; border: 1px solid #e3e7ee; border-radius: 4px; padding: 0.05em 0.45em; }
+  .rule-line .rl-builtin { font-size: 0.68rem; color: #8a6d00; background: #fff8e1; border: 1px solid #ffe7a3; border-radius: 4px; padding: 0.05em 0.45em; }
+</style>
+
+<div class="rs-detail">
+  <nav class="small text-muted mb-2"><a href="/rulesets/">Rulesets</a> › {{ page.name }}</nav>
+
+  <div class="d-flex justify-content-between align-items-start mb-2">
+    <h1 class="mb-0 me-3">{{ page.name }}</h1>
+    {% include ai-toolbar.html %}
   </div>
-  <pre class="line-numbers language-yaml"><code class="language-yaml" data-src-code id="ruleset-code"></code></pre>
+  <p class="lead">{{ page.description }}</p>
+
+  <div class="rs-meta">
+    <span class="badge bg-primary">{{ page.count }} rules</span>
+    <span class="badge bg-secondary">experience: {{ page.experience }}</span>
+    {% assign builtins = page.count | minus: page.runnable_count %}
+    <span class="badge bg-light text-dark border">{{ page.runnable_count }} inlined · {{ builtins }} from the engine</span>
+  </div>
+
+  <div class="run-box">
+    <h3>Run this ruleset</h3>
+    <p class="muted mb-1">Lint any matching artifact against this ruleset with the Spotlight CLI:</p>
+    <pre>npm i -g @spotlight-rules/spotlight-cli
+spotlight lint api.yaml \
+  --ruleset https://apicommons.org{{ page.ruleset_url }}</pre>
+    <p class="muted mb-0">Or load it into the <a href="https://validator.spotlight-rules.com">browser validator</a>, post it to the <a href="https://github.com/api-commons/spotlight-api">HTTP API</a>, or wire it into a <a href="https://github.com/api-commons/spotlight-pipeline">CI gate</a>. {{ builtins }} of these rules are the engine's built-ins (they come with <code>spotlight:*</code>); the other {{ page.runnable_count }} are inlined in the file below.</p>
+  </div>
+
+  <h3 id="source" class="h5">Ruleset definition</h3>
+  <p><a class="btn btn-sm btn-outline-dark" href="{{ page.ruleset_url }}" download>Download YAML</a>
+     <button type="button" class="btn btn-sm btn-outline-dark" id="copy-ruleset">Copy</button></p>
+  <pre class="yaml-pre"><code id="ruleset-code">Loading…</code></pre>
+
+  <h3 class="h5 mt-4">Rules in this ruleset <span class="text-muted">({{ page.count }})</span></h3>
+  <div>
+    {% assign ruleset_rules = site.data.spotlight_rules.experience_rules[page.experience] %}
+    {% for r in ruleset_rules %}
+    <div class="rule-line">
+      <a class="rl-name" href="{{ r.detail_url }}" target="_blank" rel="noopener">{{ r.name }}</a>
+      <span class="rl-art">{{ r.artifact_label }}</span>
+      {% if r.builtin %}<span class="rl-builtin">engine</span>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <br>
+  <p class="text-center"><a href="/rulesets/"><strong>← All experience rulesets</strong></a></p>
 </div>
 
-<textarea id="ruleset-raw" style="display:none;">{% for this_rule in page.rules %}{% for rule in site.rules %}{% for item in rule %}{% if item != 'output' and item != 'previous' and item != 'content' and item != 'url' and item != 'id' and item != 'collection' and item != 'excerpt' and item != 'relative_path' and item != 'next' and item != 'path' and item != 'draft' and item != 'categories' and item != 'layout' and item != 'title' and item != 'slug' and item != 'ext' and item != 'tags' and item != 'date' %}{% if item == this_rule %}"{{ item }}": {{ rule[item] | jsonify }},{% endif %}{% endif %}{% endfor %}{% endfor %}{% endfor %}</textarea>
 <script>
 (function () {
-  var raw = document.getElementById('ruleset-raw').value;
-  raw = raw.substring(0, raw.length - 1);
-  try {
-    var parsed = JSON.parse('{"rules":{' + raw + '}}');
-    document.getElementById('ruleset-code').textContent = jsyaml.dump(parsed, { indent: 2, lineWidth: 120, noRefs: true });
-  } catch (e) {
-    document.getElementById('ruleset-code').textContent = '# Error assembling ruleset: ' + e.message;
-  }
+  var code = document.getElementById('ruleset-code');
+  fetch('{{ page.ruleset_url }}').then(function (r) { return r.text(); }).then(function (t) {
+    code.textContent = t;
+  }).catch(function () { code.textContent = '# Could not load {{ page.ruleset_url }}'; });
+  document.getElementById('copy-ruleset').addEventListener('click', function () {
+    var btn = this;
+    if (!code.textContent) return;
+    navigator.clipboard.writeText(code.textContent).then(function () { btn.textContent = 'Copied!'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); });
+  });
 })();
 </script>
-
-{% include src-widget-scripts.html %}
-
-<br>
-<p class="text-center"><a href="/rulesets/"><strong>Back to All of the Rulesets</strong></a></p>

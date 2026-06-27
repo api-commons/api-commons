@@ -1,0 +1,230 @@
+documentationUrl: https://spotlight-rules.com/spec/
+functions:
+- baloise-validate-tracing
+functionsDir: ./functions
+rules:
+  openapi-path-require-tracing-header:
+    title: Path Require Tracing Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/path-require-tracing-header/
+    description: MUST use b3 or w3c tracing [233a].
+    message: Header X-B3-Traceid, X-B3-Spanid or traceparent (w3c) missing
+    severity: info
+    given: $.paths.*
+    then:
+      function: baloise-validate-tracing
+    tags:
+    - format:openapi
+    - spec:paths
+    - topic:tracing
+    - experience:reliability
+    - experience:governance
+    - experience:observability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''path-require-tracing-header''
+      (Path Require Tracing Header). Requirement: MUST use b3 or w3c tracing [233a]. This rule is evaluated at the JSONPath
+      `$.paths.*` — inspect every location it matches and correct only what violates the rule. Make the smallest change that
+      satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-request-support-baggage:
+    title: Request Support Baggage
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-baggage/
+    description: Operations should accept a baggage request header (W3C Baggage / OpenTelemetry) so application-defined context
+      propagates across services.
+    message: Operation should accept a `baggage` request header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: baggage
+              in:
+                const: header
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:tracing
+    - experience:reliability
+    - experience:usability
+    - experience:observability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-baggage''
+      (Request Support Baggage). Requirement: Operations should accept a baggage request header (W3C Baggage / OpenTelemetry)
+      so application-defined context propagates across services. To fix: Adjust `parameters` so it conforms to the schema
+      this rule requires. Guidance: Operation should accept a `baggage` request header. This rule is evaluated at the JSONPath
+      `$.paths[*][get,post,put,patch,delete]` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-request-support-correlation-id:
+    title: Request Support Correlation ID
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-correlation-id/
+    description: Operations should accept a correlation / request ID request header (e.g. Correlation-Id or X-Request-Id)
+      so a caller-supplied id can be traced end to end.
+    message: Operation should accept a `Correlation-Id` request header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^([Xx]-)?([Cc]orrelation|[Rr]equest)-[Ii][Dd]$
+              in:
+                const: header
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:tracing
+    - experience:reliability
+    - experience:usability
+    - experience:observability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-correlation-id''
+      (Request Support Correlation ID). Requirement: Operations should accept a correlation / request ID request header (e.g.
+      Correlation-Id or X-Request-Id) so a caller-supplied id can be traced end to end. To fix: Adjust `parameters` so it
+      conforms to the schema this rule requires. Guidance: Operation should accept a `Correlation-Id` request header. This
+      rule is evaluated at the JSONPath `$.paths[*][get,post,put,patch,delete]` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-request-support-tracestate:
+    title: Request Support Tracestate
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-support-tracestate/
+    description: Operations should accept a tracestate request header (W3C Trace Context) so vendor-specific trace state propagates
+      alongside traceparent.
+    message: Operation should accept a `tracestate` request header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: tracestate
+              in:
+                const: header
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:tracing
+    - experience:reliability
+    - experience:usability
+    - experience:observability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-support-tracestate''
+      (Request Support Tracestate). Requirement: Operations should accept a tracestate request header (W3C Trace Context)
+      so vendor-specific trace state propagates alongside traceparent. To fix: Adjust `parameters` so it conforms to the schema
+      this rule requires. Guidance: Operation should accept a `tracestate` request header. This rule is evaluated at the JSONPath
+      `$.paths[*][get,post,put,patch,delete]` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-return-correlation-id:
+    title: Response Return Correlation ID
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-return-correlation-id/
+    description: Responses should return a correlation / request ID header (e.g. Request-Id or X-Correlation-Id) so callers
+      can correlate a response with their request and with server-side logs.
+    message: Responses should return a correlation / request ID header.
+    given: $..responses.*
+    severity: info
+    then:
+      field: headers
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          anyOf:
+          - required:
+            - Request-Id
+          - required:
+            - X-Request-Id
+          - required:
+            - X-Request-ID
+          - required:
+            - Correlation-Id
+          - required:
+            - X-Correlation-Id
+          - required:
+            - X-Correlation-ID
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:tracing
+    - experience:reliability
+    - experience:usability
+    - experience:observability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-return-correlation-id''
+      (Response Return Correlation ID). Requirement: Responses should return a correlation / request ID header (e.g. Request-Id
+      or X-Correlation-Id) so callers can correlate a response with their request and with server-side logs. To fix: Adjust
+      `headers` so it conforms to the schema this rule requires. This rule is evaluated at the JSONPath `$..responses.*` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-schema-requestid-property-must-be-string:
+    title: Schema Requestid Property Must Be String
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-requestid-property-must-be-string/
+    description: requestId MUST use a data type of 'string'.
+    message: requestId MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "requestId")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - topic:tracing
+    - experience:data-modeling
+    - experience:consistency
+    - experience:observability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-requestid-property-must-be-string''
+      (Schema Requestid Property Must Be String). Requirement: requestId MUST use a data type of ''string''. To fix: Ensure
+      the targeted value matches the regular expression `^string$`; rewrite any value that does not. This rule is evaluated
+      at the JSONPath `$..[?(@property === "requestId")].type` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  asyncapi-component-asyncapi-message-require-correlation-id:
+    title: Component Asyncapi Message Require Correlation ID
+    reference: https://spotlight-rules.com/spec/rules/asyncapi/component-asyncapi-message-require-correlation-id/
+    description: Messages should define a correlationId so events can be traced across services.
+    message: Message should define a correlationId.
+    given: $.components.messages[*]
+    severity: info
+    then:
+      field: correlationId
+      function: truthy
+    tags:
+    - format:asyncapi
+    - spec:components
+    - topic:tracing
+    - experience:reliability
+    - experience:observability
+    prompt: 'You are editing an AsyncAPI document to satisfy the Spotlight API governance rule ''component-asyncapi-message-require-correlation-id''
+      (Component Asyncapi Message Require Correlation ID). Requirement: Messages should define a correlationId so events can
+      be traced across services. To fix: Ensure `correlationId` is present and non-empty at each matching location. This rule
+      is evaluated at the JSONPath `$.components.messages[*]` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid AsyncAPI. Return only the complete corrected document, with no commentary.'

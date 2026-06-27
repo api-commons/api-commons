@@ -1,0 +1,1624 @@
+documentationUrl: https://spotlight-rules.com/spec/
+rules:
+  openapi-component-require-security-schemes:
+    title: Component Require Security Schemes
+    reference: https://spotlight-rules.com/spec/rules/openapi/component-require-security-schemes/
+    description: The API contract MUST include a 'securitySchemes' subsection under the 'components' section.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.components
+    then:
+      field: securitySchemes
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - owasp:api2
+    - format:openapi
+    - spec:components
+    - experience:security
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''component-require-security-schemes''
+      (Component Require Security Schemes). Requirement: The API contract MUST include a ''securitySchemes'' subsection under
+      the ''components'' section. To fix: Ensure `securitySchemes` is present and non-empty at each matching location. This
+      rule is evaluated at the JSONPath `$.components` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-document-owasp-api9-server:
+    title: Document OWASP API9 Server
+    reference: https://spotlight-rules.com/spec/rules/openapi/document-owasp-api9-server/
+    description: The API should declare its servers so all hosts and environments are inventoried — undocumented or stray
+      non-production hosts are a common inventory-management risk (OWASP API9).
+    message: API should declare its servers (host/environment inventory).
+    given: $
+    severity: info
+    then:
+      field: servers
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:servers
+    - experience:security
+    - experience:governance
+    - owasp:api9
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''document-owasp-api9-server''
+      (Document OWASP API9 Server). Requirement: The API should declare its servers so all hosts and environments are inventoried
+      — undocumented or stray non-production hosts are a common inventory-management risk (OWASP API9). To fix: Ensure `servers`
+      is present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-info-description-no-eval-tag:
+    title: Info Description No Eval Tag
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-description-no-eval-tag/
+    description: Eval functions MUST not be included in the description of an API, keeping descriptions to just the text that
+      is needed, and relying on the rest of the OpenAPI to describe what is possible.
+    message: Info Description MUST NOT Have Eval Tag
+    severity: info
+    given: $.info
+    then:
+      field: description
+      function: pattern
+      functionOptions:
+        notMatch: ^\b(<eval)\b
+    tags:
+    - format:openapi
+    - spec:info
+    - experience:security
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-description-no-eval-tag''
+      (Info Description No Eval Tag). Requirement: Eval functions MUST not be included in the description of an API, keeping
+      descriptions to just the text that is needed, and relying on the rest of the OpenAPI to describe what is possible. To
+      fix: Ensure `description` does NOT match the regular expression `^\b(<eval)\b`; rename or rewrite any value that does.
+      This rule is evaluated at the JSONPath `$.info` — inspect every location it matches and correct only what violates the
+      rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-info-description-no-script-tag:
+    title: Info Description No Script Tag
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-description-no-script-tag/
+    description: Script tags MUST not be included in the description of an API, keeping descriptions to just the text that
+      is needed, and relying on the rest of the OpenAPI to describe what is possible.
+    message: Info Description MUST NOT Have Script Tag
+    severity: info
+    given: $.info
+    then:
+      field: description
+      function: pattern
+      functionOptions:
+        notMatch: ^\b(<script)\b
+    tags:
+    - format:openapi
+    - spec:info
+    - experience:security
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-description-no-script-tag''
+      (Info Description No Script Tag). Requirement: Script tags MUST not be included in the description of an API, keeping
+      descriptions to just the text that is needed, and relying on the rest of the OpenAPI to describe what is possible. To
+      fix: Ensure `description` does NOT match the regular expression `^\b(<script)\b`; rename or rewrite any value that does.
+      This rule is evaluated at the JSONPath `$.info` — inspect every location it matches and correct only what violates the
+      rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-info-owasp-api9-document-version:
+    title: Info OWASP API9 Document Version
+    reference: https://spotlight-rules.com/spec/rules/openapi/info-owasp-api9-document-version/
+    description: The API should declare a version in info.version so every published version is inventoried and retired versions
+      can be tracked (OWASP API9 — improper inventory management).
+    message: API should declare info.version for inventory management.
+    given: $.info
+    severity: info
+    then:
+      field: version
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:info
+    - experience:security
+    - experience:governance
+    - owasp:api9
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''info-owasp-api9-document-version''
+      (Info OWASP API9 Document Version). Requirement: The API should declare a version in info.version so every published
+      version is inventoried and retired versions can be tracked (OWASP API9 — improper inventory management). To fix: Ensure
+      `version` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.info` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-operation-get-require-security:
+    title: Operation Get Require Security
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-get-require-security/
+    description: 'Your API should be protected by a `security` rule either at global or operation level. Operations should
+      be protected specially when they are tied to non-idempotent HTTP methods like `POST`, `PUT`, `PATCH` and `DELETE`. This
+      is done with one or more non-empty `security` rules. Security rules are defined in the `securityScheme` section. An
+      example of a security rule applied at global level. ``` security: - BasicAuth: [] paths: /books: {} /users: {} securitySchemes:
+      BasicAuth: scheme: http type: basic ``` An example of a security rule applied at operation level, which eventually overrides
+      the global one ``` paths: /books: post: security: - AccessToken: [] securitySchemes: BasicAuth: scheme: http type: basic
+      AccessToken: scheme: http type: bearer bearerFormat: JWT ```.'
+    message: 'The following operation is not protected by a `security` rule: {{path}}'
+    severity: info
+    given:
+    - $.paths.*.get
+    then:
+    - field: security
+      function: schema
+      functionOptions:
+        schema:
+          items:
+            type: object
+            minProperties: 1
+          minItems: 1
+          type: array
+    formats:
+    - oas3
+    tags:
+    - owasp:api2
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - experience:security
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-get-require-security''
+      (Operation Get Require Security). Requirement: Your API should be protected by a `security` rule either at global or
+      operation level. Operations should be protected specially when they are tied to non-idempotent HTTP methods like `POST`,
+      `PUT`, `PATCH` and `DELETE`. This is done with one or more non-empty `security` rules. Security rules are defined in
+      the `securityScheme` section. An example of a security rule applied at global level. ``` security: - BasicAuth: [] paths:
+      /books: {} /users: {} securitySchemes: BasicAuth: scheme: http type: basic ``` An example of a security rule applied
+      at operation level, which eventually overrides the global one ``` paths: /books: post: security: - AccessToken: [] securitySchemes:
+      BasicAuth: scheme: http type: basic AccessToken: scheme: http type: bearer bearerFormat: JWT ```. To fix: Adjust `security`
+      so it conforms to the schema this rule requires. Guidance: The following operation is not protected by a `security`
+      rule. This rule is evaluated at the JSONPath `$.paths.*.get` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-operation-require-security:
+    title: Operation Require Security
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-require-security/
+    description: Check operation security is defined.
+    message: Check operation security is defined.
+    severity: info
+    given: $.paths.*.*
+    then:
+      field: security
+      function: truthy
+    tags:
+    - owasp:api5
+    - format:openapi
+    - spec:paths
+    - experience:security
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-require-security''
+      (Operation Require Security). Requirement: Check operation security is defined. To fix: Ensure `security` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths.*.*` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-operation-require-security-2:
+    title: Operation Require Security 2
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-require-security-2/
+    description: Each API operation should have a security definition referencing the central security scheme express for
+      an OpenAPI.
+    message: Operations MUST Have a Security Definition
+    severity: info
+    given: $.paths.*[get,post,patch,put,delete]
+    then:
+      field: security
+      function: truthy
+    tags:
+    - owasp:api5
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - experience:security
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-require-security-2''
+      (Operation Require Security 2). Requirement: Each API operation should have a security definition referencing the central
+      security scheme express for an OpenAPI. To fix: Ensure `security` is present and non-empty at each matching location.
+      This rule is evaluated at the JSONPath `$.paths.*[get,post,patch,put,delete]` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-operation-security-use-defined-scheme:
+    title: Operation Security Use Defined Scheme
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-security-use-defined-scheme/
+    description: Check operation security uses a defined security scheme.
+    message: Check operation security uses a defined security scheme.
+    severity: info
+    given: $.paths[*][*]..security.*
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          anyOf:
+          - required:
+            - bearer_auth
+          - required:
+            - inference_bearer_auth
+    tags:
+    - owasp:api5
+    - format:openapi
+    - spec:security
+    - spec:paths
+    - experience:security
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-security-use-defined-scheme''
+      (Operation Security Use Defined Scheme). Requirement: Check operation security uses a defined security scheme. To fix:
+      Adjust the targeted value so it conforms to the schema this rule requires. This rule is evaluated at the JSONPath `$.paths[*][*]..security.*`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-parameter-avoid-integer-id:
+    title: Parameter Avoid Integer ID
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-avoid-integer-id/
+    description: Avoid exposing IDs as an integer, UUIDs or other interoperable strings are preferred.
+    message: Avoid exposing IDs as an integer, UUIDs or other interoperable strings are preferred.
+    severity: info
+    given: $.paths..parameters[*].[?(@property === "name" && (@ === "id" || @ === "ID" || @ === "Id"))]^.schema
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          not:
+            properties:
+              type:
+                const: integer
+          properties:
+            format:
+              const: uuid
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:parameters
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-avoid-integer-id''
+      (Parameter Avoid Integer ID). Requirement: Avoid exposing IDs as an integer, UUIDs or other interoperable strings are
+      preferred. To fix: Adjust the targeted value so it conforms to the schema this rule requires. This rule is evaluated
+      at the JSONPath `$.paths..parameters[*].[?(@property === "name" && (@ === "id" || @ === "ID" || @ === "Id"))]^.schema`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-parameter-no-api-keys-in-query:
+    title: Parameter No API Keys In Query
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-no-api-keys-in-query/
+    description: Query parameters MUST not contain sensitive information, like API tokens or keys.
+    message: Query parameters MUST not contain sensitive information, like API tokens or keys.
+    severity: info
+    given: $.paths.*.*.parameters[?(@.in=='query')].name
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: apiKey|token
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:parameters
+    - experience:security
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-no-api-keys-in-query''
+      (Parameter No API Keys In Query). Requirement: Query parameters MUST not contain sensitive information, like API tokens
+      or keys. To fix: Ensure the targeted value does NOT match the regular expression `apiKey|token`; rename or rewrite any
+      value that does. This rule is evaluated at the JSONPath `$.paths.*.*.parameters[?(@.in==''query'')].name` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-parameter-owasp-api1-no-numeric-ids:
+    title: Parameter OWASP API1 No Numeric IDs
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-owasp-api1-no-numeric-ids/
+    description: Path parameters should not be sequential integers (BOLA / object enumeration, OWASP API1) — use a non-guessable
+      identifier such as a UUID.
+    message: Path parameter should not be an integer (use a non-enumerable id, e.g. UUID).
+    given: $.paths[*][*].parameters[?(@ && @.in == 'path')].schema
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            type:
+              not:
+                enum:
+                - integer
+                - number
+    tags:
+    - format:openapi
+    - spec:parameters
+    - experience:security
+    - owasp:api1
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-owasp-api1-no-numeric-ids''
+      (Parameter OWASP API1 No Numeric IDs). Requirement: Path parameters should not be sequential integers (BOLA / object
+      enumeration, OWASP API1) — use a non-guessable identifier such as a UUID. To fix: Adjust the targeted value so it conforms
+      to the schema this rule requires. This rule is evaluated at the JSONPath `$.paths[*][*].parameters[?(@ && @.in == ''path'')].schema`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-path-no-technology-leak-in:
+    title: Path No Technology Leak In
+    reference: https://spotlight-rules.com/spec/rules/openapi/path-no-technology-leak-in/
+    description: A resource MUST NOT leak or expose format or technology-specific information at any point in the path.
+    message: A resource MUST NOT leak or expose format or technology-specific information at any point in the path.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: (.php|.asp|.jsp|.cgi|.psp|.json|.xml)
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:security
+    - experience:naming
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''path-no-technology-leak-in''
+      (Path No Technology Leak In). Requirement: A resource MUST NOT leak or expose format or technology-specific information
+      at any point in the path. To fix: Ensure the targeted value does NOT match the regular expression `(.php|.asp|.jsp|.cgi|.psp|.json|.xml)`;
+      rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.paths.*~` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-response-cors-allow-origin-no-wildcard:
+    title: Response CORS Allow Origin No Wildcard
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-cors-allow-origin-no-wildcard/
+    description: 'If an Access-Control-Allow-Origin response header is documented, it should not hard-code a wildcard (*)
+      — reflect specific allowed origins instead, especially for authenticated APIs (OWASP API8 security misconfiguration).
+      Note: the project treats CORS as operational (see no-operational-headers-in-spec); this is a defensive check for specs
+      that do document it.'
+    message: Access-Control-Allow-Origin should not be a wildcard (*).
+    given: $..responses.*.headers['Access-Control-Allow-Origin'].schema
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          not:
+            anyOf:
+            - required:
+              - const
+              properties:
+                const:
+                  const: '*'
+            - required:
+              - default
+              properties:
+                default:
+                  const: '*'
+            - required:
+              - example
+              properties:
+                example:
+                  const: '*'
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:cors
+    - experience:security
+    - owasp:api8
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-cors-allow-origin-no-wildcard''
+      (Response CORS Allow Origin No Wildcard). Requirement: If an Access-Control-Allow-Origin response header is documented,
+      it should not hard-code a wildcard (*) — reflect specific allowed origins instead, especially for authenticated APIs
+      (OWASP API8 security misconfiguration). Note: the project treats CORS as operational (see no-operational-headers-in-spec);
+      this is a defensive check for specs that do document it. To fix: Adjust the targeted value so it conforms to the schema
+      this rule requires. This rule is evaluated at the JSONPath `$..responses.*.headers[''Access-Control-Allow-Origin''].schema`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-delete-define-401:
+    title: Response Delete Define 401
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-delete-define-401/
+    description: DELETE operations should define a 401 Unauthorized response to document authentication requirements for destructive
+      operations.
+    message: DELETE MUST Have 401 Response
+    severity: info
+    given: $.paths[*].delete.responses
+    then:
+      field: '401'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:security
+    - experience:error-handling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-delete-define-401''
+      (Response Delete Define 401). Requirement: DELETE operations should define a 401 Unauthorized response to document authentication
+      requirements for destructive operations. To fix: Ensure `401` is present and non-empty at each matching location. This
+      rule is evaluated at the JSONPath `$.paths[*].delete.responses` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-get-define-401:
+    title: Response Get Define 401
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-define-401/
+    description: GET operations should define a 401 Unauthorized response. Analysis of 773 specs shows 401 is the second most
+      common response code with 4805 occurrences, confirming authentication errors must be documented.
+    message: GET MUST Have 401 Response
+    severity: info
+    given: $.paths[*].get.responses
+    then:
+      field: '401'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:security
+    - experience:error-handling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-define-401''
+      (Response Get Define 401). Requirement: GET operations should define a 401 Unauthorized response. Analysis of 773 specs
+      shows 401 is the second most common response code with 4805 occurrences, confirming authentication errors must be documented.
+      To fix: Ensure `401` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*].get.responses`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-no-sensitive-data-in-header:
+    title: Response No Sensitive Data In Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-no-sensitive-data-in-header/
+    description: Headers MUST NOT contain sensitive data.
+    message: Headers MUST NOT contain sensitive data.
+    severity: info
+    given: $.paths[*][*].responses[*].headers.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(SPS-Token|SPS-Password|SPS-Identity|Password)$
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - spec:headers
+    - experience:security
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-no-sensitive-data-in-header''
+      (Response No Sensitive Data In Header). Requirement: Headers MUST NOT contain sensitive data. To fix: Ensure the targeted
+      value does NOT match the regular expression `^(SPS-Token|SPS-Password|SPS-Identity|Password)$`; rename or rewrite any
+      value that does. This rule is evaluated at the JSONPath `$.paths[*][*].responses[*].headers.*~` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-response-owasp-api3-define-error-validation:
+    title: Response OWASP API3 Define Error Validation
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-owasp-api3-define-error-validation/
+    description: Write operations (POST/PUT/PATCH) should define a 400 or 422 validation error response (OWASP API3 — reject
+      malformed or unexpected properties).
+    message: Write operations should define a 400 or 422 validation error response.
+    given: $.paths[*][post,put,patch].responses
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          anyOf:
+          - required:
+            - '400'
+          - required:
+            - '422'
+    tags:
+    - format:openapi
+    - spec:responses
+    - experience:security
+    - owasp:api3
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-owasp-api3-define-error-validation''
+      (Response OWASP API3 Define Error Validation). Requirement: Write operations (POST/PUT/PATCH) should define a 400 or
+      422 validation error response (OWASP API3 — reject malformed or unexpected properties). To fix: Adjust the targeted
+      value so it conforms to the schema this rule requires. This rule is evaluated at the JSONPath `$.paths[*][post,put,patch].responses`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-owasp-api8-define-error-401:
+    title: Response OWASP API8 Define Error 401
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-owasp-api8-define-error-401/
+    description: Operations should define a 401 Unauthorized response (OWASP API8 — security misconfiguration; document auth
+      failures).
+    message: Operation should define a 401 Unauthorized response.
+    given: $.paths[*][get,post,put,patch,delete].responses
+    severity: info
+    then:
+      field: '401'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - experience:security
+    - owasp:api8
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-owasp-api8-define-error-401''
+      (Response OWASP API8 Define Error 401). Requirement: Operations should define a 401 Unauthorized response (OWASP API8
+      — security misconfiguration; document auth failures). To fix: Ensure `401` is present and non-empty at each matching
+      location. This rule is evaluated at the JSONPath `$.paths[*][get,post,put,patch,delete].responses` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-response-owasp-api8-define-error-500:
+    title: Response OWASP API8 Define Error 500
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-owasp-api8-define-error-500/
+    description: Operations should define a 500 Internal Server Error response (OWASP API8 — document server-error behavior).
+    message: Operation should define a 500 Internal Server Error response.
+    given: $.paths[*][get,post,put,patch,delete].responses
+    severity: info
+    then:
+      field: '500'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - experience:security
+    - owasp:api8
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-owasp-api8-define-error-500''
+      (Response OWASP API8 Define Error 500). Requirement: Operations should define a 500 Internal Server Error response (OWASP
+      API8 — document server-error behavior). To fix: Ensure `500` is present and non-empty at each matching location. This
+      rule is evaluated at the JSONPath `$.paths[*][get,post,put,patch,delete].responses` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-response-post-define-401:
+    title: Response Post Define 401
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-post-define-401/
+    description: POST operations should define a 401 Unauthorized response to document authentication requirements for write
+      operations.
+    message: POST MUST Have 401 Response
+    severity: info
+    given: $.paths[*].post.responses
+    then:
+      field: '401'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:security
+    - experience:error-handling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-post-define-401''
+      (Response Post Define 401). Requirement: POST operations should define a 401 Unauthorized response to document authentication
+      requirements for write operations. To fix: Ensure `401` is present and non-empty at each matching location. This rule
+      is evaluated at the JSONPath `$.paths[*].post.responses` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-put-define-401:
+    title: Response Put Define 401
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-put-define-401/
+    description: PUT operations should define a 401 Unauthorized response to document authentication requirements for update
+      operations.
+    message: PUT MUST Have 401 Response
+    severity: info
+    given: $.paths[*].put.responses
+    then:
+      field: '401'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:security
+    - experience:error-handling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-put-define-401''
+      (Response Put Define 401). Requirement: PUT operations should define a 401 Unauthorized response to document authentication
+      requirements for update operations. To fix: Ensure `401` is present and non-empty at each matching location. This rule
+      is evaluated at the JSONPath `$.paths[*].put.responses` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-success-require-ratelimit-header:
+    title: Response Success Require Ratelimit Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-success-require-ratelimit-header/
+    description: 'Ratelimiting API preserves a service and limits attack scenario [see API4:2019 Lack of Resources & Rate
+      Limiting](https://owasp.org/www-project-api-security). APIs should use the following headers at least on successful
+      responses: - `X-RateLimit-Limit`: number of total requests in a give time window - `X-RateLimit-Remaining`: remaining
+      requests in the current window - `X-RateLimit-Reset`: number of seconds before the window resets An example set of headers
+      is the following ``` X-Ratelimit-Limit: 100 X-Ratelimit-Remaining: 40 X-Ratelimit-Reset: 12 ``` A standardization proposal
+      for ratelimit headers is ongoning inside the IETF HTTPAPI Workgroup. See [the draft](https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/).'
+    message: Missing ratelimit headers. {{property}} {{error}} {{path}}
+    severity: info
+    given: $.[responses][?(@property[0] == "2" )][headers]
+    then:
+    - functionOptions:
+        properties:
+        - X-RateLimit-Limit
+        - RateLimit-Limit
+      function: xor
+    - functionOptions:
+        properties:
+        - X-RateLimit-Remaining
+        - RateLimit-Remaining
+      function: xor
+    - functionOptions:
+        properties:
+        - X-RateLimit-Reset
+        - RateLimit-Reset
+      function: xor
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:responses
+    - spec:headers
+    - topic:rate-limiting
+    - experience:reliability
+    - experience:security
+    - experience:performance
+    - owasp:api4
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-success-require-ratelimit-header''
+      (Response Success Require Ratelimit Header). Requirement: Ratelimiting API preserves a service and limits attack scenario
+      [see API4:2019 Lack of Resources & Rate Limiting](https://owasp.org/www-project-api-security). APIs should use the following
+      headers at least on successful responses: - `X-RateLimit-Limit`: number of total requests in a give time window - `X-RateLimit-Remaining`:
+      remaining requests in the current window - `X-RateLimit-Reset`: number of seconds before the window resets An example
+      set of headers is the following ``` X-Ratelimit-Limit: 100 X-Ratelimit-Remaining: 40 X-Ratelimit-Reset: 12 ``` A standardization
+      proposal for ratelimit headers is ongoning inside the IETF HTTPAPI Workgroup. See [the draft](https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/).
+      To fix: Include exactly one of: X-RateLimit-Limit, RateLimit-Limit. Also: Include exactly one of: X-RateLimit-Remaining,
+      RateLimit-Remaining. Also: Include exactly one of: X-RateLimit-Reset, RateLimit-Reset. This rule is evaluated at the
+      JSONPath `$.[responses][?(@property[0] == "2" )][headers]` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-schema-array-require-min-max-items:
+    title: Schema Array Require Min Max Items
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-array-require-min-max-items/
+    description: 'Array size should be limited to mitigate resource exhaustion attacks. This can be done using `maxItems`
+      and `minItems`, like in the example below. ``` Limited: type: array maxItems: 10 items: type: string format: date ```
+      You should ensure that the schema referenced in `items` is constrained too. If you delegate input validation to a library
+      or framework, be sure to test it thoroughly and ensure that it verifies `maxItems`.'
+    message: Schema of type array must specify maxItems and minItems. {{path}} {{error}}
+    severity: info
+    given:
+    - $.[?(@.type=="array")]
+    then:
+    - field: maxItems
+      function: defined
+    - field: minItems
+      function: defined
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-array-require-min-max-items''
+      (Schema Array Require Min Max Items). Requirement: Array size should be limited to mitigate resource exhaustion attacks.
+      This can be done using `maxItems` and `minItems`, like in the example below. ``` Limited: type: array maxItems: 10 items:
+      type: string format: date ``` You should ensure that the schema referenced in `items` is constrained too. If you delegate
+      input validation to a library or framework, be sure to test it thoroughly and ensure that it verifies `maxItems`. To
+      fix: Ensure `maxItems` is defined at each matching location. Also: Ensure `minItems` is defined at each matching location.
+      This rule is evaluated at the JSONPath `$.[?(@.type=="array")]` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-schema-number-require-min-max:
+    title: Schema Number Require Min Max
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-number-require-min-max/
+    description: Numeric values should be limited in size to mitigate resource exhaustion using `maximum` and `minimum`. If
+      you delegate input validation to a library or framework, be sure to test it thoroughly.
+    message: Schema of type number or integer must specify a maximum and a minimum. {{path}} {{error}}
+    severity: info
+    given:
+    - $.[?(@.type=="number")]
+    - $.[?(@.type=="integer")]
+    then:
+    - field: maximum
+      function: defined
+    - field: minimum
+      function: defined
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-number-require-min-max''
+      (Schema Number Require Min Max). Requirement: Numeric values should be limited in size to mitigate resource exhaustion
+      using `maximum` and `minimum`. If you delegate input validation to a library or framework, be sure to test it thoroughly.
+      To fix: Ensure `maximum` is defined at each matching location. Also: Ensure `minimum` is defined at each matching location.
+      This rule is evaluated at the JSONPath `$.[?(@.type=="number")] | $.[?(@.type=="integer")]` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-schema-object-constrain-additional-property:
+    title: Schema Object Constrain Additional Property
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-object-constrain-additional-property/
+    description: 'By default, jsonschema allows additionalProperties. This means that schema validators can be bypassed using
+      further, unspecified fields. While forbidding additionalProperties can create rigidity and hinder the evolution of an
+      API - eg making it hard to accept new parameters or fields - it is possible that this flexibility can be used to bypass
+      the schema validator and force the application to process unwanted information. Disable `additionalProperties` with
+      `false` ``` Person: type: object additionalProperties: false properties: given_name: type: string pattern: [a-zA-Z ]{24}
+      ``` Or constraint them using `maxProperties` ``` Person: type: object additionalProperties: type: string pattern: /+39[0-9]{,14}/
+      maxProperties: 3 properties: given_name: type: string pattern: [a-zA-Z ]{24} ``` - no additionalProperties - constrained
+      additionalProperties.'
+    message: 'Objects should not allow additionalProperties. Disable them with `additionalProperties: false` or constraint
+      them.'
+    severity: info
+    given:
+    - $.[?(@.type=="object" && @.additionalProperties &&  @.additionalProperties!=true &&  @.additionalProperties!=false )]
+    then:
+    - field: maxProperties
+      function: defined
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    - owasp:api3
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-object-constrain-additional-property''
+      (Schema Object Constrain Additional Property). Requirement: By default, jsonschema allows additionalProperties. This
+      means that schema validators can be bypassed using further, unspecified fields. While forbidding additionalProperties
+      can create rigidity and hinder the evolution of an API - eg making it hard to accept new parameters or fields - it is
+      possible that this flexibility can be used to bypass the schema validator and force the application to process unwanted
+      information. Disable `additionalProperties` with `false` ``` Person: type: object additionalProperties: false properties:
+      given_name: type: string pattern: [a-zA-Z ]{24} ``` Or constraint them using `maxProperties` ``` Person: type: object
+      additionalProperties: type: string pattern: /+39[0-9]{,14}/ maxProperties: 3 properties: given_name: type: string pattern:
+      [a-zA-Z ]{24} ``` - no additionalProperties - constrained additionalProperties. To fix: Ensure `maxProperties` is defined
+      at each matching location. Guidance: Objects should not allow additionalProperties. Disable them with `additionalProperties:
+      false` or constraint them. This rule is evaluated at the JSONPath `$.[?(@.type=="object" && @.additionalProperties &&
+      @.additionalProperties!=true && @.additionalProperties!=false )]` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-schema-object-disallow-additional-property:
+    title: Schema Object Disallow Additional Property
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-object-disallow-additional-property/
+    description: 'By default, jsonschema allows additionalProperties. This means that schema validators can be bypassed using
+      further, unspecified fields. While forbidding additionalProperties can create rigidity and hinder the evolution of an
+      API - eg making it hard to accept new parameters or fields - it is possible that this flexibility can be used to bypass
+      the schema validator and force the application to process unwanted information. Disable `additionalProperties` with
+      `false` ``` Person: type: object additionalProperties: false properties: given_name: type: string pattern: [a-zA-Z ]{24}
+      ``` Or constraint them using `maxProperties` ``` Person: type: object additionalProperties: type: string pattern: /+39[0-9]{,14}/
+      maxProperties: 3 properties: given_name: type: string pattern: [a-zA-Z ]{24} ``` - no additionalProperties - constrained
+      additionalProperties.'
+    message: 'Objects should not allow additionalProperties. Disable them with `additionalProperties: false` or constraint
+      them.'
+    severity: info
+    given:
+    - $.[?(@.type=="object" && @.additionalProperties==true)]
+    then:
+    - field: additionalProperties
+      function: falsy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    - owasp:api3
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-object-disallow-additional-property''
+      (Schema Object Disallow Additional Property). Requirement: By default, jsonschema allows additionalProperties. This
+      means that schema validators can be bypassed using further, unspecified fields. While forbidding additionalProperties
+      can create rigidity and hinder the evolution of an API - eg making it hard to accept new parameters or fields - it is
+      possible that this flexibility can be used to bypass the schema validator and force the application to process unwanted
+      information. Disable `additionalProperties` with `false` ``` Person: type: object additionalProperties: false properties:
+      given_name: type: string pattern: [a-zA-Z ]{24} ``` Or constraint them using `maxProperties` ``` Person: type: object
+      additionalProperties: type: string pattern: /+39[0-9]{,14}/ maxProperties: 3 properties: given_name: type: string pattern:
+      [a-zA-Z ]{24} ``` - no additionalProperties - constrained additionalProperties. To fix: Ensure `additionalProperties`
+      is absent or empty (falsy) at each matching location. Guidance: Objects should not allow additionalProperties. Disable
+      them with `additionalProperties: false` or constraint them. This rule is evaluated at the JSONPath `$.[?(@.type=="object"
+      && @.additionalProperties==true)]` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-object-set-additional-property:
+    title: Schema Object Set Additional Property
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-object-set-additional-property/
+    description: 'By default, jsonschema allows additionalProperties. This means that schema validators can be bypassed using
+      further, unspecified fields. While forbidding additionalProperties can create rigidity and hinder the evolution of an
+      API - eg making it hard to accept new parameters or fields - it is possible that this flexibility can be used to bypass
+      the schema validator and force the application to process unwanted information. Disable `additionalProperties` with
+      `false` ``` Person: type: object additionalProperties: false properties: given_name: type: string pattern: [a-zA-Z ]{24}
+      ``` Or constraint them using `maxProperties` ``` Person: type: object additionalProperties: type: string pattern: /+39[0-9]{,14}/
+      maxProperties: 3 properties: given_name: type: string pattern: [a-zA-Z ]{24} ``` - no additionalProperties - constrained
+      additionalProperties. @.additionalProperties)]`).'
+    message: 'Objects should not allow additionalProperties. Disable them with `additionalProperties: false` or constraint
+      them.'
+    severity: info
+    given:
+    - $.[?(@.type=="object" && ! @.additionalProperties)]
+    then:
+    - field: additionalProperties
+      function: defined
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    - owasp:api3
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-object-set-additional-property''
+      (Schema Object Set Additional Property). Requirement: By default, jsonschema allows additionalProperties. This means
+      that schema validators can be bypassed using further, unspecified fields. While forbidding additionalProperties can
+      create rigidity and hinder the evolution of an API - eg making it hard to accept new parameters or fields - it is possible
+      that this flexibility can be used to bypass the schema validator and force the application to process unwanted information.
+      Disable `additionalProperties` with `false` ``` Person: type: object additionalProperties: false properties: given_name:
+      type: string pattern: [a-zA-Z ]{24} ``` Or constraint them using `maxProperties` ``` Person: type: object additionalProperties:
+      type: string pattern: /+39[0-9]{,14}/ maxProperties: 3 properties: given_name: type: string pattern: [a-zA-Z ]{24} ```
+      - no additionalProperties - constrained additionalProperties. @.additionalProperties)]`). To fix: Ensure `additionalProperties`
+      is defined at each matching location. Guidance: Objects should not allow additionalProperties. Disable them with `additionalProperties:
+      false` or constraint them. This rule is evaluated at the JSONPath `$.[?(@.type=="object" && ! @.additionalProperties)]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-schema-owasp-api4-integer-format:
+    title: Schema OWASP API4 Integer Format
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-owasp-api4-integer-format/
+    description: Integer properties should declare a format (int32 / int64) so their range is bounded (OWASP API4 — unrestricted
+      resource consumption).
+    message: Integer property should declare a format (int32 or int64).
+    given: $..properties[?(@ && @.type == 'integer')]
+    severity: info
+    then:
+      field: format
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - owasp:api4
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-owasp-api4-integer-format''
+      (Schema OWASP API4 Integer Format). Requirement: Integer properties should declare a format (int32 / int64) so their
+      range is bounded (OWASP API4 — unrestricted resource consumption). To fix: Ensure `format` is present and non-empty
+      at each matching location. This rule is evaluated at the JSONPath `$..properties[?(@ && @.type == ''integer'')]` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-schema-string-require-max-length:
+    title: Schema String Require Max Length
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-string-require-max-length/
+    description: 'String length should be limited to avoid an attacker to send very long strings to your service. You can
+      do this in different ways: - specify a `maxLength` - constraint the possible values with an `enum` - use a constrained
+      `format` like `date` or `date-time`. A constrained string using the `date` format. ``` ConstrainedString: type: string
+      format: date ``` Another constrained string using `maxLength`. You can always add further constraints using a `pattern`
+      or a `format`. ``` ZipCode: type: string maxLength: 5 pattern: ''[0-9]{5}'' ``` For further security, you can always
+      limit string length even in conjunction with `format` and `pattern`.'
+    message: Strings (non enum) must specify a maximum length. {{path}} {{error}}
+    severity: info
+    given:
+    - $.[?(@.type=="string" && !@.enum && @.format!="date" && @.format !="date-time" )]
+    then:
+    - field: maxLength
+      function: defined
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-string-require-max-length''
+      (Schema String Require Max Length). Requirement: String length should be limited to avoid an attacker to send very long
+      strings to your service. You can do this in different ways: - specify a `maxLength` - constraint the possible values
+      with an `enum` - use a constrained `format` like `date` or `date-time`. A constrained string using the `date` format.
+      ``` ConstrainedString: type: string format: date ``` Another constrained string using `maxLength`. You can always add
+      further constraints using a `pattern` or a `format`. ``` ZipCode: type: string maxLength: 5 pattern: ''[0-9]{5}'' ```
+      For further security, you can always limit string length even in conjunction with `format` and `pattern`. To fix: Ensure
+      `maxLength` is defined at each matching location. This rule is evaluated at the JSONPath `$.[?(@.type=="string" && !@.enum
+      && @.format!="date" && @.format !="date-time" )]` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-string-require-pattern-or-format:
+    title: Schema String Require Pattern Or Format
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-string-require-pattern-or-format/
+    description: 'String length should be limited to avoid an attacker to send very long strings to your service. You can
+      do this in different ways: - specify a `maxLength` - constraint the possible values with an `enum` - use a constrained
+      `format` like `date` or `date-time`. A constrained string using the `date` format. ``` ConstrainedString: type: string
+      format: date ``` Another constrained string using `maxLength`. You can always add further constraints using a `pattern`
+      or a `format`. ``` ZipCode: type: string maxLength: 5 pattern: ''[0-9]{5}'' ``` For further security, you can always
+      limit string length even in conjunction with `format` and `pattern`.'
+    message: Strings (non enum) must specify a pattern or a format. {{path}}
+    severity: info
+    given:
+    - $.[?(@.type=="string" && !@.enum && @.format!="date" && @.format !="date-time" )]
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          anyOf:
+          - required:
+            - pattern
+          - required:
+            - format
+          additionalProperties: true
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-string-require-pattern-or-format''
+      (Schema String Require Pattern Or Format). Requirement: String length should be limited to avoid an attacker to send
+      very long strings to your service. You can do this in different ways: - specify a `maxLength` - constraint the possible
+      values with an `enum` - use a constrained `format` like `date` or `date-time`. A constrained string using the `date`
+      format. ``` ConstrainedString: type: string format: date ``` Another constrained string using `maxLength`. You can always
+      add further constraints using a `pattern` or a `format`. ``` ZipCode: type: string maxLength: 5 pattern: ''[0-9]{5}''
+      ``` For further security, you can always limit string length even in conjunction with `format` and `pattern`. To fix:
+      Adjust the targeted value so it conforms to the schema this rule requires. This rule is evaluated at the JSONPath `$.[?(@.type=="string"
+      && !@.enum && @.format!="date" && @.format !="date-time" )]` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-schema-write-operation-require-security:
+    title: Schema Write Operation Require Security
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-write-operation-require-security/
+    description: 'Your API should be protected by a `security` rule either at global or operation level. Operations should
+      be protected specially when they are tied to non-idempotent HTTP methods like `POST`, `PUT`, `PATCH` and `DELETE`. This
+      is done with one or more non-empty `security` rules. Security rules are defined in the `securityScheme` section. An
+      example of a security rule applied at global level. ``` security: - BasicAuth: [] paths: /books: {} /users: {} securitySchemes:
+      BasicAuth: scheme: http type: basic ``` An example of a security rule applied at operation level, which eventually overrides
+      the global one ``` paths: /books: post: security: - AccessToken: [] securitySchemes: BasicAuth: scheme: http type: basic
+      AccessToken: scheme: http type: bearer bearerFormat: JWT ```.'
+    message: 'The following non-idempotent operation is not protected by a `security` rule: {{path}}'
+    severity: info
+    given:
+    - $.paths.*[?(@property.match(/^(post|put|patch|delete)/))]
+    then:
+    - field: security
+      function: schema
+      functionOptions:
+        schema:
+          items:
+            type: object
+            minProperties: 1
+          minItems: 1
+          type: array
+    formats:
+    - oas3
+    tags:
+    - owasp:api2
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - experience:security
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-write-operation-require-security''
+      (Schema Write Operation Require Security). Requirement: Your API should be protected by a `security` rule either at
+      global or operation level. Operations should be protected specially when they are tied to non-idempotent HTTP methods
+      like `POST`, `PUT`, `PATCH` and `DELETE`. This is done with one or more non-empty `security` rules. Security rules are
+      defined in the `securityScheme` section. An example of a security rule applied at global level. ``` security: - BasicAuth:
+      [] paths: /books: {} /users: {} securitySchemes: BasicAuth: scheme: http type: basic ``` An example of a security rule
+      applied at operation level, which eventually overrides the global one ``` paths: /books: post: security: - AccessToken:
+      [] securitySchemes: BasicAuth: scheme: http type: basic AccessToken: scheme: http type: bearer bearerFormat: JWT ```.
+      To fix: Adjust `security` so it conforms to the schema this rule requires. Guidance: The following non-idempotent operation
+      is not protected by a `security` rule. This rule is evaluated at the JSONPath `$.paths.*[?(@property.match(/^(post|put|patch|delete)/))]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-security-bearer-scheme-require-bearer-format:
+    title: Security Bearer Scheme Require Bearer Format
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-bearer-scheme-require-bearer-format/
+    description: HTTP bearer security schemes should declare a bearerFormat (e.g. JWT) so consumers know the token type and
+      tooling can validate it.
+    message: HTTP bearer scheme should declare a bearerFormat (e.g. JWT).
+    given: $.components.securitySchemes[?(@ && @.type == 'http' && @.scheme == 'bearer')]
+    severity: info
+    then:
+      field: bearerFormat
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:components
+    - experience:security
+    - owasp:api2
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-bearer-scheme-require-bearer-format''
+      (Security Bearer Scheme Require Bearer Format). Requirement: HTTP bearer security schemes should declare a bearerFormat
+      (e.g. JWT) so consumers know the token type and tooling can validate it. To fix: Ensure `bearerFormat` is present and
+      non-empty at each matching location. This rule is evaluated at the JSONPath `$.components.securitySchemes[?(@ && @.type
+      == ''http'' && @.scheme == ''bearer'')]` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-security-jwt-scheme-require-description:
+    title: Security JWT Scheme Require Description
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-jwt-scheme-require-description/
+    severity: info
+    description: 'Json Web Tokens RFC7519 is a compact, URL-safe means of representing claims to be transferred between two
+      parties. JWT can be enclosed in encrypted or signed tokens like JWS and JWE. The [JOSE IANA registry](https://www.iana.org/assignments/jose/jose.xhtml)
+      provides algorithms information. RFC8725 describes common pitfalls in the JWx specifications and in their implementations,
+      such as: - the ability to ignore algorithms, eg. `{"alg": "none"}`; - using insecure algorithms like `RSASSA-PKCS1-v1_5`
+      eg. `{"alg": "RS256"}`. An API using JWT should explicit in the `description` that the implementation conforms to RFC8725.
+      ``` components: securitySchemes: JWTBearer: type: http scheme: bearer bearerFormat: JWT description: |- A bearer token
+      in the format of a JWS and conformato to the specifications included in RFC8725. ```.'
+    message: JWT usage should be detailed in `description` {{error}}.
+    given:
+    - $.[securitySchemes][?(@.bearerFormat=="jwt" || @.bearerFormat=="JWT")]
+    then:
+    - field: description
+      function: truthy
+    - field: description
+      function: pattern
+      functionOptions:
+        match: .*RFC8725.*
+    tags:
+    - owasp:api2
+    - format:openapi
+    - spec:security
+    - experience:security
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-jwt-scheme-require-description''
+      (Security JWT Scheme Require Description). Requirement: Json Web Tokens RFC7519 is a compact, URL-safe means of representing
+      claims to be transferred between two parties. JWT can be enclosed in encrypted or signed tokens like JWS and JWE. The
+      [JOSE IANA registry](https://www.iana.org/assignments/jose/jose.xhtml) provides algorithms information. RFC8725 describes
+      common pitfalls in the JWx specifications and in their implementations, such as: - the ability to ignore algorithms,
+      eg. `{"alg": "none"}`; - using insecure algorithms like `RSASSA-PKCS1-v1_5` eg. `{"alg": "RS256"}`. An API using JWT
+      should explicit in the `description` that the implementation conforms to RFC8725. ``` components: securitySchemes: JWTBearer:
+      type: http scheme: bearer bearerFormat: JWT description: |- A bearer token in the format of a JWS and conformato to
+      the specifications included in RFC8725. ```. To fix: Ensure `description` is present and non-empty at each matching
+      location. Also: Ensure `description` matches the regular expression `.*RFC8725.*`; rewrite any value that does not.
+      Guidance: JWT usage should be detailed in `description`. This rule is evaluated at the JSONPath `$.[securitySchemes][?(@.bearerFormat=="jwt"
+      || @.bearerFormat=="JWT")]` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-security-no-http-basic-auth:
+    title: Security No HTTP Basic Auth
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-no-http-basic-auth/
+    description: Consider a more secure alternative to HTTP Basic.
+    message: HTTP Basic is an insecure way to pass credentials around, use an alternative.
+    severity: info
+    given: $.components.securitySchemes[*]
+    then:
+      field: scheme
+      function: pattern
+      functionOptions:
+        notMatch: basic
+    tags:
+    - owasp:api2
+    - format:openapi
+    - spec:security
+    - spec:components
+    - experience:security
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-no-http-basic-auth''
+      (Security No HTTP Basic Auth). Requirement: Consider a more secure alternative to HTTP Basic. To fix: Ensure `scheme`
+      does NOT match the regular expression `basic`; rename or rewrite any value that does. This rule is evaluated at the
+      JSONPath `$.components.securitySchemes[*]` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-security-oauth-disallow-insecure-flows:
+    title: Security OAuth Disallow Insecure Flows
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-oauth-disallow-insecure-flows/
+    description: The OAuth2 authorization framework defines various [grant types](https://tools.ietf.org/html/rfc6749#section-1.3),
+      most notably the [AuthorizationCode](https://tools.ietf.org/html/rfc6749#section-1.3.1) and the [Client Credentials](https://tools.ietf.org/html/rfc6749#section-1.3.4).
+      Some grant types are now considered insecure and MUST not be used, including `implicit` and `password`. The new [OAuth2.1](https://tools.ietf.org/html/draft-ietf-oauth-v2-1-01)
+      still in draft, removes them and suggests to replace the `implicit` with `authorizationCode` + PKCE defined in RFC7636.
+    message: 'Do not use oauth2 insecure flow: "{{property}}".'
+    severity: info
+    given:
+    - $.[?(@.type=="oauth2")].flows
+    then:
+    - field: implicit
+      function: falsy
+    - field: password
+      function: falsy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:security
+    - experience:security
+    - owasp:api2
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-oauth-disallow-insecure-flows''
+      (Security OAuth Disallow Insecure Flows). Requirement: The OAuth2 authorization framework defines various [grant types](https://tools.ietf.org/html/rfc6749#section-1.3),
+      most notably the [AuthorizationCode](https://tools.ietf.org/html/rfc6749#section-1.3.1) and the [Client Credentials](https://tools.ietf.org/html/rfc6749#section-1.3.4).
+      Some grant types are now considered insecure and MUST not be used, including `implicit` and `password`. The new [OAuth2.1](https://tools.ietf.org/html/draft-ietf-oauth-v2-1-01)
+      still in draft, removes them and suggests to replace the `implicit` with `authorizationCode` + PKCE defined in RFC7636.
+      To fix: Ensure `implicit` is absent or empty (falsy) at each matching location. Also: Ensure `password` is absent or
+      empty (falsy) at each matching location. This rule is evaluated at the JSONPath `$.[?(@.type=="oauth2")].flows` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-security-oauth-endpoints-require-https:
+    title: Security OAuth Endpoints Require HTTPS
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-oauth-endpoints-require-https/
+    description: OAuth2 endpoints must use `https://`.
+    message: OAuth endpoints must use https://
+    severity: info
+    given:
+    - $.[securitySchemes][?(@.type=="oauth2")][*].[?(@property.match(/url$/i))]
+    then:
+    - field: value
+      function: pattern
+      functionOptions:
+        match: ^https://
+    formats:
+    - oas3
+    tags:
+    - owasp:api8
+    - format:openapi
+    - spec:security
+    - experience:security
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-oauth-endpoints-require-https''
+      (Security OAuth Endpoints Require HTTPS). Requirement: OAuth2 endpoints must use `https://`. To fix: Ensure `value`
+      matches the regular expression `^https://`; rewrite any value that does not. This rule is evaluated at the JSONPath
+      `$.[securitySchemes][?(@.type=="oauth2")][*].[?(@property.match(/url$/i))]` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-security-oauth-flow-require-scopes:
+    title: Security OAuth Flow Require Scopes
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-oauth-flow-require-scopes/
+    description: OAuth2 flows should define scopes so authorization is granular and least-privilege rather than all-or-nothing.
+    message: OAuth2 flow should define at least one scope.
+    given: $.components.securitySchemes[?(@ && @.type == 'oauth2')].flows[*]
+    severity: info
+    then:
+      field: scopes
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          minProperties: 1
+    tags:
+    - format:openapi
+    - spec:components
+    - experience:security
+    - experience:governance
+    - owasp:api5
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-oauth-flow-require-scopes''
+      (Security OAuth Flow Require Scopes). Requirement: OAuth2 flows should define scopes so authorization is granular and
+      least-privilege rather than all-or-nothing. To fix: Adjust `scopes` so it conforms to the schema this rule requires.
+      This rule is evaluated at the JSONPath `$.components.securitySchemes[?(@ && @.type == ''oauth2'')].flows[*]` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-security-oauth-scheme-require-description:
+    title: Security OAuth Scheme Require Description
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-oauth-scheme-require-description/
+    severity: info
+    description: 'Json Web Tokens RFC7519 is a compact, URL-safe means of representing claims to be transferred between two
+      parties. JWT can be enclosed in encrypted or signed tokens like JWS and JWE. The [JOSE IANA registry](https://www.iana.org/assignments/jose/jose.xhtml)
+      provides algorithms information. RFC8725 describes common pitfalls in the JWx specifications and in their implementations,
+      such as: - the ability to ignore algorithms, eg. `{"alg": "none"}`; - using insecure algorithms like `RSASSA-PKCS1-v1_5`
+      eg. `{"alg": "RS256"}`. An API using JWT should explicit in the `description` that the implementation conforms to RFC8725.
+      ``` components: securitySchemes: JWTBearer: type: http scheme: bearer bearerFormat: JWT description: |- A bearer token
+      in the format of a JWS and conformato to the specifications included in RFC8725. ```.'
+    message: JWT usage should be detailed in `description` {{error}}.
+    given:
+    - $.[securitySchemes][?(@.type=="oauth2")]
+    then:
+    - field: description
+      function: truthy
+    - field: description
+      function: pattern
+      functionOptions:
+        match: .*RFC8725.*
+    tags:
+    - owasp:api2
+    - format:openapi
+    - spec:security
+    - experience:security
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-oauth-scheme-require-description''
+      (Security OAuth Scheme Require Description). Requirement: Json Web Tokens RFC7519 is a compact, URL-safe means of representing
+      claims to be transferred between two parties. JWT can be enclosed in encrypted or signed tokens like JWS and JWE. The
+      [JOSE IANA registry](https://www.iana.org/assignments/jose/jose.xhtml) provides algorithms information. RFC8725 describes
+      common pitfalls in the JWx specifications and in their implementations, such as: - the ability to ignore algorithms,
+      eg. `{"alg": "none"}`; - using insecure algorithms like `RSASSA-PKCS1-v1_5` eg. `{"alg": "RS256"}`. An API using JWT
+      should explicit in the `description` that the implementation conforms to RFC8725. ``` components: securitySchemes: JWTBearer:
+      type: http scheme: bearer bearerFormat: JWT description: |- A bearer token in the format of a JWS and conformato to
+      the specifications included in RFC8725. ```. To fix: Ensure `description` is present and non-empty at each matching
+      location. Also: Ensure `description` matches the regular expression `.*RFC8725.*`; rewrite any value that does not.
+      Guidance: JWT usage should be detailed in `description`. This rule is evaluated at the JSONPath `$.[securitySchemes][?(@.type=="oauth2")]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-security-openidconnect-require-url:
+    title: Security OpenID-Connect Require URL
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-openidconnect-require-url/
+    description: OpenID Connect security schemes should declare an openIdConnectUrl pointing at the discovery document so
+      clients can configure themselves.
+    message: openIdConnect scheme should declare an openIdConnectUrl.
+    given: $.components.securitySchemes[?(@ && @.type == 'openIdConnect')]
+    severity: info
+    then:
+      field: openIdConnectUrl
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:components
+    - experience:security
+    - owasp:api2
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-openidconnect-require-url''
+      (Security OpenID-Connect Require URL). Requirement: OpenID Connect security schemes should declare an openIdConnectUrl
+      pointing at the discovery document so clients can configure themselves. To fix: Ensure `openIdConnectUrl` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.components.securitySchemes[?(@ &&
+      @.type == ''openIdConnect'')]` — inspect every location it matches and correct only what violates the rule. Make the
+      smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-security-openidconnect-url-https:
+    title: Security OpenID-Connect URL HTTPS
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-openidconnect-url-https/
+    description: The OpenID Connect discovery URL (openIdConnectUrl) should use https so token/identity configuration is not
+      retrieved over an insecure channel.
+    message: openIdConnectUrl should use https.
+    given: $.components.securitySchemes[?(@ && @.type == 'openIdConnect')].openIdConnectUrl
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^https://
+    tags:
+    - format:openapi
+    - spec:components
+    - experience:security
+    - owasp:api8
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-openidconnect-url-https''
+      (Security OpenID-Connect URL HTTPS). Requirement: The OpenID Connect discovery URL (openIdConnectUrl) should use https
+      so token/identity configuration is not retrieved over an insecure channel. To fix: Ensure the targeted value matches
+      the regular expression `^https://`; rewrite any value that does not. This rule is evaluated at the JSONPath `$.components.securitySchemes[?(@
+      && @.type == ''openIdConnect'')].openIdConnectUrl` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-security-owasp-api2-auth-insecure-schemes:
+    title: Security OWASP API2 Auth Insecure Schemes
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-owasp-api2-auth-insecure-schemes/
+    description: HTTP auth schemes should not use insecure mechanisms such as negotiate or oauth1 (OWASP API2). Prefer bearer
+      with a vetted token.
+    message: HTTP auth scheme is insecure (avoid negotiate / oauth1).
+    given: $.components.securitySchemes[?(@ && @.type == 'http')].scheme
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(negotiate|oauth)$
+    tags:
+    - format:openapi
+    - spec:components
+    - experience:security
+    - owasp:api2
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-owasp-api2-auth-insecure-schemes''
+      (Security OWASP API2 Auth Insecure Schemes). Requirement: HTTP auth schemes should not use insecure mechanisms such
+      as negotiate or oauth1 (OWASP API2). Prefer bearer with a vetted token. To fix: Ensure the targeted value does NOT match
+      the regular expression `^(negotiate|oauth)$`; rename or rewrite any value that does. This rule is evaluated at the JSONPath
+      `$.components.securitySchemes[?(@ && @.type == ''http'')].scheme` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-security-owasp-api2-no-api-keys-in-url:
+    title: Security OWASP API2 No API Keys In URL
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-owasp-api2-no-api-keys-in-url/
+    description: API key security schemes should be sent in a header or cookie, never in the query string or path (OWASP API2
+      — credentials leak into logs and history).
+    message: apiKey scheme should be in a header or cookie, not the URL.
+    given: $.components.securitySchemes[?(@ && @.type == 'apiKey')]
+    severity: info
+    then:
+      field: in
+      function: enumeration
+      functionOptions:
+        values:
+        - header
+        - cookie
+    tags:
+    - format:openapi
+    - spec:components
+    - experience:security
+    - owasp:api2
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-owasp-api2-no-api-keys-in-url''
+      (Security OWASP API2 No API Keys In URL). Requirement: API key security schemes should be sent in a header or cookie,
+      never in the query string or path (OWASP API2 — credentials leak into logs and history). To fix: Set `in` to one of
+      the allowed values: header, cookie. This rule is evaluated at the JSONPath `$.components.securitySchemes[?(@ && @.type
+      == ''apiKey'')]` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-security-require-root:
+    title: Security Require Root
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-require-root/
+    description: The API contract MUST include a 'security' section at the root level.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $
+    then:
+      field: security
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - owasp:api2
+    - format:openapi
+    - spec:document
+    - experience:security
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-require-root'' (Security
+      Require Root). Requirement: The API contract MUST include a ''security'' section at the root level. To fix: Ensure `security`
+      is present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-security-require-root-scheme:
+    title: Security Require Root Scheme
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-require-root-scheme/
+    description: Security field MUST be present at the root of the spec with at least one item (ie. HTTPBearer, Token, APIKey,
+      etc.).
+    message: Security field MUST be present at the root of the spec with at least one item (ie.
+    severity: info
+    given: $
+    then:
+      field: security
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          minItems: 1
+    tags:
+    - owasp:api2
+    - format:openapi
+    - spec:document
+    - experience:security
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-require-root-scheme''
+      (Security Require Root Scheme). Requirement: Security field MUST be present at the root of the spec with at least one
+      item (ie. HTTPBearer, Token, APIKey, etc.). To fix: Adjust `security` so it conforms to the schema this rule requires.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-security-scheme-require-description:
+    title: Security Scheme Require Description
+    reference: https://spotlight-rules.com/spec/rules/openapi/security-scheme-require-description/
+    description: Every security scheme should declare a description so consumers know how to authenticate (which token, where
+      to get it, what scopes).
+    message: Security scheme should have a description.
+    given: $.components.securitySchemes[*]
+    severity: info
+    then:
+      field: description
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:components
+    - experience:security
+    - owasp:api2
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''security-scheme-require-description''
+      (Security Scheme Require Description). Requirement: Every security scheme should declare a description so consumers
+      know how to authenticate (which token, where to get it, what scopes). To fix: Ensure `description` is present and non-empty
+      at each matching location. This rule is evaluated at the JSONPath `$.components.securitySchemes[*]` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-server-must-use-https:
+    title: Server Must Use HTTPS
+    reference: https://spotlight-rules.com/spec/rules/openapi/server-must-use-https/
+    description: Servers MUST be https and no other protocol is allowed unless using localhost.
+    message: Servers MUST be https and no other protocol is allowed unless using localhost.
+    severity: info
+    given: $.servers..url
+    then:
+      function: pattern
+      functionOptions:
+        match: ^(https:|http://localhost)
+    formats:
+    - oas3
+    tags:
+    - owasp:api8
+    - format:openapi
+    - spec:servers
+    - experience:security
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''server-must-use-https'' (Server
+      Must Use HTTPS). Requirement: Servers MUST be https and no other protocol is allowed unless using localhost. To fix:
+      Ensure the targeted value matches the regular expression `^(https:|http://localhost)`; rewrite any value that does not.
+      This rule is evaluated at the JSONPath `$.servers..url` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-server-require-https:
+    title: Server Require HTTPS
+    reference: https://spotlight-rules.com/spec/rules/openapi/server-require-https/
+    description: ALL requests MUST go through `https` protocol only.
+    message: Servers MUST be https and no other protocol is allowed.
+    severity: info
+    given: $.servers..url
+    then:
+      function: pattern
+      functionOptions:
+        match: /^https:/
+    formats:
+    - oas3
+    tags:
+    - owasp:api8
+    - format:openapi
+    - spec:servers
+    - experience:security
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''server-require-https'' (Server
+      Require HTTPS). Requirement: ALL requests MUST go through `https` protocol only. To fix: Ensure the targeted value matches
+      the regular expression `/^https:/`; rewrite any value that does not. This rule is evaluated at the JSONPath `$.servers..url`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-server-require-https-2:
+    title: Server Require HTTPS 2
+    reference: https://spotlight-rules.com/spec/rules/openapi/server-require-https-2/
+    description: 'Servers must use https to ensure the origin of the responses and protect the integrity and the confidentiality
+      of the communication. You can use `http://` only on sandboxes environment. Use `x-sandbox: true` to skip this kind of
+      check.'
+    message: 'Non-sandbox url  {{value}} {{error}}. Add `x-sandbox: true` to skip this check on a specific server.'
+    severity: info
+    given:
+    - $.servers[?(@["x-sandbox"] != true)]
+    - $.paths..servers[?(@["x-sandbox"] != true)]
+    then:
+      field: url
+      function: pattern
+      functionOptions:
+        match: ^https://.*
+    tags:
+    - owasp:api8
+    - format:openapi
+    - spec:servers
+    - spec:paths
+    - experience:security
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''server-require-https-2'' (Server
+      Require HTTPS 2). Requirement: Servers must use https to ensure the origin of the responses and protect the integrity
+      and the confidentiality of the communication. You can use `http://` only on sandboxes environment. Use `x-sandbox: true`
+      to skip this kind of check. To fix: Ensure `url` matches the regular expression `^https://.*`; rewrite any value that
+      does not. Guidance: Non-sandbox url . Add `x-sandbox: true` to skip this check on a specific server. This rule is evaluated
+      at the JSONPath `$.servers[?(@["x-sandbox"] != true)] | $.paths..servers[?(@["x-sandbox"] != true)]` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-server-url-require-https:
+    title: Server URL Require HTTPS
+    reference: https://spotlight-rules.com/spec/rules/openapi/server-url-require-https/
+    description: API server URLs should use HTTPS to ensure encrypted communication between clients and servers, protecting
+      sensitive data in transit.
+    message: Server URL MUST Use HTTPS
+    severity: info
+    given: $.servers[*]
+    then:
+      field: url
+      function: pattern
+      functionOptions:
+        match: ^https://
+    tags:
+    - owasp:api8
+    - format:openapi
+    - spec:servers
+    - experience:security
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''server-url-require-https''
+      (Server URL Require HTTPS). Requirement: API server URLs should use HTTPS to ensure encrypted communication between
+      clients and servers, protecting sensitive data in transit. To fix: Ensure `url` matches the regular expression `^https://`;
+      rewrite any value that does not. This rule is evaluated at the JSONPath `$.servers[*]` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  apis-json-api-baseurl-https:
+    title: API Baseurl HTTPS
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-baseurl-https/
+    description: Each API baseURL should be an https URL.
+    message: API baseURL should use https.
+    given: $.apis[*].baseURL
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^https://
+    tags:
+    - format:apis-json
+    - spec:apis
+    - experience:security
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-baseurl-https'' (API
+      Baseurl HTTPS). Requirement: Each API baseURL should be an https URL. To fix: Ensure the targeted value matches the
+      regular expression `^https://`; rewrite any value that does not. This rule is evaluated at the JSONPath `$.apis[*].baseURL`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-require-security-page:
+    title: API Property Require Security Page
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-security-page/
+    description: This property ensures there is a URL to the security page, providing details about how security is handled
+      for an API.
+    message: Has Security Path
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(Security|SecurityTesting)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:security
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-require-security-page''
+      (API Property Require Security Page). Requirement: This property ensures there is a URL to the security page, providing
+      details about how security is handled for an API. To fix: Ensure `type` does NOT match the regular expression `\b(Security|SecurityTesting)\b`;
+      rename or rewrite any value that does. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-api-property-url-https:
+    title: API Property URL HTTPS
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-url-https/
+    description: API property URLs (documentation, OpenAPI, etc.) should be https.
+    message: API property url should use https.
+    given: $.apis[*].properties[*].url
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^https://
+    tags:
+    - format:apis-json
+    - spec:schemas
+    - experience:security
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-property-url-https''
+      (API Property URL HTTPS). Requirement: API property URLs (documentation, OpenAPI, etc.) should be https. To fix: Ensure
+      the targeted value matches the regular expression `^https://`; rewrite any value that does not. This rule is evaluated
+      at the JSONPath `$.apis[*].properties[*].url` — inspect every location it matches and correct only what violates the
+      rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  apis-json-document-apis-json-url-https:
+    title: Document APIs JSON URL HTTPS
+    reference: https://spotlight-rules.com/spec/rules/apis-json/document-apis-json-url-https/
+    description: The APIs.json url should be an https URL.
+    message: APIs.json url should use https.
+    given: $.url
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^https://
+    tags:
+    - format:apis-json
+    - spec:document
+    - experience:security
+    - experience:discoverability
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''document-apis-json-url-https''
+      (Document APIs JSON URL HTTPS). Requirement: The APIs.json url should be an https URL. To fix: Ensure the targeted value
+      matches the regular expression `^https://`; rewrite any value that does not. This rule is evaluated at the JSONPath
+      `$.url` — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid APIs.json.
+      Return only the complete corrected document, with no commentary.'
+  apis-json-schema-include-authentication-page:
+    title: Schema Include Authentication Page
+    reference: https://spotlight-rules.com/spec/rules/apis-json/schema-include-authentication-page/
+    description: This property ensures that there is a human readable authentication page available that will provide what
+      type of authentication is used and how it can be applied, as well as any services or tooling that API consumers can
+      use to troubleshoot authentication with APIs.
+    message: Has Authentication
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(Authentication)\b
+    tags:
+    - format:apis-json
+    - spec:apis
+    - spec:properties
+    - experience:security
+    - experience:documentation
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''schema-include-authentication-page''
+      (Schema Include Authentication Page). Requirement: This property ensures that there is a human readable authentication
+      page available that will provide what type of authentication is used and how it can be applied, as well as any services
+      or tooling that API consumers can use to troubleshoot authentication with APIs. To fix: Ensure `type` does NOT match
+      the regular expression `\b(Authentication)\b`; rename or rewrite any value that does. This rule is evaluated at the
+      JSONPath `$.apis.*.properties.* | $.common.*` — inspect every location it matches and correct only what violates the
+      rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid APIs.json. Return only the complete corrected document, with no commentary.'
+  agent-skill-skill-allowed-tools-array:
+    title: Skill Allowed Tools Array
+    reference: https://spotlight-rules.com/spec/rules/agent-skill/skill-allowed-tools-array/
+    description: If a skill declares allowed-tools, it must be an array of tool names so its capability surface is explicit
+      and auditable.
+    message: allowed-tools must be an array of tool names.
+    severity: info
+    given: $.frontmatter['allowed-tools']
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          items:
+            type: string
+    tags:
+    - format:agent-skill
+    - spec:frontmatter
+    - experience:security
+    - experience:governance
+    prompt: 'You are editing an Agent Skill document to satisfy the Spotlight API governance rule ''skill-allowed-tools-array''
+      (Skill Allowed Tools Array). Requirement: If a skill declares allowed-tools, it must be an array of tool names so its
+      capability surface is explicit and auditable. To fix: Adjust the targeted value so it conforms to the schema this rule
+      requires. This rule is evaluated at the JSONPath `$.frontmatter[''allowed-tools'']` — inspect every location it matches
+      and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid Agent Skill. Return only the complete corrected
+      document, with no commentary.'

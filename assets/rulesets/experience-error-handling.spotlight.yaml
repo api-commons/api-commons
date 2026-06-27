@@ -1,0 +1,1373 @@
+documentationUrl: https://spotlight-rules.com/spec/
+functions:
+- baloise-assert-http-codes-for-operation
+- trimble-check-description-for-all-error-responses
+- trimble-check-standard-for-error-payload
+- trimble-operation-post-201-202-status-code
+- trimble-valid-http-response
+functionsDir: ./functions
+rules:
+  openapi-operation-define-429-response:
+    title: Operation Define 429 Response
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-define-429-response/
+    description: APIs should define a 429 Too Many Requests response to document rate limiting behavior. Analysis shows 429
+      appears in 671 operations, confirming rate limiting is a common API pattern.
+    message: Operations MUST Have 429 Response
+    severity: info
+    given: $.paths.*[get,post,put,patch,delete].responses
+    then:
+      field: '429'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - topic:rate-limiting
+    - experience:error-handling
+    - experience:reliability
+    - experience:performance
+    - owasp:api4
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-define-429-response''
+      (Operation Define 429 Response). Requirement: APIs should define a 429 Too Many Requests response to document rate limiting
+      behavior. Analysis shows 429 appears in 671 operations, confirming rate limiting is a common API pattern. To fix: Ensure
+      `429` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths.*[get,post,put,patch,delete].responses`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-operation-define-500-response:
+    title: Operation Define 500 Response
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-define-500-response/
+    description: Every endpoint SHOULD have a 500 response.
+    message: Every endpoint SHOULD have a 500 response.
+    severity: info
+    given: $.paths[*][*]
+    then:
+      field: responses.500
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-define-500-response''
+      (Operation Define 500 Response). Requirement: Every endpoint SHOULD have a 500 response. To fix: Ensure `responses.500`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*][*]` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-operation-well-understood-status-codes:
+    title: Operation Well Understood Status Codes
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-well-understood-status-codes/
+    description: MUST use standard HTTP status codes [150].
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*
+    then:
+      function: baloise-assert-http-codes-for-operation
+      functionOptions:
+        wellUnderstood:
+          '200':
+          - ALL
+          '201':
+          - POST
+          - PUT
+          '202':
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+          '204':
+          - PUT
+          - DELETE
+          - PATCH
+          '207':
+          - POST
+          '301':
+          - ALL
+          '303':
+          - PATCH
+          - POST
+          - PUT
+          - DELETE
+          '304':
+          - GET
+          - HEAD
+          '400':
+          - ALL
+          '401':
+          - ALL
+          '403':
+          - ALL
+          '404':
+          - ALL
+          '405':
+          - ALL
+          '406':
+          - ALL
+          '408':
+          - ALL
+          '409':
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+          '410':
+          - ALL
+          '412':
+          - PUT
+          - DELETE
+          - PATCH
+          '415':
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+          '422':
+          - ALL
+          '423':
+          - PUT
+          - DELETE
+          - PATCH
+          '428':
+          - ALL
+          '429':
+          - ALL
+          '500':
+          - ALL
+          '501':
+          - ALL
+          '503':
+          - ALL
+          default:
+          - ALL
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-well-understood-status-codes''
+      (Operation Well Understood Status Codes). Requirement: MUST use standard HTTP status codes [150]. This rule is evaluated
+      at the JSONPath `$.paths.*` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-400-require-body:
+    title: Response 400 Require Body
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-400-require-body/
+    description: All 400 responses must include a response body.
+    message: All 400 responses must include a response body.
+    severity: info
+    given:
+    - $.paths.*.*.responses['400']
+    then:
+      field: content
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - experience:error-handling
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-400-require-body''
+      (Response 400 Require Body). Requirement: All 400 responses must include a response body. To fix: Ensure `content` is
+      present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths.*.*.responses[''400'']`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-code-must-be-valid:
+    title: Response Code Must Be Valid
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-code-must-be-valid/
+    description: All APIs should return a valid http response code.
+    message: '{{error}}'
+    severity: info
+    given: $..responses
+    then:
+      field: '@key'
+      function: trimble-valid-http-response
+    tags:
+    - format:openapi
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-code-must-be-valid''
+      (Response Code Must Be Valid). Requirement: All APIs should return a valid http response code. This rule is evaluated
+      at the JSONPath `$..responses` — inspect every location it matches and correct only what violates the rule. Make the
+      smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-define-401:
+    title: Response Define 401
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-define-401/
+    description: Responses should contain common response - 401 (unauthorized).
+    message: '{{description}}. Missing {{property}}'
+    severity: info
+    given: $.paths..responses
+    then:
+      field: '401'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - experience:error-handling
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-define-401'' (Response
+      Define 401). Requirement: Responses should contain common response - 401 (unauthorized). To fix: Ensure `401` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths..responses` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-response-define-404:
+    title: Response Define 404
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-define-404/
+    description: Responses should contain common response - 404 (not found).
+    message: '{{description}}. Missing {{property}}'
+    severity: info
+    given: $.paths[?(@property.match(/.*\/{.*}.*/))]..responses
+    then:
+      field: '404'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - experience:error-handling
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-define-404'' (Response
+      Define 404). Requirement: Responses should contain common response - 404 (not found). To fix: Ensure `404` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[?(@property.match(/.*\/{.*}.*/))]..responses`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-define-429:
+    title: Response Define 429
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-define-429/
+    description: Responses should contain common response - 429 (too many requests).
+    message: '{{description}}. Missing {{property}}'
+    severity: info
+    given: $.paths..responses
+    then:
+      field: '429'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - topic:rate-limiting
+    - experience:error-handling
+    - experience:reliability
+    - experience:performance
+    - owasp:api4
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-define-429'' (Response
+      Define 429). Requirement: Responses should contain common response - 429 (too many requests). To fix: Ensure `429` is
+      present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths..responses` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-response-define-500:
+    title: Response Define 500
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-define-500/
+    description: Responses should contain common response - 500 (server error).
+    message: '{{description}}. Missing {{property}}'
+    severity: info
+    given: $.paths..responses
+    then:
+      field: '500'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-define-500'' (Response
+      Define 500). Requirement: Responses should contain common response - 500 (server error). To fix: Ensure `500` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths..responses` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-response-delete-404-use-schema-ref:
+    title: Response Delete 404 Use Schema Ref
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-delete-404-use-schema-ref/
+    description: DELETE 404 not found HTTP status codes have a schema references to standardize the response payload returned
+      for the error response.
+    message: DELETE 404 Responses MUST Use Schema Reference
+    severity: info
+    given: $.paths.*.delete.responses.404
+    then:
+      field: $ref
+      function: falsy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-delete-404-use-schema-ref''
+      (Response Delete 404 Use Schema Ref). Requirement: DELETE 404 not found HTTP status codes have a schema references to
+      standardize the response payload returned for the error response. To fix: Ensure `$ref` is absent or empty (falsy) at
+      each matching location. This rule is evaluated at the JSONPath `$.paths.*.delete.responses.404` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-response-delete-codes-allowed:
+    title: Response Delete Codes Allowed
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-delete-codes-allowed/
+    description: DELETE operations should not return 200 or 201 status codes.
+    message: DELETE operations should not return 200 or 201 status codes.
+    severity: info
+    given: $.paths[*].delete.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^(200|201)$
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-delete-codes-allowed''
+      (Response Delete Codes Allowed). Requirement: DELETE operations should not return 200 or 201 status codes. To fix: Ensure
+      `@key` does NOT match the regular expression `^(200|201)$`; rename or rewrite any value that does. This rule is evaluated
+      at the JSONPath `$.paths[*].delete.responses` — inspect every location it matches and correct only what violates the
+      rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-delete-define-401:
+    title: Response Delete Define 401
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-delete-define-401/
+    description: DELETE operations should define a 401 Unauthorized response to document authentication requirements for destructive
+      operations.
+    message: DELETE MUST Have 401 Response
+    severity: info
+    given: $.paths[*].delete.responses
+    then:
+      field: '401'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:security
+    - experience:error-handling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-delete-define-401''
+      (Response Delete Define 401). Requirement: DELETE operations should define a 401 Unauthorized response to document authentication
+      requirements for destructive operations. To fix: Ensure `401` is present and non-empty at each matching location. This
+      rule is evaluated at the JSONPath `$.paths[*].delete.responses` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-delete-define-500:
+    title: Response Delete Define 500
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-delete-define-500/
+    description: DELETE responses should have a 500 internal server erorr HTTP status code, communicating the API had a problem
+      to consumers.
+    message: DELETE Responses MUST Have 500 Status Codes
+    severity: info
+    given: $.paths.*.delete.responses
+    then:
+      field: '500'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-delete-define-500''
+      (Response Delete Define 500). Requirement: DELETE responses should have a 500 internal server erorr HTTP status code,
+      communicating the API had a problem to consumers. To fix: Ensure `500` is present and non-empty at each matching location.
+      This rule is evaluated at the JSONPath `$.paths.*.delete.responses` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-response-delete-require-204:
+    title: Response Delete Require 204
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-delete-require-204/
+    description: All DELETE methods MUST have a 204 response.
+    message: All DELETE methods MUST have a 204 response.
+    severity: info
+    given:
+    - $.paths[*].delete.responses
+    then:
+      field: '204'
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:consistency
+    - experience:error-handling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-delete-require-204''
+      (Response Delete Require 204). Requirement: All DELETE methods MUST have a 204 response. To fix: Ensure `204` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*].delete.responses` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-response-error-match-problem-schema:
+    title: Response Error Match Problem Schema
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-error-match-problem-schema/
+    description: 'WARN: This rule is under implementation and just provides an hint. Error management is a key enabler of
+      a resilient API ecosystem. Enforcing a consistent schema for errors between different APIs, enables client to properly
+      implement an error management strategy, with positive impacts for users. This rule inspects the schema returned by an
+      error response and verifies whether it contains the main properties defined in RFC7807: `status`, `title` and `detail`.
+      An example of a valid payload is ``` { "title": "Not Found", "status": 404, "detail": "Book does not exist; id: 123"
+      } ``` See recommendation RAC_REST_NAME_007.'
+    message: Your schema doesn't seem to match RFC7807. Are you sure it is ok? {{path}}
+    severity: info
+    given: $.paths.[*].responses[?(@property.match(/^(4|5|default)/))][[schema]]
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+            title:
+              type: string
+            detail:
+              type: string
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - spec:schemas
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-error-match-problem-schema''
+      (Response Error Match Problem Schema). Requirement: WARN: This rule is under implementation and just provides an hint.
+      Error management is a key enabler of a resilient API ecosystem. Enforcing a consistent schema for errors between different
+      APIs, enables client to properly implement an error management strategy, with positive impacts for users. This rule
+      inspects the schema returned by an error response and verifies whether it contains the main properties defined in RFC7807:
+      `status`, `title` and `detail`. An example of a valid payload is ``` { "title": "Not Found", "status": 404, "detail":
+      "Book does not exist; id: 123" } ``` See recommendation RAC_REST_NAME_007. To fix: Adjust the targeted value so it conforms
+      to the schema this rule requires. This rule is evaluated at the JSONPath `$.paths.[*].responses[?(@property.match(/^(4|5|default)/))][[schema]]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-error-require-description:
+    title: Response Error Require Description
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-error-require-description/
+    description: Check if the response description is appropriate for all requests.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*.*.responses
+    then:
+      function: trimble-check-description-for-all-error-responses
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - experience:documentation
+    - experience:error-handling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-error-require-description''
+      (Response Error Require Description). Requirement: Check if the response description is appropriate for all requests.
+      This rule is evaluated at the JSONPath `$.paths.*.*.responses.` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-error-schema-problem-property-names:
+    title: Response Error Schema Problem Property Names
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-error-schema-problem-property-names/
+    description: 'WARN: This rule is under implementation and just provides an hint. Error management is a key enabler of
+      a resilient API ecosystem. Enforcing a consistent schema for errors between different APIs, enables client to properly
+      implement an error management strategy, with positive impacts for users. Errors should return RFC7807 objects. Instead,
+      this schema seems to use non standard properties such as: `message`, `msg` and `code`. An error of the following form
+      ``` { "msg": "Book with id: 123 does not exist.", "code": 6063 } ``` can be expressed in RFC7807 with ``` { "detail":
+      "Book with id: 123 does not exist.", "type": "https://api.example/v1/errors/6063", "status": 404, "title": "Not Found"
+      } ``` Returning an URI in `type`, instead of an opaque `code` can help the client in better identifying the error; moreover
+      the URI though it should not be dereferenced automatically, can return an actual resource providing guidance in addressing
+      the issue. See recommendation RAC_REST_NAME_007.'
+    message: Error response doesn't seem to match RFC7807. Are you sure it is ok? {{path}}
+    severity: info
+    given: $.[responses][?(@property.match(/^(4|5|default)/))][[schema]][properties].*~
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: message|code|msg
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:responses
+    - spec:schemas
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-error-schema-problem-property-names''
+      (Response Error Schema Problem Property Names). Requirement: WARN: This rule is under implementation and just provides
+      an hint. Error management is a key enabler of a resilient API ecosystem. Enforcing a consistent schema for errors between
+      different APIs, enables client to properly implement an error management strategy, with positive impacts for users.
+      Errors should return RFC7807 objects. Instead, this schema seems to use non standard properties such as: `message`,
+      `msg` and `code`. An error of the following form ``` { "msg": "Book with id: 123 does not exist.", "code": 6063 } ```
+      can be expressed in RFC7807 with ``` { "detail": "Book with id: 123 does not exist.", "type": "https://api.example/v1/errors/6063",
+      "status": 404, "title": "Not Found" } ``` Returning an URI in `type`, instead of an opaque `code` can help the client
+      in better identifying the error; moreover the URI though it should not be dereferenced automatically, can return an
+      actual resource providing guidance in addressing the issue. See recommendation RAC_REST_NAME_007. To fix: Ensure `@key`
+      does NOT match the regular expression `message|code|msg`; rename or rewrite any value that does. This rule is evaluated
+      at the JSONPath `$.[responses][?(@property.match(/^(4|5|default)/))][[schema]][properties].*~` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-response-error-standard-payload:
+    title: Response Error Standard Payload
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-error-standard-payload/
+    description: All 4XX and 5XX response codes must follow Trimble API Standard.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*.*.responses
+    then:
+      function: trimble-check-standard-for-error-payload
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-error-standard-payload''
+      (Response Error Standard Payload). Requirement: All 4XX and 5XX response codes must follow Trimble API Standard. This
+      rule is evaluated at the JSONPath `$.paths.*.*.responses.` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-error-use-problem-json:
+    title: Response Error Use Problem JSON
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-error-use-problem-json/
+    description: All 4xx and 5xx error responses MUST use the `application/problem+json` media type (RFC 7807).
+    message: 'Error response documents MUST use the application/problem+json media type: {{error}}'
+    severity: info
+    given: $.paths..responses[?( @property >= 400 && @property < 600)].content[*]~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - application/problem+json
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - spec:media-types
+    - experience:consistency
+    - experience:error-handling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-error-use-problem-json''
+      (Response Error Use Problem JSON). Requirement: All 4xx and 5xx error responses MUST use the `application/problem+json`
+      media type (RFC 7807). To fix: Set the targeted value to one of the allowed values: application/problem+json. This rule
+      is evaluated at the JSONPath `$.paths..responses[?( @property >= 400 && @property < 600)].content[*]~` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-response-error-use-problem-type:
+    title: Response Error Use Problem Type
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-error-use-problem-type/
+    description: 'Error management is a key enabler of a resilient API ecosystem. Enforcing a consistent schema for errors
+      between different APIs, enables client to properly implement an error management strategy, with positive impacts for
+      users. Error responses should return one of the media-type defined in RFC7807: - `application/problem+json` - `application/problem+xml`
+      An example of a valid response: ``` responses: "503": content: application/problem+json: schema: ... ```.'
+    message: Error responses should support RFC7807 in {{path}}.
+    severity: info
+    given: $.paths.[*].responses[?(@property.match(/^(4|5|default)/))].content.*~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - application/problem+xml
+        - application/problem+json
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - spec:media-types
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-error-use-problem-type''
+      (Response Error Use Problem Type). Requirement: Error management is a key enabler of a resilient API ecosystem. Enforcing
+      a consistent schema for errors between different APIs, enables client to properly implement an error management strategy,
+      with positive impacts for users. Error responses should return one of the media-type defined in RFC7807: - `application/problem+json`
+      - `application/problem+xml` An example of a valid response: ``` responses: "503": content: application/problem+json:
+      schema: ... ```. To fix: Set the targeted value to one of the allowed values: application/problem+xml, application/problem+json.
+      This rule is evaluated at the JSONPath `$.paths.[*].responses[?(@property.match(/^(4|5|default)/))].content.*~` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-response-error-use-problem-type-2:
+    title: Response Error Use Problem Type 2
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-error-use-problem-type-2/
+    description: Every error response SHOULD support RFC 7807.
+    message: Every error response SHOULD support RFC 7807.
+    severity: info
+    given: $.paths...responses[?(@property.match(/^(4|5)/))].content.*~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - application/problem+xml
+        - application/problem+json
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - spec:media-types
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-error-use-problem-type-2''
+      (Response Error Use Problem Type 2). Requirement: Every error response SHOULD support RFC 7807. To fix: Set the targeted
+      value to one of the allowed values: application/problem+xml, application/problem+json. This rule is evaluated at the
+      JSONPath `$.paths...responses[?(@property.match(/^(4|5)/))].content.*~` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-response-get-codes-allowed:
+    title: Response Get Codes Allowed
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-codes-allowed/
+    description: GET operations should not use status codes 201, 202, 204, 409, 412.
+    message: GET operations should not use status codes 201, 202, 204, 409, 412.
+    severity: info
+    given: $.paths[*].get.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^(201|202|204|409|412)$
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-codes-allowed''
+      (Response Get Codes Allowed). Requirement: GET operations should not use status codes 201, 202, 204, 409, 412. To fix:
+      Ensure `@key` does NOT match the regular expression `^(201|202|204|409|412)$`; rename or rewrite any value that does.
+      This rule is evaluated at the JSONPath `$.paths[*].get.responses` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-get-define-401:
+    title: Response Get Define 401
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-define-401/
+    description: GET operations should define a 401 Unauthorized response. Analysis of 773 specs shows 401 is the second most
+      common response code with 4805 occurrences, confirming authentication errors must be documented.
+    message: GET MUST Have 401 Response
+    severity: info
+    given: $.paths[*].get.responses
+    then:
+      field: '401'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:security
+    - experience:error-handling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-define-401''
+      (Response Get Define 401). Requirement: GET operations should define a 401 Unauthorized response. Analysis of 773 specs
+      shows 401 is the second most common response code with 4805 occurrences, confirming authentication errors must be documented.
+      To fix: Ensure `401` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*].get.responses`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-get-define-500:
+    title: Response Get Define 500
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-define-500/
+    description: GET responses should have a 500 internal server erorr HTTP status code, communicating the API had a problem
+      to consumers.
+    message: GET Responses MUST Have 500 Status Code
+    severity: info
+    given: $.paths.*.get.responses
+    then:
+      field: '500'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-define-500''
+      (Response Get Define 500). Requirement: GET responses should have a 500 internal server erorr HTTP status code, communicating
+      the API had a problem to consumers. To fix: Ensure `500` is present and non-empty at each matching location. This rule
+      is evaluated at the JSONPath `$.paths.*.get.responses` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-get-must-return-200:
+    title: Response Get Must Return 200
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-must-return-200/
+    description: GET operations must always return 200 status code.
+    message: GET operations must always return 200 status code.
+    severity: info
+    given: $.paths[*].get.responses
+    then:
+    - field: '200'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-must-return-200''
+      (Response Get Must Return 200). Requirement: GET operations must always return 200 status code. To fix: Ensure `200`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*].get.responses`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-head-codes-allowed:
+    title: Response Head Codes Allowed
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-head-codes-allowed/
+    description: HEAD operations should not return 201, 202, 204, 409, 412 status codes.
+    message: HEAD operations should not return 201, 202, 204, 409, 412 status codes.
+    severity: info
+    given: $.paths[*].head.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^(201|202|204|409|412)$
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-head-codes-allowed''
+      (Response Head Codes Allowed). Requirement: HEAD operations should not return 201, 202, 204, 409, 412 status codes.
+      To fix: Ensure `@key` does NOT match the regular expression `^(201|202|204|409|412)$`; rename or rewrite any value that
+      does. This rule is evaluated at the JSONPath `$.paths[*].head.responses` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-response-location-header-only-on-201:
+    title: Response Location Header Only On 201
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-location-header-only-on-201/
+    description: Location header MUST NOT be present in non-201 responses.
+    message: Location header MUST NOT be present in non-201 responses.
+    severity: info
+    given: $.paths[*][*].responses[?(@property !== '201')].headers
+    then:
+      field: Location
+      function: falsy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - spec:headers
+    - experience:consistency
+    - experience:error-handling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-location-header-only-on-201''
+      (Response Location Header Only On 201). Requirement: Location header MUST NOT be present in non-201 responses. To fix:
+      Ensure `Location` is absent or empty (falsy) at each matching location. This rule is evaluated at the JSONPath `$.paths[*][*].responses[?(@property
+      !== ''201'')].headers` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-options-codes-allowed:
+    title: Response Options Codes Allowed
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-options-codes-allowed/
+    description: OPTIONS operations should not return 201, 202, 409, 412 status codes.
+    message: OPTIONS operations should not return 201, 202, 409, 412 status codes.
+    severity: info
+    given: $.paths[*].options.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^(201|202|409|412)$
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-options-codes-allowed''
+      (Response Options Codes Allowed). Requirement: OPTIONS operations should not return 201, 202, 409, 412 status codes.
+      To fix: Ensure `@key` does NOT match the regular expression `^(201|202|409|412)$`; rename or rewrite any value that
+      does. This rule is evaluated at the JSONPath `$.paths[*].options.responses` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-response-patch-codes-allowed:
+    title: Response Patch Codes Allowed
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-patch-codes-allowed/
+    description: PATCH operations should not return 201 status code.
+    message: PATCH operations should not return 201 status code.
+    severity: info
+    given: $.paths[*].patch.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^201$
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-patch-codes-allowed''
+      (Response Patch Codes Allowed). Requirement: PATCH operations should not return 201 status code. To fix: Ensure `@key`
+      does NOT match the regular expression `^201$`; rename or rewrite any value that does. This rule is evaluated at the
+      JSONPath `$.paths[*].patch.responses` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-patch-define-200:
+    title: Response Patch Define 200
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-patch-define-200/
+    description: PATCH operations should define a 200 OK response for successful partial updates. Analysis shows PATCH is
+      used in 17.7% of APIs.
+    message: PATCH MUST Have 200 Response
+    severity: info
+    given: $.paths[*].patch.responses
+    then:
+      field: '200'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-patch-define-200''
+      (Response Patch Define 200). Requirement: PATCH operations should define a 200 OK response for successful partial updates.
+      Analysis shows PATCH is used in 17.7% of APIs. To fix: Ensure `200` is present and non-empty at each matching location.
+      This rule is evaluated at the JSONPath `$.paths[*].patch.responses` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-response-patch-define-400:
+    title: Response Patch Define 400
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-patch-define-400/
+    description: PATCH operations should define a 400 Bad Request response for validation errors on partial update payloads.
+    message: PATCH MUST Have 400 Response
+    severity: info
+    given: $.paths[*].patch.responses
+    then:
+      field: '400'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-patch-define-400''
+      (Response Patch Define 400). Requirement: PATCH operations should define a 400 Bad Request response for validation errors
+      on partial update payloads. To fix: Ensure `400` is present and non-empty at each matching location. This rule is evaluated
+      at the JSONPath `$.paths[*].patch.responses` — inspect every location it matches and correct only what violates the
+      rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-patch-define-404:
+    title: Response Patch Define 404
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-patch-define-404/
+    description: PATCH operations should define a 404 Not Found response for cases where the resource to be updated does not
+      exist.
+    message: PATCH MUST Have 404 Response
+    severity: info
+    given: $.paths[*].patch.responses
+    then:
+      field: '404'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-patch-define-404''
+      (Response Patch Define 404). Requirement: PATCH operations should define a 404 Not Found response for cases where the
+      resource to be updated does not exist. To fix: Ensure `404` is present and non-empty at each matching location. This
+      rule is evaluated at the JSONPath `$.paths[*].patch.responses` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-post-codes-allowed:
+    title: Response Post Codes Allowed
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-post-codes-allowed/
+    description: POST operations should not return 412 status codes.
+    message: POST operations should not return 412 status codes.
+    severity: info
+    given: $.paths[*].post.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: '412'
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-post-codes-allowed''
+      (Response Post Codes Allowed). Requirement: POST operations should not return 412 status codes. To fix: Ensure `@key`
+      does NOT match the regular expression `412`; rename or rewrite any value that does. This rule is evaluated at the JSONPath
+      `$.paths[*].post.responses` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-post-define-400:
+    title: Response Post Define 400
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-post-define-400/
+    description: POST operations should define a 400 Bad Request response for input validation errors. Analysis shows 400
+      is the 4th most common response code across 2516 operations.
+    message: POST MUST Have 400 Response
+    severity: info
+    given: $.paths[*].post.responses
+    then:
+      field: '400'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-post-define-400''
+      (Response Post Define 400). Requirement: POST operations should define a 400 Bad Request response for input validation
+      errors. Analysis shows 400 is the 4th most common response code across 2516 operations. To fix: Ensure `400` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*].post.responses` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-response-post-define-401:
+    title: Response Post Define 401
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-post-define-401/
+    description: POST operations should define a 401 Unauthorized response to document authentication requirements for write
+      operations.
+    message: POST MUST Have 401 Response
+    severity: info
+    given: $.paths[*].post.responses
+    then:
+      field: '401'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:security
+    - experience:error-handling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-post-define-401''
+      (Response Post Define 401). Requirement: POST operations should define a 401 Unauthorized response to document authentication
+      requirements for write operations. To fix: Ensure `401` is present and non-empty at each matching location. This rule
+      is evaluated at the JSONPath `$.paths[*].post.responses` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-post-define-500:
+    title: Response Post Define 500
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-post-define-500/
+    description: POST responses should have a 500 internal server erorr HTTP status code, communicating the API had a problem
+      to consumers.
+    message: POST Responses MUST Have 500 Status Codes
+    severity: info
+    given: $.paths.*.post.responses
+    then:
+      field: '500'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-post-define-500''
+      (Response Post Define 500). Requirement: POST responses should have a 500 internal server erorr HTTP status code, communicating
+      the API had a problem to consumers. To fix: Ensure `500` is present and non-empty at each matching location. This rule
+      is evaluated at the JSONPath `$.paths.*.post.responses` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-post-require-201-or-202:
+    title: Response Post Require 201 Or 202
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-post-require-201-or-202/
+    description: All POST methods MUST have a 201 or 202 response.
+    message: All POST methods MUST have a 201 or 202 response.
+    severity: info
+    given:
+    - $.paths[*].post.responses
+    then:
+      function: trimble-operation-post-201-202-status-code
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:consistency
+    - experience:error-handling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-post-require-201-or-202''
+      (Response Post Require 201 Or 202). Requirement: All POST methods MUST have a 201 or 202 response. This rule is evaluated
+      at the JSONPath `$.paths[*].post.responses` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-prefer-400-over-422:
+    title: Response Prefer 400 Over 422
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-prefer-400-over-422/
+    description: MUST use standard HTTP status codes [150a].
+    message: Prefer 400 over 422 as response code
+    severity: info
+    given: $.paths.*.*.responses.422
+    then:
+      field: '422'
+      function: defined
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-prefer-400-over-422''
+      (Response Prefer 400 Over 422). Requirement: MUST use standard HTTP status codes [150a]. To fix: Ensure `422` is defined
+      at each matching location. This rule is evaluated at the JSONPath `$.paths.*.*.responses.422` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-response-put-codes-allowed:
+    title: Response Put Codes Allowed
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-put-codes-allowed/
+    description: PUT operations should not return 200 or 201 status codes.
+    message: PUT operations should not return 200 or 201 status codes.
+    severity: info
+    given: $.paths[*].put.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^(200|201)$
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-put-codes-allowed''
+      (Response Put Codes Allowed). Requirement: PUT operations should not return 200 or 201 status codes. To fix: Ensure
+      `@key` does NOT match the regular expression `^(200|201)$`; rename or rewrite any value that does. This rule is evaluated
+      at the JSONPath `$.paths[*].put.responses` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-put-define-400:
+    title: Response Put Define 400
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-put-define-400/
+    description: PUT responses should have a 400 not found HTTP status code, communicating nothing was found to consumers.
+    message: PUT Responses MUST Have 400 Status Codes
+    severity: info
+    given: $.paths.*.put.responses
+    then:
+      field: '400'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-put-define-400''
+      (Response Put Define 400). Requirement: PUT responses should have a 400 not found HTTP status code, communicating nothing
+      was found to consumers. To fix: Ensure `400` is present and non-empty at each matching location. This rule is evaluated
+      at the JSONPath `$.paths.*.put.responses` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-put-define-401:
+    title: Response Put Define 401
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-put-define-401/
+    description: PUT operations should define a 401 Unauthorized response to document authentication requirements for update
+      operations.
+    message: PUT MUST Have 401 Response
+    severity: info
+    given: $.paths[*].put.responses
+    then:
+      field: '401'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:security
+    - experience:error-handling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-put-define-401''
+      (Response Put Define 401). Requirement: PUT operations should define a 401 Unauthorized response to document authentication
+      requirements for update operations. To fix: Ensure `401` is present and non-empty at each matching location. This rule
+      is evaluated at the JSONPath `$.paths[*].put.responses` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-put-define-500:
+    title: Response Put Define 500
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-put-define-500/
+    description: PUT responses should have a 500 internal server erorr HTTP status code, communicating the API had a problem
+      to consumers.
+    message: PUT Responses MUST Have 500 Status Codes
+    severity: info
+    given: $.paths.*.put.responses
+    then:
+      field: '500'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-put-define-500''
+      (Response Put Define 500). Requirement: PUT responses should have a 500 internal server erorr HTTP status code, communicating
+      the API had a problem to consumers. To fix: Ensure `500` is present and non-empty at each matching location. This rule
+      is evaluated at the JSONPath `$.paths.*.put.responses` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-status-path-problem-schema-fields:
+    title: Response Status Path Problem Schema Fields
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-status-path-problem-schema-fields/
+    description: '"/status" schema is not a Problem object.'
+    message: '{{error}} {{path}}'
+    severity: info
+    given: $.paths.'/status'.get.responses.200.content.[[schema]]
+    then:
+    - function: truthy
+      field: properties.status
+    - function: truthy
+      field: properties.title
+    - function: truthy
+      field: properties.detail
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - spec:media-types
+    - spec:schemas
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-status-path-problem-schema-fields''
+      (Response Status Path Problem Schema Fields). Requirement: "/status" schema is not a Problem object. To fix: Ensure
+      `properties.status` is present and non-empty at each matching location. Also: Ensure `properties.title` is present and
+      non-empty at each matching location. Also: Ensure `properties.detail` is present and non-empty at each matching location.
+      This rule is evaluated at the JSONPath `$.paths.''/status''.get.responses.200.content.[[schema]]` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-response-status-path-return-problem-type:
+    title: Response Status Path Return Problem Type
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-status-path-return-problem-type/
+    description: '"/status" must return a Problem object.'
+    message: '{{error}}'
+    severity: info
+    given: $.paths.'/status'.get.responses.200.content.*~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - application/problem+xml
+        - application/problem+json
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - spec:media-types
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-status-path-return-problem-type''
+      (Response Status Path Return Problem Type). Requirement: "/status" must return a Problem object. To fix: Set the targeted
+      value to one of the allowed values: application/problem+xml, application/problem+json. This rule is evaluated at the
+      JSONPath `$.paths.''/status''.get.responses.200.content.*~` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-throttled-require-retry-after:
+    title: Response Throttled Require Retry After
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-throttled-require-retry-after/
+    description: 'When a client is either: * throttled out with a 429 status code; * warned about a temporary server issue
+      with a 503 status code; the server should explicitly communicate how long to wait before issuing further requests using
+      the Retry-After header. Retry-After is defined in RFC7231.'
+    message: 'Missing ratelimit header: {{property}} in {{path}}'
+    severity: info
+    given: $.[responses][?(@property == "429" || @property == "503"  )][headers]
+    then:
+      field: Retry-After
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:responses
+    - spec:headers
+    - topic:rate-limiting
+    - experience:reliability
+    - experience:error-handling
+    - experience:performance
+    - owasp:api4
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-throttled-require-retry-after''
+      (Response Throttled Require Retry After). Requirement: When a client is either: * throttled out with a 429 status code;
+      * warned about a temporary server issue with a 503 status code; the server should explicitly communicate how long to
+      wait before issuing further requests using the Retry-After header. Retry-After is defined in RFC7231. To fix: Ensure
+      `Retry-After` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.[responses][?(@property
+      == "429" || @property == "503" )][headers]` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-use-standard-status-codes:
+    title: Response Use Standard Status Codes
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-use-standard-status-codes/
+    description: MUST use standard HTTP status codes [150a].
+    message: '{{property}} is not a standardized response code'
+    severity: info
+    given: $.paths.*.*.responses.*~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - '100'
+        - '101'
+        - '200'
+        - '201'
+        - '202'
+        - '203'
+        - '204'
+        - '205'
+        - '206'
+        - '207'
+        - '300'
+        - '301'
+        - '302'
+        - '303'
+        - '304'
+        - '305'
+        - '307'
+        - '400'
+        - '401'
+        - '402'
+        - '403'
+        - '404'
+        - '405'
+        - '406'
+        - '407'
+        - '408'
+        - '409'
+        - '410'
+        - '411'
+        - '412'
+        - '413'
+        - '414'
+        - '415'
+        - '416'
+        - '417'
+        - '422'
+        - '423'
+        - '426'
+        - '428'
+        - '429'
+        - '431'
+        - '500'
+        - '501'
+        - '502'
+        - '503'
+        - '504'
+        - '505'
+        - '511'
+        - default
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-use-standard-status-codes''
+      (Response Use Standard Status Codes). Requirement: MUST use standard HTTP status codes [150a]. To fix: Set the targeted
+      value to one of the allowed values: 100, 101, 200, 201, 202, 203, 204, 205, 206, 207, 300, 301, 302, 303, 304, 305,
+      307, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 422, 423, 426, 428, 429,
+      431, 500, 501, 502, 503, 504, 505, 511, default. This rule is evaluated at the JSONPath `$.paths.*.*.responses.*~` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-use-standard-status-codes-2:
+    title: Response Use Standard Status Codes 2
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-use-standard-status-codes-2/
+    description: An API MUST return HTTP response codes in conformance with RFC-2616 and common usage.
+    message: An API MUST return HTTP response codes in conformance with RFC-2616 and common usage.
+    severity: info
+    given: $.paths...responses.*~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - '200'
+        - '201'
+        - '202'
+        - '204'
+        - '400'
+        - '401'
+        - '403'
+        - '404'
+        - '405'
+        - '406'
+        - '409'
+        - '412'
+        - '415'
+        - '428'
+        - '429'
+        - '500'
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - experience:error-handling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-use-standard-status-codes-2''
+      (Response Use Standard Status Codes 2). Requirement: An API MUST return HTTP response codes in conformance with RFC-2616
+      and common usage. To fix: Set the targeted value to one of the allowed values: 200, 201, 202, 204, 400, 401, 403, 404,
+      405, 406, 409, 412, 415, 428, 429, 500. This rule is evaluated at the JSONPath `$.paths...responses.*~` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-schema-get-define-404-response:
+    title: Schema Get Define 404 Response
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-get-define-404-response/
+    description: GET responses should have a 404 not found HTTP status code, communicating that nothing was found to consumers.
+    message: GET Responses MUST Have 404 Status Code
+    severity: info
+    given: $.paths.*.get[?(@.properties)]
+    then:
+      field: '404'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:schemas
+    - experience:error-handling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-get-define-404-response''
+      (Schema Get Define 404 Response). Requirement: GET responses should have a 404 not found HTTP status code, communicating
+      that nothing was found to consumers. To fix: Ensure `404` is present and non-empty at each matching location. This rule
+      is evaluated at the JSONPath `$.paths.*.get[?(@.properties)]` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'

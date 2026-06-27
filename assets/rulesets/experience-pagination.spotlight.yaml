@@ -1,0 +1,279 @@
+documentationUrl: https://spotlight-rules.com/spec/
+rules:
+  openapi-parameter-collection-limit-param-default:
+    title: Parameter Collection Limit Param Default
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-collection-limit-param-default/
+    description: The limit / page-size query parameter should declare a default so the page size is predictable when the caller
+      omits it.
+    message: limit parameter should declare a default.
+    given: $.paths[*].get.parameters[?(@ && @.in == 'query' && (@.name == 'limit' || @.name == 'per_page' || @.name == 'page_size'
+      || @.name == 'pageSize'))].schema
+    severity: info
+    then:
+      field: default
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:pagination
+    - experience:pagination
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-collection-limit-param-default''
+      (Parameter Collection Limit Param Default). Requirement: The limit / page-size query parameter should declare a default
+      so the page size is predictable when the caller omits it. To fix: Ensure `default` is present and non-empty at each
+      matching location. This rule is evaluated at the JSONPath `$.paths[*].get.parameters[?(@ && @.in == ''query'' && (@.name
+      == ''limit'' || @.name == ''per_page'' || @.name == ''page_size'' || @.name == ''pageSize''))].schema` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-parameter-collection-limit-param-maximum:
+    title: Parameter Collection Limit Param Maximum
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-collection-limit-param-maximum/
+    description: The limit / page-size query parameter should declare a maximum so a caller cannot request an unbounded page
+      (OWASP API4 — unrestricted resource consumption).
+    message: limit parameter should declare a maximum.
+    given: $.paths[*].get.parameters[?(@ && @.in == 'query' && (@.name == 'limit' || @.name == 'per_page' || @.name == 'page_size'
+      || @.name == 'pageSize'))].schema
+    severity: info
+    then:
+      field: maximum
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:parameters
+    - topic:pagination
+    - experience:pagination
+    - experience:reliability
+    - experience:performance
+    - owasp:api4
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-collection-limit-param-maximum''
+      (Parameter Collection Limit Param Maximum). Requirement: The limit / page-size query parameter should declare a maximum
+      so a caller cannot request an unbounded page (OWASP API4 — unrestricted resource consumption). To fix: Ensure `maximum`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*].get.parameters[?(@
+      && @.in == ''query'' && (@.name == ''limit'' || @.name == ''per_page'' || @.name == ''page_size'' || @.name == ''pageSize''))].schema`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-parameter-pagination-params-in-query:
+    title: Parameter Pagination Params In Query
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-pagination-params-in-query/
+    description: Pagination parameters like page, limit, offset, and cursor should be passed as query parameters, not in headers
+      or path segments. Analysis confirms 100% of pagination parameters observed are query parameters.
+    message: Pagination Parameters MUST Be Query Parameters
+    severity: info
+    given: $.paths[*].get.parameters[?(@.name == 'page' || @.name == 'limit' || @.name == 'offset' || @.name == 'cursor' ||
+      @.name == 'per_page' || @.name == 'page_size')]
+    then:
+      field: in
+      function: pattern
+      functionOptions:
+        match: query
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:parameters
+    - topic:pagination
+    - experience:pagination
+    - experience:consistency
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-pagination-params-in-query''
+      (Parameter Pagination Params In Query). Requirement: Pagination parameters like page, limit, offset, and cursor should
+      be passed as query parameters, not in headers or path segments. Analysis confirms 100% of pagination parameters observed
+      are query parameters. To fix: Ensure `in` matches the regular expression `query`; rewrite any value that does not. This
+      rule is evaluated at the JSONPath `$.paths[*].get.parameters[?(@.name == ''page'' || @.name == ''limit'' || @.name ==
+      ''offset'' || @.name == ''cursor'' || @.name == ''per_page'' || @.name == ''page_size'')]` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-request-post-collection-require-paging-object:
+    title: Request Post Collection Require Paging Object
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-post-collection-require-paging-object/
+    description: POST collection endpoints MUST have a request body schema that includes paging parameters.
+    message: POST collection endpoints MUST have a request body schema that includes paging parameters.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].post.requestBody.content.application/json.schema.properties.paging
+    then:
+      field: type
+      function: pattern
+      functionOptions:
+        match: object
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:request-body
+    - spec:media-types
+    - spec:schemas
+    - topic:pagination
+    - experience:pagination
+    - experience:data-modeling
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-post-collection-require-paging-object''
+      (Request Post Collection Require Paging Object). Requirement: POST collection endpoints MUST have a request body schema
+      that includes paging parameters. To fix: Ensure `type` matches the regular expression `object`; rewrite any value that
+      does not. This rule is evaluated at the JSONPath `$.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].post.requestBody.content.application/json.schema.properties.paging`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-collection-require-results-array:
+    title: Response Collection Require Results Array
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-collection-require-results-array/
+    description: Response bodies must have a root element called results and is an array of objects.
+    message: Response bodies must have a root element called results and is an array of objects.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].get.responses['200'].content.application/json.schema.properties.results
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        match: array
+    - field: items.type
+      function: pattern
+      functionOptions:
+        match: object
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - spec:media-types
+    - spec:schemas
+    - topic:pagination
+    - experience:pagination
+    - experience:data-modeling
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-collection-require-results-array''
+      (Response Collection Require Results Array). Requirement: Response bodies must have a root element called results and
+      is an array of objects. To fix: Ensure `type` matches the regular expression `array`; rewrite any value that does not.
+      Also: Ensure `items.type` matches the regular expression `object`; rewrite any value that does not. This rule is evaluated
+      at the JSONPath `$.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].get.responses[''200''].content.application/json.schema.properties.results`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-collection-support-paging:
+    title: Response Collection Support Paging
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-collection-support-paging/
+    description: Response bodies from collection endpoints SHOULD offer paging capability.
+    message: Response bodies from collection endpoints SHOULD offer paging capability.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}.*$/))].get.responses['200'].content.application/json.schema.properties
+    then:
+    - field: paging
+      function: truthy
+    - field: paging
+      function: pattern
+      functionOptions:
+        match: object
+    - field: paging.type
+      function: pattern
+      functionOptions:
+        match: object
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - spec:media-types
+    - spec:schemas
+    - topic:pagination
+    - experience:pagination
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-collection-support-paging''
+      (Response Collection Support Paging). Requirement: Response bodies from collection endpoints SHOULD offer paging capability.
+      To fix: Ensure `paging` is present and non-empty at each matching location. Also: Ensure `paging` matches the regular
+      expression `object`; rewrite any value that does not. Also: Ensure `paging.type` matches the regular expression `object`;
+      rewrite any value that does not. This rule is evaluated at the JSONPath `$.paths[?(!@property.match(/.*\/\{[^}]+\}.*$/))].get.responses[''200''].content.application/json.schema.properties`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-get-link-header:
+    title: Response Get Link Header
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-get-link-header/
+    description: GET success responses should provide a Link header (RFC 8288) with rel next/prev/first/last for pagination
+      and navigation — the header-based alternative to an in-body paging object.
+    message: GET responses should provide a Link header (RFC 8288) for pagination/navigation.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Link
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:responses
+    - topic:pagination
+    - experience:pagination
+    - experience:discoverability
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-get-link-header''
+      (Response Get Link Header). Requirement: GET success responses should provide a Link header (RFC 8288) with rel next/prev/first/last
+      for pagination and navigation — the header-based alternative to an in-body paging object. To fix: Ensure `Link` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.paths[*].get.responses[?( @property
+      >= 200 && @property < 300 && @property != 204 )].headers` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-schema-collection-require-pagination-params:
+    title: Schema Collection Require Pagination Params
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-collection-require-pagination-params/
+    description: Collection GET endpoints SHOULD support pagination using query parameters. Offset or cursor based pagination
+      is required.
+    message: Collection GET endpoints SHOULD support pagination using query parameters.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}\/*.*/))].get
+    then:
+    - field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          items:
+            type: object
+          contains:
+            type: object
+            properties:
+              name:
+                const: limit
+              in:
+                const: query
+          allOf:
+          - anyOf:
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: offset
+                  in:
+                    const: query
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: cursor
+                  in:
+                    const: query
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: page
+                  in:
+                    const: query
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - topic:pagination
+    - experience:pagination
+    - experience:usability
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-collection-require-pagination-params''
+      (Schema Collection Require Pagination Params). Requirement: Collection GET endpoints SHOULD support pagination using
+      query parameters. Offset or cursor based pagination is required. To fix: Adjust `parameters` so it conforms to the schema
+      this rule requires. This rule is evaluated at the JSONPath `$.paths[?(!@property.match(/.*\/\{[^}]+\}\/*.*/))].get`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'

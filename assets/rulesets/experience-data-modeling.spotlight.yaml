@@ -1,0 +1,2886 @@
+documentationUrl: https://spotlight-rules.com/spec/
+functions:
+- digitalocean-ensureAllArraysHaveItemTypes
+- digitalocean-ensureSchemaHasType
+- trimble-check-content-type-for-206-get-response-code
+- trimble-check-for-content-type-in-put-and-post-responses
+- trimble-check-if-application-or-json-in-put-and-post-response
+- trimble-check-if-response-body-json-in-get-response
+- trimble-delete-must-not-return-body
+functionsDir: ./functions
+rules:
+  openapi-operation-post-require-request-body:
+    title: Operation Post Require Request Body
+    reference: https://spotlight-rules.com/spec/rules/openapi/operation-post-require-request-body/
+    description: POST HTTP methods can have a request body, providing a structured payload for configuring each API request.
+    message: POST Requests MUST Have a Body
+    severity: info
+    given: $.paths.*.post
+    then:
+      field: requestBody
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''operation-post-require-request-body''
+      (Operation Post Require Request Body). Requirement: POST HTTP methods can have a request body, providing a structured
+      payload for configuring each API request. To fix: Ensure `requestBody` is present and non-empty at each matching location.
+      This rule is evaluated at the JSONPath `$.paths.*.post` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-parameter-array-require-items:
+    title: Parameter Array Require Items
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-array-require-items/
+    description: Parameters that are of an array type should always have the items defined, being explicit about what is continued
+      as part of the array.
+    message: Parameter Schema Array MUST Have Items
+    severity: info
+    given: $.components.parameters.schema[?(@.type=='array')]
+    then:
+      field: items
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:parameters
+    - spec:schemas
+    - spec:components
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-array-require-items''
+      (Parameter Array Require Items). Requirement: Parameters that are of an array type should always have the items defined,
+      being explicit about what is continued as part of the array. To fix: Ensure `items` is present and non-empty at each
+      matching location. This rule is evaluated at the JSONPath `$.components.parameters.schema[?(@.type==''array'')]` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-parameter-array-typed-items:
+    title: Parameter Array Typed Items
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-array-typed-items/
+    description: Array parameters must have an items attribute with a type.
+    message: '{{error}}'
+    severity: info
+    given: $..*.parameters[*]
+    then:
+      function: digitalocean-ensureAllArraysHaveItemTypes
+    tags:
+    - format:openapi
+    - spec:parameters
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-array-typed-items''
+      (Parameter Array Typed Items). Requirement: Array parameters must have an items attribute with a type. This rule is
+      evaluated at the JSONPath `$..*.parameters[*]` — inspect every location it matches and correct only what violates the
+      rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-parameter-avoid-integer-id:
+    title: Parameter Avoid Integer ID
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-avoid-integer-id/
+    description: Avoid exposing IDs as an integer, UUIDs or other interoperable strings are preferred.
+    message: Avoid exposing IDs as an integer, UUIDs or other interoperable strings are preferred.
+    severity: info
+    given: $.paths..parameters[*].[?(@property === "name" && (@ === "id" || @ === "ID" || @ === "Id"))]^.schema
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          not:
+            properties:
+              type:
+                const: integer
+          properties:
+            format:
+              const: uuid
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:parameters
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-avoid-integer-id''
+      (Parameter Avoid Integer ID). Requirement: Avoid exposing IDs as an integer, UUIDs or other interoperable strings are
+      preferred. To fix: Adjust the targeted value so it conforms to the schema this rule requires. This rule is evaluated
+      at the JSONPath `$.paths..parameters[*].[?(@property === "name" && (@ === "id" || @ === "ID" || @ === "Id"))]^.schema`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-parameter-integer-require-maximum:
+    title: Parameter Integer Require Maximum
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-integer-require-maximum/
+    description: Parameters that are of the integer schema type must have their maximum value set, defining the shape of parameter
+      data passed in with a request.
+    message: Parameter Schema Type Integer Maximum
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+      field: maximum
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-integer-require-maximum''
+      (Parameter Integer Require Maximum). Requirement: Parameters that are of the integer schema type must have their maximum
+      value set, defining the shape of parameter data passed in with a request. To fix: Ensure `maximum` is present and non-empty
+      at each matching location. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-parameter-integer-require-minimum:
+    title: Parameter Integer Require Minimum
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-integer-require-minimum/
+    description: Parameters that are of the integer schema type must have their minimum value set, defining the shape of parameter
+      data passed in with a request.
+    message: Parameter Schema Type Integer Minimum
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+      field: minimum
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-integer-require-minimum''
+      (Parameter Integer Require Minimum). Requirement: Parameters that are of the integer schema type must have their minimum
+      value set, defining the shape of parameter data passed in with a request. To fix: Ensure `minimum` is present and non-empty
+      at each matching location. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-parameter-require-in:
+    title: Parameter Require In
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-require-in/
+    severity: info
+    description: Providing an in property for parameters gets explicit about whether a parameter is in the path, query, or
+      a header, making it clear to consumers where they can configure their request.
+    message: Parameters In Property MUST Be Set
+    given: $.components.parameters.*
+    then:
+      field: in
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:parameters
+    - spec:components
+    - experience:data-modeling
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-require-in'' (Parameter
+      Require In). Requirement: Providing an in property for parameters gets explicit about whether a parameter is in the
+      path, query, or a header, making it clear to consumers where they can configure their request. To fix: Ensure `in` is
+      present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.components.parameters.*`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-parameter-require-required-flag:
+    title: Parameter Require Required Flag
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-require-required-flag/
+    description: Providrequiredg an required property for parameters gets explicit about whether a parameter is required the
+      path, query, or a header, making it clear to consumers where they can configure their request.
+    message: Parameters Required Property MUST Be Set
+    severity: info
+    given: $.components.parameters.*
+    then:
+      field: required
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:parameters
+    - spec:components
+    - experience:data-modeling
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-require-required-flag''
+      (Parameter Require Required Flag). Requirement: Providrequiredg an required property for parameters gets explicit about
+      whether a parameter is required the path, query, or a header, making it clear to consumers where they can configure
+      their request. To fix: Ensure `required` is present and non-empty at each matching location. This rule is evaluated
+      at the JSONPath `$.components.parameters.*` — inspect every location it matches and correct only what violates the rule.
+      Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-parameter-require-schema:
+    title: Parameter Require Schema
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-require-schema/
+    severity: info
+    description: Parameters must always possess a schema to help define the format and shape of the parameter, setting expections
+      with consumers about what should be passed in.
+    message: Parameters MUST Have Schema
+    given: $.components.parameters.*
+    then:
+      field: schema
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:parameters
+    - spec:components
+    - experience:data-modeling
+    - experience:documentation
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-require-schema''
+      (Parameter Require Schema). Requirement: Parameters must always possess a schema to help define the format and shape
+      of the parameter, setting expections with consumers about what should be passed in. To fix: Ensure `schema` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.components.parameters.*` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-parameter-schema-require-type:
+    title: Parameter Schema Require Type
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-schema-require-type/
+    description: Parameters must always have their schema type defined, being precise about what type of data can be inputted
+      and used to configure an API request.
+    message: Parameter Schema Type
+    severity: info
+    given: $.components.parameters.*.schema
+    then:
+      field: type
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:parameters
+    - spec:schemas
+    - spec:components
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-schema-require-type''
+      (Parameter Schema Require Type). Requirement: Parameters must always have their schema type defined, being precise about
+      what type of data can be inputted and used to configure an API request. To fix: Ensure `type` is present and non-empty
+      at each matching location. This rule is evaluated at the JSONPath `$.components.parameters.*.schema` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-parameter-schema-use-ref:
+    title: Parameter Schema Use Ref
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-schema-use-ref/
+    description: Parameters must always use a schema reference that utilizes reusable schema that are defined as part of a
+      centralized schema components library.
+    message: Parameters MUST Use Schema Reference
+    severity: info
+    given: $.components.parameters.*.schema
+    then:
+      field: $ref
+      function: falsy
+    tags:
+    - format:openapi
+    - spec:parameters
+    - spec:schemas
+    - spec:components
+    - experience:consistency
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-schema-use-ref''
+      (Parameter Schema Use Ref). Requirement: Parameters must always use a schema reference that utilizes reusable schema
+      that are defined as part of a centralized schema components library. To fix: Ensure `$ref` is absent or empty (falsy)
+      at each matching location. This rule is evaluated at the JSONPath `$.components.parameters.*.schema` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-parameter-string-require-max-length:
+    title: Parameter String Require Max Length
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-string-require-max-length/
+    description: Parameters that are of the string schema type must have their maximum value set, defining the shape of parameter
+      data passed in with a request.
+    message: Parameter Schema Type String MaxLength
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+      field: maxLength
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-string-require-max-length''
+      (Parameter String Require Max Length). Requirement: Parameters that are of the string schema type must have their maximum
+      value set, defining the shape of parameter data passed in with a request. To fix: Ensure `maxLength` is present and
+      non-empty at each matching location. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-parameter-string-require-min-length:
+    title: Parameter String Require Min Length
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-string-require-min-length/
+    description: Parameters that are of the string schema type must have their minimum value set, defining the shape of parameter
+      data passed in with a request.
+    message: Parameter Schema Type String MinLength
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+      field: minLength
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-string-require-min-length''
+      (Parameter String Require Min Length). Requirement: Parameters that are of the string schema type must have their minimum
+      value set, defining the shape of parameter data passed in with a request. To fix: Ensure `minLength` is present and
+      non-empty at each matching location. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-parameter-string-require-pattern:
+    title: Parameter String Require Pattern
+    reference: https://spotlight-rules.com/spec/rules/openapi/parameter-string-require-pattern/
+    description: Parameters that are of the string schema type must have a pattern set, using a regex to define the shape
+      of parameter data passed in with a request.
+    message: Parameter Schema Type String Pattern
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+      field: pattern
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''parameter-string-require-pattern''
+      (Parameter String Require Pattern). Requirement: Parameters that are of the string schema type must have a pattern set,
+      using a regex to define the shape of parameter data passed in with a request. To fix: Ensure `pattern` is present and
+      non-empty at each matching location. This rule is evaluated at the JSONPath `$.apis.*.properties.* | $.common.*` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-path-delete-no-response-body:
+    title: Path Delete No Response Body
+    reference: https://spotlight-rules.com/spec/rules/openapi/path-delete-no-response-body/
+    description: Check if the delete response does not have any body.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*
+    then:
+      function: trimble-delete-must-not-return-body
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:consistency
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''path-delete-no-response-body''
+      (Path Delete No Response Body). Requirement: Check if the delete response does not have any body. This rule is evaluated
+      at the JSONPath `$.paths.*.` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-path-get-response-support-json:
+    title: Path Get Response Support JSON
+    reference: https://spotlight-rules.com/spec/rules/openapi/path-get-response-support-json/
+    description: All APIs returning structured data SHOULD support JSON as the default format.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*
+    then:
+      function: trimble-check-if-response-body-json-in-get-response
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:consistency
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''path-get-response-support-json''
+      (Path Get Response Support JSON). Requirement: All APIs returning structured data SHOULD support JSON as the default
+      format. This rule is evaluated at the JSONPath `$.paths.*.` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-path-write-response-support-json:
+    title: Path Write Response Support JSON
+    reference: https://spotlight-rules.com/spec/rules/openapi/path-write-response-support-json/
+    description: All APIs returning structured data SHOULD support JSON as the default format.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*
+    then:
+      function: trimble-check-if-application-or-json-in-put-and-post-response
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:consistency
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''path-write-response-support-json''
+      (Path Write Response Support JSON). Requirement: All APIs returning structured data SHOULD support JSON as the default
+      format. This rule is evaluated at the JSONPath `$.paths.*.` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-request-patch-media-type-not-plain-json:
+    title: Request Patch Media Type Not Plain JSON
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-patch-media-type-not-plain-json/
+    description: 'The PATCH specification explicits that the request body contains a "patch document" describing the changes
+      to be applied to the target resource. To avoid confusion, [this errata](https://www.rfc-editor.org/errata/eid3169) explains
+      that `application/json` is not an appropriate media-type for `PATCH`. A correct example of PATCH using eg. `application/json-patch+json`
+      media-type defined in RFC6902. ``` paths: /books/{book_id}: patch: requestBody: content: application/json-patch+json:
+      schema: type: object example: [{ "op": "add", "path": "/baz", "value": "qux" }] ```.'
+    message: application/json is not an appropriate media-type for PATCH. {{path}}
+    severity: info
+    given: $.[patch][requestBody][content]
+    then:
+      field: application/json
+      function: falsy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:operations
+    - spec:request-body
+    - spec:media-types
+    - topic:content-negotiation
+    - experience:consistency
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-patch-media-type-not-plain-json''
+      (Request Patch Media Type Not Plain JSON). Requirement: The PATCH specification explicits that the request body contains
+      a "patch document" describing the changes to be applied to the target resource. To avoid confusion, [this errata](https://www.rfc-editor.org/errata/eid3169)
+      explains that `application/json` is not an appropriate media-type for `PATCH`. A correct example of PATCH using eg.
+      `application/json-patch+json` media-type defined in RFC6902. ``` paths: /books/{book_id}: patch: requestBody: content:
+      application/json-patch+json: schema: type: object example: [{ "op": "add", "path": "/baz", "value": "qux" }] ```. To
+      fix: Ensure `application/json` is absent or empty (falsy) at each matching location. This rule is evaluated at the JSONPath
+      `$.[patch][requestBody][content]` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-request-post-collection-require-paging-object:
+    title: Request Post Collection Require Paging Object
+    reference: https://spotlight-rules.com/spec/rules/openapi/request-post-collection-require-paging-object/
+    description: POST collection endpoints MUST have a request body schema that includes paging parameters.
+    message: POST collection endpoints MUST have a request body schema that includes paging parameters.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].post.requestBody.content.application/json.schema.properties.paging
+    then:
+      field: type
+      function: pattern
+      functionOptions:
+        match: object
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:request-body
+    - spec:media-types
+    - spec:schemas
+    - topic:pagination
+    - experience:pagination
+    - experience:data-modeling
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''request-post-collection-require-paging-object''
+      (Request Post Collection Require Paging Object). Requirement: POST collection endpoints MUST have a request body schema
+      that includes paging parameters. To fix: Ensure `type` matches the regular expression `object`; rewrite any value that
+      does not. This rule is evaluated at the JSONPath `$.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].post.requestBody.content.application/json.schema.properties.paging`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-206-require-content-range:
+    title: Response 206 Require Content Range
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-206-require-content-range/
+    description: Check if the get response code 206 has content-type and content-range.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*
+    then:
+      function: trimble-check-content-type-for-206-get-response-code
+    tags:
+    - format:openapi
+    - spec:paths
+    - experience:consistency
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-206-require-content-range''
+      (Response 206 Require Content Range). Requirement: Check if the get response code 206 has content-type and content-range.
+      This rule is evaluated at the JSONPath `$.paths.*.` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-response-body-must-be-object:
+    title: Response Body Must Be Object
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-body-must-be-object/
+    description: Response bodies must be an object type.
+    message: Response bodies must be an object type.
+    severity: info
+    given: $.paths[*][*].responses[*].content.application/json.schema.type
+    then:
+      function: pattern
+      functionOptions:
+        match: object
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - spec:media-types
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-body-must-be-object''
+      (Response Body Must Be Object). Requirement: Response bodies must be an object type. To fix: Ensure the targeted value
+      matches the regular expression `object`; rewrite any value that does not. This rule is evaluated at the JSONPath `$.paths[*][*].responses[*].content.application/json.schema.type`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-collection-require-results-array:
+    title: Response Collection Require Results Array
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-collection-require-results-array/
+    description: Response bodies must have a root element called results and is an array of objects.
+    message: Response bodies must have a root element called results and is an array of objects.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].get.responses['200'].content.application/json.schema.properties.results
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        match: array
+    - field: items.type
+      function: pattern
+      functionOptions:
+        match: object
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - spec:media-types
+    - spec:schemas
+    - topic:pagination
+    - experience:pagination
+    - experience:data-modeling
+    - experience:performance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-collection-require-results-array''
+      (Response Collection Require Results Array). Requirement: Response bodies must have a root element called results and
+      is an array of objects. To fix: Ensure `type` matches the regular expression `array`; rewrite any value that does not.
+      Also: Ensure `items.type` matches the regular expression `object`; rewrite any value that does not. This rule is evaluated
+      at the JSONPath `$.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].get.responses[''200''].content.application/json.schema.properties.results`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-response-success-use-hal-json:
+    title: Response Success Use HAL JSON
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-success-use-hal-json/
+    description: All 2xx success responses MUST use the `application/hal+json` media type.
+    message: 'Success response documents MUST use the application/hal+json media type: {{error}}'
+    severity: info
+    given: $.paths..responses[?( @property >= 200 && @property < 300 && @property != 204)].content[*]~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - application/hal+json
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - spec:media-types
+    - experience:consistency
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-success-use-hal-json''
+      (Response Success Use HAL JSON). Requirement: All 2xx success responses MUST use the `application/hal+json` media type.
+      To fix: Set the targeted value to one of the allowed values: application/hal+json. This rule is evaluated at the JSONPath
+      `$.paths..responses[?( @property >= 200 && @property < 300 && @property != 204)].content[*]~` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-response-use-json-api:
+    title: Response Use JSON API
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-use-json-api/
+    description: All responses MUST use the JSON:API `application/vnd.api+json` media type.
+    message: 'Response documents MUST use the application/vnd.api+json (JSON:API) media type: {{error}}'
+    severity: info
+    given: $.paths..responses[?( @property >= 200 && @property < 600 && @property != 204)].content[*]~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - application/vnd.api+json
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - spec:media-types
+    - experience:consistency
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-use-json-api'' (Response
+      Use JSON API). Requirement: All responses MUST use the JSON:API `application/vnd.api+json` media type. To fix: Set the
+      targeted value to one of the allowed values: application/vnd.api+json. This rule is evaluated at the JSONPath `$.paths..responses[?(
+      @property >= 200 && @property < 600 && @property != 204)].content[*]~` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-response-use-standard-mime-types:
+    title: Response Use Standard Mime Types
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-use-standard-mime-types/
+    description: MIME types MUST be standard (application/json, application/problem+json, application/problem+xml) or use
+      custom format application/vnd.*.
+    message: MIME types MUST be standard (application/json, application/problem+json, application/problem+xml) or use custom
+      format application/vnd.*.
+    severity: info
+    given: $.paths[*][*].responses[*].content.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^application/(json|problem\+json|problem\+xml|vnd\..*)$
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:responses
+    - spec:media-types
+    - experience:consistency
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-use-standard-mime-types''
+      (Response Use Standard Mime Types). Requirement: MIME types MUST be standard (application/json, application/problem+json,
+      application/problem+xml) or use custom format application/vnd.*. To fix: Ensure the targeted value matches the regular
+      expression `^application/(json|problem\+json|problem\+xml|vnd\..*)$`; rewrite any value that does not. This rule is
+      evaluated at the JSONPath `$.paths[*][*].responses[*].content.*~` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-response-write-require-content-type:
+    title: Response Write Require Content Type
+    reference: https://spotlight-rules.com/spec/rules/openapi/response-write-require-content-type/
+    description: All API responses MUST include the Content-Type header in all responses.
+    message: '{{error}}'
+    severity: info
+    given:
+    - $.paths[*].post.responses
+    - $.paths[*].put.responses
+    then:
+      function: trimble-check-for-content-type-in-put-and-post-responses
+    tags:
+    - format:openapi
+    - spec:paths
+    - spec:operations
+    - spec:responses
+    - experience:consistency
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-write-require-content-type''
+      (Response Write Require Content Type). Requirement: All API responses MUST include the Content-Type header in all responses.
+      This rule is evaluated at the JSONPath `$.paths[*].post.responses | $.paths[*].put.responses` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-schema-array-property-require-items:
+    title: Schema Array Property Require Items
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-array-property-require-items/
+    description: Schema properties that are of the type array must have an items property defined.
+    message: Schema Array Properties MUST Have Items
+    severity: info
+    given: $.components.schemas.*.properties[?(@.type=="array")]
+    then:
+      field: items
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - spec:components
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-array-property-require-items''
+      (Schema Array Property Require Items). Requirement: Schema properties that are of the type array must have an items
+      property defined. To fix: Ensure `items` is present and non-empty at each matching location. This rule is evaluated
+      at the JSONPath `$.components.schemas.*.properties[?(@.type=="array")]` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-schema-array-property-require-max-items:
+    title: Schema Array Property Require Max Items
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-array-property-require-max-items/
+    description: Schema properties that are of the type array should have a max items property defined.
+    message: Schema Array Properties MUST Have Max Items
+    severity: info
+    given: $.components.schemas.*.properties[?(@.type=="array")]
+    then:
+    - field: maxItems
+      function: truthy
+    tags:
+    - owasp:api4
+    - format:openapi
+    - spec:schemas
+    - spec:components
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-array-property-require-max-items''
+      (Schema Array Property Require Max Items). Requirement: Schema properties that are of the type array should have a max
+      items property defined. To fix: Ensure `maxItems` is present and non-empty at each matching location. This rule is evaluated
+      at the JSONPath `$.components.schemas.*.properties[?(@.type=="array")]` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-schema-array-property-require-min-items:
+    title: Schema Array Property Require Min Items
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-array-property-require-min-items/
+    description: Schema properties that are of the type array should have a min items property defined.
+    message: Schema Array Properties MUST Have Min Items
+    severity: info
+    given: $.components.schemas.*.properties[?(@.type=="array")]
+    then:
+    - field: minItems
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - spec:components
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-array-property-require-min-items''
+      (Schema Array Property Require Min Items). Requirement: Schema properties that are of the type array should have a min
+      items property defined. To fix: Ensure `minItems` is present and non-empty at each matching location. This rule is evaluated
+      at the JSONPath `$.components.schemas.*.properties[?(@.type=="array")]` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-schema-array-property-typed-items:
+    title: Schema Array Property Typed Items
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-array-property-typed-items/
+    description: Array properties must have an items attribute with a type.
+    message: '{{error}}'
+    severity: info
+    given: $..*.properties[*]
+    then:
+      function: digitalocean-ensureAllArraysHaveItemTypes
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-array-property-typed-items''
+      (Schema Array Property Typed Items). Requirement: Array properties must have an items attribute with a type. This rule
+      is evaluated at the JSONPath `$..*.properties[*]` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-array-require-min-max-items:
+    title: Schema Array Require Min Max Items
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-array-require-min-max-items/
+    description: 'Array size should be limited to mitigate resource exhaustion attacks. This can be done using `maxItems`
+      and `minItems`, like in the example below. ``` Limited: type: array maxItems: 10 items: type: string format: date ```
+      You should ensure that the schema referenced in `items` is constrained too. If you delegate input validation to a library
+      or framework, be sure to test it thoroughly and ensure that it verifies `maxItems`.'
+    message: Schema of type array must specify maxItems and minItems. {{path}} {{error}}
+    severity: info
+    given:
+    - $.[?(@.type=="array")]
+    then:
+    - field: maxItems
+      function: defined
+    - field: minItems
+      function: defined
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-array-require-min-max-items''
+      (Schema Array Require Min Max Items). Requirement: Array size should be limited to mitigate resource exhaustion attacks.
+      This can be done using `maxItems` and `minItems`, like in the example below. ``` Limited: type: array maxItems: 10 items:
+      type: string format: date ``` You should ensure that the schema referenced in `items` is constrained too. If you delegate
+      input validation to a library or framework, be sure to test it thoroughly and ensure that it verifies `maxItems`. To
+      fix: Ensure `maxItems` is defined at each matching location. Also: Ensure `minItems` is defined at each matching location.
+      This rule is evaluated at the JSONPath `$.[?(@.type=="array")]` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-schema-created-datetime-must-be-date-time:
+    title: Schema Created Datetime Must Be Date Time
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-created-datetime-must-be-date-time/
+    description: createdDateTime MUST use a data type of 'string' with the format 'date-time'.
+    message: createdDateTime MUST use a data type of 'string' with the format 'date-time'.
+    severity: info
+    given: $..properties.createdDateTime
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        match: ^string$
+    - field: format
+      function: truthy
+    - field: format
+      function: pattern
+      functionOptions:
+        match: ^date-time$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-created-datetime-must-be-date-time''
+      (Schema Created Datetime Must Be Date Time). Requirement: createdDateTime MUST use a data type of ''string'' with the
+      format ''date-time''. To fix: Ensure `type` matches the regular expression `^string$`; rewrite any value that does not.
+      Also: Ensure `format` is present and non-empty at each matching location. Also: Ensure `format` matches the regular
+      expression `^date-time$`; rewrite any value that does not. This rule is evaluated at the JSONPath `$..properties.createdDateTime`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-schema-createdby-property-must-be-string:
+    title: Schema Createdby Property Must Be String
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-createdby-property-must-be-string/
+    description: createdBy MUST use a data type of 'string'.
+    message: createdBy MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "createdBy")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-createdby-property-must-be-string''
+      (Schema Createdby Property Must Be String). Requirement: createdBy MUST use a data type of ''string''. To fix: Ensure
+      the targeted value matches the regular expression `^string$`; rewrite any value that does not. This rule is evaluated
+      at the JSONPath `$..[?(@property === "createdBy")].type` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-date-time-property-require-format:
+    title: Schema Date Time Property Require Format
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-date-time-property-require-format/
+    description: Date/time string properties (createdAt, updated_at, *_date, timestamp, …) should declare a format such as
+      date-time (RFC 3339) so the value is unambiguous and machine-validatable.
+    message: Date/time string property should declare a format (e.g. date-time).
+    given: $..properties[?( @property.match(/(_at$|_date$|_time$|At$|Date$|Time$|timestamp)/i) && @.type == 'string' )]
+    severity: info
+    then:
+      field: format
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-date-time-property-require-format''
+      (Schema Date Time Property Require Format). Requirement: Date/time string properties (createdAt, updated_at, *_date,
+      timestamp, …) should declare a format such as date-time (RFC 3339) so the value is unambiguous and machine-validatable.
+      To fix: Ensure `format` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$..properties[?(
+      @property.match(/(_at$|_date$|_time$|At$|Date$|Time$|timestamp)/i) && @.type == ''string'' )]` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-schema-deletedby-property-must-be-string:
+    title: Schema Deletedby Property Must Be String
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-deletedby-property-must-be-string/
+    description: deletedBy MUST use a data type of 'string'.
+    message: deletedBy MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "deletedBy")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-deletedby-property-must-be-string''
+      (Schema Deletedby Property Must Be String). Requirement: deletedBy MUST use a data type of ''string''. To fix: Ensure
+      the targeted value matches the regular expression `^string$`; rewrite any value that does not. This rule is evaluated
+      at the JSONPath `$..[?(@property === "deletedBy")].type` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-description-property-must-be-string:
+    title: Schema Description Property Must Be String
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-description-property-must-be-string/
+    description: description MUST use a data type of 'string'.
+    message: description MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "description")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-description-property-must-be-string''
+      (Schema Description Property Must Be String). Requirement: description MUST use a data type of ''string''. To fix: Ensure
+      the targeted value matches the regular expression `^string$`; rewrite any value that does not. This rule is evaluated
+      at the JSONPath `$..[?(@property === "description")].type` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-schema-enum-not-empty:
+    title: Schema Enum Not Empty
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-enum-not-empty/
+    description: An enum should declare at least one value — an empty enum permits nothing and is almost always a mistake.
+    message: enum should not be empty.
+    given: $..enum
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          minItems: 1
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-enum-not-empty'' (Schema
+      Enum Not Empty). Requirement: An enum should declare at least one value — an empty enum permits nothing and is almost
+      always a mistake. To fix: Adjust the targeted value so it conforms to the schema this rule requires. This rule is evaluated
+      at the JSONPath `$..enum` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-fingerprint-property-must-be-string:
+    title: Schema Fingerprint Property Must Be String
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-fingerprint-property-must-be-string/
+    description: Fingerprint values MUST use a data type of `string`.
+    message: Fingerprint values MUST use a data type of `string`.
+    severity: info
+    given: $..[?(@property === "fingerprint")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-fingerprint-property-must-be-string''
+      (Schema Fingerprint Property Must Be String). Requirement: Fingerprint values MUST use a data type of `string`. To fix:
+      Ensure the targeted value matches the regular expression `^string$`; rewrite any value that does not. This rule is evaluated
+      at the JSONPath `$..[?(@property === "fingerprint")].type` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-schema-id-property-must-be-string:
+    title: Schema ID Property Must Be String
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-id-property-must-be-string/
+    description: id SHOULD use a data type of 'string'.
+    message: id SHOULD use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "id")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-id-property-must-be-string''
+      (Schema ID Property Must Be String). Requirement: id SHOULD use a data type of ''string''. To fix: Ensure the targeted
+      value matches the regular expression `^string$`; rewrite any value that does not. This rule is evaluated at the JSONPath
+      `$..[?(@property === "id")].type` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-integer-format-allowed-values:
+    title: Schema Integer Format Allowed Values
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-integer-format-allowed-values/
+    description: To improve interoperability, integer and number formats are constrained to a shared subset. See recommendation
+      RAC_REST_FORMAT_004.
+    message: Type format is "{{value}}", expected one of [int32, int64]. {{path}}
+    severity: info
+    given: '$.[?(@.type=="integer")]
+
+      '
+    then:
+      field: format
+      function: enumeration
+      functionOptions:
+        values:
+        - int32
+        - int64
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-integer-format-allowed-values''
+      (Schema Integer Format Allowed Values). Requirement: To improve interoperability, integer and number formats are constrained
+      to a shared subset. See recommendation RAC_REST_FORMAT_004. To fix: Set `format` to one of the allowed values: int32,
+      int64. This rule is evaluated at the JSONPath `$.[?(@.type=="integer")] ` — inspect every location it matches and correct
+      only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document,
+      with no commentary.'
+  openapi-schema-integer-require-format:
+    title: Schema Integer Require Format
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-integer-require-format/
+    description: Schema of type number or integer must specify a format to express the associated datatype, eg. `int32`, `int64`,
+      ... You can express similar requirements using the `minimum` and `maximum` properties. See recommendation RAC_REST_FORMAT_004.
+    message: Schema of type number or integer must specify a format. {{path}}
+    severity: info
+    given: '$.[?(@.type=="integer")]
+
+      '
+    then:
+      field: format
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-integer-require-format''
+      (Schema Integer Require Format). Requirement: Schema of type number or integer must specify a format to express the
+      associated datatype, eg. `int32`, `int64`, ... You can express similar requirements using the `minimum` and `maximum`
+      properties. See recommendation RAC_REST_FORMAT_004. To fix: Ensure `format` is present and non-empty at each matching
+      location. This rule is evaluated at the JSONPath `$.[?(@.type=="integer")] ` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected
+      document, with no commentary.'
+  openapi-schema-modified-datetime-must-be-date-time:
+    title: Schema Modified Datetime Must Be Date Time
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-modified-datetime-must-be-date-time/
+    description: modifiedDateTime MUST use a data type of 'string' with the format 'date-time'.
+    message: modifiedDateTime MUST use a data type of 'string' with the format 'date-time'.
+    severity: info
+    given: $..properties.modifiedDateTime
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        match: ^string$
+    - field: format
+      function: truthy
+    - field: format
+      function: pattern
+      functionOptions:
+        match: ^date-time$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-modified-datetime-must-be-date-time''
+      (Schema Modified Datetime Must Be Date Time). Requirement: modifiedDateTime MUST use a data type of ''string'' with
+      the format ''date-time''. To fix: Ensure `type` matches the regular expression `^string$`; rewrite any value that does
+      not. Also: Ensure `format` is present and non-empty at each matching location. Also: Ensure `format` matches the regular
+      expression `^date-time$`; rewrite any value that does not. This rule is evaluated at the JSONPath `$..properties.modifiedDateTime`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-schema-modifiedby-property-must-be-string:
+    title: Schema Modifiedby Property Must Be String
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-modifiedby-property-must-be-string/
+    description: modifiedBy MUST use a data type of 'string'.
+    message: modifiedBy MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "modifiedBy")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-modifiedby-property-must-be-string''
+      (Schema Modifiedby Property Must Be String). Requirement: modifiedBy MUST use a data type of ''string''. To fix: Ensure
+      the targeted value matches the regular expression `^string$`; rewrite any value that does not. This rule is evaluated
+      at the JSONPath `$..[?(@property === "modifiedBy")].type` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-schema-monetary-property-avoid-float:
+    title: Schema Monetary Property Avoid Float
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-monetary-property-avoid-float/
+    description: Monetary properties (amount, price, cost, fee, balance, …) should avoid floating-point numbers, which lose
+      precision — use an integer of minor units or a decimal string instead.
+    message: Monetary property should not be a floating-point number.
+    given: $..properties[?( @property.match(/(amount|price|cost|total|fee|balance|subtotal)/i) )]
+    severity: info
+    then:
+      field: type
+      function: pattern
+      functionOptions:
+        notMatch: ^number$
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-monetary-property-avoid-float''
+      (Schema Monetary Property Avoid Float). Requirement: Monetary properties (amount, price, cost, fee, balance, …) should
+      avoid floating-point numbers, which lose precision — use an integer of minor units or a decimal string instead. To fix:
+      Ensure `type` does NOT match the regular expression `^number$`; rename or rewrite any value that does. This rule is
+      evaluated at the JSONPath `$..properties[?( @property.match(/(amount|price|cost|total|fee|balance|subtotal)/i) )]` —
+      inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies the
+      rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-schema-name-property-must-be-string:
+    title: Schema Name Property Must Be String
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-name-property-must-be-string/
+    description: name MUST use a data type of 'string'.
+    message: name MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "name")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-name-property-must-be-string''
+      (Schema Name Property Must Be String). Requirement: name MUST use a data type of ''string''. To fix: Ensure the targeted
+      value matches the regular expression `^string$`; rewrite any value that does not. This rule is evaluated at the JSONPath
+      `$..[?(@property === "name")].type` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-number-format-allowed-values:
+    title: Schema Number Format Allowed Values
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-number-format-allowed-values/
+    description: To improve interoperability, integer and number formats are constrained to a shared subset. See recommendation
+      RAC_REST_FORMAT_004.
+    message: Type format is "{{value}}", expected one of [decimal32, decimal64, decimal128, float, double]. {{path}}
+    severity: info
+    given: '$.[?(@.type=="number")]
+
+      '
+    then:
+      field: format
+      function: enumeration
+      functionOptions:
+        values:
+        - decimal32
+        - decimal64
+        - float
+        - double
+        - decimal128
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:document
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-number-format-allowed-values''
+      (Schema Number Format Allowed Values). Requirement: To improve interoperability, integer and number formats are constrained
+      to a shared subset. See recommendation RAC_REST_FORMAT_004. To fix: Set `format` to one of the allowed values: decimal32,
+      decimal64, float, double, decimal128. This rule is evaluated at the JSONPath `$.[?(@.type=="number")] ` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-schema-number-property-require-maximum:
+    title: Schema Number Property Require Maximum
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-number-property-require-maximum/
+    description: Schema properties that are of the type number should have a maximum property defined.
+    message: Schema Number Properties MUST Have Maximum
+    severity: info
+    given: $.components.schemas.*.properties[?(@.type=="number")]
+    then:
+    - field: maximum
+      function: defined
+    tags:
+    - owasp:api4
+    - format:openapi
+    - spec:schemas
+    - spec:components
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-number-property-require-maximum''
+      (Schema Number Property Require Maximum). Requirement: Schema properties that are of the type number should have a maximum
+      property defined. To fix: Ensure `maximum` is defined at each matching location. This rule is evaluated at the JSONPath
+      `$.components.schemas.*.properties[?(@.type=="number")]` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-number-property-require-minimum:
+    title: Schema Number Property Require Minimum
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-number-property-require-minimum/
+    description: Schema properties that are of the type number should have a minimum property defined.
+    message: Schema Number Properties MUST Have Minimum
+    severity: info
+    given: $.components.schemas.*.properties[?(@.type=="number")]
+    then:
+    - field: minimum
+      function: defined
+    tags:
+    - owasp:api4
+    - format:openapi
+    - spec:schemas
+    - spec:components
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-number-property-require-minimum''
+      (Schema Number Property Require Minimum). Requirement: Schema properties that are of the type number should have a minimum
+      property defined. To fix: Ensure `minimum` is defined at each matching location. This rule is evaluated at the JSONPath
+      `$.components.schemas.*.properties[?(@.type=="number")]` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-number-require-format:
+    title: Schema Number Require Format
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-number-require-format/
+    description: Schema of type number or integer must specify a format to express the associated datatype, eg. `int32`, `int64`,
+      ... You can express similar requirements using the `minimum` and `maximum` properties. See recommendation RAC_REST_FORMAT_004.
+    message: Schema of type number or integer must specify a format. {{path}}
+    severity: info
+    given: $.[?(@.type=="number")]
+    then:
+      field: format
+      function: truthy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-number-require-format''
+      (Schema Number Require Format). Requirement: Schema of type number or integer must specify a format to express the associated
+      datatype, eg. `int32`, `int64`, ... You can express similar requirements using the `minimum` and `maximum` properties.
+      See recommendation RAC_REST_FORMAT_004. To fix: Ensure `format` is present and non-empty at each matching location.
+      This rule is evaluated at the JSONPath `$.[?(@.type=="number")]` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-schema-number-require-min-max:
+    title: Schema Number Require Min Max
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-number-require-min-max/
+    description: Numeric values should be limited in size to mitigate resource exhaustion using `maximum` and `minimum`. If
+      you delegate input validation to a library or framework, be sure to test it thoroughly.
+    message: Schema of type number or integer must specify a maximum and a minimum. {{path}} {{error}}
+    severity: info
+    given:
+    - $.[?(@.type=="number")]
+    - $.[?(@.type=="integer")]
+    then:
+    - field: maximum
+      function: defined
+    - field: minimum
+      function: defined
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-number-require-min-max''
+      (Schema Number Require Min Max). Requirement: Numeric values should be limited in size to mitigate resource exhaustion
+      using `maximum` and `minimum`. If you delegate input validation to a library or framework, be sure to test it thoroughly.
+      To fix: Ensure `maximum` is defined at each matching location. Also: Ensure `minimum` is defined at each matching location.
+      This rule is evaluated at the JSONPath `$.[?(@.type=="number")] | $.[?(@.type=="integer")]` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-schema-object-constrain-additional-property:
+    title: Schema Object Constrain Additional Property
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-object-constrain-additional-property/
+    description: 'By default, jsonschema allows additionalProperties. This means that schema validators can be bypassed using
+      further, unspecified fields. While forbidding additionalProperties can create rigidity and hinder the evolution of an
+      API - eg making it hard to accept new parameters or fields - it is possible that this flexibility can be used to bypass
+      the schema validator and force the application to process unwanted information. Disable `additionalProperties` with
+      `false` ``` Person: type: object additionalProperties: false properties: given_name: type: string pattern: [a-zA-Z ]{24}
+      ``` Or constraint them using `maxProperties` ``` Person: type: object additionalProperties: type: string pattern: /+39[0-9]{,14}/
+      maxProperties: 3 properties: given_name: type: string pattern: [a-zA-Z ]{24} ``` - no additionalProperties - constrained
+      additionalProperties.'
+    message: 'Objects should not allow additionalProperties. Disable them with `additionalProperties: false` or constraint
+      them.'
+    severity: info
+    given:
+    - $.[?(@.type=="object" && @.additionalProperties &&  @.additionalProperties!=true &&  @.additionalProperties!=false )]
+    then:
+    - field: maxProperties
+      function: defined
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    - owasp:api3
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-object-constrain-additional-property''
+      (Schema Object Constrain Additional Property). Requirement: By default, jsonschema allows additionalProperties. This
+      means that schema validators can be bypassed using further, unspecified fields. While forbidding additionalProperties
+      can create rigidity and hinder the evolution of an API - eg making it hard to accept new parameters or fields - it is
+      possible that this flexibility can be used to bypass the schema validator and force the application to process unwanted
+      information. Disable `additionalProperties` with `false` ``` Person: type: object additionalProperties: false properties:
+      given_name: type: string pattern: [a-zA-Z ]{24} ``` Or constraint them using `maxProperties` ``` Person: type: object
+      additionalProperties: type: string pattern: /+39[0-9]{,14}/ maxProperties: 3 properties: given_name: type: string pattern:
+      [a-zA-Z ]{24} ``` - no additionalProperties - constrained additionalProperties. To fix: Ensure `maxProperties` is defined
+      at each matching location. Guidance: Objects should not allow additionalProperties. Disable them with `additionalProperties:
+      false` or constraint them. This rule is evaluated at the JSONPath `$.[?(@.type=="object" && @.additionalProperties &&
+      @.additionalProperties!=true && @.additionalProperties!=false )]` — inspect every location it matches and correct only
+      what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  openapi-schema-object-disallow-additional-property:
+    title: Schema Object Disallow Additional Property
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-object-disallow-additional-property/
+    description: 'By default, jsonschema allows additionalProperties. This means that schema validators can be bypassed using
+      further, unspecified fields. While forbidding additionalProperties can create rigidity and hinder the evolution of an
+      API - eg making it hard to accept new parameters or fields - it is possible that this flexibility can be used to bypass
+      the schema validator and force the application to process unwanted information. Disable `additionalProperties` with
+      `false` ``` Person: type: object additionalProperties: false properties: given_name: type: string pattern: [a-zA-Z ]{24}
+      ``` Or constraint them using `maxProperties` ``` Person: type: object additionalProperties: type: string pattern: /+39[0-9]{,14}/
+      maxProperties: 3 properties: given_name: type: string pattern: [a-zA-Z ]{24} ``` - no additionalProperties - constrained
+      additionalProperties.'
+    message: 'Objects should not allow additionalProperties. Disable them with `additionalProperties: false` or constraint
+      them.'
+    severity: info
+    given:
+    - $.[?(@.type=="object" && @.additionalProperties==true)]
+    then:
+    - field: additionalProperties
+      function: falsy
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    - owasp:api3
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-object-disallow-additional-property''
+      (Schema Object Disallow Additional Property). Requirement: By default, jsonschema allows additionalProperties. This
+      means that schema validators can be bypassed using further, unspecified fields. While forbidding additionalProperties
+      can create rigidity and hinder the evolution of an API - eg making it hard to accept new parameters or fields - it is
+      possible that this flexibility can be used to bypass the schema validator and force the application to process unwanted
+      information. Disable `additionalProperties` with `false` ``` Person: type: object additionalProperties: false properties:
+      given_name: type: string pattern: [a-zA-Z ]{24} ``` Or constraint them using `maxProperties` ``` Person: type: object
+      additionalProperties: type: string pattern: /+39[0-9]{,14}/ maxProperties: 3 properties: given_name: type: string pattern:
+      [a-zA-Z ]{24} ``` - no additionalProperties - constrained additionalProperties. To fix: Ensure `additionalProperties`
+      is absent or empty (falsy) at each matching location. Guidance: Objects should not allow additionalProperties. Disable
+      them with `additionalProperties: false` or constraint them. This rule is evaluated at the JSONPath `$.[?(@.type=="object"
+      && @.additionalProperties==true)]` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-object-set-additional-property:
+    title: Schema Object Set Additional Property
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-object-set-additional-property/
+    description: 'By default, jsonschema allows additionalProperties. This means that schema validators can be bypassed using
+      further, unspecified fields. While forbidding additionalProperties can create rigidity and hinder the evolution of an
+      API - eg making it hard to accept new parameters or fields - it is possible that this flexibility can be used to bypass
+      the schema validator and force the application to process unwanted information. Disable `additionalProperties` with
+      `false` ``` Person: type: object additionalProperties: false properties: given_name: type: string pattern: [a-zA-Z ]{24}
+      ``` Or constraint them using `maxProperties` ``` Person: type: object additionalProperties: type: string pattern: /+39[0-9]{,14}/
+      maxProperties: 3 properties: given_name: type: string pattern: [a-zA-Z ]{24} ``` - no additionalProperties - constrained
+      additionalProperties. @.additionalProperties)]`).'
+    message: 'Objects should not allow additionalProperties. Disable them with `additionalProperties: false` or constraint
+      them.'
+    severity: info
+    given:
+    - $.[?(@.type=="object" && ! @.additionalProperties)]
+    then:
+    - field: additionalProperties
+      function: defined
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    - owasp:api3
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-object-set-additional-property''
+      (Schema Object Set Additional Property). Requirement: By default, jsonschema allows additionalProperties. This means
+      that schema validators can be bypassed using further, unspecified fields. While forbidding additionalProperties can
+      create rigidity and hinder the evolution of an API - eg making it hard to accept new parameters or fields - it is possible
+      that this flexibility can be used to bypass the schema validator and force the application to process unwanted information.
+      Disable `additionalProperties` with `false` ``` Person: type: object additionalProperties: false properties: given_name:
+      type: string pattern: [a-zA-Z ]{24} ``` Or constraint them using `maxProperties` ``` Person: type: object additionalProperties:
+      type: string pattern: /+39[0-9]{,14}/ maxProperties: 3 properties: given_name: type: string pattern: [a-zA-Z ]{24} ```
+      - no additionalProperties - constrained additionalProperties. @.additionalProperties)]`). To fix: Ensure `additionalProperties`
+      is defined at each matching location. Guidance: Objects should not allow additionalProperties. Disable them with `additionalProperties:
+      false` or constraint them. This rule is evaluated at the JSONPath `$.[?(@.type=="object" && ! @.additionalProperties)]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-schema-orgid-property-must-be-string:
+    title: Schema Orgid Property Must Be String
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-orgid-property-must-be-string/
+    description: orgId MUST use a data type of 'string'.
+    message: orgId MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "orgId")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-orgid-property-must-be-string''
+      (Schema Orgid Property Must Be String). Requirement: orgId MUST use a data type of ''string''. To fix: Ensure the targeted
+      value matches the regular expression `^string$`; rewrite any value that does not. This rule is evaluated at the JSONPath
+      `$..[?(@property === "orgId")].type` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-property-require-description:
+    title: Schema Property Require Description
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-property-require-description/
+    description: Schema properties should have descriptions that provide a narrative of the property contains, and how it
+      can be used.
+    message: Schema Properties MUST Have Description
+    severity: info
+    given: $.components.schemas.*.properties[?(@.type == 'string')]
+    then:
+      field: description
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - spec:components
+    - experience:documentation
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-property-require-description''
+      (Schema Property Require Description). Requirement: Schema properties should have descriptions that provide a narrative
+      of the property contains, and how it can be used. To fix: Ensure `description` is present and non-empty at each matching
+      location. This rule is evaluated at the JSONPath `$.components.schemas.*.properties[?(@.type == ''string'')]` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-schema-property-require-type:
+    title: Schema Property Require Type
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-property-require-type/
+    description: Schema properties must have a type defined.
+    message: '{{error}}'
+    severity: info
+    given: $..properties.*
+    then:
+      function: digitalocean-ensureSchemaHasType
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-property-require-type''
+      (Schema Property Require Type). Requirement: Schema properties must have a type defined. This rule is evaluated at the
+      JSONPath `$..properties.*` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-ref-property-must-be-string:
+    title: Schema Ref Property Must Be String
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-ref-property-must-be-string/
+    description: ref MUST use a data type of 'string'.
+    message: ref MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "ref")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-ref-property-must-be-string''
+      (Schema Ref Property Must Be String). Requirement: ref MUST use a data type of ''string''. To fix: Ensure the targeted
+      value matches the regular expression `^string$`; rewrite any value that does not. This rule is evaluated at the JSONPath
+      `$..[?(@property === "ref")].type` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-ref-property-require-format:
+    title: Schema Ref Property Require Format
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-ref-property-require-format/
+    description: Property with the name 'ref' MUST use a format 'sps-ref'.
+    message: Property with the name 'ref' MUST use a format 'sps-ref'.
+    severity: info
+    given: $..properties..[?((@property=== "ref" || @property === "Ref") && @.$ref == null && @.allOf == null && @.oneOf ==
+      null && @.type != null)]
+    then:
+    - field: format
+      function: truthy
+    - field: format
+      function: pattern
+      functionOptions:
+        match: ^sps-ref$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-ref-property-require-format''
+      (Schema Ref Property Require Format). Requirement: Property with the name ''ref'' MUST use a format ''sps-ref''. To
+      fix: Ensure `format` is present and non-empty at each matching location. Also: Ensure `format` matches the regular expression
+      `^sps-ref$`; rewrite any value that does not. This rule is evaluated at the JSONPath `$..properties..[?((@property===
+      "ref" || @property === "Ref") && @.$ref == null && @.allOf == null && @.oneOf == null && @.type != null)]` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-schema-ref-property-standard:
+    title: Schema Ref Property Standard
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-ref-property-standard/
+    description: Properties following 'sps-ref' format MUST use the standardized schema - maxLength (255), minLength(7), pattern
+      (includes 'sps'), type (string).
+    message: '{{property}} is not provided or not following required schema values.'
+    severity: info
+    given: $..[?(@property=== "format" && @ == "sps-ref")]^
+    then:
+    - function: schema
+      functionOptions:
+        schema:
+          type: object
+          required:
+          - maxLength
+          - minLength
+          - type
+          - pattern
+          properties:
+            maxLength:
+              type: integer
+              minimum: 255
+              maximum: 255
+            minLength:
+              type: integer
+              minimum: 7
+              maximum: 7
+            type:
+              type: string
+            pattern:
+              type: string
+    - field: pattern
+      function: pattern
+      functionOptions:
+        match: sps
+    - field: type
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-ref-property-standard''
+      (Schema Ref Property Standard). Requirement: Properties following ''sps-ref'' format MUST use the standardized schema
+      - maxLength (255), minLength(7), pattern (includes ''sps''), type (string). To fix: Adjust the targeted value so it
+      conforms to the schema this rule requires. Also: Ensure `pattern` matches the regular expression `sps`; rewrite any
+      value that does not. Also: Ensure `type` matches the regular expression `^string$`; rewrite any value that does not.
+      This rule is evaluated at the JSONPath `$..[?(@property=== "format" && @ == "sps-ref")]^` — inspect every location it
+      matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only the complete
+      corrected document, with no commentary.'
+  openapi-schema-requestid-property-must-be-string:
+    title: Schema Requestid Property Must Be String
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-requestid-property-must-be-string/
+    description: requestId MUST use a data type of 'string'.
+    message: requestId MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "requestId")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - topic:tracing
+    - experience:data-modeling
+    - experience:consistency
+    - experience:observability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-requestid-property-must-be-string''
+      (Schema Requestid Property Must Be String). Requirement: requestId MUST use a data type of ''string''. To fix: Ensure
+      the targeted value matches the regular expression `^string$`; rewrite any value that does not. This rule is evaluated
+      at the JSONPath `$..[?(@property === "requestId")].type` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-require-description:
+    title: Schema Require Description
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-require-description/
+    description: Schema should have descriptions that provide a narrative of what a schema object is for, and how it can be
+      used, leaving examples to demonstrate what can actually be expected.
+    message: Schema MUST Have a Description.
+    severity: info
+    given: $.components.schemas.*
+    then:
+      field: description
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - spec:components
+    - experience:documentation
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-require-description''
+      (Schema Require Description). Requirement: Schema should have descriptions that provide a narrative of what a schema
+      object is for, and how it can be used, leaving examples to demonstrate what can actually be expected. To fix: Ensure
+      `description` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.components.schemas.*`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI.
+      Return only the complete corrected document, with no commentary.'
+  openapi-schema-require-name:
+    title: Schema Require Name
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-require-name/
+    description: Schema names, keeping the naming of them consistent across APIs, standardizing how consumers can use in their
+      applications.
+    message: Schema Names MUST Exist
+    severity: info
+    given: $.components.schemas
+    then:
+      field: '@key'
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - spec:components
+    - experience:naming
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-require-name'' (Schema
+      Require Name). Requirement: Schema names, keeping the naming of them consistent across APIs, standardizing how consumers
+      can use in their applications. To fix: Ensure `@key` is present and non-empty at each matching location. This rule is
+      evaluated at the JSONPath `$.components.schemas` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-require-type:
+    title: Schema Require Type
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-require-type/
+    description: Schema should have a type defined, being explicit about type of data a schema describes and can be used to
+      validate, helping standardize the type of data being made available.
+    message: Schema MUST Have Type Property
+    severity: info
+    given: $.components.schemas.*
+    then:
+      field: type
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - spec:components
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-require-type'' (Schema
+      Require Type). Requirement: Schema should have a type defined, being explicit about type of data a schema describes
+      and can be used to validate, helping standardize the type of data being made available. To fix: Ensure `type` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.components.schemas.*` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
+      the complete corrected document, with no commentary.'
+  openapi-schema-string-property-require-max-length:
+    title: Schema String Property Require Max Length
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-string-property-require-max-length/
+    description: Schema properties that are of the string type have the max length applied defining the shape of the property.
+    message: Schema String Properties MUST Have Maximum Length
+    severity: info
+    given: $.components.schemas.*.properties[?(@.type == 'string')]
+    then:
+      field: maxLength
+      function: truthy
+    tags:
+    - owasp:api4
+    - format:openapi
+    - spec:schemas
+    - spec:components
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-string-property-require-max-length''
+      (Schema String Property Require Max Length). Requirement: Schema properties that are of the string type have the max
+      length applied defining the shape of the property. To fix: Ensure `maxLength` is present and non-empty at each matching
+      location. This rule is evaluated at the JSONPath `$.components.schemas.*.properties[?(@.type == ''string'')]` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-schema-string-property-require-min-length:
+    title: Schema String Property Require Min Length
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-string-property-require-min-length/
+    description: Schema properties that are of the string type have the min length applied defining the shape of the property.
+    message: Schema String Properties MUST Have Minimum Length
+    severity: info
+    given: $.components.schemas.*.properties[?(@.type == 'string')]
+    then:
+      field: minLength
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:schemas
+    - spec:components
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-string-property-require-min-length''
+      (Schema String Property Require Min Length). Requirement: Schema properties that are of the string type have the min
+      length applied defining the shape of the property. To fix: Ensure `minLength` is present and non-empty at each matching
+      location. This rule is evaluated at the JSONPath `$.components.schemas.*.properties[?(@.type == ''string'')]` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
+  openapi-schema-string-require-max-length:
+    title: Schema String Require Max Length
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-string-require-max-length/
+    description: 'String length should be limited to avoid an attacker to send very long strings to your service. You can
+      do this in different ways: - specify a `maxLength` - constraint the possible values with an `enum` - use a constrained
+      `format` like `date` or `date-time`. A constrained string using the `date` format. ``` ConstrainedString: type: string
+      format: date ``` Another constrained string using `maxLength`. You can always add further constraints using a `pattern`
+      or a `format`. ``` ZipCode: type: string maxLength: 5 pattern: ''[0-9]{5}'' ``` For further security, you can always
+      limit string length even in conjunction with `format` and `pattern`.'
+    message: Strings (non enum) must specify a maximum length. {{path}} {{error}}
+    severity: info
+    given:
+    - $.[?(@.type=="string" && !@.enum && @.format!="date" && @.format !="date-time" )]
+    then:
+    - field: maxLength
+      function: defined
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-string-require-max-length''
+      (Schema String Require Max Length). Requirement: String length should be limited to avoid an attacker to send very long
+      strings to your service. You can do this in different ways: - specify a `maxLength` - constraint the possible values
+      with an `enum` - use a constrained `format` like `date` or `date-time`. A constrained string using the `date` format.
+      ``` ConstrainedString: type: string format: date ``` Another constrained string using `maxLength`. You can always add
+      further constraints using a `pattern` or a `format`. ``` ZipCode: type: string maxLength: 5 pattern: ''[0-9]{5}'' ```
+      For further security, you can always limit string length even in conjunction with `format` and `pattern`. To fix: Ensure
+      `maxLength` is defined at each matching location. This rule is evaluated at the JSONPath `$.[?(@.type=="string" && !@.enum
+      && @.format!="date" && @.format !="date-time" )]` — inspect every location it matches and correct only what violates
+      the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
+      unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-schema-string-require-pattern-or-format:
+    title: Schema String Require Pattern Or Format
+    reference: https://spotlight-rules.com/spec/rules/openapi/schema-string-require-pattern-or-format/
+    description: 'String length should be limited to avoid an attacker to send very long strings to your service. You can
+      do this in different ways: - specify a `maxLength` - constraint the possible values with an `enum` - use a constrained
+      `format` like `date` or `date-time`. A constrained string using the `date` format. ``` ConstrainedString: type: string
+      format: date ``` Another constrained string using `maxLength`. You can always add further constraints using a `pattern`
+      or a `format`. ``` ZipCode: type: string maxLength: 5 pattern: ''[0-9]{5}'' ``` For further security, you can always
+      limit string length even in conjunction with `format` and `pattern`.'
+    message: Strings (non enum) must specify a pattern or a format. {{path}}
+    severity: info
+    given:
+    - $.[?(@.type=="string" && !@.enum && @.format!="date" && @.format !="date-time" )]
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          anyOf:
+          - required:
+            - pattern
+          - required:
+            - format
+          additionalProperties: true
+    formats:
+    - oas3
+    tags:
+    - format:openapi
+    - spec:schemas
+    - experience:security
+    - experience:data-modeling
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''schema-string-require-pattern-or-format''
+      (Schema String Require Pattern Or Format). Requirement: String length should be limited to avoid an attacker to send
+      very long strings to your service. You can do this in different ways: - specify a `maxLength` - constraint the possible
+      values with an `enum` - use a constrained `format` like `date` or `date-time`. A constrained string using the `date`
+      format. ``` ConstrainedString: type: string format: date ``` Another constrained string using `maxLength`. You can always
+      add further constraints using a `pattern` or a `format`. ``` ZipCode: type: string maxLength: 5 pattern: ''[0-9]{5}''
+      ``` For further security, you can always limit string length even in conjunction with `format` and `pattern`. To fix:
+      Adjust the targeted value so it conforms to the schema this rule requires. This rule is evaluated at the JSONPath `$.[?(@.type=="string"
+      && !@.enum && @.format!="date" && @.format !="date-time" )]` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no
+      commentary.'
+  apis-json-api-entry-require-tag:
+    title: API Entry Require Tag
+    reference: https://spotlight-rules.com/spec/rules/apis-json/api-entry-require-tag/
+    description: Each API defined in an APIs.json artifact includes a property for adding one or more tags. These tags provide
+      additional context about the resources or capabilities offered by the API, highlighting its business value and the domain
+      in which it is applied.
+    message: API MUST Have a Tags Object
+    severity: info
+    given: $.apis.*
+    then:
+      field: tags
+      function: truthy
+    tags:
+    - format:apis-json
+    - spec:apis
+    - experience:discoverability
+    - experience:data-modeling
+    prompt: 'You are editing an APIs.json document to satisfy the Spotlight API governance rule ''api-entry-require-tag''
+      (API Entry Require Tag). Requirement: Each API defined in an APIs.json artifact includes a property for adding one or
+      more tags. These tags provide additional context about the resources or capabilities offered by the API, highlighting
+      its business value and the domain in which it is applied. To fix: Ensure `tags` is present and non-empty at each matching
+      location. This rule is evaluated at the JSONPath `$.apis.*` — inspect every location it matches and correct only what
+      violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid APIs.json. Return only the complete corrected document, with no
+      commentary.'
+  asyncapi-component-asyncapi-message-require-contenttype:
+    title: Component Asyncapi Message Require Contenttype
+    reference: https://spotlight-rules.com/spec/rules/asyncapi/component-asyncapi-message-require-contenttype/
+    description: Messages should declare a contentType (e.g. application/json).
+    message: Message should declare a contentType.
+    given: $.components.messages[*]
+    severity: info
+    then:
+      field: contentType
+      function: truthy
+    tags:
+    - format:asyncapi
+    - spec:components
+    - experience:consistency
+    - experience:data-modeling
+    prompt: 'You are editing an AsyncAPI document to satisfy the Spotlight API governance rule ''component-asyncapi-message-require-contenttype''
+      (Component Asyncapi Message Require Contenttype). Requirement: Messages should declare a contentType (e.g. application/json).
+      To fix: Ensure `contentType` is present and non-empty at each matching location. This rule is evaluated at the JSONPath
+      `$.components.messages[*]` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid AsyncAPI. Return only the complete corrected document, with no commentary.'
+  asyncapi-component-asyncapi-message-require-payload:
+    title: Component Asyncapi Message Require Payload
+    reference: https://spotlight-rules.com/spec/rules/asyncapi/component-asyncapi-message-require-payload/
+    description: Messages should define a payload schema.
+    message: Message should define a payload.
+    given: $.components.messages[*]
+    severity: info
+    then:
+      field: payload
+      function: truthy
+    tags:
+    - format:asyncapi
+    - spec:components
+    - experience:data-modeling
+    prompt: 'You are editing an AsyncAPI document to satisfy the Spotlight API governance rule ''component-asyncapi-message-require-payload''
+      (Component Asyncapi Message Require Payload). Requirement: Messages should define a payload schema. To fix: Ensure `payload`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.components.messages[*]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid AsyncAPI.
+      Return only the complete corrected document, with no commentary.'
+  json-schema-document-require-description:
+    title: Document Require Description
+    reference: https://spotlight-rules.com/spec/rules/json-schema/document-require-description/
+    description: The `description` property should be present.
+    message: description should be present
+    severity: info
+    given: $
+    then:
+      field: description
+      function: truthy
+    tags:
+    - format:jsonschema
+    - spec:schemas
+    - experience:documentation
+    - experience:data-modeling
+    prompt: 'You are editing a JSON Schema document to satisfy the Spotlight API governance rule ''document-require-description''
+      (Document Require Description). Requirement: The `description` property should be present. To fix: Ensure `description`
+      is present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid JSON Schema. Return only the complete
+      corrected document, with no commentary.'
+  json-schema-document-require-id:
+    title: Document Require ID
+    reference: https://spotlight-rules.com/spec/rules/json-schema/document-require-id/
+    description: The `$id` property should be present.
+    message: $id should be present
+    severity: info
+    given: $
+    then:
+      field: $id
+      function: truthy
+    tags:
+    - format:jsonschema
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing a JSON Schema document to satisfy the Spotlight API governance rule ''document-require-id'' (Document
+      Require ID). Requirement: The `$id` property should be present. To fix: Ensure `$id` is present and non-empty at each
+      matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid JSON Schema. Return only the complete corrected document, with
+      no commentary.'
+  json-schema-document-require-property:
+    title: Document Require Property
+    reference: https://spotlight-rules.com/spec/rules/json-schema/document-require-property/
+    description: The `properties` property should be present.
+    message: properties should be present
+    severity: info
+    given: $
+    then:
+      field: properties
+      function: truthy
+    tags:
+    - format:jsonschema
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing a JSON Schema document to satisfy the Spotlight API governance rule ''document-require-property''
+      (Document Require Property). Requirement: The `properties` property should be present. To fix: Ensure `properties` is
+      present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid JSON Schema. Return only the complete
+      corrected document, with no commentary.'
+  json-schema-document-require-required-list:
+    title: Document Require Required List
+    reference: https://spotlight-rules.com/spec/rules/json-schema/document-require-required-list/
+    description: The `required` property should be present.
+    message: required should be present
+    severity: info
+    given: $
+    then:
+      field: required
+      function: truthy
+    tags:
+    - format:jsonschema
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing a JSON Schema document to satisfy the Spotlight API governance rule ''document-require-required-list''
+      (Document Require Required List). Requirement: The `required` property should be present. To fix: Ensure `required`
+      is present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid JSON Schema. Return only the complete
+      corrected document, with no commentary.'
+  json-schema-document-require-title:
+    title: Document Require Title
+    reference: https://spotlight-rules.com/spec/rules/json-schema/document-require-title/
+    description: The `title` property should be present.
+    message: title should be present
+    severity: info
+    given: $
+    then:
+      field: title
+      function: truthy
+    tags:
+    - format:jsonschema
+    - spec:schemas
+    - experience:documentation
+    - experience:data-modeling
+    prompt: 'You are editing a JSON Schema document to satisfy the Spotlight API governance rule ''document-require-title''
+      (Document Require Title). Requirement: The `title` property should be present. To fix: Ensure `title` is present and
+      non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid JSON Schema. Return only the complete corrected
+      document, with no commentary.'
+  json-schema-document-require-type:
+    title: Document Require Type
+    reference: https://spotlight-rules.com/spec/rules/json-schema/document-require-type/
+    description: The `type` property should be present.
+    message: type should be present
+    severity: info
+    given: $
+    then:
+      field: type
+      function: truthy
+    tags:
+    - format:jsonschema
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing a JSON Schema document to satisfy the Spotlight API governance rule ''document-require-type''
+      (Document Require Type). Requirement: The `type` property should be present. To fix: Ensure `type` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid JSON Schema. Return only the complete corrected document,
+      with no commentary.'
+  json-schema-schema-property-require-description:
+    title: Schema Property Require Description
+    reference: https://spotlight-rules.com/spec/rules/json-schema/schema-property-require-description/
+    description: The `description` property of each property should be present.
+    message: description should be present
+    severity: info
+    given: $.properties[*]
+    then:
+      field: description
+      function: truthy
+    tags:
+    - format:jsonschema
+    - spec:properties
+    - experience:documentation
+    - experience:data-modeling
+    prompt: 'You are editing a JSON Schema document to satisfy the Spotlight API governance rule ''schema-property-require-description''
+      (Schema Property Require Description). Requirement: The `description` property of each property should be present. To
+      fix: Ensure `description` is present and non-empty at each matching location. This rule is evaluated at the JSONPath
+      `$.properties[*]` — inspect every location it matches and correct only what violates the rule. Make the smallest change
+      that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid JSON Schema. Return only the complete corrected document, with no commentary.'
+  json-schema-schema-property-require-type:
+    title: Schema Property Require Type
+    reference: https://spotlight-rules.com/spec/rules/json-schema/schema-property-require-type/
+    description: The `type` property of each property should be present.
+    message: type should be present
+    severity: info
+    given: $.properties[*]
+    then:
+      field: type
+      function: truthy
+    tags:
+    - format:jsonschema
+    - spec:properties
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing a JSON Schema document to satisfy the Spotlight API governance rule ''schema-property-require-type''
+      (Schema Property Require Type). Requirement: The `type` property of each property should be present. To fix: Ensure
+      `type` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.properties[*]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid JSON
+      Schema. Return only the complete corrected document, with no commentary.'
+  json-schema-schema-require:
+    title: Schema Require
+    reference: https://spotlight-rules.com/spec/rules/json-schema/schema-require/
+    description: The `$schema` property should be present.
+    message: $schema should be present
+    severity: info
+    given: $
+    then:
+      field: $schema
+      function: truthy
+    tags:
+    - format:jsonschema
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing a JSON Schema document to satisfy the Spotlight API governance rule ''schema-require'' (Schema
+      Require). Requirement: The `$schema` property should be present. To fix: Ensure `$schema` is present and non-empty at
+      each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid JSON Schema. Return only the complete corrected document, with
+      no commentary.'
+  json-structure-document-require-id:
+    title: Document Require ID
+    reference: https://spotlight-rules.com/spec/rules/json-structure/document-require-id/
+    description: The `$id` property should be present.
+    message: $id should be present
+    severity: info
+    given: $
+    then:
+      field: $id
+      function: truthy
+    tags:
+    - format:json-structure
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing a JSON Structure document to satisfy the Spotlight API governance rule ''document-require-id''
+      (Document Require ID). Requirement: The `$id` property should be present. To fix: Ensure `$id` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid JSON Structure. Return only the complete corrected document,
+      with no commentary.'
+  json-structure-document-require-name:
+    title: Document Require Name
+    reference: https://spotlight-rules.com/spec/rules/json-structure/document-require-name/
+    description: The `name` property should be present.
+    message: name should be present
+    severity: info
+    given: $
+    then:
+      field: name
+      function: truthy
+    tags:
+    - format:json-structure
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing a JSON Structure document to satisfy the Spotlight API governance rule ''document-require-name''
+      (Document Require Name). Requirement: The `name` property should be present. To fix: Ensure `name` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid JSON Structure. Return only the complete corrected document,
+      with no commentary.'
+  json-structure-document-require-property:
+    title: Document Require Property
+    reference: https://spotlight-rules.com/spec/rules/json-structure/document-require-property/
+    description: The `properties` property should be present.
+    message: properties should be present
+    severity: info
+    given: $
+    then:
+      field: properties
+      function: truthy
+    tags:
+    - format:json-structure
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing a JSON Structure document to satisfy the Spotlight API governance rule ''document-require-property''
+      (Document Require Property). Requirement: The `properties` property should be present. To fix: Ensure `properties` is
+      present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid JSON Structure. Return only the
+      complete corrected document, with no commentary.'
+  json-structure-document-require-type:
+    title: Document Require Type
+    reference: https://spotlight-rules.com/spec/rules/json-structure/document-require-type/
+    description: The `type` property should be present.
+    message: type should be present
+    severity: info
+    given: $
+    then:
+      field: type
+      function: truthy
+    tags:
+    - format:json-structure
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing a JSON Structure document to satisfy the Spotlight API governance rule ''document-require-type''
+      (Document Require Type). Requirement: The `type` property should be present. To fix: Ensure `type` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid JSON Structure. Return only the complete corrected document,
+      with no commentary.'
+  json-structure-schema-json-structure-property-require-type:
+    title: Schema JSON Structure Property Require Type
+    reference: https://spotlight-rules.com/spec/rules/json-structure/schema-json-structure-property-require-type/
+    description: Properties should declare a type.
+    message: Property should declare a type.
+    given: $.properties[*]
+    severity: info
+    then:
+      field: type
+      function: truthy
+    tags:
+    - format:json-structure
+    - spec:schemas
+    - experience:data-modeling
+    prompt: 'You are editing a JSON Structure document to satisfy the Spotlight API governance rule ''schema-json-structure-property-require-type''
+      (Schema JSON Structure Property Require Type). Requirement: Properties should declare a type. To fix: Ensure `type`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.properties[*]` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid JSON Structure.
+      Return only the complete corrected document, with no commentary.'
+  json-structure-schema-json-structure-root-type-object:
+    title: Schema JSON Structure Root Type Object
+    reference: https://spotlight-rules.com/spec/rules/json-structure/schema-json-structure-root-type-object/
+    description: The root type of a JSON Structure document is typically object.
+    message: Root type should usually be object.
+    given: $.type
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^object$
+    tags:
+    - format:json-structure
+    - spec:document
+    - experience:data-modeling
+    prompt: 'You are editing a JSON Structure document to satisfy the Spotlight API governance rule ''schema-json-structure-root-type-object''
+      (Schema JSON Structure Root Type Object). Requirement: The root type of a JSON Structure document is typically object.
+      To fix: Ensure the targeted value matches the regular expression `^object$`; rewrite any value that does not. This rule
+      is evaluated at the JSONPath `$.type` — inspect every location it matches and correct only what violates the rule. Make
+      the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged,
+      and keep the document valid JSON Structure. Return only the complete corrected document, with no commentary.'
+  json-structure-schema-property-require-type:
+    title: Schema Property Require Type
+    reference: https://spotlight-rules.com/spec/rules/json-structure/schema-property-require-type/
+    description: The `type` property of each property should be present.
+    message: type should be present
+    severity: info
+    given: $.properties[*]
+    then:
+      field: type
+      function: truthy
+    tags:
+    - format:json-structure
+    - spec:properties
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing a JSON Structure document to satisfy the Spotlight API governance rule ''schema-property-require-type''
+      (Schema Property Require Type). Requirement: The `type` property of each property should be present. To fix: Ensure
+      `type` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.properties[*]`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid JSON
+      Structure. Return only the complete corrected document, with no commentary.'
+  json-structure-schema-require:
+    title: Schema Require
+    reference: https://spotlight-rules.com/spec/rules/json-structure/schema-require/
+    description: The `$schema` property should be present.
+    message: $schema should be present
+    severity: info
+    given: $
+    then:
+      field: $schema
+      function: truthy
+    tags:
+    - format:json-structure
+    - spec:schemas
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing a JSON Structure document to satisfy the Spotlight API governance rule ''schema-require'' (Schema
+      Require). Requirement: The `$schema` property should be present. To fix: Ensure `$schema` is present and non-empty at
+      each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid JSON Structure. Return only the complete corrected document, with
+      no commentary.'
+  json-ld-document-require-context:
+    title: Document Require Context
+    reference: https://spotlight-rules.com/spec/rules/json-ld/document-require-context/
+    description: The `@context` property should be present.
+    message: '@context should be present'
+    severity: info
+    given: $
+    then:
+      field: '@context'
+      function: truthy
+    tags:
+    - format:json-ld
+    - spec:document
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a JSON-LD document to satisfy the Spotlight API governance rule ''document-require-context''
+      (Document Require Context). Requirement: The `@context` property should be present. To fix: Ensure `@context` is present
+      and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid JSON-LD. Return only the complete corrected
+      document, with no commentary.'
+  json-ld-document-require-id:
+    title: Document Require ID
+    reference: https://spotlight-rules.com/spec/rules/json-ld/document-require-id/
+    description: The `@id` property should be present.
+    message: '@id should be present'
+    severity: info
+    given: $
+    then:
+      field: '@id'
+      function: truthy
+    tags:
+    - format:json-ld
+    - spec:document
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a JSON-LD document to satisfy the Spotlight API governance rule ''document-require-id'' (Document
+      Require ID). Requirement: The `@id` property should be present. To fix: Ensure `@id` is present and non-empty at each
+      matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid JSON-LD. Return only the complete corrected document, with no
+      commentary.'
+  json-ld-document-require-type:
+    title: Document Require Type
+    reference: https://spotlight-rules.com/spec/rules/json-ld/document-require-type/
+    description: The `@type` property should be present.
+    message: '@type should be present'
+    severity: info
+    given: $
+    then:
+      field: '@type'
+      function: truthy
+    tags:
+    - format:json-ld
+    - spec:document
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a JSON-LD document to satisfy the Spotlight API governance rule ''document-require-type'' (Document
+      Require Type). Requirement: The `@type` property should be present. To fix: Ensure `@type` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid JSON-LD. Return only the complete corrected document,
+      with no commentary.'
+  json-ld-schema-json-ld-context-uri-or-object:
+    title: Schema JSON LD Context URI Or Object
+    reference: https://spotlight-rules.com/spec/rules/json-ld/schema-json-ld-context-uri-or-object/
+    description: '@context should be a URI string, an inline object, or an array of those.'
+    message: '@context should be a URI, object, or array.'
+    given: $['@context']
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type:
+          - string
+          - object
+          - array
+    tags:
+    - format:json-ld
+    - spec:document
+    - experience:data-modeling
+    - experience:consistency
+    prompt: 'You are editing a JSON-LD document to satisfy the Spotlight API governance rule ''schema-json-ld-context-uri-or-object''
+      (Schema JSON LD Context URI Or Object). Requirement: @context should be a URI string, an inline object, or an array
+      of those. To fix: Adjust the targeted value so it conforms to the schema this rule requires. This rule is evaluated
+      at the JSONPath `$.@context` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid JSON-LD. Return only the complete corrected document, with no commentary.'
+  json-ld-schema-json-ld-type-string-or-array:
+    title: Schema JSON LD Type String Or Array
+    reference: https://spotlight-rules.com/spec/rules/json-ld/schema-json-ld-type-string-or-array/
+    description: '@type should be a string or an array of type strings.'
+    message: '@type should be a string or array.'
+    given: $['@type']
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type:
+          - string
+          - array
+    tags:
+    - format:json-ld
+    - spec:document
+    - experience:data-modeling
+    prompt: 'You are editing a JSON-LD document to satisfy the Spotlight API governance rule ''schema-json-ld-type-string-or-array''
+      (Schema JSON LD Type String Or Array). Requirement: @type should be a string or an array of type strings. To fix: Adjust
+      the targeted value so it conforms to the schema this rule requires. This rule is evaluated at the JSONPath `$.@type`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid JSON-LD.
+      Return only the complete corrected document, with no commentary.'
+  mcp-capability-require-prompts:
+    title: Capability Require Prompts
+    reference: https://spotlight-rules.com/spec/rules/mcp/capability-require-prompts/
+    description: The `prompts` property of each capability should be present.
+    message: prompts should be present
+    severity: info
+    given: $.capabilities
+    then:
+      field: prompts
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:capabilities
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''capability-require-prompts'' (Capability
+      Require Prompts). Requirement: The `prompts` property of each capability should be present. To fix: Ensure `prompts`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.capabilities` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid MCP. Return
+      only the complete corrected document, with no commentary.'
+  mcp-capability-require-resources:
+    title: Capability Require Resources
+    reference: https://spotlight-rules.com/spec/rules/mcp/capability-require-resources/
+    description: The `resources` property of each capability should be present.
+    message: resources should be present
+    severity: info
+    given: $.capabilities
+    then:
+      field: resources
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:capabilities
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''capability-require-resources''
+      (Capability Require Resources). Requirement: The `resources` property of each capability should be present. To fix:
+      Ensure `resources` is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.capabilities`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid MCP.
+      Return only the complete corrected document, with no commentary.'
+  mcp-capability-require-tools:
+    title: Capability Require Tools
+    reference: https://spotlight-rules.com/spec/rules/mcp/capability-require-tools/
+    description: The `tools` property of each capability should be present.
+    message: tools should be present
+    severity: info
+    given: $.capabilities
+    then:
+      field: tools
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:capabilities
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''capability-require-tools'' (Capability
+      Require Tools). Requirement: The `tools` property of each capability should be present. To fix: Ensure `tools` is present
+      and non-empty at each matching location. This rule is evaluated at the JSONPath `$.capabilities` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid MCP. Return only the complete corrected
+      document, with no commentary.'
+  mcp-document-require-capabilities:
+    title: Document Require Capabilities
+    reference: https://spotlight-rules.com/spec/rules/mcp/document-require-capabilities/
+    description: The `capabilities` property should be present.
+    message: capabilities should be present
+    severity: info
+    given: $
+    then:
+      field: capabilities
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:servers
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''document-require-capabilities''
+      (Document Require Capabilities). Requirement: The `capabilities` property should be present. To fix: Ensure `capabilities`
+      is present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid MCP. Return only the complete corrected
+      document, with no commentary.'
+  mcp-document-require-description:
+    title: Document Require Description
+    reference: https://spotlight-rules.com/spec/rules/mcp/document-require-description/
+    description: The `description` property should be present.
+    message: description should be present
+    severity: info
+    given: $
+    then:
+      field: description
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:servers
+    - experience:documentation
+    - experience:data-modeling
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''document-require-description''
+      (Document Require Description). Requirement: The `description` property should be present. To fix: Ensure `description`
+      is present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid MCP. Return only the complete corrected
+      document, with no commentary.'
+  mcp-document-require-name:
+    title: Document Require Name
+    reference: https://spotlight-rules.com/spec/rules/mcp/document-require-name/
+    description: The `name` property should be present.
+    message: name should be present
+    severity: info
+    given: $
+    then:
+      field: name
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:servers
+    - experience:data-modeling
+    - experience:discoverability
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''document-require-name'' (Document
+      Require Name). Requirement: The `name` property should be present. To fix: Ensure `name` is present and non-empty at
+      each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid MCP. Return only the complete corrected document, with no commentary.'
+  mcp-info-skill-require-version:
+    title: Info Require Version
+    reference: https://spotlight-rules.com/spec/rules/mcp/info-skill-require-version/
+    description: The `version` property should be present.
+    message: version should be present
+    severity: info
+    given: $
+    then:
+      field: version
+      function: truthy
+    tags:
+    - format:mcp
+    - spec:servers
+    - experience:versioning
+    - experience:data-modeling
+    prompt: 'You are editing a MCP document to satisfy the Spotlight API governance rule ''info-skill-require-version'' (Info
+      Require Version). Requirement: The `version` property should be present. To fix: Ensure `version` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid MCP. Return only the complete corrected document, with
+      no commentary.'
+  plans-document-require-name:
+    title: Document Require Name
+    reference: https://spotlight-rules.com/spec/rules/plans/document-require-name/
+    description: The `name` property should be present.
+    message: name should be present
+    severity: info
+    given: $
+    then:
+      field: name
+      function: truthy
+    tags:
+    - format:plans
+    - spec:document
+    - experience:data-modeling
+    - experience:governance
+    prompt: 'You are editing a Plans document to satisfy the Spotlight API governance rule ''document-require-name'' (Document
+      Require Name). Requirement: The `name` property should be present. To fix: Ensure `name` is present and non-empty at
+      each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments,
+      and formatting unchanged, and keep the document valid Plans. Return only the complete corrected document, with no commentary.'
+  plans-document-require-plan:
+    title: Document Require Plan
+    reference: https://spotlight-rules.com/spec/rules/plans/document-require-plan/
+    description: The `plans` property should be present.
+    message: plans should be present
+    severity: info
+    given: $
+    then:
+      field: plans
+      function: truthy
+    tags:
+    - format:plans
+    - spec:document
+    - experience:data-modeling
+    - experience:governance
+    prompt: 'You are editing a Plans document to satisfy the Spotlight API governance rule ''document-require-plan'' (Document
+      Require Plan). Requirement: The `plans` property should be present. To fix: Ensure `plans` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid Plans. Return only the complete corrected document,
+      with no commentary.'
+  plans-plan-currency-iso4217:
+    title: Plan Currency Iso4217
+    reference: https://spotlight-rules.com/spec/rules/plans/plan-currency-iso4217/
+    description: currency should be a 3-letter ISO 4217 code (e.g. USD).
+    message: currency should be an ISO 4217 code.
+    given: $.currency
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z]{3}$
+    tags:
+    - format:plans
+    - spec:document
+    - experience:consistency
+    - experience:data-modeling
+    prompt: 'You are editing a Plans document to satisfy the Spotlight API governance rule ''plan-currency-iso4217'' (Plan
+      Currency Iso4217). Requirement: currency should be a 3-letter ISO 4217 code (e.g. USD). To fix: Ensure the targeted
+      value matches the regular expression `^[A-Z]{3}$`; rewrite any value that does not. This rule is evaluated at the JSONPath
+      `$.currency` — inspect every location it matches and correct only what violates the rule. Make the smallest change that
+      satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document
+      valid Plans. Return only the complete corrected document, with no commentary.'
+  plans-plan-price-non-negative:
+    title: Plan Price Non Negative
+    reference: https://spotlight-rules.com/spec/rules/plans/plan-price-non-negative/
+    description: A plan price should be a non-negative number.
+    message: Plan price should be a non-negative number.
+    given: $.plans[*].price
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type:
+          - number
+          - integer
+          minimum: 0
+    tags:
+    - format:plans
+    - spec:plans
+    - experience:data-modeling
+    prompt: 'You are editing a Plans document to satisfy the Spotlight API governance rule ''plan-price-non-negative'' (Plan
+      Price Non Negative). Requirement: A plan price should be a non-negative number. To fix: Adjust the targeted value so
+      it conforms to the schema this rule requires. This rule is evaluated at the JSONPath `$.plans[*].price` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid Plans. Return only
+      the complete corrected document, with no commentary.'
+  plans-plan-require-name:
+    title: Plan Require Name
+    reference: https://spotlight-rules.com/spec/rules/plans/plan-require-name/
+    description: The `name` property of each plan should be present.
+    message: name should be present
+    severity: info
+    given: $.plans[*]
+    then:
+      field: name
+      function: truthy
+    tags:
+    - format:plans
+    - spec:plans
+    - experience:data-modeling
+    - experience:governance
+    prompt: 'You are editing a Plans document to satisfy the Spotlight API governance rule ''plan-require-name'' (Plan Require
+      Name). Requirement: The `name` property of each plan should be present. To fix: Ensure `name` is present and non-empty
+      at each matching location. This rule is evaluated at the JSONPath `$.plans[*]` — inspect every location it matches and
+      correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid Plans. Return only the complete corrected
+      document, with no commentary.'
+  rate-limits-document-require-limit:
+    title: Document Require Limit
+    reference: https://spotlight-rules.com/spec/rules/rate-limits/document-require-limit/
+    description: The `limits` property should be present.
+    message: limits should be present
+    severity: info
+    given: $
+    then:
+      field: limits
+      function: truthy
+    tags:
+    - format:rate-limits
+    - spec:document
+    - experience:reliability
+    - experience:data-modeling
+    prompt: 'You are editing a Rate Limits document to satisfy the Spotlight API governance rule ''document-require-limit''
+      (Document Require Limit). Requirement: The `limits` property should be present. To fix: Ensure `limits` is present and
+      non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid Rate Limits. Return only the complete corrected
+      document, with no commentary.'
+  rate-limits-document-require-name:
+    title: Document Require Name
+    reference: https://spotlight-rules.com/spec/rules/rate-limits/document-require-name/
+    description: The `name` property should be present.
+    message: name should be present
+    severity: info
+    given: $
+    then:
+      field: name
+      function: truthy
+    tags:
+    - format:rate-limits
+    - spec:document
+    - experience:data-modeling
+    - experience:governance
+    prompt: 'You are editing a Rate Limits document to satisfy the Spotlight API governance rule ''document-require-name''
+      (Document Require Name). Requirement: The `name` property should be present. To fix: Ensure `name` is present and non-empty
+      at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
+      comments, and formatting unchanged, and keep the document valid Rate Limits. Return only the complete corrected document,
+      with no commentary.'
+  rate-limits-limit-max-positive:
+    title: Limit Max Positive
+    reference: https://spotlight-rules.com/spec/rules/rate-limits/limit-max-positive/
+    description: A limit max should be a positive integer.
+    message: Limit max should be a positive integer.
+    given: $.limits[*].max
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: integer
+          minimum: 1
+    tags:
+    - format:rate-limits
+    - spec:limits
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing a Rate Limits document to satisfy the Spotlight API governance rule ''limit-max-positive'' (Limit
+      Max Positive). Requirement: A limit max should be a positive integer. To fix: Adjust the targeted value so it conforms
+      to the schema this rule requires. This rule is evaluated at the JSONPath `$.limits[*].max` — inspect every location
+      it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid Rate Limits. Return only the complete
+      corrected document, with no commentary.'
+  rate-limits-limit-require-name:
+    title: Limit Require Name
+    reference: https://spotlight-rules.com/spec/rules/rate-limits/limit-require-name/
+    description: The `name` property of each limit should be present.
+    message: name should be present
+    severity: info
+    given: $.limits[*]
+    then:
+      field: name
+      function: truthy
+    tags:
+    - format:rate-limits
+    - spec:limits
+    - experience:data-modeling
+    - experience:reliability
+    prompt: 'You are editing a Rate Limits document to satisfy the Spotlight API governance rule ''limit-require-name'' (Limit
+      Require Name). Requirement: The `name` property of each limit should be present. To fix: Ensure `name` is present and
+      non-empty at each matching location. This rule is evaluated at the JSONPath `$.limits[*]` — inspect every location it
+      matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid Rate Limits. Return only the complete
+      corrected document, with no commentary.'
+  finops-cost-finops-monthly-non-negative:
+    title: Cost FinOps Monthly Non Negative
+    reference: https://spotlight-rules.com/spec/rules/finops/cost-finops-monthly-non-negative/
+    description: A cost monthly amount should be a non-negative number.
+    message: Cost monthly should be a non-negative number.
+    given: $.costs[*].monthly
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type:
+          - number
+          - integer
+          minimum: 0
+    tags:
+    - format:finops
+    - spec:costs
+    - experience:data-modeling
+    prompt: 'You are editing a FinOps document to satisfy the Spotlight API governance rule ''cost-finops-monthly-non-negative''
+      (Cost FinOps Monthly Non Negative). Requirement: A cost monthly amount should be a non-negative number. To fix: Adjust
+      the targeted value so it conforms to the schema this rule requires. This rule is evaluated at the JSONPath `$.costs[*].monthly`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid FinOps.
+      Return only the complete corrected document, with no commentary.'
+  finops-cost-finops-require-monthly:
+    title: Cost FinOps Require Monthly
+    reference: https://spotlight-rules.com/spec/rules/finops/cost-finops-require-monthly/
+    description: The `monthly` property of each cost should be present.
+    message: monthly should be present
+    severity: info
+    given: $.costs[*]
+    then:
+      field: monthly
+      function: truthy
+    tags:
+    - format:finops
+    - spec:costs
+    - experience:governance
+    - experience:data-modeling
+    prompt: 'You are editing a FinOps document to satisfy the Spotlight API governance rule ''cost-finops-require-monthly''
+      (Cost FinOps Require Monthly). Requirement: The `monthly` property of each cost should be present. To fix: Ensure `monthly`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.costs[*]` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid FinOps. Return only
+      the complete corrected document, with no commentary.'
+  finops-cost-finops-require-service:
+    title: Cost FinOps Require Service
+    reference: https://spotlight-rules.com/spec/rules/finops/cost-finops-require-service/
+    description: The `service` property of each cost should be present.
+    message: service should be present
+    severity: info
+    given: $.costs[*]
+    then:
+      field: service
+      function: truthy
+    tags:
+    - format:finops
+    - spec:costs
+    - experience:governance
+    - experience:data-modeling
+    prompt: 'You are editing a FinOps document to satisfy the Spotlight API governance rule ''cost-finops-require-service''
+      (Cost FinOps Require Service). Requirement: The `service` property of each cost should be present. To fix: Ensure `service`
+      is present and non-empty at each matching location. This rule is evaluated at the JSONPath `$.costs[*]` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid FinOps. Return only
+      the complete corrected document, with no commentary.'
+  finops-document-finops-budget-non-negative:
+    title: Document FinOps Budget Non Negative
+    reference: https://spotlight-rules.com/spec/rules/finops/document-finops-budget-non-negative/
+    description: budget should be a non-negative number.
+    message: budget should be a non-negative number.
+    given: $.budget
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type:
+          - number
+          - integer
+          minimum: 0
+    tags:
+    - format:finops
+    - spec:document
+    - experience:data-modeling
+    prompt: 'You are editing a FinOps document to satisfy the Spotlight API governance rule ''document-finops-budget-non-negative''
+      (Document FinOps Budget Non Negative). Requirement: budget should be a non-negative number. To fix: Adjust the targeted
+      value so it conforms to the schema this rule requires. This rule is evaluated at the JSONPath `$.budget` — inspect every
+      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
+      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid FinOps. Return only
+      the complete corrected document, with no commentary.'
+  finops-document-finops-currency-iso4217:
+    title: Document FinOps Currency Iso4217
+    reference: https://spotlight-rules.com/spec/rules/finops/document-finops-currency-iso4217/
+    description: currency should be a 3-letter ISO 4217 code (e.g. USD).
+    message: currency should be an ISO 4217 code.
+    given: $.currency
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z]{3}$
+    tags:
+    - format:finops
+    - spec:document
+    - experience:consistency
+    - experience:data-modeling
+    prompt: 'You are editing a FinOps document to satisfy the Spotlight API governance rule ''document-finops-currency-iso4217''
+      (Document FinOps Currency Iso4217). Requirement: currency should be a 3-letter ISO 4217 code (e.g. USD). To fix: Ensure
+      the targeted value matches the regular expression `^[A-Z]{3}$`; rewrite any value that does not. This rule is evaluated
+      at the JSONPath `$.currency` — inspect every location it matches and correct only what violates the rule. Make the smallest
+      change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
+      the document valid FinOps. Return only the complete corrected document, with no commentary.'
+  finops-document-finops-require-budget:
+    title: Document FinOps Require Budget
+    reference: https://spotlight-rules.com/spec/rules/finops/document-finops-require-budget/
+    description: The `budget` property should be present.
+    message: budget should be present
+    severity: info
+    given: $
+    then:
+      field: budget
+      function: truthy
+    tags:
+    - format:finops
+    - spec:document
+    - experience:governance
+    - experience:data-modeling
+    prompt: 'You are editing a FinOps document to satisfy the Spotlight API governance rule ''document-finops-require-budget''
+      (Document FinOps Require Budget). Requirement: The `budget` property should be present. To fix: Ensure `budget` is present
+      and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid FinOps. Return only the complete corrected
+      document, with no commentary.'
+  finops-document-finops-require-cost:
+    title: Document FinOps Require Cost
+    reference: https://spotlight-rules.com/spec/rules/finops/document-finops-require-cost/
+    description: The `costs` property should be present.
+    message: costs should be present
+    severity: info
+    given: $
+    then:
+      field: costs
+      function: truthy
+    tags:
+    - format:finops
+    - spec:document
+    - experience:governance
+    - experience:data-modeling
+    prompt: 'You are editing a FinOps document to satisfy the Spotlight API governance rule ''document-finops-require-cost''
+      (Document FinOps Require Cost). Requirement: The `costs` property should be present. To fix: Ensure `costs` is present
+      and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid FinOps. Return only the complete corrected
+      document, with no commentary.'
+  finops-document-finops-require-currency:
+    title: Document FinOps Require Currency
+    reference: https://spotlight-rules.com/spec/rules/finops/document-finops-require-currency/
+    description: The `currency` property should be present.
+    message: currency should be present
+    severity: info
+    given: $
+    then:
+      field: currency
+      function: truthy
+    tags:
+    - format:finops
+    - spec:document
+    - experience:governance
+    - experience:data-modeling
+    prompt: 'You are editing a FinOps document to satisfy the Spotlight API governance rule ''document-finops-require-currency''
+      (Document FinOps Require Currency). Requirement: The `currency` property should be present. To fix: Ensure `currency`
+      is present and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated
+      content, key order, comments, and formatting unchanged, and keep the document valid FinOps. Return only the complete
+      corrected document, with no commentary.'
+  finops-document-finops-require-name:
+    title: Document FinOps Require Name
+    reference: https://spotlight-rules.com/spec/rules/finops/document-finops-require-name/
+    description: The `name` property should be present.
+    message: name should be present
+    severity: info
+    given: $
+    then:
+      field: name
+      function: truthy
+    tags:
+    - format:finops
+    - spec:document
+    - experience:data-modeling
+    - experience:governance
+    prompt: 'You are editing a FinOps document to satisfy the Spotlight API governance rule ''document-finops-require-name''
+      (Document FinOps Require Name). Requirement: The `name` property should be present. To fix: Ensure `name` is present
+      and non-empty at each matching location. Make the smallest change that satisfies the rule, leave all unrelated content,
+      key order, comments, and formatting unchanged, and keep the document valid FinOps. Return only the complete corrected
+      document, with no commentary.'
+  agent-skill-skill-metadata-object:
+    title: Skill Metadata Object
+    reference: https://spotlight-rules.com/spec/rules/agent-skill/skill-metadata-object/
+    description: If a skill declares metadata, it should be an object of key/value pairs.
+    message: Skill metadata should be an object.
+    given: $.frontmatter.metadata
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+    tags:
+    - format:agent-skill
+    - spec:frontmatter
+    - experience:data-modeling
+    prompt: 'You are editing an Agent Skill document to satisfy the Spotlight API governance rule ''skill-metadata-object''
+      (Skill Metadata Object). Requirement: If a skill declares metadata, it should be an object of key/value pairs. To fix:
+      Adjust the targeted value so it conforms to the schema this rule requires. This rule is evaluated at the JSONPath `$.frontmatter.metadata`
+      — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
+      the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid Agent
+      Skill. Return only the complete corrected document, with no commentary.'
