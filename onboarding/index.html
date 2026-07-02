@@ -1,0 +1,86 @@
+---
+layout: default
+title: API Onboarding Descriptor
+nav_active: onboarding
+description: A machine-readable /.well-known/api-onboarding document describing what it actually takes to onboard with an API — the account, plan gates, terms of service, verification queues, registration mechanisms, and an executable flow a generic engine can run.
+---
+
+<style>
+  .page-hero { text-align: center; padding: 2.5rem 0 1.5rem; }
+  .page-hero h1 { font-size: 2.2rem; font-weight: 800; color: #1a1a2e; margin-bottom: 0.75rem; }
+  .page-hero p { color: #555; font-size: 1.1rem; max-width: 760px; margin: 0 auto; line-height: 1.7; }
+  .onb-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2.5rem 0; }
+  .onb-card { display: flex; flex-direction: column; padding: 1.75rem; border: 1px solid #e3e7ee; border-radius: 12px; background: white; }
+  .onb-card h2 { font-size: 1.2rem; font-weight: 700; color: #1a1a2e; margin: 0 0 0.75rem; }
+  .onb-card p { color: #555; font-size: 0.98rem; line-height: 1.6; flex-grow: 1; margin-bottom: 0; }
+  .onb-card code { font-size: 0.85rem; }
+  .onb-intro { background: #f8f9fb; border-radius: 12px; padding: 1.5rem 2rem; margin: 2rem 0; border-left: 4px solid #0d6efd; font-size: 1rem; line-height: 1.8; color: #444; }
+  .onb-actions { text-align: center; margin: 2rem 0 1rem; }
+  .onb-actions .btn-launch { display: inline-block; background: #0d6efd; color: #fff; padding: 0.6rem 1.3rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; text-decoration: none; margin: 0 0.4rem 0.6rem; }
+  .onb-actions .btn-launch:hover { background: #0a58ca; color: #fff; }
+  .onb-actions .btn-alt { display: inline-block; background: #fff; color: #0d6efd; border: 1px solid #0d6efd; padding: 0.6rem 1.3rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; text-decoration: none; margin: 0 0.4rem 0.6rem; }
+  .maturity { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin: 2rem 0; }
+  .maturity .level { padding: 1.4rem 1.5rem; border-radius: 12px; border: 1px solid #e3e7ee; background: #fff; }
+  .maturity .level h3 { font-size: 1.05rem; font-weight: 700; margin: 0 0 0.5rem; }
+  .maturity .level p { font-size: 0.92rem; color: #555; line-height: 1.55; margin: 0; }
+  .maturity .open h3 { color: #198754; }
+  .maturity .keyed h3 { color: #b8860b; }
+  .maturity .human h3 { color: #dc3545; }
+  .wellknown { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9rem; }
+</style>
+
+<div class="page-hero">
+  <h1>API Onboarding Descriptor</h1>
+  <p>We standardized the API — we didn't standardize the application. OpenAPI describes what an API does. OAuth, <a href="https://www.rfc-editor.org/rfc/rfc7591" target="_blank" rel="noopener">dynamic client registration</a>, and client ID metadata documents describe the credential handshake. Nothing describes what it takes to <em>get there</em>: the account, the plan tier, the terms of service, the verification queue, and the console a human still has to click through. The API Onboarding Descriptor is a machine-readable document, published at <span class="wellknown">/.well-known/api-onboarding</span> and referenced from an <a href="https://apisjson.org">APIs.json</a> index, that closes that gap — for developers and for the agents now doing the onboarding.</p>
+</div>
+
+<div class="onb-actions">
+  <a class="btn-launch" href="https://github.com/api-commons/api-onboarding" target="_blank" rel="noopener">Spec + Schema on GitHub ↗</a>
+  <a class="btn-alt" href="https://github.com/api-commons/api-onboarding/blob/master/schema/api-onboarding.schema.json" target="_blank" rel="noopener">JSON Schema</a>
+  <a class="btn-alt" href="https://github.com/api-commons/api-onboarding/tree/master/descriptors" target="_blank" rel="noopener">Example Descriptors</a>
+</div>
+
+<div class="onb-intro">
+  The descriptor was not designed on a whiteboard — it was <strong>derived by induction from working onboarding scripts written against 36 API providers, gateways, and identity platforms</strong>. Every provider turned out to be answering the same six questions in a different vocabulary: what a human must do first, what credential you walk away with, what gates sit in the way, what happens when the application already exists, how access is scoped, and what gets printed at the end. The descriptor writes those answers down in one shape.
+</div>
+
+<div class="maturity">
+  <div class="level open">
+    <h3>self-serve — the open door</h3>
+    <p>A stranger (or their agent) can authenticate through a public flow and walk away with credentials. No pre-existing token anywhere. Of 36 providers profiled, exactly <strong>one</strong> clears this bar.</p>
+  </div>
+  <div class="level keyed">
+    <h3>bootstrap-token — the keyed door</h3>
+    <p>A real management API exists and everything is scriptable — except the first token, which a human mints in a console and pastes into an environment variable. Twenty-five of 36 live here.</p>
+  </div>
+  <div class="level human">
+    <h3>console-only — the human door</h3>
+    <p>No complete programmatic path exists; a browser dashboard is load-bearing. The descriptor's <code>gaps</code> section states this honestly, so it doubles as the provider's punch list.</p>
+  </div>
+</div>
+
+<div class="onb-grid">
+  <div class="onb-card">
+    <h2>What a descriptor declares</h2>
+    <p>Maturity level, account prerequisites and plan gates, an explicit <code>agentPolicy</code>, terms of service, verification queues with expected latency, the registration mechanisms that exist (browser OAuth, app manifest, management API, portal API, RFC 7591 DCR, CIMD, or console-only), credential shapes mapped from provider vocabulary to canonical fields, and the scope model.</p>
+  </div>
+  <div class="onb-card">
+    <h2>An executable flow</h2>
+    <p>The part that keeps the spec honest: ordered HTTP steps with environment and argument templating, per-status recovery (a 409 routes to a read-back instead of failing), and output mappings. A generic engine — <a href="https://github.com/api-commons/api-onboarding/blob/master/engine/api-onboard.mjs" target="_blank" rel="noopener"><code>api-onboard.mjs</code></a>, one file, Node stdlib, no npm install — runs the flow and prints <code>client_id=</code> to stdout. If the engine can't onboard from the descriptor alone, the descriptor grows a field. That loop is the spec process.</p>
+  </div>
+  <div class="onb-card">
+    <h2>Built on existing standards</h2>
+    <p>The descriptor deliberately does not reinvent the handshake. Where a provider supports RFC 7591 dynamic client registration or Client ID Metadata Documents, the descriptor points at them. It is the discovery-and-paperwork layer <em>around</em> OAuth and its descendants — the account, plan, ToS, and verification reality those standards assume away.</p>
+  </div>
+</div>
+
+<h2 style="margin-top:2.5rem;">Live descriptors</h2>
+<p>We publish descriptors for our own APIs, the same way we ask every provider to:</p>
+<ul>
+  <li><span class="wellknown"><a href="https://apis.io/.well-known/api-onboarding">apis.io/.well-known/api-onboarding</a></span> — the APIs.io search API and MCP server</li>
+  <li><span class="wellknown"><a href="https://apievangelist.com/.well-known/api-onboarding">apievangelist.com/.well-known/api-onboarding</a></span> — the API Evangelist API and MCP server</li>
+</ul>
+
+<div class="onb-intro">
+  Read the story behind the specification — <a href="https://apievangelist.com/2026/07/02/what-36-providers-taught-me-about-programmatic-api-onboarding/">What 36 Providers Taught Me About Programmatic API Onboarding</a> — and the posts that led to it on <a href="https://apievangelist.com">API Evangelist</a>. Open source and free to adopt; <a href="https://apievangelist.com/services/">API Evangelist</a> offers expert services when you want help profiling and fixing your own onboarding.
+</div>
