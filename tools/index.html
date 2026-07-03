@@ -2,7 +2,7 @@
 layout: default
 title: Tools
 nav_active: tools
-description: Browser-first API Commons tools — discover, index, document, validate, assess the reusability of, and distribute the APIs and MCP servers you produce and consume. No backend, keys stay in your browser.
+description: Browser-first API Commons tools — discover, index, document, validate, govern, report on, assess the reusability of, and distribute the APIs and MCP servers you produce and consume. No backend, keys stay in your browser.
 ---
 
 <style>
@@ -86,6 +86,66 @@ description: Browser-first API Commons tools — discover, index, document, vali
     <div class="actions">
       <a class="btn-launch" href="https://github.com/api-commons/api-governance-mcp#use-it" target="_blank" rel="noopener">Install ↗</a>
       <a class="gh-link" href="https://github.com/api-commons/api-governance-mcp" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>Spectral Reporter</h2>
+    <div class="domain">reporter.apicommons.org</div>
+    <p>Turn a <strong>Spectral</strong> lint run into a beautiful, self-contained <strong>HTML governance report</strong> — severity summary, grouped by rule and file, top offenders, searchable, and framed toward progress instead of just deficits. The <strong>newman-reporter-htmlextra</strong> for API governance. Now with <strong>SARIF</strong> output for GitHub code scanning and <strong>trend reports</strong> over time. CLI + browser.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://reporter.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/spectral-reporter" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>Governance Pipeline Auditor</h2>
+    <div class="domain">auditor.apicommons.org</div>
+    <p><strong>Lint your linting.</strong> Scan a repo's Spectral CI setup and score it against an <strong>8-point governance maturity rubric</strong> — does it gate the PR, pin its tooling, own its ruleset, run a security layer, emit a report — then get a prioritized punch-list of fixes. CLI, <strong>GitHub Action</strong>, and browser. Built from the <em>State of Spectral in API Pipelines</em> research.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://auditor.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/governance-pipeline-auditor" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>Spectral Ruleset Studio</h2>
+    <div class="domain">studio.apicommons.org</div>
+    <p>Turn a prose <strong>style guide</strong> into an <strong>owned, grounded, well-named Spectral ruleset</strong>. Distill each statement into a rule with a real function, tuned severity, and the who/what/when/where/why grounding that turns a bare verdict into guidance — then download a ready <strong>.spectral.yaml</strong>. Twenty grounded starter templates included.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://studio.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/spectral-ruleset-studio" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>Ruleset Commons</h2>
+    <div class="domain">rulesets.apicommons.org</div>
+    <p>A registry of <strong>adoptable, provenanced governance rulesets</strong> — adopt a real owned ruleset by reference instead of running the linter's defaults. National (<strong>Italy, Netherlands</strong>), industry, security, and company rulesets, each with real provenance and a copy-paste <strong>extends</strong> snippet. The supply side of owned governance.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://rulesets.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/ruleset-commons" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>Governance Pipeline</h2>
+    <div class="domain">pipeline.apicommons.org</div>
+    <p>A <strong>reference API governance pipeline</strong> you can fork — <strong>PR-gated</strong>, path-filtered, <strong>SHA-pinned</strong>, with a dedicated <strong>OWASP security job</strong> and a human-readable report. The blueprint from the <em>State of Spectral</em> research, assembled from parts real teams already ship. A composite <strong>GitHub Action</strong>: <code>uses: api-commons/governance-pipeline@v1</code>.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://pipeline.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/governance-pipeline" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>Spectral OWASP Ruleset</h2>
+    <div class="domain">@api-common/spectral-owasp-ruleset</div>
+    <p>A grounded <strong>Spectral ruleset for the OWASP API Security Top 10</strong> — 22 rules across all ten categories, each mapped to its OWASP item with a severity and a docs link. Add a real <strong>security governance layer</strong> in one line: <code>extends: ['@api-common/spectral-owasp-ruleset']</code>. Only 14% of real pipelines run any security rules — this is the easy fix.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://www.npmjs.com/package/@api-common/spectral-owasp-ruleset" target="_blank" rel="noopener">Install ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/spectral-owasp-ruleset" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 </div>
