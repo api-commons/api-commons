@@ -27,8 +27,8 @@ blocks and the index of tools:
 - `_posts/` — the API Commons blog.
 - `_data/`, `_includes/`, `_layouts/`, `assets/`, `images/` — site data and theme.
 - `tools/` — the index of the API Commons tool family (below).
-- `scripts/` — helpers that generate site data (e.g. rulesets from the Spotlight
-  catalog).
+- `scripts/` — helpers that generate site data (e.g. rulesets from the API Commons
+  rule catalog).
 
 ## Building blocks
 
