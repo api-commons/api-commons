@@ -49,6 +49,7 @@ tool lives at its own subdomain of **apicommons.org**:
 | **API Documentation** | [documentation.apicommons.org](https://documentation.apicommons.org) | Standalone docs for any APIs.json — OpenAPI as a full reference, Arazzo as step timelines. |
 | **API Validator** | [validator.apicommons.org](https://validator.apicommons.org) | Browser-first governance linter for OpenAPI (3.x + Swagger 2.0), AsyncAPI, Arazzo, and JSON Schema, powered by Spectral. |
 | **API Governance Graph** | [graph.apicommons.org](https://graph.apicommons.org) | Bind rules, policies, provenance, guidance, experiences, and lifecycle into one navigable graph — walk the Guidance Stack and see where it breaks. |
+| **Governance Coverage** | [coverage.apicommons.org](https://coverage.apicommons.org) | Measure how much of your API description your rules actually check — coverage by section, dead rules, and per-rule reach. |
 | **API Reusability** | [reusability.apicommons.org](https://reusability.apicommons.org) | Score how reusable your organization's APIs really are, by org, team, or domain. |
 | **MCP Install** | [install.apicommons.org](https://install.apicommons.org) | A universal install button for MCP servers — one button, every client. |
 | **API Governance MCP** | [`@api-common/api-governance-mcp`](https://github.com/api-commons/api-governance-mcp) | The AI surface of the Validator — the same Spectral governance over MCP for any agent. |
