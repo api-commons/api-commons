@@ -51,6 +51,7 @@ tool lives at its own subdomain of **apicommons.org**:
 | **API Governance Graph** | [graph.apicommons.org](https://graph.apicommons.org) | Bind rules, policies, provenance, guidance, experiences, and lifecycle into one navigable graph — walk the Guidance Stack and see where it breaks. |
 | **Governance Coverage** | [coverage.apicommons.org](https://coverage.apicommons.org) | Measure how much of your API description your rules actually check — coverage by section, dead rules, and per-rule reach. |
 | **Governance Waivers** | [waivers.apicommons.org](https://waivers.apicommons.org) | Sanctioned, owned, expiring governance exceptions — reconcile a waivers file against Spectral output; expired, stale, and expiring waivers surface. |
+| **API Certification** | [certification.apicommons.org](https://certification.apicommons.org) | Issue and verify tamper-evident API governance certificates — a SHA-256 fingerprint lets consumers re-verify an API passed a ruleset at a profile. |
 | **API Reusability** | [reusability.apicommons.org](https://reusability.apicommons.org) | Score how reusable your organization's APIs really are, by org, team, or domain. |
 | **MCP Install** | [install.apicommons.org](https://install.apicommons.org) | A universal install button for MCP servers — one button, every client. |
 | **API Governance MCP** | [`@api-common/api-governance-mcp`](https://github.com/api-commons/api-governance-mcp) | The AI surface of the Validator — the same Spectral governance over MCP for any agent. |
