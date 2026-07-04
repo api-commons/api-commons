@@ -30,6 +30,26 @@ description: Browser-first API Commons tools — discover, index, document, vali
 
 <div class="tools-grid">
   <div class="tool-card">
+    <h2>Agent Rule Export</h2>
+    <div class="domain">agents.apicommons.org</div>
+    <p>Turn a governance ruleset into <strong>agent-native guidance</strong> so agents follow the rules while authoring, not just after linting. Exports an <strong>AGENTS.md</strong> governance block, a <strong>system-prompt</strong> instruction set, a per-rule <strong>remediation prompt pack</strong>, and a compact <strong>rule digest</strong> — from the 769-rule catalog or your own Spectral ruleset. No backend.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://agents.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/governance-agent-export" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>API Certification</h2>
+    <div class="domain">certification.apicommons.org</div>
+    <p>Issue and verify <strong>tamper-evident API governance certificates</strong> — a consumer-facing trust stamp attesting that an API description passed a named ruleset at a profile threshold. A <strong>SHA-256 fingerprint</strong> of the API + ruleset lets anyone re-verify it: if the API drifts or the certificate is forged, verification fails. Reference it from your <code>apis.json</code>. No backend.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://certification.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/governance-certification" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
     <h2>API Discovery</h2>
     <div class="domain">discovery.apicommons.org</div>
     <p>A browser-first registry for API artifacts. Search <strong>APIs.io</strong> and code across <strong>GitHub / GitLab / Bitbucket</strong>, keep a provenance pointer back to where you found each one, save locally, and commit or open a PR to git with your own token. Edit with Monaco, then roll everything into a single <strong>APIs.json 0.21</strong> index.</p>
@@ -50,82 +70,12 @@ description: Browser-first API Commons tools — discover, index, document, vali
   </div>
 
   <div class="tool-card">
-    <h2>API Validator</h2>
-    <div class="domain">validator.apicommons.org</div>
-    <p>A simple, browser-first governance validator for <strong>OpenAPI, AsyncAPI, Arazzo, and JSON Schema</strong>, powered by <strong>Spectral</strong>. Search <strong>GitHub / GitLab / Bitbucket</strong> for real artifacts, lint against a best-of-breed ruleset, toggle any rule or edit it in Monaco, then commit or open a PR back to Git with your own token. No backend — everything runs locally.</p>
-    <div class="actions">
-      <a class="btn-launch" href="https://validator.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/api-validator" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-
-  <div class="tool-card">
     <h2>API Governance Graph</h2>
     <div class="domain">graph.apicommons.org</div>
     <p>Binds the governance building blocks — <strong>rules, policies, provenance, guidance, experiences, and lifecycle</strong> — into one navigable graph. Walk the <em>Guidance Stack</em> from any node to everything bound to it, then flip to the <strong>Gaps</strong> view to see exactly where it breaks: rules no policy enforces, policies with no stated <em>why</em>, guidance nobody links. Built from the 769-rule catalog + the apievangelist.com building blocks. No backend.</p>
     <div class="actions">
       <a class="btn-launch" href="https://graph.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
       <a class="gh-link" href="https://github.com/api-commons/api-governance-graph" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <h2>Governance Coverage</h2>
-    <div class="domain">coverage.apicommons.org</div>
-    <p>Measures <strong>how much of your API description your governance actually looks at</strong> — like test coverage, one altitude up. Resolves every rule's JSONPath against your OpenAPI to report <strong>coverage by section</strong>, the <strong>rules that match nothing</strong> (dead weight for this API), and each rule's <strong>reach</strong>. Use the 769-rule catalog or paste your own Spectral ruleset. No backend.</p>
-    <div class="actions">
-      <a class="btn-launch" href="https://coverage.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/governance-coverage" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <h2>Governance Waivers</h2>
-    <div class="domain">waivers.apicommons.org</div>
-    <p>Make governance exceptions <strong>sanctioned, owned, and expiring</strong> instead of teams routing around the rules. Author a machine-readable waivers file and reconcile it against <strong>Spectral</strong> lint output: waived violations are suppressed, while <strong>expired</strong>, <strong>stale</strong>, and <strong>expiring</strong> waivers surface — and you get the effective failing set to gate your build on. No backend.</p>
-    <div class="actions">
-      <a class="btn-launch" href="https://waivers.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/governance-waivers" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <h2>API Certification</h2>
-    <div class="domain">certification.apicommons.org</div>
-    <p>Issue and verify <strong>tamper-evident API governance certificates</strong> — a consumer-facing trust stamp attesting that an API description passed a named ruleset at a profile threshold. A <strong>SHA-256 fingerprint</strong> of the API + ruleset lets anyone re-verify it: if the API drifts or the certificate is forged, verification fails. Reference it from your <code>apis.json</code>. No backend.</p>
-    <div class="actions">
-      <a class="btn-launch" href="https://certification.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/governance-certification" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <h2>Agent Rule Export</h2>
-    <div class="domain">agents.apicommons.org</div>
-    <p>Turn a governance ruleset into <strong>agent-native guidance</strong> so agents follow the rules while authoring, not just after linting. Exports an <strong>AGENTS.md</strong> governance block, a <strong>system-prompt</strong> instruction set, a per-rule <strong>remediation prompt pack</strong>, and a compact <strong>rule digest</strong> — from the 769-rule catalog or your own Spectral ruleset. No backend.</p>
-    <div class="actions">
-      <a class="btn-launch" href="https://agents.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/governance-agent-export" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <h2>MCP Install</h2>
-    <div class="domain">install.apicommons.org</div>
-    <p>The universal install button for MCP servers — one button, every client. One-click deep links for <strong>Cursor, VS Code, LM Studio, and Goose</strong>; ready-to-run CLI commands and per-OS config snippets for <strong>Claude Code, Claude Desktop, Windsurf, Zed</strong>, and twenty more; connector walkthroughs for <strong>Claude and ChatGPT</strong>. Driven by an open, machine-readable registry of client install methods, and native to <strong>MCP Registry server.json</strong>.</p>
-    <div class="actions">
-      <a class="btn-launch" href="https://install.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/mcp-install" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <h2>API Reusability</h2>
-    <div class="domain">reusability.apicommons.org</div>
-    <p>Assess how reusable the APIs across your organization really are. Discover evidence of APIs from <strong>APIs.io</strong>, code search, <strong>HAR uploads</strong>, and gateways; index them as OpenAPI in an <strong>APIs.json</strong> inventory; then score reusability and duplication — rolled up by org, team, or business domain.</p>
-    <div class="actions">
-      <a class="btn-launch" href="https://reusability.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/api-reusability" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 
@@ -140,42 +90,42 @@ description: Browser-first API Commons tools — discover, index, document, vali
   </div>
 
   <div class="tool-card">
-    <h2>Spectral Reporter</h2>
-    <div class="domain">reporter.apicommons.org</div>
-    <p>Turn a <strong>Spectral</strong> lint run into a beautiful, self-contained <strong>HTML governance report</strong> — severity summary, grouped by rule and file, top offenders, searchable, and framed toward progress instead of just deficits. The <strong>newman-reporter-htmlextra</strong> for API governance. Now with <strong>SARIF</strong> output for GitHub code scanning and <strong>trend reports</strong> over time. CLI + browser.</p>
+    <h2>API Reusability</h2>
+    <div class="domain">reusability.apicommons.org</div>
+    <p>Assess how reusable the APIs across your organization really are. Discover evidence of APIs from <strong>APIs.io</strong>, code search, <strong>HAR uploads</strong>, and gateways; index them as OpenAPI in an <strong>APIs.json</strong> inventory; then score reusability and duplication — rolled up by org, team, or business domain.</p>
     <div class="actions">
-      <a class="btn-launch" href="https://reporter.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/spectral-reporter" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn-launch" href="https://reusability.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/api-reusability" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 
   <div class="tool-card">
-    <h2>Governance Pipeline Auditor</h2>
-    <div class="domain">auditor.apicommons.org</div>
-    <p><strong>Lint your linting.</strong> Scan a repo's Spectral CI setup and score it against an <strong>8-point governance maturity rubric</strong> — does it gate the PR, pin its tooling, own its ruleset, run a security layer, emit a report — then get a prioritized punch-list of fixes. CLI, <strong>GitHub Action</strong>, and browser. Built from the <em>State of Spectral in API Pipelines</em> research.</p>
+    <h2>API Validator</h2>
+    <div class="domain">validator.apicommons.org</div>
+    <p>A simple, browser-first governance validator for <strong>OpenAPI, AsyncAPI, Arazzo, and JSON Schema</strong>, powered by <strong>Spectral</strong>. Search <strong>GitHub / GitLab / Bitbucket</strong> for real artifacts, lint against a best-of-breed ruleset, toggle any rule or edit it in Monaco, then commit or open a PR back to Git with your own token. No backend — everything runs locally.</p>
     <div class="actions">
-      <a class="btn-launch" href="https://auditor.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/governance-pipeline-auditor" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn-launch" href="https://validator.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/api-validator" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 
   <div class="tool-card">
-    <h2>Spectral Ruleset Studio</h2>
-    <div class="domain">studio.apicommons.org</div>
-    <p>Turn a prose <strong>style guide</strong> into an <strong>owned, grounded, well-named Spectral ruleset</strong>. Distill each statement into a rule with a real function, tuned severity, and the who/what/when/where/why grounding that turns a bare verdict into guidance — then download a ready <strong>.spectral.yaml</strong>. Twenty grounded starter templates included.</p>
+    <h2>Context Gate</h2>
+    <div class="domain">contextgate.apicommons.org</div>
+    <p>Consumer-centric governance for the agentic era: choose exactly which <strong>operations and fields</strong> your APIs expose to agents, and emit a governed <strong>Tyk OpenAPI + MCP</strong> surface plus a <strong>Spectral ruleset</strong> for it — with <strong>PII, secret, and compliance</strong> checks on what reaches the agent. Search APIs.io / GitHub or upload. No backend.</p>
     <div class="actions">
-      <a class="btn-launch" href="https://studio.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/spectral-ruleset-studio" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn-launch" href="https://contextgate.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/context-gate" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 
   <div class="tool-card">
-    <h2>Ruleset Commons</h2>
-    <div class="domain">rulesets.apicommons.org</div>
-    <p>A registry of <strong>adoptable, provenanced governance rulesets</strong> — adopt a real owned ruleset by reference instead of running the linter's defaults. National (<strong>Italy, Netherlands</strong>), industry, security, and company rulesets, each with real provenance and a copy-paste <strong>extends</strong> snippet. The supply side of owned governance.</p>
+    <h2>Governance Coverage</h2>
+    <div class="domain">coverage.apicommons.org</div>
+    <p>Measures <strong>how much of your API description your governance actually looks at</strong> — like test coverage, one altitude up. Resolves every rule's JSONPath against your OpenAPI to report <strong>coverage by section</strong>, the <strong>rules that match nothing</strong> (dead weight for this API), and each rule's <strong>reach</strong>. Use the 769-rule catalog or paste your own Spectral ruleset. No backend.</p>
     <div class="actions">
-      <a class="btn-launch" href="https://rulesets.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/ruleset-commons" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn-launch" href="https://coverage.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/governance-coverage" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 
@@ -190,12 +140,72 @@ description: Browser-first API Commons tools — discover, index, document, vali
   </div>
 
   <div class="tool-card">
+    <h2>Governance Pipeline Auditor</h2>
+    <div class="domain">auditor.apicommons.org</div>
+    <p><strong>Lint your linting.</strong> Scan a repo's Spectral CI setup and score it against an <strong>8-point governance maturity rubric</strong> — does it gate the PR, pin its tooling, own its ruleset, run a security layer, emit a report — then get a prioritized punch-list of fixes. CLI, <strong>GitHub Action</strong>, and browser. Built from the <em>State of Spectral in API Pipelines</em> research.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://auditor.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/governance-pipeline-auditor" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>Governance Waivers</h2>
+    <div class="domain">waivers.apicommons.org</div>
+    <p>Make governance exceptions <strong>sanctioned, owned, and expiring</strong> instead of teams routing around the rules. Author a machine-readable waivers file and reconcile it against <strong>Spectral</strong> lint output: waived violations are suppressed, while <strong>expired</strong>, <strong>stale</strong>, and <strong>expiring</strong> waivers surface — and you get the effective failing set to gate your build on. No backend.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://waivers.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/governance-waivers" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>MCP Install</h2>
+    <div class="domain">install.apicommons.org</div>
+    <p>The universal install button for MCP servers — one button, every client. One-click deep links for <strong>Cursor, VS Code, LM Studio, and Goose</strong>; ready-to-run CLI commands and per-OS config snippets for <strong>Claude Code, Claude Desktop, Windsurf, Zed</strong>, and twenty more; connector walkthroughs for <strong>Claude and ChatGPT</strong>. Driven by an open, machine-readable registry of client install methods, and native to <strong>MCP Registry server.json</strong>.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://install.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/mcp-install" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>Ruleset Commons</h2>
+    <div class="domain">rulesets.apicommons.org</div>
+    <p>A registry of <strong>adoptable, provenanced governance rulesets</strong> — adopt a real owned ruleset by reference instead of running the linter's defaults. National (<strong>Italy, Netherlands</strong>), industry, security, and company rulesets, each with real provenance and a copy-paste <strong>extends</strong> snippet. The supply side of owned governance.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://rulesets.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/ruleset-commons" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
     <h2>Spectral OWASP Ruleset</h2>
     <div class="domain">@api-common/spectral-owasp-ruleset</div>
     <p>A grounded <strong>Spectral ruleset for the OWASP API Security Top 10</strong> — 22 rules across all ten categories, each mapped to its OWASP item with a severity and a docs link. Add a real <strong>security governance layer</strong> in one line: <code>extends: ['@api-common/spectral-owasp-ruleset']</code>. Only 14% of real pipelines run any security rules — this is the easy fix.</p>
     <div class="actions">
       <a class="btn-launch" href="https://www.npmjs.com/package/@api-common/spectral-owasp-ruleset" target="_blank" rel="noopener">Install ↗</a>
       <a class="gh-link" href="https://github.com/api-commons/spectral-owasp-ruleset" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>Spectral Reporter</h2>
+    <div class="domain">reporter.apicommons.org</div>
+    <p>Turn a <strong>Spectral</strong> lint run into a beautiful, self-contained <strong>HTML governance report</strong> — severity summary, grouped by rule and file, top offenders, searchable, and framed toward progress instead of just deficits. The <strong>newman-reporter-htmlextra</strong> for API governance. Now with <strong>SARIF</strong> output for GitHub code scanning and <strong>trend reports</strong> over time. CLI + browser.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://reporter.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/spectral-reporter" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>Spectral Ruleset Studio</h2>
+    <div class="domain">studio.apicommons.org</div>
+    <p>Turn a prose <strong>style guide</strong> into an <strong>owned, grounded, well-named Spectral ruleset</strong>. Distill each statement into a rule with a real function, tuned severity, and the who/what/when/where/why grounding that turns a bare verdict into guidance — then download a ready <strong>.spectral.yaml</strong>. Twenty grounded starter templates included.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://studio.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/spectral-ruleset-studio" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 </div>

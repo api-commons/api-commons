@@ -45,23 +45,24 @@ tool lives at its own subdomain of **apicommons.org**:
 
 | Tool | Where | What it does |
 | --- | --- | --- |
+| **Agent Rule Export** | [agents.apicommons.org](https://agents.apicommons.org) | Export a ruleset into agent-native artifacts — AGENTS.md block, system prompt, remediation prompt pack, and a compact rule digest. |
+| **API Certification** | [certification.apicommons.org](https://certification.apicommons.org) | Issue and verify tamper-evident API governance certificates — a SHA-256 fingerprint lets consumers re-verify an API passed a ruleset at a profile. |
 | **API Discovery** | [discovery.apicommons.org](https://discovery.apicommons.org) | Search APIs.io and Git hosts for API artifacts and roll them into one APIs.json 0.21 index. |
 | **API Documentation** | [documentation.apicommons.org](https://documentation.apicommons.org) | Standalone docs for any APIs.json — OpenAPI as a full reference, Arazzo as step timelines. |
-| **API Validator** | [validator.apicommons.org](https://validator.apicommons.org) | Browser-first governance linter for OpenAPI (3.x + Swagger 2.0), AsyncAPI, Arazzo, and JSON Schema, powered by Spectral. |
 | **API Governance Graph** | [graph.apicommons.org](https://graph.apicommons.org) | Bind rules, policies, provenance, guidance, experiences, and lifecycle into one navigable graph — walk the Guidance Stack and see where it breaks. |
-| **Governance Coverage** | [coverage.apicommons.org](https://coverage.apicommons.org) | Measure how much of your API description your rules actually check — coverage by section, dead rules, and per-rule reach. |
-| **Governance Waivers** | [waivers.apicommons.org](https://waivers.apicommons.org) | Sanctioned, owned, expiring governance exceptions — reconcile a waivers file against Spectral output; expired, stale, and expiring waivers surface. |
-| **API Certification** | [certification.apicommons.org](https://certification.apicommons.org) | Issue and verify tamper-evident API governance certificates — a SHA-256 fingerprint lets consumers re-verify an API passed a ruleset at a profile. |
-| **Agent Rule Export** | [agents.apicommons.org](https://agents.apicommons.org) | Export a ruleset into agent-native artifacts — AGENTS.md block, system prompt, remediation prompt pack, and a compact rule digest. |
-| **API Reusability** | [reusability.apicommons.org](https://reusability.apicommons.org) | Score how reusable your organization's APIs really are, by org, team, or domain. |
-| **MCP Install** | [install.apicommons.org](https://install.apicommons.org) | A universal install button for MCP servers — one button, every client. |
 | **API Governance MCP** | [`@api-common/api-governance-mcp`](https://github.com/api-commons/api-governance-mcp) | The AI surface of the Validator — the same Spectral governance over MCP for any agent. |
-| **Spectral Reporter** | [reporter.apicommons.org](https://reporter.apicommons.org) | Turn a Spectral lint run into a self-contained HTML governance report (with SARIF + trends). |
-| **Governance Pipeline Auditor** | [auditor.apicommons.org](https://auditor.apicommons.org) | Score a repo's Spectral CI against an 8-point governance maturity rubric. |
+| **API Reusability** | [reusability.apicommons.org](https://reusability.apicommons.org) | Score how reusable your organization's APIs really are, by org, team, or domain. |
+| **API Validator** | [validator.apicommons.org](https://validator.apicommons.org) | Browser-first governance linter for OpenAPI (3.x + Swagger 2.0), AsyncAPI, Arazzo, and JSON Schema, powered by Spectral. |
+| **Context Gate** | [contextgate.apicommons.org](https://contextgate.apicommons.org) | Choose which API operations and fields you expose to agents; emit a governed Tyk API + MCP surface and a Spectral ruleset for it (PII, secrets, compliance). |
+| **Governance Coverage** | [coverage.apicommons.org](https://coverage.apicommons.org) | Measure how much of your API description your rules actually check — coverage by section, dead rules, and per-rule reach. |
 | **Governance Pipeline** | [pipeline.apicommons.org](https://pipeline.apicommons.org) | A forkable reference API governance pipeline — PR-gated, SHA-pinned, OWASP security job. |
+| **Governance Pipeline Auditor** | [auditor.apicommons.org](https://auditor.apicommons.org) | Score a repo's Spectral CI against an 8-point governance maturity rubric. |
+| **Governance Waivers** | [waivers.apicommons.org](https://waivers.apicommons.org) | Sanctioned, owned, expiring governance exceptions — reconcile a waivers file against Spectral output; expired, stale, and expiring waivers surface. |
+| **MCP Install** | [install.apicommons.org](https://install.apicommons.org) | A universal install button for MCP servers — one button, every client. |
 | **Ruleset Commons** | [rulesets.apicommons.org](https://rulesets.apicommons.org) | A registry of adoptable, provenanced governance rulesets you can `extends`. |
-| **Spectral Ruleset Studio** | [studio.apicommons.org](https://studio.apicommons.org) | Turn a prose style guide into an owned, grounded, well-named Spectral ruleset. |
 | **Spectral OWASP Ruleset** | [`@api-common/spectral-owasp-ruleset`](https://www.npmjs.com/package/@api-common/spectral-owasp-ruleset) | A grounded Spectral ruleset for the OWASP API Security Top 10. |
+| **Spectral Reporter** | [reporter.apicommons.org](https://reporter.apicommons.org) | Turn a Spectral lint run into a self-contained HTML governance report (with SARIF + trends). |
+| **Spectral Ruleset Studio** | [studio.apicommons.org](https://studio.apicommons.org) | Turn a prose style guide into an owned, grounded, well-named Spectral ruleset. |
 
 See the full, current list at [apicommons.org/tools](https://apicommons.org/tools/).
 
