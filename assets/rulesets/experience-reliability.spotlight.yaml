@@ -1982,6 +1982,92 @@ rules:
       This rule is evaluated at the JSONPath `$.servers..url` — inspect every location it matches and correct only what violates
       the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order, comments, and formatting
       unchanged, and keep the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-agentic-access-core-fields:
+    title: Agentic Access Core Fields
+    reference: https://spotlight-rules.com/spec/rules/openapi/agentic-access-core-fields/
+    description: An x-agentic-access contract must declare action-class, consequence, subject, and a non-empty scope so the
+      runtime decision layer has the token and policy context it needs.
+    message: x-agentic-access must declare action-class, consequence, subject, and a non-empty scope.
+    severity: info
+    given: $.paths[*][get,post,put,patch,delete,options,head,trace].x-agentic-access
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required:
+          - action-class
+          - consequence
+          - subject
+          - scope
+          properties:
+            action-class:
+              enum:
+              - connected
+              - delegated
+              - acting
+            consequence:
+              enum:
+              - read
+              - write
+              - physical
+              - safety-critical
+            subject:
+              enum:
+              - required
+              - optional
+              - none
+            scope:
+              type: array
+              minItems: 1
+              items:
+                type: string
+            audience:
+              type: string
+            audit:
+              enum:
+              - required
+              - none
+            token:
+              type: object
+              properties:
+                max-ttl:
+                  type: integer
+                  minimum: 1
+                exchange:
+                  type: boolean
+                proof-of-possession:
+                  type: boolean
+                purpose-required:
+                  type: boolean
+            escalation:
+              type: object
+              properties:
+                human-in-the-loop:
+                  enum:
+                  - required
+                  - conditional
+                  - none
+                triggers:
+                  type: array
+                  items:
+                    enum:
+                    - abnormal
+                    - high-value
+                    - safety
+                approver:
+                  type: string
+    tags:
+    - format:openapi
+    - spec:operations
+    - topic:agentic-access
+    - experience:agentic-access
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''agentic-access-core-fields''.
+      Requirement: each `x-agentic-access` object must declare `action-class` (connected|delegated|acting), `consequence`
+      (read|write|physical|safety-critical), `subject` (required|optional|none), and a non-empty `scope` array. To fix: add
+      the missing fields with valid enum values. Make the smallest change, keep the document valid OpenAPI, and return only
+      the complete corrected document.'
   apis-json-api-property-require-status-page:
     title: API Property Require Status Page
     reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-status-page/

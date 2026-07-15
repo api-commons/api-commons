@@ -56,6 +56,7 @@ EXPERIENCES = [
     ("usability", "Usability", "Developer-experience details that make the API easy to learn and consume."),
     ("naming", "Naming", "Casing, vocabulary, and naming conventions applied consistently across the surface."),
     ("security", "Security", "Authentication, authorization, and the OWASP API Security Top 10 as machine checks."),
+    ("agentic-access", "Agentic Access", "Execution contracts for AI agents — scope, audience, consequence, short-lived tokens, and human-in-the-loop escalation checked in the API description."),
     ("error-handling", "Error Handling", "Standardized, informative error responses across every operation."),
     ("performance", "Performance", "Caching, payload, and efficiency signals that keep the API fast."),
     ("versioning", "Versioning", "Explicit, predictable versioning so changes don't break consumers."),

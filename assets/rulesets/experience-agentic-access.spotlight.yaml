@@ -1,0 +1,353 @@
+documentationUrl: https://spotlight-rules.com/spec/
+rules:
+  openapi-agentic-access-contract-declared:
+    title: Agentic Access Contract Declared
+    reference: https://spotlight-rules.com/spec/rules/openapi/agentic-access-contract-declared/
+    description: Every operation exposed to AI agents should declare an x-agentic-access execution contract so an agent knows
+      what it may attempt, and what must be denied, constrained, or escalated.
+    message: Operation has no x-agentic-access contract — an agent cannot know what it may attempt.
+    severity: info
+    given: $.paths[*][get,post,put,patch,delete,options,head,trace]
+    then:
+      field: x-agentic-access
+      function: truthy
+    tags:
+    - format:openapi
+    - spec:operations
+    - topic:agentic-access
+    - experience:agentic-access
+    - experience:security
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''agentic-access-contract-declared''.
+      Requirement: every operation should declare an `x-agentic-access` object (action-class, consequence, scope, and — for
+      state-changing actions — audience, subject, token constraints, escalation, and audit). To fix: add an `x-agentic-access`
+      block to each operation, classifying the action an AI agent may take. Make the smallest change that satisfies the rule,
+      keep the document valid OpenAPI, and return only the complete corrected document.'
+  openapi-agentic-access-core-fields:
+    title: Agentic Access Core Fields
+    reference: https://spotlight-rules.com/spec/rules/openapi/agentic-access-core-fields/
+    description: An x-agentic-access contract must declare action-class, consequence, subject, and a non-empty scope so the
+      runtime decision layer has the token and policy context it needs.
+    message: x-agentic-access must declare action-class, consequence, subject, and a non-empty scope.
+    severity: info
+    given: $.paths[*][get,post,put,patch,delete,options,head,trace].x-agentic-access
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required:
+          - action-class
+          - consequence
+          - subject
+          - scope
+          properties:
+            action-class:
+              enum:
+              - connected
+              - delegated
+              - acting
+            consequence:
+              enum:
+              - read
+              - write
+              - physical
+              - safety-critical
+            subject:
+              enum:
+              - required
+              - optional
+              - none
+            scope:
+              type: array
+              minItems: 1
+              items:
+                type: string
+            audience:
+              type: string
+            audit:
+              enum:
+              - required
+              - none
+            token:
+              type: object
+              properties:
+                max-ttl:
+                  type: integer
+                  minimum: 1
+                exchange:
+                  type: boolean
+                proof-of-possession:
+                  type: boolean
+                purpose-required:
+                  type: boolean
+            escalation:
+              type: object
+              properties:
+                human-in-the-loop:
+                  enum:
+                  - required
+                  - conditional
+                  - none
+                triggers:
+                  type: array
+                  items:
+                    enum:
+                    - abnormal
+                    - high-value
+                    - safety
+                approver:
+                  type: string
+    tags:
+    - format:openapi
+    - spec:operations
+    - topic:agentic-access
+    - experience:agentic-access
+    - experience:reliability
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''agentic-access-core-fields''.
+      Requirement: each `x-agentic-access` object must declare `action-class` (connected|delegated|acting), `consequence`
+      (read|write|physical|safety-critical), `subject` (required|optional|none), and a non-empty `scope` array. To fix: add
+      the missing fields with valid enum values. Make the smallest change, keep the document valid OpenAPI, and return only
+      the complete corrected document.'
+  openapi-agentic-access-consequence-requirements:
+    title: Agentic Access Consequence Requirements
+    reference: https://spotlight-rules.com/spec/rules/openapi/agentic-access-consequence-requirements/
+    description: Higher-consequence actions must bind an audience, require a subject, cap token lifetime, and be audited —
+      just-enough privilege, just-in-time access, and an auditable production loop.
+    message: Higher-consequence action must bind audience, require a subject, cap token TTL, and be audited.
+    severity: info
+    given: $.paths[*][get,post,put,patch,delete,options,head,trace].x-agentic-access
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          allOf:
+          - if:
+              properties:
+                consequence:
+                  const: write
+            then:
+              required:
+              - audience
+              - audit
+              - token
+              properties:
+                audit:
+                  const: required
+                token:
+                  required:
+                  - max-ttl
+                  properties:
+                    max-ttl:
+                      maximum: 900
+          - if:
+              properties:
+                consequence:
+                  const: physical
+            then:
+              required:
+              - audience
+              - audit
+              - subject
+              - token
+              properties:
+                subject:
+                  const: required
+                audit:
+                  const: required
+                token:
+                  required:
+                  - max-ttl
+                  properties:
+                    max-ttl:
+                      maximum: 300
+          - if:
+              properties:
+                consequence:
+                  const: safety-critical
+            then:
+              required:
+              - audience
+              - audit
+              - subject
+              - token
+              properties:
+                subject:
+                  const: required
+                audit:
+                  const: required
+                token:
+                  required:
+                  - max-ttl
+                  properties:
+                    max-ttl:
+                      maximum: 120
+    tags:
+    - format:openapi
+    - spec:operations
+    - topic:agentic-access
+    - experience:agentic-access
+    - experience:security
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''agentic-access-consequence-requirements''.
+      Requirement: for `x-agentic-access` where consequence is write/physical/safety-critical, declare `audience`, set `audit:
+      required`, and set a short-lived `token.max-ttl` (≤900s write, ≤300s physical, ≤120s safety-critical); physical and
+      safety-critical also require `subject: required`. To fix: add the missing constraints. Make the smallest change, keep
+      the document valid OpenAPI, and return only the complete corrected document.'
+  openapi-agentic-access-safety-critical-human:
+    title: Agentic Access Safety Critical Human In The Loop
+    reference: https://spotlight-rules.com/spec/rules/openapi/agentic-access-safety-critical-human/
+    description: Safety-critical actions must require human-in-the-loop approval — step-up review for high-impact operations.
+    message: Safety-critical action must set escalation.human-in-the-loop = required.
+    severity: info
+    given: $.paths[*][get,post,put,patch,delete,options,head,trace].x-agentic-access
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          if:
+            properties:
+              consequence:
+                const: safety-critical
+            required:
+            - consequence
+          then:
+            required:
+            - escalation
+            properties:
+              escalation:
+                type: object
+                required:
+                - human-in-the-loop
+                properties:
+                  human-in-the-loop:
+                    const: required
+    tags:
+    - format:openapi
+    - spec:operations
+    - topic:agentic-access
+    - experience:agentic-access
+    - experience:security
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''agentic-access-safety-critical-human''.
+      Requirement: any `x-agentic-access` with `consequence: safety-critical` must set `escalation.human-in-the-loop: required`.
+      To fix: add the escalation block requiring human approval. Make the smallest change, keep the document valid OpenAPI,
+      and return only the complete corrected document.'
+  openapi-agentic-access-acting-escalation:
+    title: Agentic Access Acting Declares Escalation
+    reference: https://spotlight-rules.com/spec/rules/openapi/agentic-access-acting-escalation/
+    description: Any acting operation should declare an escalation policy — even 'none' by explicit decision — so runtime
+      approval behavior is never left implicit.
+    message: Acting operation should declare escalation.human-in-the-loop (may be 'none' by decision).
+    severity: info
+    given: $.paths[*][get,post,put,patch,delete,options,head,trace].x-agentic-access
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          if:
+            properties:
+              action-class:
+                const: acting
+            required:
+            - action-class
+          then:
+            required:
+            - escalation
+            properties:
+              escalation:
+                type: object
+                required:
+                - human-in-the-loop
+    tags:
+    - format:openapi
+    - spec:operations
+    - topic:agentic-access
+    - experience:agentic-access
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''agentic-access-acting-escalation''.
+      Requirement: any `x-agentic-access` with `action-class: acting` must declare `escalation.human-in-the-loop` (required,
+      conditional, or an explicit none). To fix: add the escalation block. Make the smallest change, keep the document valid
+      OpenAPI, and return only the complete corrected document.'
+  openapi-agentic-access-delegation-token-exchange:
+    title: Agentic Access Delegation Token Exchange
+    reference: https://spotlight-rules.com/spec/rules/openapi/agentic-access-delegation-token-exchange/
+    description: Actions that act on behalf of a subject should require token exchange so delegation is scoped per action
+      rather than relying on a broad standing token.
+    message: Action acts on behalf of a subject but does not require token.exchange = true.
+    severity: info
+    given: $.paths[*][get,post,put,patch,delete,options,head,trace].x-agentic-access
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          if:
+            properties:
+              subject:
+                const: required
+            required:
+            - subject
+          then:
+            required:
+            - token
+            properties:
+              token:
+                type: object
+                required:
+                - exchange
+                properties:
+                  exchange:
+                    const: true
+    tags:
+    - format:openapi
+    - spec:operations
+    - topic:agentic-access
+    - experience:agentic-access
+    - experience:security
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''agentic-access-delegation-token-exchange''.
+      Requirement: any `x-agentic-access` with `subject: required` must set `token.exchange: true` (RFC 8693 scoped delegation).
+      To fix: add token.exchange. Make the smallest change, keep the document valid OpenAPI, and return only the complete
+      corrected document.'
+  openapi-agentic-access-oauth-protected:
+    title: Agentic Access OAuth Protected
+    reference: https://spotlight-rules.com/spec/rules/openapi/agentic-access-oauth-protected/
+    description: Delegated or acting operations must carry a security requirement so agent actions are actually authorized
+      at runtime, not merely described.
+    message: Delegated/acting operation for an agent declares no security requirement.
+    severity: info
+    given: $.paths[*][get,post,put,patch,delete,options,head,trace]
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          if:
+            required:
+            - x-agentic-access
+            properties:
+              x-agentic-access:
+                required:
+                - action-class
+                properties:
+                  action-class:
+                    enum:
+                    - acting
+                    - delegated
+          then:
+            required:
+            - security
+            properties:
+              security:
+                type: array
+                minItems: 1
+    tags:
+    - format:openapi
+    - spec:operations
+    - topic:agentic-access
+    - experience:agentic-access
+    - experience:security
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''agentic-access-oauth-protected''.
+      Requirement: any operation whose `x-agentic-access.action-class` is acting or delegated must declare a non-empty `security`
+      requirement (globally or on the operation). To fix: add a security requirement referencing an OAuth2 scheme. Make the
+      smallest change, keep the document valid OpenAPI, and return only the complete corrected document.'

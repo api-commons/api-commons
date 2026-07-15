@@ -905,6 +905,43 @@ rules:
       the JSONPath `$.servers` — inspect every location it matches and correct only what violates the rule. Make the smallest
       change that satisfies the rule, leave all unrelated content, key order, comments, and formatting unchanged, and keep
       the document valid OpenAPI. Return only the complete corrected document, with no commentary.'
+  openapi-agentic-access-acting-escalation:
+    title: Agentic Access Acting Declares Escalation
+    reference: https://spotlight-rules.com/spec/rules/openapi/agentic-access-acting-escalation/
+    description: Any acting operation should declare an escalation policy — even 'none' by explicit decision — so runtime
+      approval behavior is never left implicit.
+    message: Acting operation should declare escalation.human-in-the-loop (may be 'none' by decision).
+    severity: info
+    given: $.paths[*][get,post,put,patch,delete,options,head,trace].x-agentic-access
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          if:
+            properties:
+              action-class:
+                const: acting
+            required:
+            - action-class
+          then:
+            required:
+            - escalation
+            properties:
+              escalation:
+                type: object
+                required:
+                - human-in-the-loop
+    tags:
+    - format:openapi
+    - spec:operations
+    - topic:agentic-access
+    - experience:agentic-access
+    - experience:governance
+    prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''agentic-access-acting-escalation''.
+      Requirement: any `x-agentic-access` with `action-class: acting` must declare `escalation.human-in-the-loop` (required,
+      conditional, or an explicit none). To fix: add the escalation block. Make the smallest change, keep the document valid
+      OpenAPI, and return only the complete corrected document.'
   apis-json-api-property-require-linting-rules:
     title: API Property Require Linting Rules
     reference: https://spotlight-rules.com/spec/rules/apis-json/api-property-require-linting-rules/
