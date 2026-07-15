@@ -1,0 +1,85 @@
+---
+layout: default
+title: API Authorization Profile
+nav_active: api-authorization
+description: A jurisdiction-neutral, two-tier, machine-checkable profile for securing APIs with OAuth 2.1 and FAPI 2.0 — checkable against your OpenAPI and your OAuth Authorization Server metadata with a Spectral ruleset.
+---
+
+<style>
+  .page-hero { text-align: center; padding: 2.5rem 0 1.5rem; }
+  .page-hero h1 { font-size: 2.2rem; font-weight: 800; color: #1a1a2e; margin-bottom: 0.75rem; }
+  .page-hero p { color: #555; font-size: 1.1rem; max-width: 760px; margin: 0 auto; line-height: 1.7; }
+  .onb-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2.5rem 0; }
+  .onb-card { display: flex; flex-direction: column; padding: 1.75rem; border: 1px solid #e3e7ee; border-radius: 12px; background: white; }
+  .onb-card h2 { font-size: 1.2rem; font-weight: 700; color: #1a1a2e; margin: 0 0 0.75rem; }
+  .onb-card p { color: #555; font-size: 0.98rem; line-height: 1.6; flex-grow: 1; margin-bottom: 0; }
+  .onb-card code { font-size: 0.85rem; }
+  .onb-intro { background: #f8f9fb; border-radius: 12px; padding: 1.5rem 2rem; margin: 2rem 0; border-left: 4px solid #0d6efd; font-size: 1rem; line-height: 1.8; color: #444; }
+  .onb-actions { text-align: center; margin: 2rem 0 1rem; }
+  .onb-actions .btn-launch { display: inline-block; background: #0d6efd; color: #fff; padding: 0.6rem 1.3rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; text-decoration: none; margin: 0 0.4rem 0.6rem; }
+  .onb-actions .btn-launch:hover { background: #0a58ca; color: #fff; }
+  .onb-actions .btn-alt { display: inline-block; background: #fff; color: #0d6efd; border: 1px solid #0d6efd; padding: 0.6rem 1.3rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; text-decoration: none; margin: 0 0.4rem 0.6rem; }
+  .maturity { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin: 2rem 0; }
+  .maturity .level { padding: 1.4rem 1.5rem; border-radius: 12px; border: 1px solid #e3e7ee; background: #fff; }
+  .maturity .level h3 { font-size: 1.05rem; font-weight: 700; margin: 0 0 0.5rem; }
+  .maturity .level p { font-size: 0.92rem; color: #555; line-height: 1.55; margin: 0; }
+  .maturity .normal h3 { color: #198754; }
+  .maturity .high h3 { color: #0d6efd; }
+  .wellknown { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9rem; }
+  .authz-cmd { background: #1a1a2e; color: #e6edf3; border-radius: 10px; padding: 1.1rem 1.3rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; line-height: 1.7; overflow-x: auto; margin: 1.25rem 0; }
+</style>
+
+<div class="page-hero">
+  <h1>API Authorization Profile</h1>
+  <p>Most API programs assert "we use OAuth" and stop there. This profile says <em>which</em> OAuth — a small set of requirements you can check against the artifacts an API already publishes, at two assurance tiers, so conformance is a CI lint instead of an annual review. It follows the <strong>profile, don't invent</strong> posture: every requirement grounds in an existing IETF or OpenID standard. Generalized from Germany's federal <a href="https://gitlab.opencode.de/sachsen-anhalt/mid/foederale-api-autorisierungsinfrastruktur" target="_blank" rel="noopener">API authorization security profiles</a> into a standard-neutral form any API program — public or private — can adopt.</p>
+</div>
+
+<div class="onb-actions">
+  <a class="btn-launch" href="https://github.com/api-commons/spectral-api-authorization-ruleset" target="_blank" rel="noopener">Spectral Ruleset on GitHub ↗</a>
+  <a class="btn-alt" href="https://github.com/api-commons/api-authorization" target="_blank" rel="noopener">Profile Spec</a>
+  <a class="btn-alt" href="https://github.com/api-commons/api-authorization/blob/main/profile.json" target="_blank" rel="noopener">profile.json</a>
+  <a class="btn-alt" href="https://rulesets.apicommons.org" target="_blank" rel="noopener">Ruleset Commons</a>
+</div>
+
+<div class="onb-intro">
+  The profile did not come off a whiteboard — it was <strong>generalized from a national government's published API authorization security profiles</strong>, which had already done the hard work of composing OAuth 2.1, FAPI 2.0, DPoP, PAR, and dynamic client registration into a coherent, tiered baseline. Every requirement here names the RFC or FAPI clause it enforces, and every one is expressed as an executable Spectral rule.
+</div>
+
+<div class="maturity">
+  <div class="level normal">
+    <h3>normal — the baseline</h3>
+    <p>Grounded in <a href="https://datatracker.ietf.org/doc/html/rfc9700" target="_blank" rel="noopener">RFC 9700</a> (OAuth 2.0 Security BCP) and OAuth 2.1 hardening: HTTPS everywhere, no implicit or password grants, declared scopes, security on every operation, no <code>none</code> signing algorithm. The default for any API using OAuth.</p>
+  </div>
+  <div class="level high">
+    <h3>high — FAPI 2.0</h3>
+    <p>A strict superset grounded in the <a href="https://openid.net/specs/fapi-2_0-security-profile.html" target="_blank" rel="noopener">FAPI 2.0 Security Profile</a>: sender-constrained tokens (DPoP or mTLS), <code>private_key_jwt</code>/mTLS client authentication, Pushed Authorization Requests, PKCE S256, code-only response types, asymmetric signing. For high-assurance, cross-boundary, or machine-to-machine-at-scale APIs.</p>
+  </div>
+</div>
+
+<div class="onb-grid">
+  <div class="onb-card">
+    <h2>Two lint targets</h2>
+    <p>The posture lives in two artifacts, so conformance is checked against both. Your <strong>OpenAPI</strong> carries the security-scheme contract, global and operation <code>security</code>, declared scopes, and the shape of OAuth flows. Your <strong>OAuth Authorization Server metadata</strong> (<a href="https://datatracker.ietf.org/doc/html/rfc8414" target="_blank" rel="noopener">RFC 8414</a>) carries the FAPI-specific truth: client authentication, DPoP, PAR, PKCE, response types, and signing algorithms.</p>
+  </div>
+  <div class="onb-card">
+    <h2>Executable, not aspirational</h2>
+    <p>The profile ships as <a href="https://github.com/api-commons/spectral-api-authorization-ruleset" target="_blank" rel="noopener"><code>@api-common/spectral-api-authorization-ruleset</code></a> — two Spectral rule files using built-in functions only, so they run anywhere Spectral runs, with fixtures and a passing test harness. Adopt it by reference from <a href="https://rulesets.apicommons.org">Ruleset Commons</a> and lint on every commit.</p>
+  </div>
+  <div class="onb-card">
+    <h2>An honest floor</h2>
+    <p>Static conformance is necessary, not sufficient. It checks the <em>declared contract</em>, not the running system — it cannot verify a live DPoP proof, real token binding, or that object-level authorization is correct (that is the <a href="https://github.com/api-commons/spectral-owasp-ruleset" target="_blank" rel="noopener">OWASP ruleset</a>). A clean report means the contract is not leaving an obvious door open; the rest is owed to your code, tests, and gateway.</p>
+  </div>
+</div>
+
+<h2 style="margin-top:2.5rem;">Lint your API</h2>
+<div class="authz-cmd">
+# lint your OpenAPI<br>
+spectral lint openapi.yaml -r api-authorization-openapi.yaml<br><br>
+# lint your authorization server metadata<br>
+curl -s https://as.example.gov/.well-known/openid-configuration -o as-metadata.json<br>
+spectral lint as-metadata.json -r api-authorization-oauth-metadata.yaml
+</div>
+
+<div class="onb-intro">
+  Read the series behind the profile — <a href="https://apievangelist.com/2026/07/16/germany-built-the-api-authorization-blueprint-the-rest-of-government-needs/">Germany Built the API Authorization Blueprint the Rest of Government Needs</a> — on <a href="https://apievangelist.com">API Evangelist</a>. Open source and free to adopt; <a href="https://apievangelist.com/services/">API Evangelist</a> offers expert services when you want help profiling and hardening your own API authorization.
+</div>
