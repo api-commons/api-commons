@@ -46,8 +46,6 @@ both humans and agents can consume it. Each lives in its own repo under
 - [**use-cases**](https://github.com/api-commons/use-cases) — the use cases an API serves.
 - [**vocabulary**](https://github.com/api-commons/vocabulary) — shared words and definitions for API operations.
 - [**plans**](https://github.com/api-commons/plans) — access plans, tiers, and pricing.
-- [**tiers**](https://github.com/api-commons/tiers) — managing access tiers to APIs.
-- [**rate-limits**](https://github.com/api-commons/rate-limits) — a schema for rate limits.
 - [**change-log**](https://github.com/api-commons/change-log) — publish an API's changelog, machine-readably.
 - [**road-map**](https://github.com/api-commons/road-map) — publish an API's roadmap, machine-readably.
 - [**interface-license**](https://github.com/api-commons/interface-license) — apply an open license to your API's interface (its surface, not its implementation).
@@ -58,7 +56,6 @@ both humans and agents can consume it. Each lives in its own repo under
 - [**api-authorization**](https://github.com/api-commons/api-authorization) — a jurisdiction-neutral, two-tier, machine-checkable profile for securing APIs with OAuth 2.1 and FAPI 2.0.
 - [**problem-details-for-http-apis**](https://github.com/api-commons/problem-details-for-http-apis) — a base for using RFC 9457 Problem Details in your API.
 - [**json-api**](https://github.com/api-commons/json-api) — schemas and governance for the JSON:API standard.
-- [**agent-skills**](https://github.com/api-commons/agent-skills) — reference agent skills (`SKILL.md`) for the API Commons / APIs.io ecosystem.
 - [**train-travel**](https://github.com/api-commons/train-travel) — an OpenAPI + APIs.json template for a Train Travel API, handy for demos and testing.
 - [**examples**](https://github.com/api-commons/examples) — shared examples for the building blocks and the APIs.json ecosystem.
 - [**snacks-twilio-messages**](https://github.com/api-commons/snacks-twilio-messages) — an API Snack for AI: send a message with Twilio.
