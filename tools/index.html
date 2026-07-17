@@ -143,56 +143,6 @@ description: Browser-first API Commons tools — discover, index, document, vali
 
 <div class="tools-grid">
   <div class="tool-card">
-    <h2>Governance Baseline</h2>
-    <div class="domain">baseline.apicommons.org</div>
-    <p>Adopt a strict ruleset on an estate that already exists. <strong>Snapshot</strong> today's violations into a baseline, then <strong>fail only NEW ones</strong> while baselined issues are suppressed, enforce a <strong>warning budget</strong>, and <strong>burn the baseline down</strong> to zero — no more wall of red that gets the check switched off.</p>
-    <div class="actions">
-      <a class="btn-launch" href="https://baseline.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/governance-baseline" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <h2>Governance Scorecard</h2>
-    <div class="domain">scorecard.apicommons.org</div>
-    <p>Governance health <strong>over time</strong>, not just today. Ingest a series of lint runs, score each spec 0–100, and render <strong>trend lines</strong> per spec and across the estate — with the specs whose problem lists are <strong>growing</strong> ranked at the top so you act before one goes the wrong direction.</p>
-    <div class="actions">
-      <a class="btn-launch" href="https://scorecard.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/governance-scorecard" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <h2>Model Library</h2>
-    <div class="domain">library.apicommons.org</div>
-    <p>A shared, <strong>versioned component/model library</strong>. Author reusable schemas, see which specs consume each model, and when a model version bumps, classify the change as <strong>breaking or non-breaking</strong> for every consumer. A <strong>drift detector</strong> finds the three variants of your <code>User</code> model across teams.</p>
-    <div class="actions">
-      <a class="btn-launch" href="https://library.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/component-library" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <h2>Spec Review</h2>
-    <div class="domain">review.apicommons.org</div>
-    <p>A <strong>$ref-resolving, human-readable diff</strong> of two API descriptions for the design phase. Resolves references so reviewers see the real shape, flags each change as added / removed / <strong>breaking</strong> in plain English, and hands you a Markdown summary to paste into the PR — because reviewing raw YAML is hostile to non-engineers.</p>
-    <div class="actions">
-      <a class="btn-launch" href="https://review.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/spec-review" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-
-  <div class="tool-card">
-    <h2>Code-First Governance</h2>
-    <div class="domain">codefirst.apicommons.org</div>
-    <p>For teams that <strong>generate OpenAPI from code annotations</strong>. Detects the generator (springdoc, FastAPI, NestJS, go-swagger, drf-spectacular, tsoa…), separates <strong>code-gen-caused</strong> findings from authoring ones, and tells you the exact <strong>annotation to fix in code</strong> — bridging the gap where Spectral doesn't fit a code-first workflow.</p>
-    <div class="actions">
-      <a class="btn-launch" href="https://codefirst.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
-      <a class="gh-link" href="https://github.com/api-commons/codefirst-governance" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </div>
-
-  <div class="tool-card">
     <h2>Agent Rule Export</h2>
     <div class="domain">agents.apicommons.org</div>
     <p>Turn a governance ruleset into <strong>agent-native guidance</strong> so agents follow the rules while authoring, not just after linting. Exports an <strong>AGENTS.md</strong> governance block, a <strong>system-prompt</strong> instruction set, a per-rule <strong>remediation prompt pack</strong>, and a compact <strong>rule digest</strong> — from the 769-rule catalog or your own Spectral ruleset. No backend.</p>
@@ -283,12 +233,32 @@ description: Browser-first API Commons tools — discover, index, document, vali
   </div>
 
   <div class="tool-card">
+    <h2>Code-First Governance</h2>
+    <div class="domain">codefirst.apicommons.org</div>
+    <p>For teams that <strong>generate OpenAPI from code annotations</strong>. Detects the generator (springdoc, FastAPI, NestJS, go-swagger, drf-spectacular, tsoa…), separates <strong>code-gen-caused</strong> findings from authoring ones, and tells you the exact <strong>annotation to fix in code</strong> — bridging the gap where Spectral doesn't fit a code-first workflow.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://codefirst.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/codefirst-governance" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
     <h2>Context Gate</h2>
     <div class="domain">contextgate.apicommons.org</div>
     <p>Consumer-centric governance for the agentic era: choose exactly which <strong>operations and fields</strong> your APIs expose to agents, and emit a governed <strong>Tyk OpenAPI + MCP</strong> surface plus a <strong>Spectral ruleset</strong> for it — with <strong>PII, secret, and compliance</strong> checks on what reaches the agent. Search APIs.io / GitHub or upload. No backend.</p>
     <div class="actions">
       <a class="btn-launch" href="https://contextgate.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
       <a class="gh-link" href="https://github.com/api-commons/context-gate" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>Governance Baseline</h2>
+    <div class="domain">baseline.apicommons.org</div>
+    <p>Adopt a strict ruleset on an estate that already exists. <strong>Snapshot</strong> today's violations into a baseline, then <strong>fail only NEW ones</strong> while baselined issues are suppressed, enforce a <strong>warning budget</strong>, and <strong>burn the baseline down</strong> to zero — no more wall of red that gets the check switched off.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://baseline.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/governance-baseline" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 
@@ -323,6 +293,16 @@ description: Browser-first API Commons tools — discover, index, document, vali
   </div>
 
   <div class="tool-card">
+    <h2>Governance Scorecard</h2>
+    <div class="domain">scorecard.apicommons.org</div>
+    <p>Governance health <strong>over time</strong>, not just today. Ingest a series of lint runs, score each spec 0–100, and render <strong>trend lines</strong> per spec and across the estate — with the specs whose problem lists are <strong>growing</strong> ranked at the top so you act before one goes the wrong direction.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://scorecard.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/governance-scorecard" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
     <h2>Governance Waivers</h2>
     <div class="domain">waivers.apicommons.org</div>
     <p>Make governance exceptions <strong>sanctioned, owned, and expiring</strong> instead of teams routing around the rules. Author a machine-readable waivers file and reconcile it against <strong>Spectral</strong> lint output: waived violations are suppressed, while <strong>expired</strong>, <strong>stale</strong>, and <strong>expiring</strong> waivers surface — and you get the effective failing set to gate your build on. No backend.</p>
@@ -343,12 +323,32 @@ description: Browser-first API Commons tools — discover, index, document, vali
   </div>
 
   <div class="tool-card">
+    <h2>Model Library</h2>
+    <div class="domain">library.apicommons.org</div>
+    <p>A shared, <strong>versioned component/model library</strong>. Author reusable schemas, see which specs consume each model, and when a model version bumps, classify the change as <strong>breaking or non-breaking</strong> for every consumer. A <strong>drift detector</strong> finds the three variants of your <code>User</code> model across teams.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://library.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/component-library" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
     <h2>Ruleset Commons</h2>
     <div class="domain">rulesets.apicommons.org</div>
     <p>A registry of <strong>adoptable, provenanced governance rulesets</strong> — adopt a real owned ruleset by reference instead of running the linter's defaults. National (<strong>Italy, Netherlands</strong>), industry, security, and company rulesets, each with real provenance and a copy-paste <strong>extends</strong> snippet. The supply side of owned governance.</p>
     <div class="actions">
       <a class="btn-launch" href="https://rulesets.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
       <a class="gh-link" href="https://github.com/api-commons/ruleset-commons" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <h2>Spec Review</h2>
+    <div class="domain">review.apicommons.org</div>
+    <p>A <strong>$ref-resolving, human-readable diff</strong> of two API descriptions for the design phase. Resolves references so reviewers see the real shape, flags each change as added / removed / <strong>breaking</strong> in plain English, and hands you a Markdown summary to paste into the PR — because reviewing raw YAML is hostile to non-engineers.</p>
+    <div class="actions">
+      <a class="btn-launch" href="https://review.apicommons.org" target="_blank" rel="noopener">Launch tool ↗</a>
+      <a class="gh-link" href="https://github.com/api-commons/spec-review" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 
