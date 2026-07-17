@@ -1,0 +1,192 @@
+# Priorities-driven tool picker catalog.
+# Each tool is tagged with the priorities (jobs-to-be-done) it serves — `primary`
+# (a core reason to reach for this tool) scores higher than `secondary` (it helps,
+# but isn't the main event). The picker on /tools/ reads this file, so KEEP IT IN
+# SYNC when tools are added or renamed. Priority ids must match the `priorities` list.
+
+priorities:
+  - id: discover
+    label: Find & inventory the APIs and MCP servers we have
+    blurb: Discovery, documentation, and a single index of what exists.
+  - id: author-rules
+    label: Author and own our governance rules
+    blurb: Turn a style guide into a real, owned ruleset — and run it.
+  - id: adopt-legacy
+    label: Adopt governance on an estate that already exists
+    blurb: Get past the wall of red without turning the checks off.
+  - id: enforce-scale
+    label: Enforce governance at scale across many teams and repos
+    blurb: Pipelines, coverage, and an estate-wide rollup.
+  - id: review-changes
+    label: Review spec changes and catch breaking changes
+    blurb: Human-readable, ref-resolved diffs and versioned models.
+  - id: agent-ready
+    label: Make our APIs agent- and MCP-ready
+    blurb: Agent-native rules, MCP servers, and safe agent context.
+  - id: prove-trust
+    label: Prove compliance and show consumers they can trust us
+    blurb: Coverage, certification, and shareable reports.
+  - id: code-first
+    label: We generate our specs from code annotations
+    blurb: Govern a generated spec and fix findings at the source.
+  - id: reuse
+    label: Reduce duplication and reuse shared models
+    blurb: Score reusability and collapse model drift.
+  - id: report
+    label: Report governance status to stakeholders
+    blurb: Trends, scorecards, and one-page rollups for leadership.
+
+tools:
+  # ---- new (from the Jakub Rozek governance roadmap) ----
+  - name: Governance Baseline
+    domain: baseline.apicommons.org
+    url: https://baseline.apicommons.org
+    github: api-commons/governance-baseline
+    blurb: Snapshot the violations an estate already has, then fail only NEW ones and burn the baseline down — so a strict ruleset can be adopted without a wall of red.
+    priorities: { primary: [adopt-legacy], secondary: [enforce-scale, author-rules] }
+  - name: Governance Scorecard
+    domain: scorecard.apicommons.org
+    url: https://scorecard.apicommons.org
+    github: api-commons/governance-scorecard
+    blurb: Governance health per spec and per estate OVER TIME, with the specs whose problem lists are growing ranked at the top — the longitudinal view point-in-time scorecards miss.
+    priorities: { primary: [report, enforce-scale], secondary: [prove-trust] }
+  - name: Model Library
+    domain: library.apicommons.org
+    url: https://library.apicommons.org
+    github: api-commons/component-library
+    blurb: A shared, versioned component/model library with change-propagation and a drift detector that finds the three variants of your User model across teams.
+    priorities: { primary: [reuse, review-changes], secondary: [author-rules] }
+  - name: Spec Review
+    domain: review.apicommons.org
+    url: https://review.apicommons.org
+    github: api-commons/spec-review
+    blurb: A $ref-resolving, stakeholder-friendly diff of two specs that flags breaking changes and hands you a plain-English summary to paste into a PR.
+    priorities: { primary: [review-changes], secondary: [report] }
+  - name: Code-First Governance
+    domain: codefirst.apicommons.org
+    url: https://codefirst.apicommons.org
+    github: api-commons/codefirst-governance
+    blurb: For teams that generate OpenAPI from code annotations — detects the generator, separates code-gen-caused findings from authoring ones, and tells you which annotation to fix in code.
+    priorities: { primary: [code-first], secondary: [author-rules, adopt-legacy] }
+
+  # ---- existing suite ----
+  - name: Spectral Ruleset Studio
+    domain: studio.apicommons.org
+    url: https://studio.apicommons.org
+    github: api-commons/spectral-ruleset-studio
+    blurb: Turn a prose style guide into an owned, grounded, well-named Spectral ruleset — in your browser.
+    priorities: { primary: [author-rules], secondary: [adopt-legacy] }
+  - name: Ruleset Commons
+    domain: rulesets.apicommons.org
+    url: https://rulesets.apicommons.org
+    github: api-commons/ruleset-commons
+    blurb: Adopt a provenanced, community ruleset by reference instead of copy-pasting rules.
+    priorities: { primary: [author-rules], secondary: [prove-trust] }
+  - name: Spectral OWASP Ruleset
+    domain: "@api-common/spectral-owasp-ruleset"
+    url: https://github.com/api-commons/spectral-owasp-ruleset
+    github: api-commons/spectral-owasp-ruleset
+    blurb: A security layer for your rules — an OWASP-aligned Spectral ruleset you can drop in.
+    priorities: { primary: [author-rules], secondary: [prove-trust] }
+  - name: API Validator
+    domain: validator.apicommons.org
+    url: https://validator.apicommons.org
+    github: api-commons/api-validator
+    blurb: Run your rules against an API description in the browser — lint 11 artifact types, no backend.
+    priorities: { primary: [author-rules], secondary: [discover, prove-trust] }
+  - name: Governance Coverage
+    domain: coverage.apicommons.org
+    url: https://coverage.apicommons.org
+    github: api-commons/governance-coverage
+    blurb: Measures how much of your API description your governance actually inspects — coverage by section and dead rules.
+    priorities: { primary: [prove-trust, enforce-scale], secondary: [author-rules] }
+  - name: Governance Waivers
+    domain: waivers.apicommons.org
+    url: https://waivers.apicommons.org
+    github: api-commons/governance-waivers
+    blurb: Sanctioned, owned, expiring exceptions — with an override/masking policy — so teams stop routing around governance.
+    priorities: { primary: [adopt-legacy], secondary: [enforce-scale] }
+  - name: Governance Pipeline
+    domain: pipeline.apicommons.org
+    url: https://pipeline.apicommons.org
+    github: api-commons/governance-pipeline
+    blurb: Wire governance into CI/CD so it runs on every change.
+    priorities: { primary: [enforce-scale], secondary: [author-rules] }
+  - name: Governance Pipeline Auditor
+    domain: auditor.apicommons.org
+    url: https://auditor.apicommons.org
+    github: api-commons/governance-pipeline-auditor
+    blurb: Audit whether your CI pipelines actually run governance — and how well.
+    priorities: { primary: [enforce-scale], secondary: [prove-trust, report] }
+  - name: API Governance Graph
+    domain: graph.apicommons.org
+    url: https://graph.apicommons.org
+    github: api-commons/api-governance-graph
+    blurb: Bind policies, rules, pipelines, and specs into one graph — with a Gaps view — many views over one artifact store.
+    priorities: { primary: [enforce-scale, report], secondary: [author-rules] }
+  - name: API Governance MCP
+    domain: "npx @api-common/api-governance-mcp"
+    url: https://github.com/api-commons/api-governance-mcp
+    github: api-commons/api-governance-mcp
+    blurb: A Spectral MCP server so agents can lint and reason about governance directly.
+    priorities: { primary: [agent-ready], secondary: [author-rules] }
+  - name: Agent Rule Export
+    domain: agents.apicommons.org
+    url: https://agents.apicommons.org
+    github: api-commons/governance-agent-export
+    blurb: Turn a ruleset into agent-native guidance (AGENTS.md, system prompt, remediation pack) so agents follow the rules while authoring.
+    priorities: { primary: [agent-ready], secondary: [author-rules, code-first] }
+  - name: Context Gate
+    domain: contextgate.apicommons.org
+    url: https://contextgate.apicommons.org
+    github: api-commons/context-gate
+    blurb: Consumer-centric governance for what an agent is allowed to see and do with an API's context.
+    priorities: { primary: [agent-ready], secondary: [prove-trust] }
+  - name: Toolsmith
+    domain: toolsmith.apicommons.org
+    url: https://toolsmith.apicommons.org
+    github: api-commons/toolsmith
+    blurb: Forge MCP tools and Agent Skills per OpenAPI operation.
+    priorities: { primary: [agent-ready], secondary: [discover] }
+  - name: MCP Install
+    domain: install.apicommons.org
+    url: https://install.apicommons.org
+    github: api-commons/mcp-install
+    blurb: A "Run in Postman"-style install button for MCP servers.
+    priorities: { primary: [agent-ready], secondary: [discover] }
+  - name: API Certification
+    domain: certification.apicommons.org
+    url: https://certification.apicommons.org
+    github: api-commons/governance-certification
+    blurb: Issue and verify tamper-evident governance certificates — a consumer-facing trust stamp anyone can re-verify.
+    priorities: { primary: [prove-trust], secondary: [report] }
+  - name: Spectral Reporter
+    domain: reporter.apicommons.org
+    url: https://reporter.apicommons.org
+    github: api-commons/spectral-reporter
+    blurb: Turn raw Spectral JSON into a clean, self-contained HTML report you can share.
+    priorities: { primary: [report], secondary: [prove-trust] }
+  - name: API Reusability
+    domain: reusability.apicommons.org
+    url: https://reusability.apicommons.org
+    github: api-commons/api-reusability
+    blurb: Score how reusable your APIs actually are — surface duplication and decide what to consolidate on.
+    priorities: { primary: [reuse], secondary: [discover, report] }
+  - name: API Discovery
+    domain: discovery.apicommons.org
+    url: https://discovery.apicommons.org
+    github: api-commons/api-discovery
+    blurb: A browser-first registry — search APIs.io and code hosts, keep provenance, and roll everything into one APIs.json index.
+    priorities: { primary: [discover], secondary: [reuse] }
+  - name: API Documentation
+    domain: documentation.apicommons.org
+    url: https://documentation.apicommons.org
+    github: api-commons/api-documentation
+    blurb: Render and browse APIs.json-indexed API documentation.
+    priorities: { primary: [discover], secondary: [] }
+  - name: API Experience
+    domain: experience.apicommons.org
+    url: https://experience.apicommons.org
+    github: api-commons/api-experience
+    blurb: Map and assess the developer experience across an API's surface and artifacts.
+    priorities: { primary: [discover, agent-ready], secondary: [report] }
