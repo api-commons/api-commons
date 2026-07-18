@@ -37,6 +37,13 @@ priorities:
     blurb: Trends, scorecards, and one-page rollups for leadership.
 
 tools:
+  - name: Rule Federation
+    domain: federation.apicommons.org
+    url: https://federation.apicommons.org
+    github: api-commons/rule-federation
+    blurb: A federated rule registry — a central baseline plus the domains that adopt it, shown as a matrix of who inherits, overrides, waives, or defers each rule, which rules are contested/unstewarded/orphaned, and which local rules to promote to the center.
+    priorities: { primary: [enforce-scale, author-rules], secondary: [report, adopt-legacy] }
+
   # ---- new (from the Jakub Rozek governance roadmap) ----
   - name: Governance Baseline
     domain: baseline.apicommons.org
