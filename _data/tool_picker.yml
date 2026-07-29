@@ -209,3 +209,9 @@ tools:
     github: api-commons/api-platform
     blurb: "Draw your company's whole API stack from the APIs.io catalog and export it as one `type: platform` APIs.json — with a merged OpenAPI of just the operations you use, for honest AI context."
     priorities: { primary: [discover, agent-ready], secondary: [reuse] }
+  - name: API Tags
+    domain: tags.apicommons.org
+    url: https://tags.apicommons.org
+    github: api-commons/api-tags
+    blurb: Walk an APIs.json down through every provider index, OpenAPI, and AsyncAPI beneath it and harvest every tag applied at every level — then see the whole vocabulary as a cloud, a graph, a provider matrix, and a table, and click any tag to find who uses it.
+    priorities: { primary: [discover, reuse], secondary: [report, agent-ready] }
