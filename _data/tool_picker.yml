@@ -95,6 +95,12 @@ tools:
     github: api-commons/spectral-owasp-ruleset
     blurb: A security layer for your rules — an OWASP-aligned Spectral ruleset you can drop in.
     priorities: { primary: [author-rules], secondary: [prove-trust] }
+  - name: Spectral API Authorization Ruleset
+    domain: "@api-common/spectral-api-authorization-ruleset"
+    url: https://github.com/api-commons/spectral-api-authorization-ruleset
+    github: api-commons/spectral-api-authorization-ruleset
+    blurb: Lint your authorization posture at two tiers — OAuth 2.1 (normal) and FAPI 2.0 (high) — against both your OpenAPI and your OAuth AS metadata.
+    priorities: { primary: [author-rules, prove-trust], secondary: [enforce-scale] }
   - name: API Validator
     domain: validator.apicommons.org
     url: https://validator.apicommons.org
@@ -197,3 +203,9 @@ tools:
     github: api-commons/api-experience
     blurb: Map and assess the developer experience across an API's surface and artifacts.
     priorities: { primary: [discover, agent-ready], secondary: [report] }
+  - name: API Platform
+    domain: platform.apicommons.org
+    url: https://platform.apicommons.org
+    github: api-commons/api-platform
+    blurb: "Draw your company's whole API stack from the APIs.io catalog and export it as one `type: platform` APIs.json — with a merged OpenAPI of just the operations you use, for honest AI context."
+    priorities: { primary: [discover, agent-ready], secondary: [reuse] }
