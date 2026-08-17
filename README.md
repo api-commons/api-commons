@@ -20,6 +20,7 @@ blocks and the index of tools:
 
 - `_common/` — **Common Schema**: shared operational properties every API can adopt.
 - `_community/` — **Community Schema**: community-contributed properties.
+- `_starters/` — the smallest correct version of each artifact (OpenAPI, APIs.json, JSON Schema).
 - `_blueprints/` — reusable API blueprints.
 - `_overlays/` — OpenAPI Overlays for applying properties to existing descriptions.
 - `_rulesets/` / `rules/` / `rulesets/` — governance rules and rulesets.
@@ -72,6 +73,7 @@ both humans and agents can consume it. Each lives in its own repo under
 - [**api-authorization**](https://github.com/api-commons/api-authorization) — a jurisdiction-neutral, two-tier, machine-checkable profile for securing APIs with OAuth 2.1 and FAPI 2.0.
 - [**problem-details-for-http-apis**](https://github.com/api-commons/problem-details-for-http-apis) — a base for using RFC 9457 Problem Details in your API, with a [Spectral ruleset](https://github.com/api-commons/spectral-problem-details-ruleset) that checks conformance.
 - [**json-api**](https://github.com/api-commons/json-api) — schemas and governance for the JSON:API standard.
+- [**starters**](https://github.com/api-commons/starters) — the smallest correct version of each artifact: a starter OpenAPI, APIs.json, and JSON Schema you copy and grow.
 - [**train-travel**](https://github.com/api-commons/train-travel) — an OpenAPI + APIs.json template for a Train Travel API, handy for demos and testing.
 - [**accounts**](https://github.com/api-commons/accounts) — a base Accounts API: the account lifecycle every service reinvents, described once.
 - [**images**](https://github.com/api-commons/images) — a base Images API: upload, metadata, renditions, and deletion.

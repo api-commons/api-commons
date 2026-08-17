@@ -67,7 +67,10 @@ collections:
     permalink: /rules/:path/    
   rulesets:
     output: true
-    permalink: /rulesets/:path/      
+    permalink: /rulesets/:path/
+  starters:
+    output: true
+    permalink: /starters/:path/      
 
 defaults:
 
@@ -105,4 +108,9 @@ defaults:
       path:         ""
       type:         rulesets
     values:
-      layout:       rulesets                 
+      layout:       rulesets
+  - scope:
+      path:         ""
+      type:         starters
+    values:
+      layout:       starters                 
