@@ -3,7 +3,7 @@ name: Rate Limits
 description: All APIs should possess rate limits that govern the amount of any digital resource or capability a consumer be able to access, with well-communicated, consistent, and enforced rate limits. Rate limits are what give API producers control over their digital resources, and are a fundamental aspect of how any type of APIs is publicly made available.
 image: /images/rate-limits.png
 url: '#'
-machineReadable: false
+machineReadable: true
 source: commons
 tags:
   - Rate Limits
@@ -14,10 +14,22 @@ aliases:
   - Quotas
   - Usage Limits
 yaml_example: |
-  - type: RateLimits
+  - name: Rate Limits
+    type: RateLimits
     url: https://developers.example.com/rate-limits
+    source_date: '2026-08-17'
+    data:
+      - name: Platform requests
+        type: Platform
+        limit: 10000
+        metric: request
+        timeframe: hour
+        description: Requests per hour across the whole API for a single account.
 
 standards:
+  - name: API Commons Rate Limits schema
+    url: https://github.com/api-commons/rate-limits
+    kind: API Commons (Apache-2.0)
   - name: RateLimit header fields for HTTP (draft-ietf-httpapi-ratelimit-headers)
     url: https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/
     kind: IETF
@@ -106,6 +118,10 @@ risk:
   security_implications: Without enforced rate limits, APIs are vulnerable to credential stuffing, scraping, denial-of-wallet (for metered backends), and DoS. Apply per-key, per-IP, and per-tenant limits; surface quota state via standard headers; degrade gracefully with 429 + Retry-After rather than dropping connections.
 
 tools:
+  - name: API Commons Rate Limits schema + validator
+    url: https://github.com/api-commons/rate-limits
+    license: Apache-2.0
+    category: Machine-readable schema
   - name: Kong Rate Limiting
     url: https://docs.konghq.com/hub/kong-inc/rate-limiting/
     category: Gateway plugin

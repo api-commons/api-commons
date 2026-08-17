@@ -35,6 +35,9 @@ standards:
   - name: OpenSLO
     url: https://openslo.com/
     kind: Community
+  - name: SLA4OAI — Service Level Agreement for OpenAPI Initiative
+    url: https://github.com/isa-group/SLA4OAI-Specification/blob/main/versions/1.0.0-Draft.md
+    kind: Community spec (1.0.0 Draft, dormant since 2023)
   - name: RFC 9457 — Problem Details for HTTP APIs
     url: https://www.rfc-editor.org/rfc/rfc9457
     kind: IETF
@@ -85,6 +88,9 @@ openapi_expression:
   - field: info.x-sla
     spec: OpenAPI extension (vendor)
     description: No standard OpenAPI field for SLAs; commonly carried as an extension.
+  - field: x-sla (SLA4OAI document)
+    spec: SLA4OAI 1.0.0 Draft
+    description: SLA4OAI is the one serious attempt to standardize this extension — a separate SLA document with context, metrics, plans, and quotas, linked from the OpenAPI. It remains a draft and has been dormant since 2023, so treat it as prior art to borrow from rather than a dependency to adopt.
 
 governance_rules:
   - id: info-contact

@@ -1,6 +1,6 @@
 ---
 name: FAQ
-description: A curated set of questions consumers actually ask, with concise authoritative answers. A good FAQ short-circuits the common-question slice of support load, makes the API feel approachable, and surfaces issues the rest of the documentation does not address head-on. FAQs work best when they are sourced from real support conversations and revised on a cadence rather than written once and abandoned.
+description: A curated set of questions consumers actually ask, with concise authoritative answers. A good FAQ short-circuits the common-question slice of support load, makes the API feel approachable, and surfaces issues the rest of the documentation does not address head-on. FAQs work best when they are sourced from real support conversations and revised on a cadence rather than written once and abandoned. The honest caveat is that most FAQs are not curated at all — they are where questions get dumped when no one owns the place the answer belongs, which is why a growing FAQ is usually a signal that the reference, the getting-started guide, or the error documentation has a gap. Treat every entry as a candidate for promotion into the docs proper, and measure the FAQ by how few entries it needs rather than how many it has.
 image: /images/faq.png
 url: '#'
 machineReadable: false
@@ -58,6 +58,10 @@ metrics:
     description: Drop in support tickets after publishing or updating an FAQ entry.
   - name: faq_freshness_days
     description: Days since each FAQ entry was last reviewed against current product behavior.
+  - name: faq_entries_promotable
+    description: Count of entries whose answer belongs in the reference, getting-started guide, or error documentation instead — the FAQ's own backlog.
+  - name: faq_entry_provenance
+    description: Share of entries traceable to a real support ticket or forum thread rather than an internally imagined question.
 
 examples:
   - provider: Stripe
@@ -69,6 +73,12 @@ examples:
   - provider: SendGrid
     url: https://docs.sendgrid.com/
     note: FAQ entries surfaced inline with deliverability and onboarding topics.
+
+further_reading:
+  - name: FAQs are not the answer
+    url: https://passo.uno/what-the-faq/
+    author: Fabrizio Ferri Benedetti
+    note: An honest look at why FAQs accumulate — not an anti-pattern so much as content with no strategy around it, unable to grow because it lacks structure and specialization. Its conclusion is worth taking literally - to build a good FAQ, don't build an FAQ.
 
 related_properties:
   - documentation
