@@ -62,6 +62,9 @@ both humans and agents can consume it. Each lives in its own repo under
 - [**problem-details-for-http-apis**](https://github.com/api-commons/problem-details-for-http-apis) — a base for using RFC 9457 Problem Details in your API, with a [Spectral ruleset](https://github.com/api-commons/spectral-problem-details-ruleset) that checks conformance.
 - [**json-api**](https://github.com/api-commons/json-api) — schemas and governance for the JSON:API standard.
 - [**train-travel**](https://github.com/api-commons/train-travel) — an OpenAPI + APIs.json template for a Train Travel API, handy for demos and testing.
+- [**accounts**](https://github.com/api-commons/accounts) — a base Accounts API: the account lifecycle every service reinvents, described once.
+- [**images**](https://github.com/api-commons/images) — a base Images API: upload, metadata, renditions, and deletion.
+- [**videos**](https://github.com/api-commons/videos) — a base Videos API: upload, transcoding, playback renditions, and captions.
 - [**examples**](https://github.com/api-commons/examples) — shared examples for the building blocks and the APIs.json ecosystem.
 - [**snacks-twilio-messages**](https://github.com/api-commons/snacks-twilio-messages) — an API Snack for AI: send a message with Twilio.
 
