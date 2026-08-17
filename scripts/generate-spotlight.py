@@ -17,6 +17,22 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent          # api-commons/
 SRC = ROOT.parent / "spotlight-validator" / "rules" / "all-rules.yaml"
 FN_SRC = ROOT.parent / "spotlight-validator" / "src" / "functions"
+
+# The rule catalog lives in a SIBLING checkout, not in this repo. Check for it
+# up front and say so plainly — the original remote for spotlight-validator was
+# lost once, and a run against a missing or stale checkout silently regenerates
+# _data/spotlight_rules.json from whatever happens to be on disk. That is how
+# corrected content (e.g. the RFC 7807 -> RFC 9457 pass) gets quietly reverted.
+if not SRC.exists():
+    raise SystemExit(
+        f"Rule catalog not found: {SRC}\n\n"
+        "This script reads the Spotlight rule catalog from a sibling checkout.\n"
+        "Clone it next to this repo, then re-run:\n\n"
+        "    git clone https://github.com/api-commons/spotlight-validator.git "
+        f"{ROOT.parent / 'spotlight-validator'}\n\n"
+        "The repo is PRIVATE. Do not hand-edit _data/spotlight_rules.json as a\n"
+        "workaround — it is generated, and the next run overwrites it."
+    )
 SITE = "https://spotlight-rules.com"
 DOC = SITE + "/spec/"
 

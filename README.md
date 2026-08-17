@@ -30,6 +30,17 @@ blocks and the index of tools:
 - `scripts/` — helpers that generate site data (e.g. rulesets from the API Commons
   rule catalog).
 
+> **`scripts/generate-spotlight.py` needs a sibling checkout.** It reads the Spotlight
+> rule catalog from `../spotlight-validator/rules/all-rules.yaml` — a **private** repo
+> that is not vendored here. `_data/spotlight_rules.json`, `assets/rulesets/*` and the
+> `/rules/` and `/rulesets/` pages are all **generated** from it, so never hand-edit
+> them; the next run overwrites your change. Clone it alongside this repo before
+> regenerating:
+>
+> ```
+> git clone https://github.com/api-commons/spotlight-validator.git ../spotlight-validator
+> ```
+
 ## Building blocks
 
 Each building block is a machine-readable property or artifact that describes one facet
