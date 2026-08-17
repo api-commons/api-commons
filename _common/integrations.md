@@ -3,7 +3,7 @@ name: Integrations
 description: Providing ready to go integrations with other APIs has become commonplace as part of Software as a Service (SaaS) solutions, and help demonstrate the value an API provides. Demonstrating how an API can be used with the existing platforms that API consumers are already using help make your APIs more useful and sticky for developers.
 image: /images/integrations.png
 url: '#'
-machineReadable: false
+machineReadable: true
 source: concept
 tags:
   - Integrations
@@ -13,10 +13,26 @@ aliases:
   - Integration Catalog
   - Partner Integrations
 yaml_example: |
-  - type: Integrations
-    url: https://developers.example.com/integrations
+  - name: Connectors
+    type: Integrations
+    url: https://example.com/connectors/
+    source_date: '2026-08-17'
+    count: 412
+    data:
+      - name: Salesforce
+        url: https://example.com/connectors/salesforce/
+        partner_domain: salesforce.com
+        category: CRM
+        kind: connector
+        direction: bidirectional
+        built_by: first-party
+        status: ga
+        auth: oauth2
 
 standards:
+  - name: API Commons Integrations schema
+    url: https://github.com/api-commons/integrations
+    kind: API Commons (Apache-2.0)
   - name: OpenAPI Specification 3.1
     url: https://spec.openapis.org/oas/v3.1.0
     kind: OpenAPI Initiative
@@ -68,6 +84,10 @@ risk:
   governance: Unversioned integration manifests cause silent breakage across iPaaS catalogs. Treat connector metadata as a versioned artifact alongside the API description.
 
 tools:
+  - name: API Commons Integrations schema + validator
+    url: https://github.com/api-commons/integrations
+    license: Apache-2.0
+    category: Machine-readable schema
   - name: Zapier developer platform
     url: https://platform.zapier.com/
     category: iPaaS
