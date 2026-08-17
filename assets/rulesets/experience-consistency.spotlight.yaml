@@ -3013,10 +3013,10 @@ rules:
     description: 'WARN: This rule is under implementation and just provides an hint. Error management is a key enabler of
       a resilient API ecosystem. Enforcing a consistent schema for errors between different APIs, enables client to properly
       implement an error management strategy, with positive impacts for users. This rule inspects the schema returned by an
-      error response and verifies whether it contains the main properties defined in RFC7807: `status`, `title` and `detail`.
+      error response and verifies whether it contains the main properties defined in RFC 9457: `status`, `title` and `detail`.
       An example of a valid payload is ``` { "title": "Not Found", "status": 404, "detail": "Book does not exist; id: 123"
       } ``` See recommendation RAC_REST_NAME_007.'
-    message: Your schema doesn't seem to match RFC7807. Are you sure it is ok? {{path}}
+    message: Your schema doesn't seem to match RFC 9457. Are you sure it is ok? {{path}}
     severity: info
     given: $.paths.[*].responses[?(@property.match(/^(4|5|default)/))][[schema]]
     then:
@@ -3044,8 +3044,8 @@ rules:
       (Response Error Match Problem Schema). Requirement: WARN: This rule is under implementation and just provides an hint.
       Error management is a key enabler of a resilient API ecosystem. Enforcing a consistent schema for errors between different
       APIs, enables client to properly implement an error management strategy, with positive impacts for users. This rule
-      inspects the schema returned by an error response and verifies whether it contains the main properties defined in RFC7807:
-      `status`, `title` and `detail`. An example of a valid payload is ``` { "title": "Not Found", "status": 404, "detail":
+      inspects the schema returned by an error response and verifies whether it contains the main properties defined in RFC
+      9457: `status`, `title` and `detail`. An example of a valid payload is ``` { "title": "Not Found", "status": 404, "detail":
       "Book does not exist; id: 123" } ``` See recommendation RAC_REST_NAME_007. To fix: Adjust the targeted value so it conforms
       to the schema this rule requires. This rule is evaluated at the JSONPath `$.paths.[*].responses[?(@property.match(/^(4|5|default)/))][[schema]]`
       — inspect every location it matches and correct only what violates the rule. Make the smallest change that satisfies
@@ -3056,14 +3056,14 @@ rules:
     reference: https://spotlight-rules.com/spec/rules/openapi/response-error-schema-problem-property-names/
     description: 'WARN: This rule is under implementation and just provides an hint. Error management is a key enabler of
       a resilient API ecosystem. Enforcing a consistent schema for errors between different APIs, enables client to properly
-      implement an error management strategy, with positive impacts for users. Errors should return RFC7807 objects. Instead,
+      implement an error management strategy, with positive impacts for users. Errors should return RFC 9457 objects. Instead,
       this schema seems to use non standard properties such as: `message`, `msg` and `code`. An error of the following form
-      ``` { "msg": "Book with id: 123 does not exist.", "code": 6063 } ``` can be expressed in RFC7807 with ``` { "detail":
+      ``` { "msg": "Book with id: 123 does not exist.", "code": 6063 } ``` can be expressed in RFC 9457 with ``` { "detail":
       "Book with id: 123 does not exist.", "type": "https://api.example/v1/errors/6063", "status": 404, "title": "Not Found"
       } ``` Returning an URI in `type`, instead of an opaque `code` can help the client in better identifying the error; moreover
       the URI though it should not be dereferenced automatically, can return an actual resource providing guidance in addressing
       the issue. See recommendation RAC_REST_NAME_007.'
-    message: Error response doesn't seem to match RFC7807. Are you sure it is ok? {{path}}
+    message: Error response doesn't seem to match RFC 9457. Are you sure it is ok? {{path}}
     severity: info
     given: $.[responses][?(@property.match(/^(4|5|default)/))][[schema]][properties].*~
     then:
@@ -3083,9 +3083,9 @@ rules:
       (Response Error Schema Problem Property Names). Requirement: WARN: This rule is under implementation and just provides
       an hint. Error management is a key enabler of a resilient API ecosystem. Enforcing a consistent schema for errors between
       different APIs, enables client to properly implement an error management strategy, with positive impacts for users.
-      Errors should return RFC7807 objects. Instead, this schema seems to use non standard properties such as: `message`,
+      Errors should return RFC 9457 objects. Instead, this schema seems to use non standard properties such as: `message`,
       `msg` and `code`. An error of the following form ``` { "msg": "Book with id: 123 does not exist.", "code": 6063 } ```
-      can be expressed in RFC7807 with ``` { "detail": "Book with id: 123 does not exist.", "type": "https://api.example/v1/errors/6063",
+      can be expressed in RFC 9457 with ``` { "detail": "Book with id: 123 does not exist.", "type": "https://api.example/v1/errors/6063",
       "status": 404, "title": "Not Found" } ``` Returning an URI in `type`, instead of an opaque `code` can help the client
       in better identifying the error; moreover the URI though it should not be dereferenced automatically, can return an
       actual resource providing guidance in addressing the issue. See recommendation RAC_REST_NAME_007. To fix: Ensure `@key`
@@ -3118,7 +3118,8 @@ rules:
   openapi-response-error-use-problem-json:
     title: Response Error Use Problem JSON
     reference: https://spotlight-rules.com/spec/rules/openapi/response-error-use-problem-json/
-    description: All 4xx and 5xx error responses MUST use the `application/problem+json` media type (RFC 7807).
+    description: All 4xx and 5xx error responses MUST use the `application/problem+json` media type (RFC 9457, which obsoleted
+      RFC 7807).
     message: 'Error response documents MUST use the application/problem+json media type: {{error}}'
     severity: info
     given: $.paths..responses[?( @property >= 400 && @property < 600)].content[*]~
@@ -3138,19 +3139,19 @@ rules:
     - experience:error-handling
     prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-error-use-problem-json''
       (Response Error Use Problem JSON). Requirement: All 4xx and 5xx error responses MUST use the `application/problem+json`
-      media type (RFC 7807). To fix: Set the targeted value to one of the allowed values: application/problem+json. This rule
-      is evaluated at the JSONPath `$.paths..responses[?( @property >= 400 && @property < 600)].content[*]~` — inspect every
-      location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule, leave
-      all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return only
-      the complete corrected document, with no commentary.'
+      media type (RFC 9457, which obsoleted RFC 7807). To fix: Set the targeted value to one of the allowed values: application/problem+json.
+      This rule is evaluated at the JSONPath `$.paths..responses[?( @property >= 400 && @property < 600)].content[*]~` — inspect
+      every location it matches and correct only what violates the rule. Make the smallest change that satisfies the rule,
+      leave all unrelated content, key order, comments, and formatting unchanged, and keep the document valid OpenAPI. Return
+      only the complete corrected document, with no commentary.'
   openapi-response-error-use-problem-type:
     title: Response Error Use Problem Type
     reference: https://spotlight-rules.com/spec/rules/openapi/response-error-use-problem-type/
     description: 'Error management is a key enabler of a resilient API ecosystem. Enforcing a consistent schema for errors
       between different APIs, enables client to properly implement an error management strategy, with positive impacts for
-      users. Error responses should return one of the media-type defined in RFC7807: - `application/problem+json` - `application/problem+xml`
+      users. Error responses should return one of the media-type defined in RFC 9457: - `application/problem+json` - `application/problem+xml`
       An example of a valid response: ``` responses: "503": content: application/problem+json: schema: ... ```.'
-    message: Error responses should support RFC7807 in {{path}}.
+    message: Error responses should support RFC 9457 in {{path}}.
     severity: info
     given: $.paths.[*].responses[?(@property.match(/^(4|5|default)/))].content.*~
     then:
@@ -3171,7 +3172,7 @@ rules:
     prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-error-use-problem-type''
       (Response Error Use Problem Type). Requirement: Error management is a key enabler of a resilient API ecosystem. Enforcing
       a consistent schema for errors between different APIs, enables client to properly implement an error management strategy,
-      with positive impacts for users. Error responses should return one of the media-type defined in RFC7807: - `application/problem+json`
+      with positive impacts for users. Error responses should return one of the media-type defined in RFC 9457: - `application/problem+json`
       - `application/problem+xml` An example of a valid response: ``` responses: "503": content: application/problem+json:
       schema: ... ```. To fix: Set the targeted value to one of the allowed values: application/problem+xml, application/problem+json.
       This rule is evaluated at the JSONPath `$.paths.[*].responses[?(@property.match(/^(4|5|default)/))].content.*~` — inspect
@@ -3181,8 +3182,8 @@ rules:
   openapi-response-error-use-problem-type-2:
     title: Response Error Use Problem Type 2
     reference: https://spotlight-rules.com/spec/rules/openapi/response-error-use-problem-type-2/
-    description: Every error response SHOULD support RFC 7807.
-    message: Every error response SHOULD support RFC 7807.
+    description: Every error response SHOULD support RFC 9457.
+    message: Every error response SHOULD support RFC 9457.
     severity: info
     given: $.paths...responses[?(@property.match(/^(4|5)/))].content.*~
     then:
@@ -3199,7 +3200,7 @@ rules:
     - experience:error-handling
     - experience:consistency
     prompt: 'You are editing an OpenAPI document to satisfy the Spotlight API governance rule ''response-error-use-problem-type-2''
-      (Response Error Use Problem Type 2). Requirement: Every error response SHOULD support RFC 7807. To fix: Set the targeted
+      (Response Error Use Problem Type 2). Requirement: Every error response SHOULD support RFC 9457. To fix: Set the targeted
       value to one of the allowed values: application/problem+xml, application/problem+json. This rule is evaluated at the
       JSONPath `$.paths...responses[?(@property.match(/^(4|5)/))].content.*~` — inspect every location it matches and correct
       only what violates the rule. Make the smallest change that satisfies the rule, leave all unrelated content, key order,
