@@ -3,7 +3,7 @@ name: Features
 description: A summary of what an API can do — the consumer-facing capability list that bridges marketing claims and reference documentation. Features pages are how prospective consumers evaluate fit before they read the reference, and how internal teams confirm parity with competitors. A clear features pointer lets discovery tools surface capability summaries without crawling the entire docs site.
 image: /images/features.png
 url: '#'
-machineReadable: false
+machineReadable: true
 source: commons
 tags:
   - Discovery
@@ -16,10 +16,24 @@ aliases:
   - Product Features
   - What You Can Do
 yaml_example: |
-  - type: Features
+  - name: Features
+    type: Features
     url: https://example.com/features
+    source_date: '2026-08-17'
+    data:
+      - name: Bulk send
+        description: Send the same message to up to 10,000 recipients in one request.
+        category: Messaging
+        status: ga
+        tiers:
+          - Pro
+        operations:
+          - createBulkSend
 
 standards:
+  - name: API Commons Features schema
+    url: https://github.com/api-commons/features
+    kind: API Commons (Apache-2.0)
   - name: schema.org Product
     url: https://schema.org/Product
     kind: Schema.org
@@ -41,6 +55,12 @@ openapi_expression:
 risk:
   security_implications: Features pages occasionally enumerate capabilities (admin actions, data exports, write operations) that the reference docs gate behind elevated scopes — making them an accidental scope-discovery surface for attackers. Keep the features list aligned with what is actually authorized at the default tier.
 
+tools:
+  - name: API Commons Features schema + validator
+    url: https://github.com/api-commons/features
+    license: Apache-2.0
+    category: Machine-readable schema
+
 metrics:
   - name: features_to_signup_conversion
     description: Share of features-page visits that convert to a signup or contact-sales event.
@@ -61,6 +81,7 @@ examples:
     note: Platform-level features index linking into per-feature deep dives.
 
 related_properties:
+  - benefits
   - documentation
   - use-cases
   - pricing

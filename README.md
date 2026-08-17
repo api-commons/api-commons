@@ -46,6 +46,11 @@ both humans and agents can consume it. Each lives in its own repo under
 - [**use-cases**](https://github.com/api-commons/use-cases) — the use cases an API serves.
 - [**vocabulary**](https://github.com/api-commons/vocabulary) — shared words and definitions for API operations.
 - [**plans**](https://github.com/api-commons/plans) — access plans, tiers, and pricing.
+- [**rate-limits**](https://github.com/api-commons/rate-limits) — the quotas an API enforces, machine-readably.
+- [**versioning**](https://github.com/api-commons/versioning) — how an API is versioned, and which versions are reachable.
+- [**features**](https://github.com/api-commons/features) — what an API can do, tied to the operations behind each claim.
+- [**benefits**](https://github.com/api-commons/benefits) — the outcomes an API claims, with the measure and the evidence.
+- [**integrations**](https://github.com/api-commons/integrations) — the connector catalog, resolvable to the providers on the other end.
 - [**change-log**](https://github.com/api-commons/change-log) — publish an API's changelog, machine-readably.
 - [**road-map**](https://github.com/api-commons/road-map) — publish an API's roadmap, machine-readably.
 - [**interface-license**](https://github.com/api-commons/interface-license) — apply an open license to your API's interface (its surface, not its implementation).

@@ -3,7 +3,7 @@ name: Versioning
 description: The details of how an API is being versioned with information about how change is being communicated with consumers across multiple channels. Having a formal approach to versioning published and communicated helps lay the ground work for change, but also keeps API consumers aligned with what has changed.
 image: /images/versioning.png
 url: '#'
-machineReadable: false
+machineReadable: true
 source: concept
 tags:
   - Change
@@ -14,10 +14,29 @@ aliases:
   - SemVer
   - CalVer
 yaml_example: |
-  - type: Versioning
+  - name: Versioning
+    type: Versioning
     url: https://developers.example.com/versioning
+    source_date: '2026-08-17'
+    data:
+      scheme: sequential
+      location: path
+      path_pattern: /v{version}
+      current: '3'
+      default: '2'
+      required: true
+      pinning: per-request
+      supported:
+        - version: '2'
+          status: deprecated
+          sunset: '2027-02-01'
+        - version: '3'
+          status: current
 
 standards:
+  - name: API Commons Versioning schema
+    url: https://github.com/api-commons/versioning
+    kind: API Commons (Apache-2.0)
   - name: Semantic Versioning 2.0.0
     url: https://semver.org/spec/v2.0.0.html
     kind: Community spec
@@ -106,6 +125,10 @@ risk:
   security_implications: Ambiguous versioning lets clients pin to vulnerable behaviour or silently roll forward into untested code paths. Explicit, negotiated versions plus a published compatibility policy reduce regression-driven security incidents.
 
 tools:
+  - name: API Commons Versioning schema + validator
+    url: https://github.com/api-commons/versioning
+    license: Apache-2.0
+    category: Machine-readable schema
   - name: oasdiff
     url: https://github.com/oasdiff/oasdiff
     license: Apache-2.0
