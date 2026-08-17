@@ -112,6 +112,7 @@ tool lives at its own subdomain of **apicommons.org**:
 | **Spec Review** | [review.apicommons.org](https://review.apicommons.org) | A ref-resolving design-diff for OpenAPI/AsyncAPI/Arazzo — resolve `$ref`, flag breaking changes, and get a copyable Markdown summary for the PR. |
 | **Spectral OWASP Ruleset** | [github.com/api-commons/spectral-owasp-ruleset](https://github.com/api-commons/spectral-owasp-ruleset) | A grounded Spectral ruleset for the OWASP API Security Top 10. |
 | **Spectral Problem Details Ruleset** | [github.com/api-commons/spectral-problem-details-ruleset](https://github.com/api-commons/spectral-problem-details-ruleset) | A grounded Spectral ruleset for RFC 9457 Problem Details — check that your error responses really are problem details. |
+| **Spectral FHIR Ruleset** | [github.com/api-commons/spectral-fhir-ruleset](https://github.com/api-commons/spectral-fhir-ruleset) | A grounded Spectral ruleset for HL7 FHIR R4/R5 — check that a FHIR-shaped API is actually FHIR. |
 | **Spectral Reporter** | [reporter.apicommons.org](https://reporter.apicommons.org) | Turn a Spectral lint run into a self-contained HTML governance report (with SARIF + trends). |
 | **Spectral Ruleset Studio** | [studio.apicommons.org](https://studio.apicommons.org) | Turn a prose style guide into an owned, grounded, well-named Spectral ruleset. |
 | **Toolsmith** | [toolsmith.apicommons.org](https://toolsmith.apicommons.org) | Forge MCP tools and Agent Skills from your OpenAPI — a workbench for designing the agent layer of an API. |
