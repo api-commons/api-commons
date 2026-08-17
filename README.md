@@ -59,7 +59,7 @@ both humans and agents can consume it. Each lives in its own repo under
 
 - [**api-onboarding**](https://github.com/api-commons/api-onboarding) — the API Onboarding Descriptor (AID), a `/.well-known/api-onboarding` document describing what it takes to onboard with an API.
 - [**api-authorization**](https://github.com/api-commons/api-authorization) — a jurisdiction-neutral, two-tier, machine-checkable profile for securing APIs with OAuth 2.1 and FAPI 2.0.
-- [**problem-details-for-http-apis**](https://github.com/api-commons/problem-details-for-http-apis) — a base for using RFC 9457 Problem Details in your API.
+- [**problem-details-for-http-apis**](https://github.com/api-commons/problem-details-for-http-apis) — a base for using RFC 9457 Problem Details in your API, with a [Spectral ruleset](https://github.com/api-commons/spectral-problem-details-ruleset) that checks conformance.
 - [**json-api**](https://github.com/api-commons/json-api) — schemas and governance for the JSON:API standard.
 - [**train-travel**](https://github.com/api-commons/train-travel) — an OpenAPI + APIs.json template for a Train Travel API, handy for demos and testing.
 - [**examples**](https://github.com/api-commons/examples) — shared examples for the building blocks and the APIs.json ecosystem.
@@ -95,6 +95,7 @@ tool lives at its own subdomain of **apicommons.org**:
 | **Ruleset Commons** | [rulesets.apicommons.org](https://rulesets.apicommons.org) | A registry of adoptable, provenanced governance rulesets you can `extends`. |
 | **Spec Review** | [review.apicommons.org](https://review.apicommons.org) | A ref-resolving design-diff for OpenAPI/AsyncAPI/Arazzo — resolve `$ref`, flag breaking changes, and get a copyable Markdown summary for the PR. |
 | **Spectral OWASP Ruleset** | [github.com/api-commons/spectral-owasp-ruleset](https://github.com/api-commons/spectral-owasp-ruleset) | A grounded Spectral ruleset for the OWASP API Security Top 10. |
+| **Spectral Problem Details Ruleset** | [github.com/api-commons/spectral-problem-details-ruleset](https://github.com/api-commons/spectral-problem-details-ruleset) | A grounded Spectral ruleset for RFC 9457 Problem Details — check that your error responses really are problem details. |
 | **Spectral Reporter** | [reporter.apicommons.org](https://reporter.apicommons.org) | Turn a Spectral lint run into a self-contained HTML governance report (with SARIF + trends). |
 | **Spectral Ruleset Studio** | [studio.apicommons.org](https://studio.apicommons.org) | Turn a prose style guide into an owned, grounded, well-named Spectral ruleset. |
 | **Toolsmith** | [toolsmith.apicommons.org](https://toolsmith.apicommons.org) | Forge MCP tools and Agent Skills from your OpenAPI — a workbench for designing the agent layer of an API. |

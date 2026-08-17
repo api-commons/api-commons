@@ -113,6 +113,25 @@ link_relations:
     spec: RFC 6903
 
 governance_rules:
+  - id: problem-details-*
+    source: API Commons Problem Details ruleset (spectral-problem-details-ruleset)
+    description: >-
+      Sixteen rules checking an OpenAPI's error responses against RFC 9457 — the
+      problem+json media type on 4xx/5xx, the five members and their JSON types,
+      extension members, and the WWW-Authenticate and Retry-After headers that
+      belong with 401 and 429.
+  - id: problem-details-status-is-number
+    source: API Commons Problem Details ruleset
+    description: >-
+      `status` declared as a string is the most common problem detail defect, and
+      RFC 9457 §3.1 requires a consumer to ignore any member whose type does not
+      match — so it fails silently rather than loudly.
+  - id: problem-details-allows-extension-members
+    source: API Commons Problem Details ruleset
+    description: >-
+      `additionalProperties: false` forbids the extension members RFC 9457 §3.2
+      builds its evolution story on. Emitted by default by several schema
+      generators, and invisible in review.
   - id: oas-operation-4xx-response
     source: Spectral built-in
     description: Operations should declare at least one 4xx response.
@@ -132,6 +151,14 @@ risk:
   security_implications: Verbose error responses can leak stack traces, internal hostnames, query fragments, or PII. Use Problem Details with stable type URIs, redact sensitive fields, and ensure error bodies do not vary based on existence of resources in ways that enable enumeration.
 
 tools:
+  - name: API Commons Problem Details ruleset
+    url: https://github.com/api-commons/spectral-problem-details-ruleset
+    license: Apache-2.0
+    category: Spectral ruleset for RFC 9457
+  - name: Problem Details base OpenAPI
+    url: https://github.com/api-commons/problem-details-for-http-apis
+    license: Apache-2.0
+    category: Reusable base
   - name: Spectral
     url: https://github.com/stoplightio/spectral
     license: Apache-2.0

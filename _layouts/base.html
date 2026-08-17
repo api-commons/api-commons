@@ -24,13 +24,35 @@ layout: default
     {% endfor %}
 {% endfor %}
 
+{% comment %}
+  Every entry that is not an embedded gist, rendered as a labelled list.
+  Previously only GitHubRepository was rendered, and every one of them got the
+  text "Visit this Base on GitHub" — which is wrong as soon as a base points at
+  more than one repo (a ruleset, a schema, the spec it implements).
+{% endcomment %}
+{% assign has_resources = false %}
 {% for api in page.apis %}
-    {% for property in api.properties %}
-        {% if property.type == 'GitHubRepository' %}
-            <p class="text-center"><a href="{{ property.url }}"><strong>Visit this Base on GitHub</strong></a></p>
-        {% endif %}
-    {% endfor %}
+  {% for property in api.properties %}
+    {% if property.type != 'GitHubGist' %}{% assign has_resources = true %}{% endif %}
+  {% endfor %}
 {% endfor %}
+
+{% if has_resources %}
+<h3>Resources</h3>
+<ul>
+{% for api in page.apis %}
+  {% for property in api.properties %}
+    {% if property.type != 'GitHubGist' %}
+    <li>
+      <a href="{{ property.url }}" target="_blank" rel="noopener">{{ api.name }}</a>
+      <small class="text-muted">— {{ property.type }}</small>
+      {% if api.description and forloop.first %}<br><small>{{ api.description }}</small>{% endif %}
+    </li>
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+</ul>
+{% endif %}
 
 <p class="text-center"><a href="/base/"><strong>Return to All Base Schema Page</strong></a></p>
 <br>
