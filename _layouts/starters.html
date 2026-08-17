@@ -1,0 +1,58 @@
+---
+layout: default
+---
+<style>.gist-data { max-height: 500px; }</style>
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <h2 class="mb-0 me-3">{{ page.title }}</h2>
+  {% include ai-toolbar.html %}
+</div>
+<img src="{{ page.image }}" class="float-end ms-3 mb-3" width="100">
+<p>{{ page.description }}</p>
+<h3>Tags</h3>
+<ul>
+{% for tag in page.tags %}
+    <li>{{ tag }}</li>
+{% endfor %}
+</ul>
+{% for api in page.apis %}
+    {% for property in api.properties %}
+        {% if property.type == 'GitHubGist' %}
+        <h3>{{ api.name }}</h3>
+        <p>{{ api.description }}</p>
+        <script src="{{ property.url }}"></script>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+{% comment %}
+  Every entry that is not an embedded gist, rendered as a labelled list.
+  Previously only GitHubRepository was rendered, and every one of them got the
+  text "Visit this Base on GitHub" — which is wrong as soon as a base points at
+  more than one repo (a ruleset, a schema, the spec it implements).
+{% endcomment %}
+{% assign has_resources = false %}
+{% for api in page.apis %}
+  {% for property in api.properties %}
+    {% if property.type != 'GitHubGist' %}{% assign has_resources = true %}{% endif %}
+  {% endfor %}
+{% endfor %}
+
+{% if has_resources %}
+<h3>Resources</h3>
+<ul>
+{% for api in page.apis %}
+  {% for property in api.properties %}
+    {% if property.type != 'GitHubGist' %}
+    <li>
+      <a href="{{ property.url }}" target="_blank" rel="noopener">{{ api.name }}</a>
+      <small class="text-muted">— {{ property.type }}</small>
+      {% if api.description and forloop.first %}<br><small>{{ api.description }}</small>{% endif %}
+    </li>
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+</ul>
+{% endif %}
+
+<p class="text-center"><a href="/starters/"><strong>All Starters</strong></a></p>
+<br>

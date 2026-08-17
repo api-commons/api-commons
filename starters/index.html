@@ -1,0 +1,34 @@
+---
+layout: default
+title: Starters
+description: The smallest correct version of each artifact in the API Commons stack — a starter OpenAPI, APIs.json and JSON Schema you copy and grow. Each one lints clean, so whatever you build on top starts from zero findings.
+---
+
+<h2>Starters</h2>
+
+<p>The <strong>smallest correct version</strong> of each artifact in the API Commons stack. Copy one, rename everything, and grow it.</p>
+
+<p>A <strong>starter</strong> is the smallest document that is still correct and worth copying. A <a href="/base/"><strong>base</strong></a> is a full working template for a real domain — the whole error contract, pagination, conditional writes, merge-patch. Start here when you are starting something; start from a base when one already resembles what you are building.</p>
+
+<p>The starter OpenAPI returns <strong>zero findings</strong> under both <code>spectral:oas</code> and the <a href="https://github.com/api-commons/spectral-problem-details-ruleset">API Commons Problem Details ruleset</a>. That is deliberate — whatever you build on top of it starts from zero, so the first warning you ever see is one you introduced. A starter that ships with warnings teaches you to ignore warnings.</p>
+
+<table width="100%">
+{% for property in site.starters %}
+	<tr>
+		<td align="center">
+			<a href="{{ property.url }}"><img src="{{ property.image }}" width="100" style="margin: 15px;" /></a>
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>{{ property.name }}</strong> - {{ property.description }}
+		</td>
+		<td width="10%" align="center">
+			<a href="{{ property.url }}">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+{% endfor %}
+</table>
+
+<p class="text-center"><a href="https://github.com/api-commons/starters"><strong>Every starter on GitHub</strong></a></p>
+<br>

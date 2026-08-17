@@ -20,6 +20,7 @@ blocks and the index of tools:
 
 - `_common/` — **Common Schema**: shared operational properties every API can adopt.
 - `_community/` — **Community Schema**: community-contributed properties.
+- `_starters/` — the smallest correct version of each artifact (OpenAPI, APIs.json, JSON Schema).
 - `_blueprints/` — reusable API blueprints.
 - `_overlays/` — OpenAPI Overlays for applying properties to existing descriptions.
 - `_rulesets/` / `rules/` / `rulesets/` — governance rules and rulesets.
@@ -29,6 +30,17 @@ blocks and the index of tools:
 - `tools/` — the index of the API Commons tool family (below).
 - `scripts/` — helpers that generate site data (e.g. rulesets from the API Commons
   rule catalog).
+
+> **`scripts/generate-spotlight.py` needs a sibling checkout.** It reads the Spotlight
+> rule catalog from `../spotlight-validator/rules/all-rules.yaml` — a **private** repo
+> that is not vendored here. `_data/spotlight_rules.json`, `assets/rulesets/*` and the
+> `/rules/` and `/rulesets/` pages are all **generated** from it, so never hand-edit
+> them; the next run overwrites your change. Clone it alongside this repo before
+> regenerating:
+>
+> ```
+> git clone https://github.com/api-commons/spotlight-validator.git ../spotlight-validator
+> ```
 
 ## Building blocks
 
@@ -61,7 +73,11 @@ both humans and agents can consume it. Each lives in its own repo under
 - [**api-authorization**](https://github.com/api-commons/api-authorization) — a jurisdiction-neutral, two-tier, machine-checkable profile for securing APIs with OAuth 2.1 and FAPI 2.0.
 - [**problem-details-for-http-apis**](https://github.com/api-commons/problem-details-for-http-apis) — a base for using RFC 9457 Problem Details in your API, with a [Spectral ruleset](https://github.com/api-commons/spectral-problem-details-ruleset) that checks conformance.
 - [**json-api**](https://github.com/api-commons/json-api) — schemas and governance for the JSON:API standard.
+- [**starters**](https://github.com/api-commons/starters) — the smallest correct version of each artifact: a starter OpenAPI, APIs.json, and JSON Schema you copy and grow.
 - [**train-travel**](https://github.com/api-commons/train-travel) — an OpenAPI + APIs.json template for a Train Travel API, handy for demos and testing.
+- [**accounts**](https://github.com/api-commons/accounts) — a base Accounts API: the account lifecycle every service reinvents, described once.
+- [**images**](https://github.com/api-commons/images) — a base Images API: upload, metadata, renditions, and deletion.
+- [**videos**](https://github.com/api-commons/videos) — a base Videos API: upload, transcoding, playback renditions, and captions.
 - [**examples**](https://github.com/api-commons/examples) — shared examples for the building blocks and the APIs.json ecosystem.
 - [**snacks-twilio-messages**](https://github.com/api-commons/snacks-twilio-messages) — an API Snack for AI: send a message with Twilio.
 
@@ -96,6 +112,7 @@ tool lives at its own subdomain of **apicommons.org**:
 | **Spec Review** | [review.apicommons.org](https://review.apicommons.org) | A ref-resolving design-diff for OpenAPI/AsyncAPI/Arazzo — resolve `$ref`, flag breaking changes, and get a copyable Markdown summary for the PR. |
 | **Spectral OWASP Ruleset** | [github.com/api-commons/spectral-owasp-ruleset](https://github.com/api-commons/spectral-owasp-ruleset) | A grounded Spectral ruleset for the OWASP API Security Top 10. |
 | **Spectral Problem Details Ruleset** | [github.com/api-commons/spectral-problem-details-ruleset](https://github.com/api-commons/spectral-problem-details-ruleset) | A grounded Spectral ruleset for RFC 9457 Problem Details — check that your error responses really are problem details. |
+| **Spectral FHIR Ruleset** | [github.com/api-commons/spectral-fhir-ruleset](https://github.com/api-commons/spectral-fhir-ruleset) | A grounded Spectral ruleset for HL7 FHIR R4/R5 — check that a FHIR-shaped API is actually FHIR. |
 | **Spectral Reporter** | [reporter.apicommons.org](https://reporter.apicommons.org) | Turn a Spectral lint run into a self-contained HTML governance report (with SARIF + trends). |
 | **Spectral Ruleset Studio** | [studio.apicommons.org](https://studio.apicommons.org) | Turn a prose style guide into an owned, grounded, well-named Spectral ruleset. |
 | **Toolsmith** | [toolsmith.apicommons.org](https://toolsmith.apicommons.org) | Forge MCP tools and Agent Skills from your OpenAPI — a workbench for designing the agent layer of an API. |
