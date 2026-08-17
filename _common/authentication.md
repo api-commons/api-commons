@@ -46,6 +46,9 @@ standards:
   - name: RFC 7517 — JSON Web Key (JWK)
     url: https://www.rfc-editor.org/rfc/rfc7517
     kind: IETF
+  - name: PASETO — Platform-Agnostic Security Tokens
+    url: https://github.com/paseto-standard/paseto-spec
+    kind: Community spec (JWT alternative)
   - name: RFC 7591 — OAuth 2.0 Dynamic Client Registration
     url: https://www.rfc-editor.org/rfc/rfc7591
     kind: IETF
@@ -168,7 +171,7 @@ risk:
     - PCI DSS v4 Req. 8 — identify and authenticate access to system components
     - SOC 2 CC6.1 — logical and physical access controls
     - NIST SP 800-63B — digital identity guidelines
-  security_implications: Weak or missing authentication enables enumeration, account takeover, and data exfiltration. Default to short-lived bearer tokens, refresh-token rotation with reuse detection, mTLS for service-to-service, and WebAuthn/FIDO2 for human factors.
+  security_implications: Weak or missing authentication enables enumeration, account takeover, and data exfiltration. Default to short-lived bearer tokens, refresh-token rotation with reuse detection, mTLS for service-to-service, and WebAuthn/FIDO2 for human factors. Where the token format itself is a choice, note that JWT's algorithm agility is the source of its best-known failure modes (alg none, HS/RS confusion); PASETO removes that agility by binding each protocol version to one fixed algorithm suite, at the cost of a smaller library and IdP ecosystem than JWT's.
 
 tools:
   - name: Auth0
@@ -191,6 +194,9 @@ tools:
   - name: jwt.io
     url: https://jwt.io/
     category: Debugger
+  - name: PASETO
+    url: https://paseto.io/
+    category: Token format and reference implementations
 
 metrics:
   - name: auth_success_rate

@@ -40,6 +40,9 @@ standards:
   - name: OpenAPI Specification (info, deprecated)
     url: https://spec.openapis.org/oas/latest.html
     kind: OpenAPI Initiative
+  - name: ADDR — Align-Define-Design-Refine
+    url: https://addrprocess.com/
+    kind: Methodology (LaunchAny)
 
 headers:
   - name: Sunset

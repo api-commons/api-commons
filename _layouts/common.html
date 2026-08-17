@@ -171,6 +171,19 @@ layout: default
 </ul>
 {% endif %}
 
+{% if page.further_reading %}
+<h3>Further Reading</h3>
+<ul>
+{% for f in page.further_reading %}
+  <li>
+    {% if f.url %}<a href="{{ f.url }}" target="_blank" rel="noopener">{{ f.name }}</a>{% else %}{{ f.name }}{% endif %}
+    {% if f.author %} <small class="text-muted">— {{ f.author }}</small>{% endif %}
+    {% if f.note %}<br><small>{{ f.note }}</small>{% endif %}
+  </li>
+{% endfor %}
+</ul>
+{% endif %}
+
 {% if page.related_properties %}
 <h3>Related Properties</h3>
 <ul>
