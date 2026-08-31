@@ -46,7 +46,7 @@ description: A machine-readable /.well-known/api-onboarding document describing 
 
 <div class="maturity">
   <div class="level open">
-    <h3>self-serve — the open door</h3>
+    <h3>self-serve &mdash; the open door</h3>
     <p>A stranger (or their agent) can authenticate through a public flow and walk away with credentials. No pre-existing token anywhere. Of 36 providers profiled, exactly <strong>one</strong> clears this bar.</p>
   </div>
   <div class="level keyed">
@@ -62,7 +62,15 @@ description: A machine-readable /.well-known/api-onboarding document describing 
 <div class="onb-grid">
   <div class="onb-card">
     <h2>What a descriptor declares</h2>
-    <p>Maturity level, account prerequisites and plan gates, an explicit <code>agentPolicy</code>, terms of service, verification queues with expected latency, the registration mechanisms that exist (browser OAuth, app manifest, management API, portal API, RFC 7591 DCR, CIMD, or console-only), credential shapes mapped from provider vocabulary to canonical fields, and the scope model.</p>
+    <p>Maturity level, account prerequisites and plan gates, an explicit <code>agentPolicy</code>, terms of service, verification queues with expected latency, the registration mechanisms that exist (<code>open</code> &mdash; no registration at all, browser OAuth, app manifest, management API, portal API, RFC 7591 DCR, CIMD, <code>aauth</code>, or console-only), credential shapes mapped from provider vocabulary to canonical fields, and the scope model.</p>
+  </div>
+  <div class="onb-card">
+    <h2>Two mechanisms the 36-provider corpus did not contain</h2>
+    <p><code>open</code> came from dogfooding: some APIs need no registration at all, and a descriptor with no way to say &ldquo;the door is simply open&rdquo; forces a keyless provider to describe itself as if it had a gate. <code>aauth</code> came from implementing one &mdash; a caller signs the request with its own key (RFC 9421) and presents a token in which an agent provider vouches for its <code>aauth:local@domain</code> identifier, so a resource can recognise a caller it has never registered. Its authentication method type is <code>request-signing</code>. Both were added by induction from a working implementation, which is the only way a field gets into this spec.</p>
+  </div>
+  <div class="onb-card">
+    <h2>The ladder needs a rung above <code>self-serve</code></h2>
+    <p><code>self-serve</code> is defined as a stranger, <em>or their agent</em>, authenticating through a public flow. That conflated two things which have now come apart in practice: a stranger with a browser, and a stranger with no human anywhere in the loop. A provider where an agent signs a request, exchanges it for its own principal and deletes that principal again &mdash; no person at any step &mdash; is not the same door as one where somebody clicks a consent screen, and the current enum cannot tell them apart. Deliberately unresolved here rather than quietly patched: whether that is a fourth rung or a second axis is a spec decision, not an editorial one.</p>
   </div>
   <div class="onb-card">
     <h2>An executable flow</h2>
