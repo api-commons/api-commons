@@ -16,36 +16,50 @@ layout: default
   Every key below must be rendered here or it is invisible on the site.
 {% endcomment %}
 
+{% comment %}
+  A standards repo is the home for a DOMAIN and may carry more than one profile — the
+  model layer carries both the OpenAI interface and the Anthropic Messages dialect. Each
+  profile renders its own identity, source, tiers, adopter evidence and artifacts.
+  Every key a profile can set must be rendered here or it is invisible on the site.
+{% endcomment %}
+
 <table class="table table-sm mb-4">
   <tbody>
-    {% if page.standard_id %}<tr><th scope="row" style="width:12rem">Identifier</th><td><code>{{ page.standard_id }}</code></td></tr>{% endif %}
-    {% if page.originator %}<tr><th scope="row">Originator</th><td>{{ page.originator }}</td></tr>{% endif %}
-    {% if page.cohort %}<tr><th scope="row">Cohort</th><td>{{ page.cohort }}</td></tr>{% endif %}
+    {% if page.cohort %}<tr><th scope="row" style="width:12rem">Cohort</th><td>{{ page.cohort }}</td></tr>{% endif %}
     {% if page.status %}<tr><th scope="row">Status</th><td>{{ page.status }}</td></tr>{% endif %}
-    {% if page.source %}
-    <tr><th scope="row">Source of truth</th>
-      <td>
-        {% if page.source.url %}<a href="{{ page.source.url }}" target="_blank" rel="noopener">{{ page.source.name }}</a>{% else %}{{ page.source.name }}{% endif %}
-        {% if page.source.license %}<span class="badge bg-secondary ms-2">{{ page.source.license }}</span>{% endif %}
-        {% if page.source.pinned %}<br><small class="text-muted">Pinned at <code>{{ page.source.pinned }}</code></small>{% endif %}
-        {% if page.source.note %}<br><small class="text-muted">{{ page.source.note }}</small>{% endif %}
-      </td>
-    </tr>
-    {% endif %}
     {% if page.repository %}<tr><th scope="row">Repository</th><td><a href="{{ page.repository }}" target="_blank" rel="noopener">{{ page.repository }}</a></td></tr>{% endif %}
+    {% if page.profiles %}<tr><th scope="row">Profiles</th><td>{{ page.profiles | size }} in this domain</td></tr>{% endif %}
   </tbody>
 </table>
 
-{% if page.tiers %}
-<h3>Conformance tiers</h3>
-<p>Every operation in the profile carries an <code>x-tier</code>. A compatibility claim is
-measured against a tier, not against the word "compatible".</p>
-<table class="table table-bordered">
-  <thead class="table-light">
-    <tr><th style="width:9rem">Tier</th><th>What it covers</th></tr>
-  </thead>
+{% for profile in page.profiles %}
+<hr class="my-4">
+<h3 id="{{ profile.standard_id }}">{{ profile.name }}</h3>
+<p>{{ profile.description }}</p>
+
+<table class="table table-sm mb-4">
   <tbody>
-    {% for tier in page.tiers %}
+    <tr><th scope="row" style="width:12rem">Identifier</th><td><code>{{ profile.standard_id }}</code></td></tr>
+    {% if profile.originator %}<tr><th scope="row">Originator</th><td>{{ profile.originator }}</td></tr>{% endif %}
+    {% if profile.source %}
+    <tr><th scope="row">Source of truth</th>
+      <td>
+        {% if profile.source.url %}<a href="{{ profile.source.url }}" target="_blank" rel="noopener">{{ profile.source.name }}</a>{% else %}{{ profile.source.name }}{% endif %}
+        {% if profile.source.license %}<span class="badge bg-secondary ms-2">{{ profile.source.license }}</span>{% endif %}
+        {% if profile.source.pinned %}<br><small class="text-muted">Pinned at <code>{{ profile.source.pinned }}</code></small>{% endif %}
+        {% if profile.source.note %}<br><small class="text-muted">{{ profile.source.note }}</small>{% endif %}
+      </td>
+    </tr>
+    {% endif %}
+    {% if profile.measurement %}<tr><th scope="row">How it was measured</th><td>{{ profile.measurement }}</td></tr>{% endif %}
+  </tbody>
+</table>
+
+{% if profile.tiers %}
+<table class="table table-bordered">
+  <thead class="table-light"><tr><th style="width:9rem">Tier</th><th>What it covers</th></tr></thead>
+  <tbody>
+    {% for tier in profile.tiers %}
     <tr>
       <td><strong>{{ tier.name }}</strong>{% if tier.count %}<br><small class="text-muted">{{ tier.count }} operations</small>{% endif %}</td>
       <td>{{ tier.description }}</td>
@@ -55,29 +69,28 @@ measured against a tier, not against the word "compatible".</p>
 </table>
 {% endif %}
 
-{% if page.adopters %}
-<h3>Adopters</h3>
+{% if profile.adopters %}
 <p>
-  {% if page.adopters.count %}<strong>{{ page.adopters.count }}</strong> implementations recorded{% endif %}
-  {% if page.adopters.as_of %}<small class="text-muted"> · as of {{ page.adopters.as_of }}</small>{% endif %}
+  {% if profile.adopters.count %}<strong>{{ profile.adopters.count }}</strong> implementations recorded{% endif %}
+  {% if profile.adopters.as_of %}<small class="text-muted"> · as of {{ profile.adopters.as_of }}</small>{% endif %}
 </p>
-{% if page.adopters.evidence %}
+{% if profile.adopters.evidence %}
 <table class="table table-sm">
   <thead class="table-light"><tr><th style="width:12rem">Evidence</th><th style="width:6rem">Count</th><th>Meaning</th></tr></thead>
   <tbody>
-    {% for grade in page.adopters.evidence %}
+    {% for grade in profile.adopters.evidence %}
     <tr><td><code>{{ grade.grade }}</code></td><td>{{ grade.count }}</td><td>{{ grade.description }}</td></tr>
     {% endfor %}
   </tbody>
 </table>
 {% endif %}
-{% if page.adopters.url %}<p><a href="{{ page.adopters.url }}" target="_blank" rel="noopener">The full adopter registry</a> — every entry carries the URL it was read from and the date it was read.</p>{% endif %}
+{% if profile.adopters.url %}<p><a href="{{ profile.adopters.url }}" target="_blank" rel="noopener">The full adopter registry</a>{% if profile.adopters.matrix_url %} · <a href="{{ profile.adopters.matrix_url }}" target="_blank" rel="noopener">the adopter matrix</a>{% endif %} — every entry carries the URL it was read from and the date it was read.</p>{% endif %}
 {% endif %}
 
-{% if page.apis %}
-<h3>Artifacts</h3>
+{% if profile.apis %}
+<h4 class="h6">Artifacts</h4>
 <ul>
-{% for api in page.apis %}
+{% for api in profile.apis %}
   {% for property in api.properties %}
   <li>
     <a href="{{ property.url }}" target="_blank" rel="noopener">{{ api.name }}</a>
@@ -88,6 +101,9 @@ measured against a tier, not against the word "compatible".</p>
 {% endfor %}
 </ul>
 {% endif %}
+{% endfor %}
+
+<hr class="my-4">
 
 {% if page.licensing %}
 <h3>Licensing</h3>
