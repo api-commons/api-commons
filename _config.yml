@@ -71,6 +71,9 @@ collections:
   starters:
     output: true
     permalink: /starters/:path/      
+  standards:
+    output: true
+    permalink: /standards/:path/
 
 defaults:
 
@@ -114,3 +117,8 @@ defaults:
       type:         starters
     values:
       layout:       starters                 
+  - scope:
+      path:         ""
+      type:         standards
+    values:
+      layout:       standard
