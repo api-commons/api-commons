@@ -1,0 +1,38 @@
+---
+layout: default
+title: Standards
+---
+
+<h2>The Standards Nobody Standardized</h2>
+<p class="lead">Some of the most widely implemented API contracts in the world were never
+ratified by anybody. S3, the OpenAI API, CKAN's Action API, Ethereum JSON-RPC — each became
+a standard by being copied, not by being agreed.</p>
+
+<p>These are not <a href="/base/">base APIs</a>, which describe how an API <em>should</em> be
+designed. They are descriptions of what the industry <strong>already implements</strong>,
+profiled from the interface as it actually behaves, graded into conformance tiers, and
+published with a registry of who implements them and how strongly each claim is evidenced.
+We describe; we do not design. A claim is recorded as a claim until something verifies it.</p>
+
+<table width="100%">
+{% for standard in site.standards %}
+	<tr>
+		<td align="center">
+			{% if standard.image %}<a href="{{ standard.url }}"><img src="{{ standard.image }}" width="100" style="margin: 15px;" /></a>{% endif %}
+		</td>
+		<td valign="top" style="padding: 30px">
+			<strong>{{ standard.name }}</strong> - {{ standard.description }}
+			{% if standard.adopters.count %}<br><small class="text-muted">{{ standard.adopters.count }} implementations recorded{% if standard.status %} · {{ standard.status }}{% endif %}</small>{% endif %}
+		</td>
+		<td width="10%" align="center">
+			<a href="{{ standard.url }}">
+				<button type="button" class="btn btn-dark">More Info</button>
+			</a>
+		</td>
+	</tr>
+{% endfor %}
+</table>
+
+<p class="mt-4"><small class="text-muted">Adoption counts are a floor, not a census. They
+count organizations who state compatibility in sources we have harvested, and nowhere else.
+Every adopter entry carries the URL it was read from and the date it was read.</small></p>
