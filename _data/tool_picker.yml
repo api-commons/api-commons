@@ -149,12 +149,6 @@ tools:
     github: api-commons/governance-agent-export
     blurb: Turn a ruleset into agent-native guidance (AGENTS.md, system prompt, remediation pack) so agents follow the rules while authoring.
     priorities: { primary: [agent-ready], secondary: [author-rules, code-first] }
-  - name: Context Gate
-    domain: contextgate.apicommons.org
-    url: https://contextgate.apicommons.org
-    github: api-commons/context-gate
-    blurb: Consumer-centric governance for what an agent is allowed to see and do with an API's context.
-    priorities: { primary: [agent-ready], secondary: [prove-trust] }
   - name: Toolsmith
     domain: toolsmith.apicommons.org
     url: https://toolsmith.apicommons.org
