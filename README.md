@@ -32,13 +32,13 @@ blocks and the index of tools:
   rule catalog).
 
 > **`scripts/generate-rules.py` needs a sibling checkout.** It reads the API Commons
-> rule catalog from `../api-validator/rules/all-rules.yaml`. `_data/rules_catalog.json`,
+> rule catalog from `../common-openlint-validator/rules/all-rules.yaml`. `_data/rules_catalog.json`,
 > `assets/rulesets/*` and the `/rules/` and `/rulesets/` pages are all **generated** from
 > it, so never hand-edit them; the next run overwrites your change. Clone it alongside
 > this repo before regenerating:
 >
 > ```
-> git clone https://github.com/api-commons/api-validator.git ../api-validator
+> git clone https://github.com/api-commons/common-openlint-validator.git ../common-openlint-validator
 > ```
 
 ## Building blocks

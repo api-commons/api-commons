@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generate the API Commons /rules/ and /rulesets/ content from the API Commons
-rule catalog — the single source of truth in the sibling api-validator checkout
+rule catalog — the single source of truth in the sibling common-openlint-validator checkout
 (rules/all-rules.yaml). Re-runnable; commit the output.
 
 Writes:
@@ -16,8 +16,8 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent          # api-commons/
-SRC = ROOT.parent / "api-validator" / "rules" / "all-rules.yaml"
-FN_SRC = ROOT.parent / "api-validator" / "src" / "functions"
+SRC = ROOT.parent / "common-openlint-validator" / "rules" / "all-rules.yaml"
+FN_SRC = ROOT.parent / "common-openlint-validator" / "src" / "functions"
 
 # The rule catalog lives in a SIBLING checkout, not in this repo. Check for it
 # up front and say so plainly — the catalog's original remote was
@@ -29,8 +29,8 @@ if not SRC.exists():
         f"Rule catalog not found: {SRC}\n\n"
         "This script reads the API Commons rule catalog from a sibling checkout.\n"
         "Clone it next to this repo, then re-run:\n\n"
-        "    git clone https://github.com/api-commons/api-validator.git "
-        f"{ROOT.parent / 'api-validator'}\n\n"
+        "    git clone https://github.com/api-commons/common-openlint-validator.git "
+        f"{ROOT.parent / 'common-openlint-validator'}\n\n"
         "Do not hand-edit _data/rules_catalog.json as a\n"
         "workaround — it is generated, and the next run overwrites it."
     )
@@ -248,7 +248,7 @@ for fn in used_funcs:
         # These functions use createRulesetFunction with no input/options schema, which
         # only wraps the function, so a local pass-through keeps them portable.
         src = re.sub(
-            r"import __sc from '@(?:openlint/openlint|stoplight/spectral)-core';\nconst \{ createRulesetFunction \} = __sc;",
+            r"import (?:\* as )?__sc from '@(?:openlint/openlint|stoplight/spectral)-core';\nconst \{ createRulesetFunction \} = __sc;",
             "// Portable: no linter-specific import (see scripts/generate-rules.py).\n"
             "const createRulesetFunction = (_schema, fn) => fn;",
             srcf.read_text())
