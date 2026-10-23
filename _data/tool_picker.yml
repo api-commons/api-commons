@@ -104,7 +104,7 @@ tools:
   - name: API Validator
     domain: validator.apicommons.org
     url: https://validator.apicommons.org
-    github: api-commons/api-validator
+    github: api-commons/common-openlint-validator
     blurb: Run your rules against an API description in the browser — lint 11 artifact types, no backend.
     priorities: { primary: [author-rules], secondary: [discover, prove-trust] }
   - name: Governance Coverage

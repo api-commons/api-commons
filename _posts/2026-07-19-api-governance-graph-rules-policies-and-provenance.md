@@ -28,7 +28,7 @@ Stack makes governance legible. Gaps is the view that turns "we have governance"
 
 ## An Explicit Join Spine, Not Fuzzy Matching
 
-The graph is assembled at build time from two sources we already maintain and shipped as a single static snapshot (`graph-bundle.json`), so the app has no runtime dependencies and makes no network calls. It draws on the [**API Commons rule catalog**](https://github.com/api-commons/api-validator) — the full 769-rule, twelve-format ruleset with each rule's tags, `source` provenance, and `given`/`then` — and the [**apievangelist.com** building blocks](https://apievangelist.com): the policies, guidance, experiences, lifecycle, properties, and strategies collections, joined by their published cross-link arrays.
+The graph is assembled at build time from two sources we already maintain and shipped as a single static snapshot (`graph-bundle.json`), so the app has no runtime dependencies and makes no network calls. It draws on the [**API Commons rule catalog**](https://github.com/api-commons/common-openlint-validator) — the full 769-rule, twelve-format ruleset with each rule's tags, `source` provenance, and `given`/`then` — and the [**apievangelist.com** building blocks](https://apievangelist.com): the policies, guidance, experiences, lifecycle, properties, and strategies collections, joined by their published cross-link arrays.
 
 The join is declared, not guessed. A policy names the rule slugs it enforces, points at the guidance that explains it, and lists the experiences it improves; a rule carries its own `experience:` tags and its `source` lineage. The graph simply renders what is already true in the data — which is why the Gaps view can be trusted to name real holes rather than artifacts of a matcher.
 
