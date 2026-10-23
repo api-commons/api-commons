@@ -1,0 +1,1231 @@
+documentationUrl: https://spec.openlint.org/
+rules:
+  openapi-document-require-external-docs:
+    description: Defining external documentation provides a link to detailed API guides, tutorials, and reference material
+      beyond the OpenAPI spec. Analysis shows 57.1% of APIs include external docs.
+    message: External Docs MUST Be Defined
+    severity: info
+    given: $
+    then:
+      field: externalDocs
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-document-require-external-docs
+  openapi-document-require-jsonschemadialect:
+    description: openapi document should declare a `jsonSchemaDialect` property.
+    message: Missing `jsonSchemaDialect`.
+    given: $
+    severity: info
+    then:
+      field: jsonSchemaDialect
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-document-require-jsonschemadialect
+  openapi-document-require-openapi:
+    formats:
+    - oas3
+    description: openapi document should declare a `openapi` property.
+    message: Missing `openapi`.
+    given: $
+    severity: info
+    then:
+      field: openapi
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-document-require-openapi
+  openapi-document-require-swagger:
+    formats:
+    - oas2
+    description: swagger document should declare a `swagger` property.
+    message: Missing `swagger`.
+    given: $
+    severity: info
+    then:
+      field: swagger
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-document-require-swagger
+  openapi-document-require-path:
+    description: openapi document should declare a `paths` property.
+    message: Missing `paths`.
+    given: $
+    severity: info
+    then:
+      field: paths
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-document-require-path
+  openapi-document-require-server-defined:
+    formats:
+    - oas3
+    description: Every OpenAPI should define at least one server URL. Analysis shows 97.2% of APIs define servers, providing
+      consumers with the base URL needed to make requests.
+    message: Servers MUST Be Defined
+    severity: info
+    given: $
+    then:
+      field: servers
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-document-require-server-defined
+  openapi-document-require-server-defined-oas2:
+    formats:
+    - oas2
+    description: Every Swagger 2.0 API should define a host so consumers have the base URL needed to make requests.
+    message: Host MUST Be Defined
+    severity: info
+    given: $
+    then:
+      field: host
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-document-require-server-defined-oas2
+  openapi-document-require-webhooks:
+    formats:
+    - oas3
+    description: openapi document should declare a `webhooks` property.
+    message: Missing `webhooks`.
+    given: $
+    severity: info
+    then:
+      field: webhooks
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-document-require-webhooks
+  openapi-info-contact-require-email:
+    description: Having a contact email address associated with the technical contract ensures that anyone who comes across
+      the API has someone to email and get more information.
+    message: Info MUST Have Contact Email
+    severity: info
+    given: $.info.contact
+    then:
+      field: email
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-info-contact-require-email
+  openapi-info-contact-require-name:
+    description: Having a contact name associated with the technical contract ensures that anyone who comes across the API
+      knows who to contact.
+    message: Info MUST Have Contact Name
+    severity: info
+    given: $.info.contact
+    then:
+      field: name
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-info-contact-require-name
+  openapi-info-contact-require-url:
+    description: Having a contact url associated with the technical contract ensures that anyone who comes across the API
+      knows where to go to contact someone.
+    message: Info MUST Have Contact URL
+    severity: info
+    given: $.info.contact
+    then:
+      field: url
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-info-contact-require-url
+  openapi-info-require-api-identifier:
+    description: The `#/info/x-api-id` field can be used to associate an identifier to an API. This is useful to track an
+      API even when its `#/info/title` changes.
+    message: 'API must have an unique identifier in x-api-id in #/info/x-api-id.'
+    severity: info
+    given: $
+    then:
+      field: info.x-api-id
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-info-require-api-identifier
+  openapi-info-require-contact-2:
+    description: Having a contact object associated with the technical contract ensures that anyone who comes across the API
+      has someone to contact and get more information.
+    message: Info MUST Have Contact Object
+    severity: info
+    given: $.info
+    then:
+      field: contact
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-info-require-contact-2
+  openapi-info-require-summary:
+    description: 'The `#/info/x-summary` can be used to specify a brief, one-liner description of your API: this is very useful
+      for catalog purposes (eg. this can be shown as your API subtitle in catalogs and developer portals). In OAS3.1 you can
+      use the standard `#/info/summary` field.'
+    message: 'API MUST have an one-liner #/info/x-summary field containing a brief description.'
+    severity: info
+    given: $
+    then:
+      field: info.x-summary
+      function: truthy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-info-require-summary
+  openapi-info-require-title:
+    description: Having a intuitive and helpful title for your API using the OpenAPI info title is the first impression you
+      will make on the consumers of your API.
+    message: Info MUST Have Title
+    severity: info
+    given: $.info
+    then:
+      field: title
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-info-require-title
+  openapi-operation-collection-support-filtering:
+    description: Collection GET operations should support filtering via a filter query parameter (e.g. filter or filter[field]).
+    message: Collection should support a filter query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^filter
+              in:
+                const: query
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-collection-support-filtering
+  openapi-operation-collection-support-sorting:
+    description: Collection GET operations should support sorting via a sort or order query parameter.
+    message: Collection should support a sort/order query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^(sort|order)
+              in:
+                const: query
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-collection-support-sorting
+  openapi-operation-require-one-tag:
+    description: Having tags applied to each API operations helps organize and group APIs in portals, documentation, search,
+      and other ways in which APIs are made available.
+    message: MUST Be At Least One Operation Tag
+    severity: info
+    given: $.paths.*[get,post,patch,put,delete]
+    then:
+      field: tags
+      function: length
+      functionOptions:
+        min: 1
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-require-one-tag
+  openapi-operation-require-tag:
+    description: Having tags applied to each API operations helps organize and group APIs in portals, documentation, search,
+      and other ways in which APIs are made available.
+    message: Operations MUST Have Tags
+    severity: info
+    given: $.paths.*[get,post,patch,put,delete]
+    then:
+    - field: tags
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-require-tag
+  openapi-response-get-link-header:
+    description: GET success responses should provide a Link header (RFC 8288) with rel next/prev/first/last for pagination
+      and navigation — the header-based alternative to an in-body paging object.
+    message: GET responses should provide a Link header (RFC 8288) for pagination/navigation.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Link
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-link-header
+  openapi-response-include-hypermedia-links:
+    description: The API contract MAY include hypermedia links to represent the state of resources and be navigable.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths[*][*].responses[*]
+    then:
+      field: links
+      function: truthy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-include-hypermedia-links
+  openapi-response-require-status-health-check-path:
+    description: You must define a `/status` path that can be used to health-check the API. Using this path avoids the arbitrary
+      usage of a server URL for health-check scope. The `/status` endpoint should return a `application/problem+json` response
+      containing a successful status code if the service is working correctly. The service provider is free to define the
+      implementation logic for this path.
+    message: The "/status" path used to health-check the API must be defined. {{error}}
+    severity: info
+    given: $
+    then:
+      field: paths./status.get.responses.200
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-require-status-health-check-path
+  openapi-schema-require-tag-object:
+    description: There needs to be a central tags object applied to the OpenAPI, providing central tags that can be applied
+      across all operations within an OpenAPI.
+    message: OpenAPIs MUST Have a Tag Object
+    severity: info
+    given: $
+    then:
+      field: tags
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-require-tag-object
+  openapi-tag-require-at-least-one:
+    description: There needs to be at least one tag applied to an OpenAPI, providing a key word or phrase that can be applied
+      to API operations.
+    message: MUST Be At Least One Tag
+    severity: info
+    given: $
+    then:
+      field: tags
+      function: length
+      functionOptions:
+        min: 1
+    documentationUrl: https://apicommons.org/rules/#openapi-tag-require-at-least-one
+  openapi-tag-require-name:
+    description: Tags used as part of an OpenAPI should have names, providing a simple key word or phrase that represents
+      the tag being applied to APIs.
+    message: Tags MUST Have a Name
+    severity: info
+    given: $.tags[*]
+    then:
+      field: name
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-tag-require-name
+  apis-json-api-contact-include-email:
+    description: The contact object in an APIs.json file allows for referencing the email address of a person or group. This
+      property provides a convenient way for users to seek support for an API, using email as the default method to reach
+      the team managing the API in production.
+    message: API contact COULD have email.
+    severity: info
+    given: $.apis.*.contact.*
+    then:
+      field: email
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-contact-include-email
+  apis-json-api-contact-include-full-name:
+    description: The contact object in an APIs.json file includes a full name (FN) property, which specifies the formatted
+      text corresponding to the contact name in the vCard for an API. This provides a quick and clear way to assign a person,
+      group, or other point of contact to an API for addressing questions and providing support.
+    message: Contact Could Have FN
+    severity: info
+    given: $.apis.*.contact.*
+    then:
+      field: FN
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-contact-include-full-name
+  apis-json-api-entry-require-tag:
+    description: Each API defined in an APIs.json artifact includes a property for adding one or more tags. These tags provide
+      additional context about the resources or capabilities offered by the API, highlighting its business value and the domain
+      in which it is applied.
+    message: API MUST Have a Tags Object
+    severity: info
+    given: $.apis.*
+    then:
+      field: tags
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-entry-require-tag
+  apis-json-api-include-about-page:
+    description: This property ensures provides a reference to an about page, either for the company, organization, or government
+      agency behind an API, or specifically about the domain, team, and the APIs they produce.
+    message: Has About
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(about|About)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-include-about-page
+  apis-json-api-include-contact:
+    description: The contact object in an APIs.json file allows for associating a vCard that represents an individual or organizational
+      entity. It includes common contact information such as a name, email, or other references, offering a standardized method
+      for providing support for an API.
+    message: API COULD have a contact.
+    severity: info
+    given: $.apis.*
+    then:
+      field: contact
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-include-contact
+  apis-json-api-property-require-go-sdk:
+    description: This property ensures that there is a Go SDK available for an API, making it easier for Go developers to
+      integrate an API into their applications.
+    message: Has Go SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-go)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-go-sdk
+  apis-json-api-property-require-java-sdk:
+    description: This property ensures that there is a Java SDK available for an API, making it easier for Java developers
+      to integrate an API into their applications.
+    message: Has Java SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-java)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-java-sdk
+  apis-json-api-property-require-node-sdk:
+    description: This property ensures that there is a Node SDK available for an API, making it easier for Node developers
+      to integrate an API into their applications.
+    message: Has Node SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-node)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-node-sdk
+  apis-json-api-property-require-python-sdk:
+    description: This property ensures that there is a Python SDK available for an API, making it easier for Python developers
+      to integrate an API into their applications.
+    message: Has Python SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-python)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-python-sdk
+  apis-json-api-property-require-road-map:
+    description: This property ensures there is a reference to the road map for an API or for the entire API operations within
+      domain, line of business, or teams.
+    message: Has a Road Map
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-road-map|road-map|Roadmap|Road Map|RoadMap)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-road-map
+  apis-json-api-property-require-sdk:
+    description: This property ensures that there is an SDK available for an API, making it easier for developers to integrate
+      an API into their applications.
+    message: Has SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(sdk|sdks|SDKs)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-sdk
+  apis-json-api-property-require-signup:
+    description: This property ensures there is a link to where you sign up for an API, making sure API consumers can access
+      in a single click.
+    message: Has a Sign Up
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(X-signup|signup|Sign Up|SignUp)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-signup
+  apis-json-api-property-require-status-page:
+    description: This property ensures that there is a status page available for each API, providing the uptime status for
+      any given moment, as well as historical data.
+    message: Has a Status Page
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(x-status|status|Status|StatusPage)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-status-page
+  apis-json-api-property-require-use-cases:
+    description: This property ensures there is a reference to the use cases for an API, helping align an API with the who,
+      what, how, and why of putting an API to work.
+    message: Has Use Cases
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(UseCases)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-use-cases
+  apis-json-api-property-require-valid-url:
+    description: This property ensures that properties of an API or API contract all have valid URLs, checking if any of the
+      URLs are not properly formed, or could be other formats.
+    message: Property URLs Are Valid
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: url
+      function: pattern
+      functionOptions:
+        notMatch: ^((http|https)://)[-a-zA-Z0-9@:%._\+~#?&//=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%._\+~#?&//=]*)$
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-valid-url
+  apis-json-api-property-require-video:
+    description: This property ensures there is a reference to a video page or channel for an API.
+    message: Has Videos for API
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(videos|Videos)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-video
+  apis-json-api-require-aid:
+    description: Every API should have a unique identifier, known as an AID (API Identifier). The APIs.json file, contract,
+      or collection contains its own AID, which the API uses as part of its reference. Additionally, the API applies a slugified
+      version of its name, resulting in a unique, human-readable identifier for the API.
+    message: APIs MUST have an aid property.
+    severity: info
+    given: $.apis.*
+    then:
+      field: aid
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-require-aid
+  apis-json-api-require-base-url:
+    description: Each API defined within an APIs.json artifact can specify the base URL for the API. This URL serves as a
+      reference point for developers during onboarding and when making API calls. Additionally, it helps identify the API
+      and validate the domain it is associated with.
+    message: APIs MUST Have a Base URL
+    severity: info
+    given: $.apis.*
+    then:
+      field: baseURL
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-require-base-url
+  apis-json-api-tag-require-upper-case:
+    description: Maintaining consistent casing for tags applied to individual APIs ensures a uniform appearance and enhances
+      search and discovery. Each word in a tag should be capitalized, with the first letter of every word in a phrase treated
+      the same way.
+    message: API Tags MUST Be Upper Case
+    severity: info
+    given: $.apis.*.tags.*
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-tag-require-upper-case
+  apis-json-document-apis-json-url-https:
+    description: The APIs.json url should be an https URL.
+    message: APIs.json url should use https.
+    given: $.url
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^https://
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-apis-json-url-https
+  apis-json-document-require-access:
+    description: apis-json document should declare a `access` property.
+    message: Missing `access`.
+    given: $
+    severity: info
+    then:
+      field: access
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-access
+  apis-json-document-require-aid:
+    description: apis-json document should declare a `aid` property.
+    message: Missing `aid`.
+    given: $
+    severity: info
+    then:
+      field: aid
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-aid
+  apis-json-document-require-apis:
+    description: apis-json document should declare a `apis` property.
+    message: Missing `apis`.
+    given: $
+    severity: info
+    then:
+      field: apis
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-apis
+  apis-json-document-require-common:
+    description: apis-json document should declare a `common` property.
+    message: Missing `common`.
+    given: $
+    severity: info
+    then:
+      field: common
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-common
+  apis-json-document-require-created:
+    description: apis-json document should declare a `created` property.
+    message: Missing `created`.
+    given: $
+    severity: info
+    then:
+      field: created
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-created
+  apis-json-document-require-description:
+    description: apis-json document should declare a `description` property.
+    message: Missing `description`.
+    given: $
+    severity: info
+    then:
+      field: description
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-description
+  apis-json-document-require-image:
+    description: apis-json document should declare a `image` property.
+    message: Missing `image`.
+    given: $
+    severity: info
+    then:
+      field: image
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-image
+  apis-json-document-require-include:
+    description: apis-json document should declare a `include` property.
+    message: Missing `include`.
+    given: $
+    severity: info
+    then:
+      field: include
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-include
+  apis-json-document-require-kind:
+    description: apis-json document should declare a `kind` property.
+    message: Missing `kind`.
+    given: $
+    severity: info
+    then:
+      field: kind
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-kind
+  apis-json-document-require-maintainer:
+    description: apis-json document should declare a `maintainers` property.
+    message: Missing `maintainers`.
+    given: $
+    severity: info
+    then:
+      field: maintainers
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-maintainer
+  apis-json-document-require-modified:
+    description: apis-json document should declare a `modified` property.
+    message: Missing `modified`.
+    given: $
+    severity: info
+    then:
+      field: modified
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-modified
+  apis-json-document-require-name:
+    description: apis-json document should declare a `name` property.
+    message: Missing `name`.
+    given: $
+    severity: info
+    then:
+      field: name
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-name
+  apis-json-document-require-network:
+    description: apis-json document should declare a `network` property.
+    message: Missing `network`.
+    given: $
+    severity: info
+    then:
+      field: network
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-network
+  apis-json-document-require-overlays:
+    description: apis-json document should declare a `overlays` property.
+    message: Missing `overlays`.
+    given: $
+    severity: info
+    then:
+      field: overlays
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-overlays
+  apis-json-document-require-position:
+    description: apis-json document should declare a `position` property.
+    message: Missing `position`.
+    given: $
+    severity: info
+    then:
+      field: position
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-position
+  apis-json-document-require-prompts:
+    description: apis-json document should declare a `prompts` property.
+    message: Missing `prompts`.
+    given: $
+    severity: info
+    then:
+      field: prompts
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-prompts
+  apis-json-document-require-rating:
+    description: apis-json document should declare a `rating` property.
+    message: Missing `rating`.
+    given: $
+    severity: info
+    then:
+      field: rating
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-rating
+  apis-json-document-require-rules:
+    description: apis-json document should declare a `rules` property.
+    message: Missing `rules`.
+    given: $
+    severity: info
+    then:
+      field: rules
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-rules
+  apis-json-document-require-specificationversion:
+    description: apis-json document should declare a `specificationVersion` property.
+    message: Missing `specificationVersion`.
+    given: $
+    severity: info
+    then:
+      field: specificationVersion
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-specificationversion
+  apis-json-document-require-tag:
+    description: apis-json document should declare a `tags` property.
+    message: Missing `tags`.
+    given: $
+    severity: info
+    then:
+      field: tags
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-tag
+  apis-json-document-require-type:
+    description: apis-json document should declare a `type` property.
+    message: Missing `type`.
+    given: $
+    severity: info
+    then:
+      field: type
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-type
+  apis-json-document-require-url:
+    description: apis-json document should declare a `url` property.
+    message: Missing `url`.
+    given: $
+    severity: info
+    then:
+      field: url
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-url
+  apis-json-document-require-visibility:
+    description: apis-json document should declare a `visibility` property.
+    message: Missing `visibility`.
+    given: $
+    severity: info
+    then:
+      field: visibility
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-visibility
+  apis-json-document-require-workflow:
+    description: apis-json document should declare a `workflows` property.
+    message: Missing `workflows`.
+    given: $
+    severity: info
+    then:
+      field: workflows
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-document-require-workflow
+  apis-json-schema-include-blog:
+    description: This property ensures that an API has a reference to a blog where anyone can find updates and other stories
+      that will help keep API consumers and other stakeholders up to speed on what is happening with an API, and the larger
+      operations.
+    message: Has a Blog
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(blog|Blogs)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-blog
+  apis-json-schema-include-blog-feed:
+    description: This property ensures that blogs in support of APIs have an Atom or RSS feed of posts, allowing for the syndication
+      of updates and information around individual APIs and the operations around them.
+    message: Has a Blog Feed
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(blog-feed|BlogFeeds)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-blog-feed
+  apis-json-schema-include-developer-portal:
+    description: This property ensures there a developer portal associated with an API and that you can find a landing page
+      for the API, documentation, SDKs, and other resources.
+    message: Has Developer Portal
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-developer-portal|developer-portal|portal|Portal|Portals|DeveloperPortal)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-developer-portal
+  apis-json-schema-include-discussion-forum:
+    description: This property ensures that there is a link to a discussion forum, providing a way for consumers and producers
+      to engage and support either other throughout the lifecycle.
+    message: Has Discussion Forum
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(Forums|Forums|Discussions)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-discussion-forum
+  apis-json-schema-include-gateway-reference:
+    description: This property ensures that there is a reference to the gateway for an API, referencing where you can manage
+      the configuration for each API.
+    message: Has Staging Gateway for API
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(gateway|Gateway)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-gateway-reference
+  apis-json-schema-include-github-organization:
+    description: This property ensures that an API is associated with GitHub organization, providing the URL to where you
+      can engage with the operations surrounding an API.
+    message: Has a GitHub Organization
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(github-organization|GitHubOrganization)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-github-organization
+  apis-json-schema-include-github-repository:
+    description: This property ensures that an API possess a reference to a dedicated GitHub repository that is used to manage
+      the Open, but also possible server and client code.
+    message: Has a GitHub Repository
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(github-repository|GitHubRepository)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-github-repository
+  apis-json-schema-include-openapi-definition:
+    description: This property ensures that there is an OpenAPI present for an API, providing the technical contract that
+      describes the surface area of an API.
+    message: Has An OpenAPI
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(openapi|OpenAPI)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-openapi-definition
+  apis-json-schema-include-postman-public-workspace:
+    description: This property ensures that an API is associated with a Postman Workspace, providing a single location that
+      API producers and/or API consumers can engage around an API.
+    message: Has Public Postman Workspace
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(postman-public-workspace|PostmanPublicWorkspace|PostmanWorkspace)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-postman-public-workspace
+  apis-json-tag-apis-json-not-empty:
+    description: If tags are declared they should not be empty — tags drive discovery in the catalog.
+    message: tags should not be empty.
+    given: $.tags
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          minItems: 1
+    documentationUrl: https://apicommons.org/rules/#apis-json-tag-apis-json-not-empty
+  apis-json-tag-require-upper-case:
+    description: Maintaining consistent casing for tags applied to APIs.json contracts ensures a uniform appearance and enhances
+      search and discovery. Each word in a tag should be capitalized, with the first letter of every word in a phrase treated
+      the same way.
+    message: Tags Upper Case
+    severity: info
+    given: $.tags.*
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    documentationUrl: https://apicommons.org/rules/#apis-json-tag-require-upper-case
+  asyncapi-document-require-asyncapi:
+    description: asyncapi document should declare a `asyncapi` property.
+    message: Missing `asyncapi`.
+    given: $
+    severity: info
+    then:
+      field: asyncapi
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#asyncapi-document-require-asyncapi
+  asyncapi-document-require-channel:
+    description: asyncapi document should declare a `channels` property.
+    message: Missing `channels`.
+    given: $
+    severity: info
+    then:
+      field: channels
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#asyncapi-document-require-channel
+  asyncapi-document-require-component:
+    description: asyncapi document should declare a `components` property.
+    message: Missing `components`.
+    given: $
+    severity: info
+    then:
+      field: components
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#asyncapi-document-require-component
+  asyncapi-document-require-defaultcontenttype:
+    description: asyncapi document should declare a `defaultContentType` property.
+    message: Missing `defaultContentType`.
+    given: $
+    severity: info
+    then:
+      field: defaultContentType
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#asyncapi-document-require-defaultcontenttype
+  asyncapi-document-require-id:
+    description: asyncapi document should declare a `id` property.
+    message: Missing `id`.
+    given: $
+    severity: info
+    then:
+      field: id
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#asyncapi-document-require-id
+  asyncapi-document-require-info:
+    description: asyncapi document should declare a `info` property.
+    message: Missing `info`.
+    given: $
+    severity: info
+    then:
+      field: info
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#asyncapi-document-require-info
+  asyncapi-document-require-operation:
+    description: asyncapi document should declare a `operations` property.
+    message: Missing `operations`.
+    given: $
+    severity: info
+    then:
+      field: operations
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#asyncapi-document-require-operation
+  asyncapi-document-require-server:
+    description: asyncapi document should declare a `servers` property.
+    message: Missing `servers`.
+    given: $
+    severity: info
+    then:
+      field: servers
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#asyncapi-document-require-server
+  asyncapi-operation-asyncapi-require-tag:
+    description: Operations should declare tags for grouping.
+    message: Operation should declare tags.
+    given: $.operations[*]
+    severity: info
+    then:
+      field: tags
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#asyncapi-operation-asyncapi-require-tag
+  arazzo-document-require-arazzo:
+    description: arazzo document should declare a `arazzo` property.
+    message: Missing `arazzo`.
+    given: $
+    severity: info
+    then:
+      field: arazzo
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#arazzo-document-require-arazzo
+  arazzo-document-require-component:
+    description: arazzo document should declare a `components` property.
+    message: Missing `components`.
+    given: $
+    severity: info
+    then:
+      field: components
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#arazzo-document-require-component
+  arazzo-document-require-info:
+    description: arazzo document should declare a `info` property.
+    message: Missing `info`.
+    given: $
+    severity: info
+    then:
+      field: info
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#arazzo-document-require-info
+  arazzo-document-require-sourcedescriptions:
+    description: arazzo document should declare a `sourceDescriptions` property.
+    message: Missing `sourceDescriptions`.
+    given: $
+    severity: info
+    then:
+      field: sourceDescriptions
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#arazzo-document-require-sourcedescriptions
+  arazzo-document-require-workflow:
+    description: arazzo document should declare a `workflows` property.
+    message: Missing `workflows`.
+    given: $
+    severity: info
+    then:
+      field: workflows
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#arazzo-document-require-workflow
+  arazzo-source-arazzo-description-require-url:
+    description: Each source description should declare a url to the referenced OpenAPI/Arazzo document.
+    message: Source description should have a url.
+    given: $.sourceDescriptions[*]
+    severity: info
+    then:
+      field: url
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#arazzo-source-arazzo-description-require-url
+  json-structure-document-json-structure-id-uri:
+    description: $id should be a stable absolute URI (https:// or urn:) identifying the schema.
+    message: $id should be an absolute URI.
+    given: $.$id
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: '^https?://|^urn:'
+    documentationUrl: https://apicommons.org/rules/#json-structure-document-json-structure-id-uri
+  json-structure-schema-json-structure-uri:
+    description: $schema should be the URI of the JSON Structure meta-schema.
+    message: $schema should be a URI.
+    given: $.$schema
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^https?://
+    documentationUrl: https://apicommons.org/rules/#json-structure-schema-json-structure-uri
+  json-ld-document-json-ld-id-iri:
+    description: '@id should be an IRI (https://, urn:, did:) or a blank-node identifier.'
+    message: '@id should be an IRI.'
+    given: $['@id']
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: '^https?://|^urn:|^did:|^_:'
+    documentationUrl: https://apicommons.org/rules/#json-ld-document-json-ld-id-iri
+  json-ld-document-require-context:
+    description: The `@context` property should be present.
+    message: '@context should be present'
+    severity: info
+    given: $
+    then:
+      field: '@context'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-ld-document-require-context
+  json-ld-document-require-id:
+    description: The `@id` property should be present.
+    message: '@id should be present'
+    severity: info
+    given: $
+    then:
+      field: '@id'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-ld-document-require-id
+  json-ld-document-require-type:
+    description: The `@type` property should be present.
+    message: '@type should be present'
+    severity: info
+    given: $
+    then:
+      field: '@type'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-ld-document-require-type
+  mcp-capability-mcp-capabilities-not-empty:
+    description: capabilities should declare at least one of tools, resources, or prompts.
+    message: capabilities should not be empty.
+    given: $.capabilities
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          minProperties: 1
+    documentationUrl: https://apicommons.org/rules/#mcp-capability-mcp-capabilities-not-empty
+  mcp-capability-require-prompts:
+    description: The `prompts` property of each capability should be present.
+    message: prompts should be present
+    severity: info
+    given: $.capabilities
+    then:
+      field: prompts
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#mcp-capability-require-prompts
+  mcp-capability-require-resources:
+    description: The `resources` property of each capability should be present.
+    message: resources should be present
+    severity: info
+    given: $.capabilities
+    then:
+      field: resources
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#mcp-capability-require-resources
+  mcp-capability-require-tools:
+    description: The `tools` property of each capability should be present.
+    message: tools should be present
+    severity: info
+    given: $.capabilities
+    then:
+      field: tools
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#mcp-capability-require-tools
+  mcp-document-mcp-description-meaningful:
+    description: The server description should be specific (at least 40 characters) so agents can decide when to use it.
+    message: MCP description should be at least 40 characters.
+    given: $.description
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: string
+          minLength: 40
+    documentationUrl: https://apicommons.org/rules/#mcp-document-mcp-description-meaningful
+  mcp-document-require-capabilities:
+    description: The `capabilities` property should be present.
+    message: capabilities should be present
+    severity: info
+    given: $
+    then:
+      field: capabilities
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#mcp-document-require-capabilities
+  mcp-document-require-name:
+    description: The `name` property should be present.
+    message: name should be present
+    severity: info
+    given: $
+    then:
+      field: name
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#mcp-document-require-name
+  agent-skill-skill-require-allowed-tools:
+    description: agent-skill document should declare a `allowed-tools` property.
+    message: Missing `allowed-tools`.
+    given: $.frontmatter
+    severity: info
+    then:
+      field: allowed-tools
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-require-allowed-tools
+  agent-skill-skill-require-metadata:
+    description: agent-skill document should declare a `metadata` property.
+    message: Missing `metadata`.
+    given: $.frontmatter
+    severity: info
+    then:
+      field: metadata
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-require-metadata
+  agent-skill-skill-require-version:
+    description: agent-skill document should declare a `version` property.
+    message: Missing `version`.
+    given: $.frontmatter
+    severity: info
+    then:
+      field: version
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-require-version
+  agent-skill-skill-description:
+    description: A skill must declare a description — it is the primary signal an agent uses to decide when to invoke the
+      skill.
+    message: A skill must declare a description.
+    severity: info
+    given: $.frontmatter
+    then:
+      field: description
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-description
+  agent-skill-skill-description-length:
+    description: Skill descriptions should be specific enough to drive good selection — at least 40 characters of meaningful
+      intent.
+    message: Skill description should be at least 40 characters.
+    severity: info
+    given: $.frontmatter.description
+    then:
+      function: length
+      functionOptions:
+        min: 40
+        max: 1024
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-description-length
+  agent-skill-skill-name:
+    description: A skill must declare a name in its frontmatter — it identifies the skill to agents and tooling.
+    message: A skill must declare a name.
+    severity: info
+    given: $.frontmatter
+    then:
+      field: name
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-name

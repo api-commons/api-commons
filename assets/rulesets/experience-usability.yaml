@@ -1,0 +1,1522 @@
+documentationUrl: https://spec.openlint.org/
+functions:
+- digitalocean-ensurePropertiesExample
+- microcks-aas-verify-mocks
+- microcks-oas-verify-mocks
+- trimble-check-for-query-parameter-in-every-path
+functionsDir: ./functions
+rules:
+  openapi-channel-parameter-require-examples:
+    description: Parameter must have examples.
+    message: Parameter must have examples
+    severity: info
+    given: $.channels.*.parameters.*.schema
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - aas2
+    documentationUrl: https://apicommons.org/rules/#openapi-channel-parameter-require-examples
+  openapi-component-message-require-examples:
+    description: Message must have examples.
+    message: Message must have examples
+    severity: info
+    given: $.components.messages.*
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - aas3
+    documentationUrl: https://apicommons.org/rules/#openapi-component-message-require-examples
+  openapi-document-require-realistic-examples:
+    description: API design SHOULD include real-like examples for request and response definitions.
+    message: The {{property}} SHOULD include a real-like example. Add realistic examples to improve API usability.
+    severity: info
+    given: $..[?(@.example || @.examples)]
+    then:
+      field: example
+      function: truthy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-document-require-realistic-examples
+  openapi-document-require-server-defined:
+    formats:
+    - oas3
+    description: Every OpenAPI should define at least one server URL. Analysis shows 97.2% of APIs define servers, providing
+      consumers with the base URL needed to make requests.
+    message: Servers MUST Be Defined
+    severity: info
+    given: $
+    then:
+      field: servers
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-document-require-server-defined
+  openapi-document-require-server-defined-oas2:
+    formats:
+    - oas2
+    description: Every Swagger 2.0 API should define a host so consumers have the base URL needed to make requests.
+    message: Host MUST Be Defined
+    severity: info
+    given: $
+    then:
+      field: host
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-document-require-server-defined-oas2
+  openapi-header-require-examples:
+    description: Headers must include examples.
+    message: '{{description}}; missing {{property}}'
+    severity: info
+    given: $..headers.*
+    then:
+      function: digitalocean-ensurePropertiesExample
+    documentationUrl: https://apicommons.org/rules/#openapi-header-require-examples
+  openapi-limit-nested-sub-resources:
+    description: The hierarchy of nested resources SHOULD NOT contain more than 8 resource names in the path.
+    message: The hierarchy of nested resources SHOULD NOT contain more than 8 resource names in the path.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^([^/]*/){9,}
+    documentationUrl: https://apicommons.org/rules/#openapi-limit-nested-sub-resources
+  openapi-limit-path-length:
+    description: APIs SHOULD NOT expand their total URL length beyond a few hundred characters.
+    message: APIs SHOULD NOT expand their total URL length beyond a few hundred characters.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: length
+      functionOptions:
+        max: 100
+    documentationUrl: https://apicommons.org/rules/#openapi-limit-path-length
+  openapi-limit-path-parameter:
+    description: The URL path should not contain more than 3 dynamic path parameters.
+    message: The URL path should not contain more than 3 dynamic path parameters.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(.*{{1}.*){4,}
+    documentationUrl: https://apicommons.org/rules/#openapi-limit-path-parameter
+  openapi-message-examples-form-complete-mocks:
+    description: Message example must match params examples to form full mocks.
+    message: '{{error}}'
+    severity: info
+    given: $.channels.*
+    then:
+      function: microcks-aas-verify-mocks
+    formats:
+    - aas2
+    documentationUrl: https://apicommons.org/rules/#openapi-message-examples-form-complete-mocks
+  openapi-message-require-examples:
+    description: Message must have examples.
+    message: Message must have examples
+    severity: info
+    given: $.channels.*.[publish,subscribe].message
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - aas2
+    documentationUrl: https://apicommons.org/rules/#openapi-message-require-examples
+  openapi-operation-collection-support-filtering:
+    description: Collection GET operations should support filtering via a filter query parameter (e.g. filter or filter[field]).
+    message: Collection should support a filter query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^filter
+              in:
+                const: query
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-collection-support-filtering
+  openapi-operation-collection-support-sorting:
+    description: Collection GET operations should support sorting via a sort or order query parameter.
+    message: Collection should support a sort/order query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^(sort|order)
+              in:
+                const: query
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-collection-support-sorting
+  openapi-operation-collection-support-sparse-fieldsets:
+    description: GET operations should support sparse fieldsets via a fields query parameter so clients can request only the
+      fields they need.
+    message: Operation should support a fields (sparse fieldset) query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^fields
+              in:
+                const: query
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-collection-support-sparse-fieldsets
+  openapi-operation-examples-form-complete-mocks:
+    description: Response example must match required params examples to form full mocks.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*.*
+    then:
+      function: microcks-oas-verify-mocks
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-examples-form-complete-mocks
+  openapi-operation-get-support-if-modified-since:
+    description: GET operations should accept an If-Modified-Since request header to enable date-based conditional requests.
+    message: Operation should accept a `If-Modified-Since` request header.
+    given: $.paths[*][get]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                const: If-Modified-Since
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-get-support-if-modified-since
+  openapi-operation-get-support-if-none-match:
+    description: GET operations should accept an If-None-Match request header to enable ETag-based conditional requests (304
+      responses).
+    message: Operation should accept a `If-None-Match` request header.
+    given: $.paths[*][get]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                const: If-None-Match
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-get-support-if-none-match
+  openapi-operation-post-not-for-retrieval:
+    description: POST requests SHOULD NOT be used for retrieving information. Use GET instead.
+    message: POST requests SHOULD NOT be used for retrieving information.
+    severity: info
+    given: $.paths[*].post
+    then:
+      field: summary
+      function: pattern
+      functionOptions:
+        notMatch: (retrieve|fetch|get|read)
+      message: '{{description}}: {{error}}'
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-post-not-for-retrieval
+  openapi-operation-put-require-request-body:
+    description: PUT requests MUST have a request body.
+    message: PUT requests MUST have a request body.
+    severity: info
+    given: $.paths[*].put
+    then:
+      field: requestBody
+      function: truthy
+      message: '{{description}}: {{error}}'
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-put-require-request-body
+  openapi-operation-require-id:
+    description: Every operation should have an operationId for SDK generation and documentation linking. Analysis shows operationId
+      styles across 8878 operations with camelCase dominant at 92%.
+    message: Operation MUST Have operationId
+    severity: info
+    given: $.paths.*[get,post,put,patch,delete]
+    then:
+      field: operationId
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-require-id
+  openapi-operation-require-identifier:
+    description: Operation identifiers provide a unique way to identify each individual API, which then used for SDK generation
+      and other automation.
+    message: Operation MUST Have Identifier
+    severity: info
+    given: $.paths.*[get,post,patch,put,delete]
+    then:
+    - field: operationId
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-require-identifier
+  openapi-operation-write-support-if-match:
+    description: Write operations should accept an If-Match request header to enable optimistic concurrency / conditional
+      writes.
+    message: Operation should accept a `If-Match` request header.
+    given: $.paths[*][put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                const: If-Match
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-write-support-if-match
+  openapi-operation-write-support-if-unmodified-since:
+    description: Write operations should accept an If-Unmodified-Since request header to enable date-based optimistic concurrency
+      / conditional writes.
+    message: Operation should accept a `If-Unmodified-Since` request header.
+    given: $.paths[*][put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                const: If-Unmodified-Since
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-write-support-if-unmodified-since
+  openapi-parameter-collection-limit-param-default:
+    description: The limit / page-size query parameter should declare a default so the page size is predictable when the caller
+      omits it.
+    message: limit parameter should declare a default.
+    given: $.paths[*].get.parameters[?(@ && @.in == 'query' && (@.name == 'limit' || @.name == 'per_page' || @.name == 'page_size'
+      || @.name == 'pageSize'))].schema
+    severity: info
+    then:
+      field: default
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-collection-limit-param-default
+  openapi-parameter-filter-param-only-on-get:
+    description: Only GET-based endpoints SHOULD have have the query parameter 'filter'.
+    message: Only GET-based endpoints SHOULD have have the query parameter 'filter'.
+    severity: info
+    given: $.paths.*[?(@property!='get')].parameters.[?(@.in=='query' && @.name=='filter')].name
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-filter-param-only-on-get
+  openapi-parameter-no-hybrid-and-root-filtering:
+    description: Hybrid filtering MAY be offered on multiple attributes, but MUST never exist if a root "filter" query parameter
+      is present.
+    message: Hybrid filtering MAY be offered on multiple attributes, but MUST never exist if a root "filter" query parameter
+      is present.
+    severity: info
+    given: $.paths..get.parameters^
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            parameters:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  in:
+                    type: string
+          allOf:
+          - if:
+              properties:
+                parameters:
+                  type: array
+                  contains:
+                    type: object
+                    properties:
+                      name:
+                        const: filter
+            then:
+              not:
+                properties:
+                  parameters:
+                    type: array
+                    contains:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          pattern: \w+Filter
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-no-hybrid-and-root-filtering
+  openapi-parameter-no-id-query:
+    description: Resource identifier filtering is not allowed as a query parameter. Use the resource identifier in the URL
+      path.
+    message: Resource identifier filtering is not allowed as a query parameter.
+    severity: info
+    given: $.paths..get.parameters.[?(@.in=='query' && @.name=='id')]
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        notMatch: ^id$
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-no-id-query
+  openapi-parameter-optional-include-examples:
+    description: Optional param should have examples.
+    message: Optional param should have examples
+    severity: info
+    given: $..parameters[?(@ && @.required != true)]
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-optional-include-examples
+  openapi-parameter-query-must-be-optional:
+    description: Query parameters MUST be optional.
+    message: Query parameters MUST be optional.
+    severity: info
+    given: $.paths.*.*.parameters[?(@.in=='query')].required
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-query-must-be-optional
+  openapi-parameter-require-examples:
+    description: Parameters must include examples.
+    message: '{{description}}; missing {{property}}'
+    severity: info
+    given: $..parameters.*
+    then:
+      function: xor
+      functionOptions:
+        properties:
+        - example
+        - examples
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-require-examples
+  openapi-parameter-required-require-examples:
+    description: Required param must have examples.
+    message: Required param must have examples
+    severity: info
+    given: $..parameters[?(@ && @.required == true)]
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-required-require-examples
+  openapi-parameter-sort-param-only-on-get:
+    description: Non-GET endpoints MUST NOT have sorting query parameters. Parameter names such as sort, sorting, orderBy,
+      etc.
+    message: Non-GET endpoints MUST NOT have sorting query parameters.
+    severity: info
+    given: $.paths.*[?(@property!='get')].parameters.[?(@.in=='query')]
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        notMatch: ^sort|sorting|sortBy|order|ordering|orderBy$
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-sort-param-only-on-get
+  openapi-path-cors-support-options-preflight:
+    description: Resources should expose an OPTIONS operation so browsers can complete a CORS preflight. (Many teams handle
+      preflight at the gateway and treat CORS as operational — enable this only if you document CORS in the spec.).
+    message: Path should expose an OPTIONS operation for CORS preflight.
+    given: $.paths[*]
+    severity: info
+    then:
+      field: options
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-path-cors-support-options-preflight
+  openapi-path-max-nesting-depth:
+    description: API paths should not exceed 4 levels of nesting depth. Analysis of 6627 paths across 773 specs shows an average
+      depth of 3.04 segments, with deeper paths indicating overly complex resource hierarchies.
+    message: Path Nesting MUST NOT Exceed 4 Levels
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(/[^/]+){5,}
+    documentationUrl: https://apicommons.org/rules/#openapi-path-max-nesting-depth
+  openapi-path-parameter-not-empty:
+    description: Path parameter declarations must not be empty ex. `/api/{}` is invalid.
+    message: Path parameter declarations must not be empty ex.
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: '{}'
+    formats:
+    - oas3
+    - oas3_1
+    documentationUrl: https://apicommons.org/rules/#openapi-path-parameter-not-empty
+  openapi-path-require-query-parameter:
+    description: Check if the given resource path has queryparameter.
+    message: '{{error}}'
+    severity: info
+    given: $.paths[*]~
+    then:
+      function: trimble-check-for-query-parameter-in-every-path
+    documentationUrl: https://apicommons.org/rules/#openapi-path-require-query-parameter
+  openapi-request-body-must-use-json-content-type:
+    formats:
+    - oas3
+    description: Request bodies should use application/json as the primary content type for consistency across API operations
+      and client implementations.
+    message: Request Body MUST Use application/json Content Type
+    severity: info
+    given: $.paths.*[post,put,patch].requestBody.content
+    then:
+      field: application/json
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-request-body-must-use-json-content-type
+  openapi-request-body-must-use-json-content-type-oas2:
+    formats:
+    - oas2
+    description: Request bodies should be consumed as application/json for consistency across API operations and client implementations.
+      In Swagger 2.0 consumed media types are declared in the operation (or root) `consumes` array.
+    message: Operation `consumes` MUST Include application/json
+    severity: info
+    given: $.paths.*[post,put,patch]
+    then:
+      field: consumes
+      function: schema
+      functionOptions:
+        dialect: draft7
+        schema:
+          type: array
+          contains:
+            const: application/json
+    documentationUrl: https://apicommons.org/rules/#openapi-request-body-must-use-json-content-type-oas2
+  openapi-request-content-require-examples:
+    description: Request with content must have examples.
+    message: Request with content must have examples
+    severity: info
+    given: $.paths..requestBody..content.*
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-content-require-examples
+  openapi-request-delete-no-body:
+    description: DELETE requests MUST NOT have a request body.
+    message: DELETE requests MUST NOT have a request body.
+    severity: info
+    given: $.paths[*].delete.requestBody
+    then:
+      function: falsy
+      message: '{{description}}: {{error}}'
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-delete-no-body
+  openapi-request-get-no-body:
+    description: GET requests MUST NOT have a request body.
+    message: GET requests MUST NOT have a request body.
+    severity: info
+    given: $.paths[*].get.requestBody
+    then:
+      function: falsy
+      message: '{{description}}: {{error}}'
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-get-no-body
+  openapi-request-support-accept-encoding:
+    description: Operations should accept an Accept-Encoding request header so clients can negotiate a compressed (e.g. gzip)
+      response.
+    message: Operation should accept an Accept-Encoding header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: Accept-Encoding
+              in:
+                const: header
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-accept-encoding
+  openapi-request-support-accept-language:
+    description: Operations should accept an Accept-Language request header so clients can negotiate a localized response
+      (i18n).
+    message: Operation should accept an Accept-Language header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: Accept-Language
+              in:
+                const: header
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-accept-language
+  openapi-request-support-baggage:
+    description: Operations should accept a baggage request header (W3C Baggage / OpenTelemetry) so application-defined context
+      propagates across services.
+    message: Operation should accept a `baggage` request header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: baggage
+              in:
+                const: header
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-baggage
+  openapi-request-support-correlation-id:
+    description: Operations should accept a correlation / request ID request header (e.g. Correlation-Id or X-Request-Id)
+      so a caller-supplied id can be traced end to end.
+    message: Operation should accept a `Correlation-Id` request header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^([Xx]-)?([Cc]orrelation|[Rr]equest)-[Ii][Dd]$
+              in:
+                const: header
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-correlation-id
+  openapi-request-support-form-urlencoded-media-type:
+    description: Every request MUST support `application/x-www-form-urlencoded` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('urlencoded') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-form-urlencoded-media-type
+  openapi-request-support-json-media-type:
+    description: Every request MUST support `application/json` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('json') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-json-media-type
+  openapi-request-support-json-media-type-2:
+    description: Every request MUST support `application/json` media type.
+    message: Every request MUST support `application/json` media type.
+    severity: info
+    given: $.paths[*][*].requestBody.content
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            application/json: true
+          required:
+          - application/json
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-json-media-type-2
+  openapi-request-support-multipart-media-type:
+    description: Every request MUST support `multipart/form-data` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('multipart') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-multipart-media-type
+  openapi-request-support-text-plain-media-type:
+    description: Every request MUST support `text/plain` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('plain') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-text-plain-media-type
+  openapi-request-support-tracestate:
+    description: Operations should accept a tracestate request header (W3C Trace Context) so vendor-specific trace state propagates
+      alongside traceparent.
+    message: Operation should accept a `tracestate` request header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: tracestate
+              in:
+                const: header
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-tracestate
+  openapi-request-support-xml-media-type:
+    description: Every request MUST support `application/xml` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('xml') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-xml-media-type
+  openapi-response-202-location-header:
+    description: 202 Accepted responses should document a Location header pointing at the status or result resource clients
+      can poll for the long-running operation.
+    message: 202 Accepted responses should document a Location header.
+    given: $.paths[*][*].responses['202'].headers
+    severity: info
+    then:
+      field: Location
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-202-location-header
+  openapi-response-202-retry-after:
+    description: 202 Accepted responses should document a Retry-After header suggesting how long clients should wait before
+      polling the status resource.
+    message: 202 Accepted responses should document a Retry-After header.
+    given: $.paths[*][*].responses['202'].headers
+    severity: info
+    then:
+      field: Retry-After
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-202-retry-after
+  openapi-response-collection-support-paging:
+    formats:
+    - oas3
+    description: Response bodies from collection endpoints SHOULD offer paging capability.
+    message: Response bodies from collection endpoints SHOULD offer paging capability.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}.*$/))].get.responses['200'].content.application/json.schema.properties
+    then:
+    - field: paging
+      function: truthy
+    - field: paging
+      function: pattern
+      functionOptions:
+        match: object
+    - field: paging.type
+      function: pattern
+      functionOptions:
+        match: object
+    documentationUrl: https://apicommons.org/rules/#openapi-response-collection-support-paging
+  openapi-response-collection-support-paging-oas2:
+    formats:
+    - oas2
+    description: Response bodies from collection endpoints SHOULD offer paging capability.
+    message: Response bodies from collection endpoints SHOULD offer paging capability.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}.*$/))].get.responses['200'].schema.properties
+    then:
+    - field: paging
+      function: truthy
+    - field: paging
+      function: pattern
+      functionOptions:
+        match: object
+    - field: paging.type
+      function: pattern
+      functionOptions:
+        match: object
+    documentationUrl: https://apicommons.org/rules/#openapi-response-collection-support-paging-oas2
+  openapi-response-content-require-examples:
+    description: Response with content must have examples.
+    message: Response with content must have examples
+    severity: info
+    given: $.paths..responses..content.*
+    then:
+      field: examples
+      function: truthy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-content-require-examples
+  openapi-response-default-content-language-en-us:
+    description: Content-Language is optional but MUST default locale to en-US when none provided.
+    message: Content-Language is optional but MUST default locale to en-US when none provided.
+    severity: info
+    given: $.paths[*][*].responses[*].headers.Content-Language.schema.default
+    then:
+      function: pattern
+      functionOptions:
+        match: en-US
+    documentationUrl: https://apicommons.org/rules/#openapi-response-default-content-language-en-us
+  openapi-response-get-cache-control:
+    description: GET success responses should define a Cache-Control header so clients and intermediaries know how to cache
+      the representation.
+    message: GET success responses should define a `Cache-Control` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Cache-Control
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-cache-control
+  openapi-response-get-document-304-not-modified:
+    description: GET operations should document a 304 Not Modified response so ETag/Last-Modified conditional requests are
+      handled.
+    message: Operation should document a `304` response.
+    given: $.paths[*][get].responses
+    severity: info
+    then:
+      field: '304'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-document-304-not-modified
+  openapi-response-get-etag:
+    description: GET success responses should define an ETag header to enable validation-based caching and conditional requests.
+    message: GET success responses should define a `ETag` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: ETag
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-etag
+  openapi-response-get-last-modified:
+    description: GET success responses should define a Last-Modified header to enable date-based conditional requests.
+    message: GET success responses should define a `Last-Modified` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Last-Modified
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-last-modified
+  openapi-response-get-link-header:
+    description: GET success responses should provide a Link header (RFC 8288) with rel next/prev/first/last for pagination
+      and navigation — the header-based alternative to an in-body paging object.
+    message: GET responses should provide a Link header (RFC 8288) for pagination/navigation.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Link
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-link-header
+  openapi-response-get-vary:
+    description: GET success responses should define a Vary header so caches key correctly on the request headers that affect
+      the representation.
+    message: GET success responses should define a `Vary` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Vary
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-vary
+  openapi-response-include-hypermedia-links:
+    description: The API contract MAY include hypermedia links to represent the state of resources and be navigable.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths[*][*].responses[*]
+    then:
+      field: links
+      function: truthy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-include-hypermedia-links
+  openapi-response-must-use-json-content-type:
+    formats:
+    - oas3
+    description: API responses should use application/json as the primary content type. Analysis of 773 specs shows application/json
+      is used by 92% of APIs, making it the universal standard for modern REST APIs.
+    message: Response MUST Use application/json Content Type
+    severity: info
+    given: $.paths.*[get,post,put,patch,delete].responses[*].content
+    then:
+      field: application/json
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-must-use-json-content-type
+  openapi-response-must-use-json-content-type-oas2:
+    formats:
+    - oas2
+    description: API responses should offer application/json as a produced content type. In Swagger 2.0 produced media types
+      are declared in the operation (or root) `produces` array.
+    message: Operation `produces` MUST Include application/json
+    severity: info
+    given: $.paths.*[get,post,put,patch,delete]
+    then:
+      field: produces
+      function: schema
+      functionOptions:
+        dialect: draft7
+        schema:
+          type: array
+          contains:
+            const: application/json
+    documentationUrl: https://apicommons.org/rules/#openapi-response-must-use-json-content-type-oas2
+  openapi-response-ratelimit-header:
+    description: Responses should define the structured RateLimit header (current IETF draft) conveying quota, remaining,
+      and reset in one field — the modern successor to the RateLimit-Limit/Remaining/Reset triplet.
+    message: Responses should define a `RateLimit` header.
+    given: $..responses.*
+    severity: info
+    then:
+      field: headers.RateLimit
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-ratelimit-header
+  openapi-response-ratelimit-policy:
+    description: Responses should define a RateLimit-Policy header documenting the quota policy and window (e.g. 100;w=60),
+      so clients understand the limits in effect.
+    message: Responses should define a `RateLimit-Policy` header.
+    given: $..responses.*
+    severity: info
+    then:
+      field: headers.RateLimit-Policy
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-ratelimit-policy
+  openapi-response-return-correlation-id:
+    description: Responses should return a correlation / request ID header (e.g. Request-Id or X-Correlation-Id) so callers
+      can correlate a response with their request and with server-side logs.
+    message: Responses should return a correlation / request ID header.
+    given: $..responses.*
+    severity: info
+    then:
+      field: headers
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          anyOf:
+          - required:
+            - Request-Id
+          - required:
+            - X-Request-Id
+          - required:
+            - X-Request-ID
+          - required:
+            - Correlation-Id
+          - required:
+            - X-Correlation-Id
+          - required:
+            - X-Correlation-ID
+    documentationUrl: https://apicommons.org/rules/#openapi-response-return-correlation-id
+  openapi-response-write-document-412-precondition-failed:
+    description: Write operations should document a 412 Precondition Failed response for failed conditional (If-Match) writes.
+    message: Operation should document a `412` response.
+    given: $.paths[*][put,patch,delete].responses
+    severity: info
+    then:
+      field: '412'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-write-document-412-precondition-failed
+  openapi-response-write-etag:
+    description: Write success responses (POST/PUT/PATCH) should define an ETag header so clients receive the new entity tag
+      after a write and can make subsequent conditional requests.
+    message: Write success responses should define a `ETag` header.
+    given: $.paths[*][post,put,patch].responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: ETag
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-write-etag
+  openapi-schema-collection-require-pagination-params:
+    description: Collection GET endpoints SHOULD support pagination using query parameters. Offset or cursor based pagination
+      is required.
+    message: Collection GET endpoints SHOULD support pagination using query parameters.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}\/*.*/))].get
+    then:
+    - field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          items:
+            type: object
+          contains:
+            type: object
+            properties:
+              name:
+                const: limit
+              in:
+                const: query
+          allOf:
+          - anyOf:
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: offset
+                  in:
+                    const: query
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: cursor
+                  in:
+                    const: query
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: page
+                  in:
+                    const: query
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-collection-require-pagination-params
+  openapi-schema-property-require-examples:
+    description: Object properties must include examples.
+    message: '{{description}}; {{property}}'
+    severity: info
+    given: $..properties..properties.*
+    then:
+      function: digitalocean-ensurePropertiesExample
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-require-examples
+  openapi-server-must-not-specify-port:
+    description: Port MUST NOT be specified or required to use the API, except for 'localhost' testing in a spec.
+    message: Port MUST NOT be specified or required to use the API, except for 'localhost' testing in a spec.
+    severity: info
+    given: $.servers..url
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: (?!https?://localhost)(https?://.*):(\d*)\/?(.*)
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-server-must-not-specify-port
+  apis-json-api-property-require-go-sdk:
+    description: This property ensures that there is a Go SDK available for an API, making it easier for Go developers to
+      integrate an API into their applications.
+    message: Has Go SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-go)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-go-sdk
+  apis-json-api-property-require-java-sdk:
+    description: This property ensures that there is a Java SDK available for an API, making it easier for Java developers
+      to integrate an API into their applications.
+    message: Has Java SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-java)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-java-sdk
+  apis-json-api-property-require-node-sdk:
+    description: This property ensures that there is a Node SDK available for an API, making it easier for Node developers
+      to integrate an API into their applications.
+    message: Has Node SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-node)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-node-sdk
+  apis-json-api-property-require-python-sdk:
+    description: This property ensures that there is a Python SDK available for an API, making it easier for Python developers
+      to integrate an API into their applications.
+    message: Has Python SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-sdk-python)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-python-sdk
+  apis-json-api-property-require-sandbox:
+    description: This property ensures that an API has a reference to a sandbox for individual APIs or as part of common properties,
+      providing sandbox, synthetic data, and mock servers for use in making test requests.
+    message: Has a Blog
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(sandbox|Sandbox)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-sandbox
+  apis-json-api-property-require-sdk:
+    description: This property ensures that there is an SDK available for an API, making it easier for developers to integrate
+      an API into their applications.
+    message: Has SDK
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(sdk|sdks|SDKs)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-sdk
+  apis-json-api-property-require-signup:
+    description: This property ensures there is a link to where you sign up for an API, making sure API consumers can access
+      in a single click.
+    message: Has a Sign Up
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(X-signup|signup|Sign Up|SignUp)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-signup
+  apis-json-api-property-require-support-email:
+    description: This property ensures that an API has email support, providing a valid email address that can be used to
+      get API support.
+    message: Has Support Email
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(support-email|SupportEmail)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-support-email
+  apis-json-api-property-require-support-issues-url:
+    description: This property ensures that there are Git issues available to support an API, using the issues capability
+      of GitHub, GitLab, or Bitbucket to support API consumers.
+    message: Has Support Issues URL
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(SupportIssues|SupportGitHubIssues)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-support-issues-url
+  apis-json-api-property-require-support-page:
+    description: This property ensures that there is a support page available for an API, providing direct and in-direct support
+      opportunities for each API or for entire API platform.
+    message: Has Support Page
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(support|Support)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-support-page
+  apis-json-api-require-base-url:
+    description: Each API defined within an APIs.json artifact can specify the base URL for the API. This URL serves as a
+      reference point for developers during onboarding and when making API calls. Additionally, it helps identify the API
+      and validate the domain it is associated with.
+    message: APIs MUST Have a Base URL
+    severity: info
+    given: $.apis.*
+    then:
+      field: baseURL
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-require-base-url
+  apis-json-schema-include-api-plan:
+    description: This property provides a link to the dedicated plans page that applies to an API, providing information about
+      access tiers, rate limits, and features available for an API as part of a wider API business plan.
+    message: Has API Plans
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-plans|Plans)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-api-plan
+  apis-json-schema-include-developer-portal:
+    description: This property ensures there a developer portal associated with an API and that you can find a landing page
+      for the API, documentation, SDKs, and other resources.
+    message: Has Developer Portal
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-developer-portal|developer-portal|portal|Portal|Portals|DeveloperPortal)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-developer-portal
+  apis-json-schema-include-discussion-forum:
+    description: This property ensures that there is a link to a discussion forum, providing a way for consumers and producers
+      to engage and support either other throughout the lifecycle.
+    message: Has Discussion Forum
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(Forums|Forums|Discussions)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-discussion-forum
+  apis-json-schema-include-documentation:
+    description: This property ensures that there is documentation published for an API, and API consumers will have a set
+      of human-readable instructions for onboarding and integrating with HTTP APIs in their applications.
+    message: Has Documentation
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(documentation|Documentation)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-documentation
+  apis-json-schema-include-examples:
+    description: This property ensures that an API has a reference to a examples for individual APIs or as part of common
+      properties, providing examples and synthentic data that can be used for APIs.
+    message: Has a Blog
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(examples|Examples)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-examples
+  apis-json-schema-include-feedback-email:
+    description: This property ensures that there is an email available for API consumers to provide feedback.
+    message: Has Feedback Email
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(feedback-email|FeedbackEmail)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-feedback-email
+  apis-json-schema-include-feedback-issues-url:
+    description: This property ensures there is a URL to Git issues specifically for providing feedback.
+    message: Has Feedback Issues URL
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(FeedbackIssues|FeedbackGitHubIssues)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-feedback-issues-url
+  apis-json-schema-include-getting-started:
+    description: This property ensures that there is a getting started link available, providing a reference for API consumers
+      to get started with an API is as few steps as possible.
+    message: Has Getting Started
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(GettingStarted)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-getting-started
+  apis-json-schema-include-insomnia-collection:
+    description: This property defines an Insomnia collection available for each API, providing executable artifacts that
+      can be used in the Insomnia client for making calls, and executing automation workflows.
+    message: Has Insomnia Collection
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(RunInInsomnia)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-insomnia-collection
+  apis-json-schema-include-mock-server:
+    description: This property ensures that an API has a reference to a mock servers for individual APIs or as part of common
+      properties, providing mocked deployments of an API that can be used for making test API calls.
+    message: Has a Mock Server
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(mocks|Mocks|MockServers)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-mock-server
+  apis-json-schema-include-postman-collection:
+    description: This property ensures that an API has at least one Postman Collection associated with it, providing automation,
+      tests, and other executable derivatives of an APIs OpenAPI.
+    message: Has a Postman Collection
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(PostmanCollection)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-postman-collection
+  apis-json-schema-include-postman-public-workspace:
+    description: This property ensures that an API is associated with a Postman Workspace, providing a single location that
+      API producers and/or API consumers can engage around an API.
+    message: Has Public Postman Workspace
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(postman-public-workspace|PostmanPublicWorkspace|PostmanWorkspace)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-postman-public-workspace
+  apis-json-schema-include-pricing:
+    description: This property provides a link to a pricing page that applies to an API, providing a breakdown of the costs
+      associated with using an API.
+    message: Has Pricing
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(Pricing)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-pricing
+  apis-json-schema-include-production-environment:
+    description: This property ensures that there is a production environment available for an API, providing base URL, tokens,
+      keys, and other key / value pairs that are needed to integrate with an API.
+    message: Has a Production Environment
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(ProductionEnvironment)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-production-environment
+  apis-json-schema-include-questions-issues-url:
+    description: This property ensures that an API has a dedicated link to Git issues for asking questions.
+    message: Has Questions Issues URL
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(QuestionsIssues|QuestionsGitHubIssues)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-questions-issues-url
+  apis-json-schema-include-staging-environment:
+    description: This property ensures that there is a staging environment available for an API, providing base URL, tokens,
+      keys, and other key / value pairs that are needed to integrate with an API.
+    message: Has a Stage Environment
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(StagingEnvironment)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-staging-environment
+  mcp-document-require-instructions:
+    description: The `instructions` property should be present.
+    message: instructions should be present
+    severity: info
+    given: $
+    then:
+      field: instructions
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#mcp-document-require-instructions
+  plans-document-require-currency:
+    description: The `currency` property should be present.
+    message: currency should be present
+    severity: info
+    given: $
+    then:
+      field: currency
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#plans-document-require-currency
+  plans-plan-require-description:
+    description: The `description` property of each plan should be present.
+    message: description should be present
+    severity: info
+    given: $.plans[*]
+    then:
+      field: description
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#plans-plan-require-description
+  plans-plan-require-features:
+    description: The `features` property of each plan should be present.
+    message: features should be present
+    severity: info
+    given: $.plans[*]
+    then:
+      field: features
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#plans-plan-require-features
+  plans-plan-require-interval:
+    description: Each plan should declare a billing interval (e.g. month, year).
+    message: Plan should declare a billing interval.
+    given: $.plans[*]
+    severity: info
+    then:
+      field: interval
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#plans-plan-require-interval
+  plans-plan-require-price:
+    description: The `price` property of each plan should be present.
+    message: price should be present
+    severity: info
+    given: $.plans[*]
+    then:
+      field: price
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#plans-plan-require-price
+  agent-skill-skill-body-length:
+    description: Skill bodies should stay focused — very long instructions degrade agent performance. Keep the body under
+      ~5000 words.
+    message: Skill body is very long (over ~5000 words).
+    severity: info
+    given: $.words
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: integer
+          maximum: 5000
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-body-length
+  agent-skill-skill-description-length:
+    description: Skill descriptions should be specific enough to drive good selection — at least 40 characters of meaningful
+      intent.
+    message: Skill description should be at least 40 characters.
+    severity: info
+    given: $.frontmatter.description
+    then:
+      function: length
+      functionOptions:
+        min: 40
+        max: 1024
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-description-length
+  agent-skill-skill-description-single-line:
+    description: A skill description should be a single line (no embedded line breaks) so it renders cleanly in pickers.
+    message: Skill description should be a single line.
+    given: $.frontmatter.description
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \n
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-description-single-line
+  agent-skill-skill-name-max-length:
+    description: A skill name should be concise (64 characters or fewer).
+    message: Skill name should be 64 characters or fewer.
+    given: $.frontmatter.name
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: string
+          maxLength: 64
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-name-max-length

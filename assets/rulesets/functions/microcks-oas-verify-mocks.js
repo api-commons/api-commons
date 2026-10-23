@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import __sc from '@spotlight-rules/spotlight-core';
+import * as __sc from '@stoplight/spectral-core';
 const { createRulesetFunction } = __sc;
 
 export default createRulesetFunction(

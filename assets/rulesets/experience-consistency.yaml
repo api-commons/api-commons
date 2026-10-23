@@ -1,0 +1,3324 @@
+documentationUrl: https://spec.openlint.org/
+functions:
+- baloise-assert-http-codes-for-operation
+- digitalocean-ensureAllArraysHaveItemTypes
+- digitalocean-ensureSchemaHasType
+- digitalocean-ensureSnakeCaseWithDigits
+- trimble-check-content-type-for-206-get-response-code
+- trimble-check-for-content-type-in-put-and-post-responses
+- trimble-check-for-path-parameter
+- trimble-check-for-query-parameter-in-every-path
+- trimble-check-for-response-in-every-request
+- trimble-check-if-application-or-json-in-put-and-post-response
+- trimble-check-if-response-body-json-in-get-response
+- trimble-check-standard-for-error-payload
+- trimble-delete-must-not-return-body
+- trimble-does-spec-contains-valid-http-verbs
+- trimble-invalid-symbol-in-path
+- trimble-no-http-verbs-in-path
+- trimble-operation-post-201-202-status-code
+- trimble-valid-http-response
+- trimble-valid-url-checker
+- trimble-valid-version-checker
+functionsDir: ./functions
+rules:
+  openapi-component-example-keys-snake-case:
+    description: example key must be snake cased (e.g. snake_case).
+    message: '{{error}}'
+    severity: info
+    given: $.components['examples'].*~
+    then:
+      function: digitalocean-ensureSnakeCaseWithDigits
+    documentationUrl: https://apicommons.org/rules/#openapi-component-example-keys-snake-case
+  openapi-document-require-component-section:
+    description: The API contract MUST include a 'components' section.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $
+    then:
+      field: components
+      function: truthy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-document-require-component-section
+  openapi-header-names-hyphenated-pascal-case:
+    description: All `HTTP` headers MUST use `Hyphenated-Pascal-Case` notation.
+    message: '''HTTP'' headers MUST follow ''Hyphenated-Pascal-Case'' notation'
+    severity: info
+    given: $..parameters[?(@.in == 'header')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: /^([A-Z][a-z0-9]-)*([A-Z][a-z0-9])+/
+    documentationUrl: https://apicommons.org/rules/#openapi-header-names-hyphenated-pascal-case
+  openapi-header-no-x-prefix:
+    description: '''HTTP'' headers SHOULD NOT start with ''X-'' RFC6648.'
+    message: HTTP header '{{value}}' SHOULD NOT start with 'X-' in {{path}}
+    severity: info
+    given:
+    - $..parameters[?(@.in == 'header')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: /^([^x]|.[^-])|RateLimit-/i
+    documentationUrl: https://apicommons.org/rules/#openapi-header-no-x-prefix
+  openapi-info-description-length-limit:
+    description: Having a restriction on the length of the API description expressed as the OpenAPI info description helps
+      provide constraints for consumers when adding a description, and keeps portals, landing pages, documentation, and discovery
+      results more consistent.
+    message: Info description MUST be less than 500 characters.
+    severity: info
+    given: $.info
+    then:
+      field: description
+      function: length
+      functionOptions:
+        max: 500
+    documentationUrl: https://apicommons.org/rules/#openapi-info-description-length-limit
+  openapi-info-microcks-extension-valid:
+    description: x-microcks extension must be valid.
+    message: x-microcks extension must be valid
+    severity: info
+    given: $.info.x-microcks
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            labels:
+              type: object
+              additionalProperties:
+                type: string
+          required:
+          - labels
+          additionalProperties: false
+    formats:
+    - oas3
+    - aas2
+    - aas3
+    documentationUrl: https://apicommons.org/rules/#openapi-info-microcks-extension-valid
+  openapi-info-title-capitalized:
+    description: Having a consistent casing for the title for your API helps provide constraints for teams naming the API,
+      but also keep consistent with other APIs from across teams.
+    message: Info Title Has First Characters Capitalized
+    severity: info
+    given: $.info.title
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    documentationUrl: https://apicommons.org/rules/#openapi-info-title-capitalized
+  openapi-info-title-max-length:
+    description: Having a limitation on the length of the title for your API helps provide constraints for teams naming it,
+      but also keep consistent with other APIs from across teams.
+    message: Info Title MUST Be Less Than 50 Characters
+    severity: info
+    given: $.info
+    then:
+      field: title
+      function: length
+      functionOptions:
+        max: 50
+    documentationUrl: https://apicommons.org/rules/#openapi-info-title-max-length
+  openapi-info-version-must-be-semver:
+    description: The API version field should follow [semantic versioning](https://semver.org/#semantic-versioning-specification-semver).
+    message: Specs should follow semantic versioning. {{value}} is not a valid version.
+    severity: info
+    given: $.info.version
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[0-9]+.[0-9]+.[0-9]+(-[a-z0-9+.-]+)?
+    documentationUrl: https://apicommons.org/rules/#openapi-info-version-must-be-semver
+  openapi-info-version-must-use-semver:
+    description: Version should use semantic versioning. {{value}} is not a valid version.
+    message: Version should use semantic versioning. {{value}} is not a valid version.
+    severity: info
+    given: $.info.version
+    then:
+      function: pattern
+      functionOptions:
+        match: ^([0-9]+.[0-9]+.[0-9]+)$
+    documentationUrl: https://apicommons.org/rules/#openapi-info-version-must-use-semver
+  openapi-info-version-semantic-and-stable:
+    description: The API contract MUST have a stable version and MUST follow semantic versioning (e.g., '1.0.0'). Words like
+      'SNAPSHOT' or 'RELEASE' are not allowed.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.info.version
+    then:
+      function: pattern
+      functionOptions:
+        match: ^(?!.*\b(SNAPSHOT|RELEASE)\b)(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-info-version-semantic-and-stable
+  openapi-limit-nested-sub-resources:
+    description: The hierarchy of nested resources SHOULD NOT contain more than 8 resource names in the path.
+    message: The hierarchy of nested resources SHOULD NOT contain more than 8 resource names in the path.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^([^/]*/){9,}
+    documentationUrl: https://apicommons.org/rules/#openapi-limit-nested-sub-resources
+  openapi-limit-path-length:
+    description: APIs SHOULD NOT expand their total URL length beyond a few hundred characters.
+    message: APIs SHOULD NOT expand their total URL length beyond a few hundred characters.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: length
+      functionOptions:
+        max: 100
+    documentationUrl: https://apicommons.org/rules/#openapi-limit-path-length
+  openapi-limit-path-parameter:
+    description: The URL path should not contain more than 3 dynamic path parameters.
+    message: The URL path should not contain more than 3 dynamic path parameters.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(.*{{1}.*){4,}
+    documentationUrl: https://apicommons.org/rules/#openapi-limit-path-parameter
+  openapi-operation-description-max-length:
+    severity: info
+    description: Having a length limitation for each description of each API operation helps apply constraints to how you
+      describe your APIs, while helping drive consistency across APIs when it comes to search, documentation, and other ways
+      an API is made available.
+    message: Operation Description MUST Be Less Than 250 Characters
+    given: $.paths.*[get,post,patch,put,delete]
+    then:
+    - field: description
+      function: length
+      functionOptions:
+        max: 250
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-description-max-length
+  openapi-operation-id-camel-case:
+    description: Operation identifiers provide a unique way to identify each individual API, and requiring them to have consistent
+      casing reduces friction when generating SDKs and automating around APIs.
+    message: Operation Identifier MUST Be camelCase
+    severity: info
+    given: $.paths.*[get,post,patch,put,delete].operationId
+    then:
+    - function: pattern
+      functionOptions:
+        match: ^[a-z]+(?:[A-Z][a-z]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-id-camel-case
+  openapi-operation-id-url-safe:
+    description: OperationId must use URL friendly characters.
+    message: OperationId must use URL friendly characters.
+    severity: info
+    given: $.paths[*][*]
+    then:
+      field: operationId
+      function: pattern
+      functionOptions:
+        match: ^[A-Za-z0-9-._~:/?#\[\]@!\$&'()*+,;=]*$
+    formats:
+    - oas3
+    - oas3_1
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-id-url-safe
+  openapi-operation-microcks-extension-valid:
+    description: x-microcks-operation extension must be valid.
+    message: x-microcks-operation extension must be valid
+    severity: info
+    given:
+    - $.paths.*.*.x-microcks-operation
+    - $.channels.*.[publish,subscribe].x-microcks-operation
+    - $.operations.*.x-microcks-operation
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            delay:
+              type: number
+              format: int32
+            frequency:
+              type: number
+              format: int32
+            dispatcher:
+              type: string
+            dispatcherRules:
+              type: string
+            parameterConstraints:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  in:
+                    type: string
+                    enum:
+                    - path
+                    - query
+                    - header
+                  required:
+                    type: boolean
+                  recopy:
+                    type: boolean
+                  mustMatchRegexp:
+                    type: string
+                required:
+                - name
+                - in
+          additionalProperties: false
+    formats:
+    - oas3
+    - aas2
+    - aas3
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-microcks-extension-valid
+  openapi-operation-mutation-support-idempotency-key:
+    description: POST and PATCH operations should accept an Idempotency-Key request header so clients can safely retry without
+      creating duplicates.
+    message: Mutation should accept an Idempotency-Key header for safe retries.
+    given: $.paths[*][post,patch]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: Idempotency-Key
+              in:
+                const: header
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-mutation-support-idempotency-key
+  openapi-operation-patch-must-have-request-body:
+    formats:
+    - oas3
+    description: PATCH operations must have a request body.
+    message: PATCH operations must have a request body.
+    severity: info
+    given: $.paths[*].patch
+    then:
+      field: requestBody
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-patch-must-have-request-body
+  openapi-operation-patch-must-have-request-body-oas2:
+    formats:
+    - oas2
+    description: 'PATCH operations must accept a body parameter (a `parameters` entry with `in: body`).'
+    message: PATCH operations must have a body parameter.
+    severity: info
+    given: $.paths[*].patch
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        dialect: draft7
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - in
+            properties:
+              in:
+                const: body
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-patch-must-have-request-body-oas2
+  openapi-operation-post-not-for-retrieval:
+    description: POST requests SHOULD NOT be used for retrieving information. Use GET instead.
+    message: POST requests SHOULD NOT be used for retrieving information.
+    severity: info
+    given: $.paths[*].post
+    then:
+      field: summary
+      function: pattern
+      functionOptions:
+        notMatch: (retrieve|fetch|get|read)
+      message: '{{description}}: {{error}}'
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-post-not-for-retrieval
+  openapi-operation-post-require-request-body:
+    formats:
+    - oas3
+    description: POST HTTP methods can have a request body, providing a structured payload for configuring each API request.
+    message: POST Requests MUST Have a Body
+    severity: info
+    given: $.paths.*.post
+    then:
+      field: requestBody
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-post-require-request-body
+  openapi-operation-post-require-request-body-oas2:
+    formats:
+    - oas2
+    description: 'POST operations can accept a request payload; in Swagger 2.0 this is a `parameters` entry with `in: body`
+      or `in: formData`, providing a structured payload for configuring each API request.'
+    message: POST Requests MUST Have a Body Parameter
+    severity: info
+    given: $.paths.*.post
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        dialect: draft7
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - in
+            properties:
+              in:
+                enum:
+                - body
+                - formData
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-post-require-request-body-oas2
+  openapi-operation-put-require-request-body:
+    description: PUT requests MUST have a request body.
+    message: PUT requests MUST have a request body.
+    severity: info
+    given: $.paths[*].put
+    then:
+      field: requestBody
+      function: truthy
+      message: '{{description}}: {{error}}'
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-put-require-request-body
+  openapi-operation-ref-resource-file:
+    description: Endpoint must a $ref to a file in resources/.
+    message: '{{description}}; {{value}} incorrect'
+    severity: info
+    given: $.paths.*.$ref
+    then:
+      function: pattern
+      functionOptions:
+        match: ^resources/.*yml$
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-ref-resource-file
+  openapi-operation-require-id:
+    description: Every operation should have an operationId for SDK generation and documentation linking. Analysis shows operationId
+      styles across 8878 operations with camelCase dominant at 92%.
+    message: Operation MUST Have operationId
+    severity: info
+    given: $.paths.*[get,post,put,patch,delete]
+    then:
+      field: operationId
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-require-id
+  openapi-operation-require-identifier:
+    description: Operation identifiers provide a unique way to identify each individual API, which then used for SDK generation
+      and other automation.
+    message: Operation MUST Have Identifier
+    severity: info
+    given: $.paths.*[get,post,patch,put,delete]
+    then:
+    - field: operationId
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-require-identifier
+  openapi-operation-require-one-tag:
+    description: Having tags applied to each API operations helps organize and group APIs in portals, documentation, search,
+      and other ways in which APIs are made available.
+    message: MUST Be At Least One Operation Tag
+    severity: info
+    given: $.paths.*[get,post,patch,put,delete]
+    then:
+      field: tags
+      function: length
+      functionOptions:
+        min: 1
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-require-one-tag
+  openapi-operation-require-response:
+    description: Check if every request has their respective responses.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*
+    then:
+      function: trimble-check-for-response-in-every-request
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-require-response
+  openapi-operation-security-use-defined-scheme:
+    description: Check operation security uses a defined security scheme.
+    message: Check operation security uses a defined security scheme.
+    severity: info
+    given: $.paths[*][*]..security.*
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          anyOf:
+          - required:
+            - bearer_auth
+          - required:
+            - inference_bearer_auth
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-security-use-defined-scheme
+  openapi-operation-summary-max-length:
+    severity: info
+    description: Apply length constraints to the operation summary helps keep them consistent for publishing in documentation.
+    message: Operation Summary MUST Be Less Than 50 Characters
+    given: $.paths.*[get,post,patch,put,delete]
+    then:
+    - field: summary
+      function: length
+      functionOptions:
+        max: 50
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-summary-max-length
+  openapi-operation-summary-no-period:
+    description: Operation summaries should not have a period, keeping the primary summary for each API as consistent as possible
+      for publishing in documentation.
+    message: Operation MUST Not Have a Period.
+    severity: info
+    given: $.paths[*][*].summary
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \.$
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-summary-no-period
+  openapi-operation-tag-title-case:
+    description: Having the first letter of each word applied as a tag to API operations helps keep a consistent layout when
+      published via search, documentation, and other ways APIs are made available.
+    message: Operation Tag Names MUST Have First Letter in Each Word Capitalized
+    severity: info
+    given: $.paths.*[get,post,patch,put,delete].tags.*
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-tag-title-case
+  openapi-operation-use-ref:
+    description: Endpoint must be a $ref.
+    message: '{{description}}; {{property}} incorrect'
+    severity: info
+    given: $.paths.*.*
+    then:
+      field: $ref
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-use-ref
+  openapi-operation-well-understood-status-codes:
+    description: MUST use standard HTTP status codes [150].
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*
+    then:
+      function: baloise-assert-http-codes-for-operation
+      functionOptions:
+        wellUnderstood:
+          '200':
+          - ALL
+          '201':
+          - POST
+          - PUT
+          '202':
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+          '204':
+          - PUT
+          - DELETE
+          - PATCH
+          '207':
+          - POST
+          '301':
+          - ALL
+          '303':
+          - PATCH
+          - POST
+          - PUT
+          - DELETE
+          '304':
+          - GET
+          - HEAD
+          '400':
+          - ALL
+          '401':
+          - ALL
+          '403':
+          - ALL
+          '404':
+          - ALL
+          '405':
+          - ALL
+          '406':
+          - ALL
+          '408':
+          - ALL
+          '409':
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+          '410':
+          - ALL
+          '412':
+          - PUT
+          - DELETE
+          - PATCH
+          '415':
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+          '422':
+          - ALL
+          '423':
+          - PUT
+          - DELETE
+          - PATCH
+          '428':
+          - ALL
+          '429':
+          - ALL
+          '500':
+          - ALL
+          '501':
+          - ALL
+          '503':
+          - ALL
+          default:
+          - ALL
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-well-understood-status-codes
+  openapi-parameter-array-require-items:
+    description: Parameters that are of an array type should always have the items defined, being explicit about what is continued
+      as part of the array.
+    message: Parameter Schema Array MUST Have Items
+    severity: info
+    given:
+    - $.components.parameters.schema[?(@.type=='array')]
+    - $.parameters.schema[?(@.type=='array')]
+    then:
+      field: items
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-array-require-items
+  openapi-parameter-array-typed-items:
+    description: Array parameters must have an items attribute with a type.
+    message: '{{error}}'
+    severity: info
+    given: $..*.parameters[*]
+    then:
+      function: digitalocean-ensureAllArraysHaveItemTypes
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-array-typed-items
+  openapi-parameter-description-max-length:
+    severity: info
+    description: Limiting the length of parameters description forces us to be more concise in how we describe each parameter,
+      while keeping our documentation and other ways descriptions show up in discovery and portals more consistent.
+    message: Parameters Description MUST Be Less Than 500 Characters
+    given:
+    - $.components.parameters.*
+    - $.parameters.*
+    then:
+      field: summary
+      function: length
+      functionOptions:
+        max: 500
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-description-max-length
+  openapi-parameter-enum-upper-snake-case:
+    description: Keeping parameters enumerator casing consistent across APIs helps reduce confusion by consumers, and can
+      keep aligned with services and applications putting an API to work.
+    message: Parameters Enums MUST Must Be Upper Snake Case
+    severity: info
+    given:
+    - $.components.parameters.*.enum.*
+    - $.parameters.*.enum.*
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^[A-Z]+(?:_[A-Z]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-enum-upper-snake-case
+  openapi-parameter-filter-param-only-on-get:
+    description: Only GET-based endpoints SHOULD have have the query parameter 'filter'.
+    message: Only GET-based endpoints SHOULD have have the query parameter 'filter'.
+    severity: info
+    given: $.paths.*[?(@property!='get')].parameters.[?(@.in=='query' && @.name=='filter')].name
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-filter-param-only-on-get
+  openapi-parameter-keys-snake-case:
+    description: parameter key must be snake cased (e.g. snake_case).
+    message: '{{error}}'
+    severity: info
+    given: $.components['parameters'].*~
+    then:
+      function: digitalocean-ensureSnakeCaseWithDigits
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-keys-snake-case
+  openapi-parameter-name-max-length:
+    severity: info
+    description: Providing short and concise names for your parameters helps make it easier for API consumers to understand
+      how they are able to configure their API requests.
+    message: Parameters Name Length MUST Be Less Than 25 Characters
+    given:
+    - $.components.parameters[?(@.in=='path')].name
+    - $.parameters[?(@.in=='path')].name
+    then:
+      field: summary
+      function: length
+      functionOptions:
+        max: 25
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-name-max-length
+  openapi-parameter-names-camel-case:
+    description: Providing parameters with consistent naming helps make it easier for API consumers to understand how they
+      are able to configure their API requests.
+    message: Parameters Names MUST Be Camel Case
+    severity: info
+    given:
+    - $.components.parameters.*
+    - $.parameters.*
+    then:
+    - field: name
+      function: pattern
+      functionOptions:
+        notMatch: ^[a-z]+(?:[A-Z][a-z]+)*$
+    - field: name
+      function: pattern
+      functionOptions:
+        match: ^[A-Z](([a-z0-9]+[A-Z]?)*)$
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-names-camel-case
+  openapi-parameter-no-forbidden-http-header:
+    description: 'OAS do not allow using the following HTTP headers in a specification file: Authorization, Content-Type and
+      Accept. You MUST use the associate functionalities provided by OAS, instead.'
+    message: '{{error}} in {{path}} {{value}}'
+    severity: info
+    given:
+    - $..parameters[?(@.in == 'header')].name
+    - $.[responses][*].headers.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /^(accept|content-type|authorization)$/i
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-no-forbidden-http-header
+  openapi-parameter-no-hybrid-and-root-filtering:
+    description: Hybrid filtering MAY be offered on multiple attributes, but MUST never exist if a root "filter" query parameter
+      is present.
+    message: Hybrid filtering MAY be offered on multiple attributes, but MUST never exist if a root "filter" query parameter
+      is present.
+    severity: info
+    given: $.paths..get.parameters^
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            parameters:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  in:
+                    type: string
+          allOf:
+          - if:
+              properties:
+                parameters:
+                  type: array
+                  contains:
+                    type: object
+                    properties:
+                      name:
+                        const: filter
+            then:
+              not:
+                properties:
+                  parameters:
+                    type: array
+                    contains:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          pattern: \w+Filter
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-no-hybrid-and-root-filtering
+  openapi-parameter-no-id-query:
+    description: Resource identifier filtering is not allowed as a query parameter. Use the resource identifier in the URL
+      path.
+    message: Resource identifier filtering is not allowed as a query parameter.
+    severity: info
+    given: $.paths..get.parameters.[?(@.in=='query' && @.name=='id')]
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        notMatch: ^id$
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-no-id-query
+  openapi-parameter-no-x-prefixed-request-header:
+    description: Do not use headers with X-.
+    message: 'Headers cannot start with X-. More: https://tools.ietf.org/html/rfc6648'
+    severity: info
+    given: $..parameters.[?(@.in === 'header')].name
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(x|X)-
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-no-x-prefixed-request-header
+  openapi-parameter-pagination-params-in-query:
+    description: Pagination parameters like page, limit, offset, and cursor should be passed as query parameters, not in headers
+      or path segments. Analysis confirms 100% of pagination parameters observed are query parameters.
+    message: Pagination Parameters MUST Be Query Parameters
+    severity: info
+    given: $.paths[*].get.parameters[?(@.name == 'page' || @.name == 'limit' || @.name == 'offset' || @.name == 'cursor' ||
+      @.name == 'per_page' || @.name == 'page_size')]
+    then:
+      field: in
+      function: pattern
+      functionOptions:
+        match: query
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-pagination-params-in-query
+  openapi-parameter-query-allowed-characters:
+    description: 'Query parameter keys MUST include only alpha-numeric characters and periods: [Aa0-Zz9]''.'
+    message: 'Query parameter keys MUST include only alpha-numeric characters and periods: [Aa0-Zz9]''.'
+    severity: info
+    given: $.paths.*.*.parameters[?(@.in=='query')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Za-z0-9\.]+$
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-query-allowed-characters
+  openapi-parameter-query-camel-case:
+    description: MUST query parameter names must be ASCII camelCase [130a].
+    message: Query parameter name has to be ASCII camelCase
+    severity: info
+    given: $.paths.*.*.parameters[?(@ && @.in=='query')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z]+((\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?$
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-query-camel-case
+  openapi-parameter-query-must-be-optional:
+    description: Query parameters MUST be optional.
+    message: Query parameters MUST be optional.
+    severity: info
+    given: $.paths.*.*.parameters[?(@.in=='query')].required
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-query-must-be-optional
+  openapi-parameter-schema-require-type:
+    description: Parameters must always have their schema type defined, being precise about what type of data can be inputted
+      and used to configure an API request.
+    message: Parameter Schema Type
+    severity: info
+    given:
+    - $.components.parameters.*.schema
+    - $.parameters.*.schema
+    then:
+      field: type
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-schema-require-type
+  openapi-parameter-schema-use-ref:
+    description: Parameters must always use a schema reference that utilizes reusable schema that are defined as part of a
+      centralized schema components library.
+    message: Parameters MUST Use Schema Reference
+    severity: info
+    given:
+    - $.components.parameters.*.schema
+    - $.parameters.*.schema
+    then:
+      field: $ref
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-schema-use-ref
+  openapi-parameter-sort-param-only-on-get:
+    description: Non-GET endpoints MUST NOT have sorting query parameters. Parameter names such as sort, sorting, orderBy,
+      etc.
+    message: Non-GET endpoints MUST NOT have sorting query parameters.
+    severity: info
+    given: $.paths.*[?(@property!='get')].parameters.[?(@.in=='query')]
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        notMatch: ^sort|sorting|sortBy|order|ordering|orderBy$
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-sort-param-only-on-get
+  openapi-path-delete-no-response-body:
+    description: Check if the delete response does not have any body.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*
+    then:
+      function: trimble-delete-must-not-return-body
+    documentationUrl: https://apicommons.org/rules/#openapi-path-delete-no-response-body
+  openapi-path-get-response-support-json:
+    description: All APIs returning structured data SHOULD support JSON as the default format.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*
+    then:
+      function: trimble-check-if-response-body-json-in-get-response
+    documentationUrl: https://apicommons.org/rules/#openapi-path-get-response-support-json
+  openapi-path-include-version:
+    description: Path must include the version.
+    message: '{{description}}; {{property}} incorrect'
+    severity: info
+    given: $.paths[?(@property!='/<upload_url>')]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^(/v[12]/.*|/api/v[12]/.*)$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-include-version
+  openapi-path-max-nesting-depth:
+    description: API paths should not exceed 4 levels of nesting depth. Analysis of 6627 paths across 773 specs shows an average
+      depth of 3.04 segments, with deeper paths indicating overly complex resource hierarchies.
+    message: Path Nesting MUST NOT Exceed 4 Levels
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(/[^/]+){5,}
+    documentationUrl: https://apicommons.org/rules/#openapi-path-max-nesting-depth
+  openapi-path-no-api-prefix-in:
+    description: A resource SHOULD NOT contain 'api' as a prefix in or a part of the path.
+    message: A resource SHOULD NOT contain 'api' as a prefix in or a part of the path.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /api|/api/|-api/
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-api-prefix-in
+  openapi-path-no-empty-segment:
+    description: A resource MUST use normalized paths without empty path segments.
+    message: A resource MUST use normalized paths without empty path segments.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: //
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-empty-segment
+  openapi-path-no-file-extension-in:
+    description: A resource SHOULD NOT make use of an extension at any point in the path.
+    message: A resource SHOULD NOT make use of an extension at any point in the path.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \.
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-file-extension-in
+  openapi-path-no-file-extensions:
+    description: API paths should not include file extensions like .json or .xml. Content negotiation should be handled through
+      Accept headers rather than path suffixes.
+    message: Paths MUST NOT Contain File Extensions
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \.(json|xml|html|yaml|yml|csv|pdf)$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-file-extensions
+  openapi-path-no-format-extensions-in:
+    description: Request and Response media type formats MUST NOT be implied using extensions on resources (i.e. .json or
+      .xml). Instead, use the standard resource path with the appropriate Content-Type header.
+    message: Request and Response media type formats MUST NOT be implied using extensions on resources (i.e.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \.json|\.xml|\.yml|\.yaml
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-format-extensions-in
+  openapi-path-no-http-method-names:
+    description: 'When you design a REST API, you don''t usually need to mention terms like `get`, `delete` and so on in your
+      `paths`, because this information is conveyed by the HTTP method. Instead of using ``` POST /books/1234/delete HTTP/1.1
+      Host: api.example ``` You can simply call ``` DELETE /books/1234 HTTP/1.1 Host: api.example ``` Similarly you don''t
+      need verbs like `list` or `create` because the HTTP Semantics RFC7231 supports this kind of actions natively with proper
+      methods and status code. Instead of ``` POST /create/user HTTP/1.1 Host: api.example Content-Type: application/json
+      {"given_name": "Mario"} ``` You can use ``` POST /create/user HTTP/1.1 Host: api.example Content-Type: application/json
+      {"given_name": "Mario"} ``` returning a proper response ``` HTTP/1.1 201 Created Location: /users/1234 ``` This simplifies
+      securing your API as you know beforehand the kind of action which is going to be performed.'
+    message: API "path" contains a name of an http method. {{error}}
+    severity: info
+    given:
+    - $.paths[?(@property.match( /\/(get|post|put|delete|patch)[\/A-Z_\-]?/ ))]~
+    - $.paths[?(@property.match( /\/(create|remove|list)[\/A-Z_\-]?/ ))]~
+    then:
+      field: '@key'
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-http-method-names
+  openapi-path-no-http-methods-in:
+    description: A resource SHOULD NOT contain HTTP methods.
+    message: A resource SHOULD NOT contain HTTP methods.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: (\/get|\/post|\/put|\/delete|\/patch)
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-http-methods-in
+  openapi-path-no-http-verbs:
+    severity: info
+    description: HTTP verbs should be not be in URL paths.
+    message: '{{property}} has HTTP verb in path: {{error}}'
+    given: $.paths[*]~
+    then:
+      function: trimble-no-http-verbs-in-path
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-http-verbs
+  openapi-path-no-invalid-symbols:
+    description: Check if the given endpoint has queryparameter.
+    message: '{{error}}'
+    severity: info
+    given: $.paths[*]~
+    then:
+      function: trimble-invalid-symbol-in-path
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-invalid-symbols
+  openapi-path-no-query-string:
+    description: Path must not include query string.
+    message: Path must not include query string.
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \?
+    formats:
+    - oas3
+    - oas3_1
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-query-string
+  openapi-path-no-query-strings-in:
+    description: Paths SHOULD NOT have query parameters in them. They should be defined separately in the OpenAPI.
+    message: Paths SHOULD NOT have query parameters in them. They should be defined separately in the OpenAPI.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \?
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-query-strings-in
+  openapi-path-no-trailing-slash:
+    description: Path must not end with a slash.
+    message: Path must not end with a slash.
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: .+\/$
+    formats:
+    - oas3
+    - oas3_1
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-trailing-slash
+  openapi-path-no-trailing-slash-in:
+    description: A resource MUST be addressable without a trailing slash on the path.
+    message: A resource MUST be addressable without a trailing slash on the path.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-trailing-slash-in
+  openapi-path-no-verbs:
+    description: API paths MUST be resource-focused and MUST NOT include verbs like 'get', 'update', 'create', or 'delete'.
+    message: Path '{{path}}' includes a verb (e.g., 'get', 'update', 'create', 'delete'). API paths SHOULD be resource-focused.
+    severity: info
+    given: $.paths[*]~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /\b(get|update|create|delete|fetch|retrieve)\b/
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-verbs
+  openapi-path-no-version-segment:
+    description: API paths should not contain version numbers like v1 or v2. API versioning should be handled through headers,
+      query parameters, or server URLs rather than embedded in resource paths.
+    message: Paths MUST NOT Contain API Version
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /v[0-9]
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-version-segment
+  openapi-path-no-x-prefixed-response-header:
+    description: Do not use headers with X-.
+    message: 'Headers cannot start with X-, so please find a new name for {{property}}. More: https://tools.ietf.org/html/rfc6648'
+    severity: info
+    given: $..headers.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(x|X)-
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-x-prefixed-response-header
+  openapi-path-parameter-camel-case:
+    description: Path parameters MUST follow camelCase.
+    message: '{{property}} path parameter is not camelCase: {{error}}'
+    severity: info
+    given: $..parameters[?(@.in == 'path')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9]+$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-parameter-camel-case
+  openapi-path-parameter-constant-case:
+    description: Path parameters MUST follow CONSTANT_CASE (screaming snake_case).
+    message: '{{property}} path parameter is not CONSTANT_CASE: {{error}}'
+    severity: info
+    given: $..parameters[?(@.in == 'path')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-parameter-constant-case
+  openapi-path-parameter-kebab-case:
+    description: Path parameters MUST follow kebab-case.
+    message: '{{property}} path parameter is not kebab-case: {{error}}'
+    severity: info
+    given: $..parameters[?(@.in == 'path')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(-[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-parameter-kebab-case
+  openapi-path-parameter-not-empty:
+    description: Path parameter declarations must not be empty ex. `/api/{}` is invalid.
+    message: Path parameter declarations must not be empty ex.
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: '{}'
+    formats:
+    - oas3
+    - oas3_1
+    documentationUrl: https://apicommons.org/rules/#openapi-path-parameter-not-empty
+  openapi-path-parameter-pascal-case:
+    description: Path parameters MUST follow PascalCase.
+    message: '{{property}} path parameter is not PascalCase: {{error}}'
+    severity: info
+    given: $..parameters[?(@.in == 'path')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][a-zA-Z0-9]+$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-parameter-pascal-case
+  openapi-path-parameter-snake-case:
+    description: Path parameters MUST follow snake_case.
+    message: '{{property}} path parameter is not snake_case: {{error}}'
+    severity: info
+    given: $..parameters[?(@.in == 'path')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(_[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-parameter-snake-case
+  openapi-path-params-declared-in-block:
+    description: Check for the path parameter in the parameter block.
+    message: '{{error}}'
+    severity: info
+    given: $.paths
+    then:
+      function: trimble-check-for-path-parameter
+    documentationUrl: https://apicommons.org/rules/#openapi-path-params-declared-in-block
+  openapi-path-require-query-parameter:
+    description: Check if the given resource path has queryparameter.
+    message: '{{error}}'
+    severity: info
+    given: $.paths[*]~
+    then:
+      function: trimble-check-for-query-parameter-in-every-path
+    documentationUrl: https://apicommons.org/rules/#openapi-path-require-query-parameter
+  openapi-path-require-valid-http-verb:
+    description: All APIs MUST have a valid http verb.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*
+    then:
+      field: '@key'
+      function: trimble-does-spec-contains-valid-http-verbs
+    documentationUrl: https://apicommons.org/rules/#openapi-path-require-valid-http-verb
+  openapi-path-resources-plural:
+    description: Resource names in paths should use plural nouns to maintain consistency and follow REST conventions for collection-oriented
+      resource design.
+    message: Path Resources Should Be Plural
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        match: ^(/[a-z].*s(/\{[^}]+\})?)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-resources-plural
+  openapi-path-segment-kebab-case:
+    description: All YAML/JSON paths MUST follow kebab-case.
+    message: '{{property}} is not kebab-case: {{error}}'
+    severity: info
+    given: $.paths[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^/([a-z0-9]+(-[a-z0-9]+)*)?(/[a-z0-9]+(-[a-z0-9]+)*|/{.+})*$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-segment-kebab-case
+  openapi-path-uri-versioning-single-version:
+    description: CAN use correct URI versioning [115a].
+    message: Path can contain correct URI versioning
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^((?!.*\/v\d+(\/.*)?\/v\d+)\/.*)$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-uri-versioning-single-version
+  openapi-path-use-standard-http-methods:
+    description: Operations MUST use only the common HTTP methods as outlined in the standards guide, and must be in lower-case.
+    message: Operations MUST use only the common HTTP methods as outlined in the standards guide, and must be in lower-case.
+    severity: info
+    given: $.paths[*].*~
+    then:
+      field: method
+      function: enumeration
+      functionOptions:
+        values:
+        - get
+        - post
+        - put
+        - patch
+        - delete
+        - head
+        - options
+    documentationUrl: https://apicommons.org/rules/#openapi-path-use-standard-http-methods
+  openapi-path-write-response-support-json:
+    description: All APIs returning structured data SHOULD support JSON as the default format.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*
+    then:
+      function: trimble-check-if-application-or-json-in-put-and-post-response
+    documentationUrl: https://apicommons.org/rules/#openapi-path-write-response-support-json
+  openapi-request-body-must-use-json-content-type:
+    formats:
+    - oas3
+    description: Request bodies should use application/json as the primary content type for consistency across API operations
+      and client implementations.
+    message: Request Body MUST Use application/json Content Type
+    severity: info
+    given: $.paths.*[post,put,patch].requestBody.content
+    then:
+      field: application/json
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-request-body-must-use-json-content-type
+  openapi-request-body-must-use-json-content-type-oas2:
+    formats:
+    - oas2
+    description: Request bodies should be consumed as application/json for consistency across API operations and client implementations.
+      In Swagger 2.0 consumed media types are declared in the operation (or root) `consumes` array.
+    message: Operation `consumes` MUST Include application/json
+    severity: info
+    given: $.paths.*[post,put,patch]
+    then:
+      field: consumes
+      function: schema
+      functionOptions:
+        dialect: draft7
+        schema:
+          type: array
+          contains:
+            const: application/json
+    documentationUrl: https://apicommons.org/rules/#openapi-request-body-must-use-json-content-type-oas2
+  openapi-request-delete-must-not-have-body:
+    formats:
+    - oas3
+    description: DELETE operations must not accept a request body.
+    message: DELETE operations must not accept a request body.
+    severity: info
+    given: $.paths[*].delete.requestBody
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-delete-must-not-have-body
+  openapi-request-delete-must-not-have-body-oas2:
+    formats:
+    - oas2
+    description: A DELETE operation must not accept a body parameter.
+    message: DELETE operations must not accept a body parameter.
+    severity: info
+    given: $.paths[*].delete.parameters[?(@.in=='body')]
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-delete-must-not-have-body-oas2
+  openapi-request-delete-no-body:
+    description: DELETE requests MUST NOT have a request body.
+    message: DELETE requests MUST NOT have a request body.
+    severity: info
+    given: $.paths[*].delete.requestBody
+    then:
+      function: falsy
+      message: '{{description}}: {{error}}'
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-delete-no-body
+  openapi-request-get-must-not-have-body:
+    formats:
+    - oas3
+    description: A `GET` request MUST NOT accept a request body.
+    message: A `GET` request MUST NOT accept a request body.
+    severity: info
+    given: $.paths[*][get].requestBody
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-get-must-not-have-body
+  openapi-request-get-must-not-have-body-oas2:
+    formats:
+    - oas2
+    description: A `GET` request MUST NOT accept a body parameter.
+    message: A `GET` request MUST NOT accept a body parameter.
+    severity: info
+    given: $.paths[*][get].parameters[?(@.in=='body')]
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-get-must-not-have-body-oas2
+  openapi-request-get-no-body:
+    description: GET requests MUST NOT have a request body.
+    message: GET requests MUST NOT have a request body.
+    severity: info
+    given: $.paths[*].get.requestBody
+    then:
+      function: falsy
+      message: '{{description}}: {{error}}'
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-get-no-body
+  openapi-request-head-must-not-have-body:
+    formats:
+    - oas3
+    description: A `HEAD` request MUST NOT accept a request body.
+    message: A `HEAD` request MUST NOT accept a request body.
+    severity: info
+    given: $.paths[*][head].requestBody
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-head-must-not-have-body
+  openapi-request-head-must-not-have-body-oas2:
+    formats:
+    - oas2
+    description: A `HEAD` request MUST NOT accept a body parameter.
+    message: A `HEAD` request MUST NOT accept a body parameter.
+    severity: info
+    given: $.paths[*][head].parameters[?(@.in=='body')]
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-head-must-not-have-body-oas2
+  openapi-request-header-names-pascal-case:
+    description: Headers should be pascal-case. See Italian recommendation RAC_REST_NAME_003.
+    message: '{{value}} {{error}} in {{path}}'
+    severity: info
+    given:
+    - $.[parameters][?(@.in=="header")].name
+    then:
+      function: casing
+      functionOptions:
+        type: pascal
+        separator:
+          char: '-'
+    documentationUrl: https://apicommons.org/rules/#openapi-request-header-names-pascal-case
+  openapi-request-options-must-not-have-body:
+    formats:
+    - oas3
+    description: An `OPTIONS` request MUST NOT accept a request body.
+    message: An `OPTIONS` request MUST NOT accept a request body.
+    severity: info
+    given: $.paths[*][options].requestBody
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-options-must-not-have-body
+  openapi-request-options-must-not-have-body-oas2:
+    formats:
+    - oas2
+    description: An `OPTIONS` request MUST NOT accept a body parameter.
+    message: An `OPTIONS` request MUST NOT accept a body parameter.
+    severity: info
+    given: $.paths[*][options].parameters[?(@.in=='body')]
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-options-must-not-have-body-oas2
+  openapi-request-patch-media-type-not-plain-json:
+    description: 'The PATCH specification explicits that the request body contains a "patch document" describing the changes
+      to be applied to the target resource. To avoid confusion, [this errata](https://www.rfc-editor.org/errata/eid3169) explains
+      that `application/json` is not an appropriate media-type for `PATCH`. A correct example of PATCH using eg. `application/json-patch+json`
+      media-type defined in RFC6902. ``` paths: /books/{book_id}: patch: requestBody: content: application/json-patch+json:
+      schema: type: object example: [{ "op": "add", "path": "/baz", "value": "qux" }] ```.'
+    message: application/json is not an appropriate media-type for PATCH. {{path}}
+    severity: info
+    given: $.[patch][requestBody][content]
+    then:
+      field: application/json
+      function: falsy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-patch-media-type-not-plain-json
+  openapi-request-property-names-camel-case:
+    formats:
+    - oas3
+    description: MUST property names must be ASCII camelCase [118a].
+    message: Property name has to be ASCII camelCase
+    severity: info
+    given: $.paths.*.*[responses,requestBody]..content..schema..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z]+((\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?$
+    documentationUrl: https://apicommons.org/rules/#openapi-request-property-names-camel-case
+  openapi-request-property-names-camel-case-oas2:
+    formats:
+    - oas2
+    description: MUST property names must be ASCII camelCase [118a].
+    message: Property name has to be ASCII camelCase
+    severity: info
+    given:
+    - $.paths.*.*.responses..schema..properties.*~
+    - $.paths.*.*.parameters[?(@.in=='body')].schema..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z]+((\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?$
+    documentationUrl: https://apicommons.org/rules/#openapi-request-property-names-camel-case-oas2
+  openapi-request-support-accept-language:
+    description: Operations should accept an Accept-Language request header so clients can negotiate a localized response
+      (i18n).
+    message: Operation should accept an Accept-Language header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: Accept-Language
+              in:
+                const: header
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-accept-language
+  openapi-request-support-form-urlencoded-media-type:
+    description: Every request MUST support `application/x-www-form-urlencoded` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('urlencoded') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-form-urlencoded-media-type
+  openapi-request-support-json-media-type:
+    description: Every request MUST support `application/json` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('json') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-json-media-type
+  openapi-request-support-json-media-type-2:
+    description: Every request MUST support `application/json` media type.
+    message: Every request MUST support `application/json` media type.
+    severity: info
+    given: $.paths[*][*].requestBody.content
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            application/json: true
+          required:
+          - application/json
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-json-media-type-2
+  openapi-request-support-multipart-media-type:
+    description: Every request MUST support `multipart/form-data` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('multipart') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-multipart-media-type
+  openapi-request-support-text-plain-media-type:
+    description: Every request MUST support `text/plain` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('plain') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-text-plain-media-type
+  openapi-request-support-xml-media-type:
+    description: Every request MUST support `application/xml` media type.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.paths.[*].requestBody.content[?(@property.indexOf('xml') === -1)]^
+    then:
+      function: falsy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-xml-media-type
+  openapi-response-206-require-content-range:
+    description: Check if the get response code 206 has content-type and content-range.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*
+    then:
+      function: trimble-check-content-type-for-206-get-response-code
+    documentationUrl: https://apicommons.org/rules/#openapi-response-206-require-content-range
+  openapi-response-body-must-be-object:
+    formats:
+    - oas3
+    description: Response bodies must be an object type.
+    message: Response bodies must be an object type.
+    severity: info
+    given: $.paths[*][*].responses[*].content.application/json.schema.type
+    then:
+      function: pattern
+      functionOptions:
+        match: object
+    documentationUrl: https://apicommons.org/rules/#openapi-response-body-must-be-object
+  openapi-response-body-must-be-object-oas2:
+    formats:
+    - oas2
+    description: Response bodies must be an object type.
+    message: Response bodies must be an object type.
+    severity: info
+    given: $.paths[*][*].responses[*].schema.type
+    then:
+      function: pattern
+      functionOptions:
+        match: object
+    documentationUrl: https://apicommons.org/rules/#openapi-response-body-must-be-object-oas2
+  openapi-response-cache-header-no-conflict:
+    description: 'Cache usage SHOULD be extensively detailed in the `description` property to avoid data leaks or the usage
+      of stale data. This rule should ensure in some way that the api provider documented extensively the cache usage to avoid
+      data leaks or usage of stale data. For now this ruleset tests: * the presence of following keywords in the `description`:
+      `max-age`, `private`, `no-store`, `no-cache`. * that one and only one between Expires and Cache-Control is used. `Cache-Control`
+      and `Expires` should not be used in conjuction, because `Cache-Control` overrides `Expires` when `max-age` is set. Instead
+      if neither `Cache-Control` or `Expires` are set, clients MAY use euristic cache like described in RFC7234.'
+    message: '{{error}}'
+    severity: info
+    given: $.[responses][?(@property[0] == "2" )][headers]
+    then:
+    - function: xor
+      functionOptions:
+        properties:
+        - Expires
+        - Cache-Control
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-cache-header-no-conflict
+  openapi-response-code-must-be-valid:
+    description: All APIs should return a valid http response code.
+    message: '{{error}}'
+    severity: info
+    given: $..responses
+    then:
+      field: '@key'
+      function: trimble-valid-http-response
+    documentationUrl: https://apicommons.org/rules/#openapi-response-code-must-be-valid
+  openapi-response-custom-header-naming-format:
+    description: Custom headers MUST NOT be longer than 50 chars, and MUST only contain alphanumeric and dash chars, and MUST
+      begin with Sps- not X-.
+    message: Custom headers MUST NOT be longer than 50 chars, and MUST only contain alphanumeric and dash chars, and MUST
+      begin with Sps- not X-.
+    severity: info
+    given: $.paths[*][*].responses[*].headers.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^(Sps-[a-zA-Z0-9-]{1,50}|Accept|Access-Control.*|Authorization|Cache-Control|Content-Disposition|Content-Language|Content-Length|Content-Type|Date|ETag|Host|If-Match|If-None-Match|Location|Origin|User-Agent)$
+    documentationUrl: https://apicommons.org/rules/#openapi-response-custom-header-naming-format
+  openapi-response-default-content-language-en-us:
+    description: Content-Language is optional but MUST default locale to en-US when none provided.
+    message: Content-Language is optional but MUST default locale to en-US when none provided.
+    severity: info
+    given: $.paths[*][*].responses[*].headers.Content-Language.schema.default
+    then:
+      function: pattern
+      functionOptions:
+        match: en-US
+    documentationUrl: https://apicommons.org/rules/#openapi-response-default-content-language-en-us
+  openapi-response-delete-404-use-schema-ref:
+    description: DELETE 404 not found HTTP status codes have a schema references to standardize the response payload returned
+      for the error response.
+    message: DELETE 404 Responses MUST Use Schema Reference
+    severity: info
+    given: $.paths.*.delete.responses.404
+    then:
+      field: $ref
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-delete-404-use-schema-ref
+  openapi-response-delete-codes-allowed:
+    description: DELETE operations should not return 200 or 201 status codes.
+    message: DELETE operations should not return 200 or 201 status codes.
+    severity: info
+    given: $.paths[*].delete.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^(200|201)$
+    documentationUrl: https://apicommons.org/rules/#openapi-response-delete-codes-allowed
+  openapi-response-delete-define-204:
+    description: DELETE responses should have a 204 success HTTP status codes, communicating a success created response to
+      consumers.
+    message: DELETE 204 Status Code
+    severity: info
+    given: $.paths.*.delete.responses
+    then:
+      field: '204'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-delete-define-204
+  openapi-response-delete-must-not-return-body:
+    formats:
+    - oas3
+    description: DELETE operations must not have a response body.
+    message: DELETE operations must not have a response body.
+    severity: info
+    given: $.paths.*.delete.responses[202,204].content
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-delete-must-not-return-body
+  openapi-response-delete-must-not-return-body-oas2:
+    formats:
+    - oas2
+    description: DELETE operations must not have a response body.
+    message: DELETE operations must not have a response body.
+    severity: info
+    given: $.paths.*.delete.responses[202,204].schema
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-delete-must-not-return-body-oas2
+  openapi-response-delete-require-204:
+    description: All DELETE methods MUST have a 204 response.
+    message: All DELETE methods MUST have a 204 response.
+    severity: info
+    given:
+    - $.paths[*].delete.responses
+    then:
+      field: '204'
+      function: truthy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-delete-require-204
+  openapi-response-error-match-problem-schema:
+    description: 'WARN: This rule is under implementation and just provides an hint. Error management is a key enabler of
+      a resilient API ecosystem. Enforcing a consistent schema for errors between different APIs, enables client to properly
+      implement an error management strategy, with positive impacts for users. This rule inspects the schema returned by an
+      error response and verifies whether it contains the main properties defined in RFC7807: `status`, `title` and `detail`.
+      An example of a valid payload is ``` { "title": "Not Found", "status": 404, "detail": "Book does not exist; id: 123"
+      } ``` See recommendation RAC_REST_NAME_007.'
+    message: Your schema doesn't seem to match RFC7807. Are you sure it is ok? {{path}}
+    severity: info
+    given: $.paths.[*].responses[?(@property.match(/^(4|5|default)/))][[schema]]
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+            title:
+              type: string
+            detail:
+              type: string
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-error-match-problem-schema
+  openapi-response-error-schema-problem-property-names:
+    description: 'WARN: This rule is under implementation and just provides an hint. Error management is a key enabler of
+      a resilient API ecosystem. Enforcing a consistent schema for errors between different APIs, enables client to properly
+      implement an error management strategy, with positive impacts for users. Errors should return RFC7807 objects. Instead,
+      this schema seems to use non standard properties such as: `message`, `msg` and `code`. An error of the following form
+      ``` { "msg": "Book with id: 123 does not exist.", "code": 6063 } ``` can be expressed in RFC7807 with ``` { "detail":
+      "Book with id: 123 does not exist.", "type": "https://api.example/v1/errors/6063", "status": 404, "title": "Not Found"
+      } ``` Returning an URI in `type`, instead of an opaque `code` can help the client in better identifying the error; moreover
+      the URI though it should not be dereferenced automatically, can return an actual resource providing guidance in addressing
+      the issue. See recommendation RAC_REST_NAME_007.'
+    message: Error response doesn't seem to match RFC7807. Are you sure it is ok? {{path}}
+    severity: info
+    given: $.[responses][?(@property.match(/^(4|5|default)/))][[schema]][properties].*~
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: message|code|msg
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-error-schema-problem-property-names
+  openapi-response-error-standard-payload:
+    description: All 4XX and 5XX response codes must follow Trimble API Standard.
+    message: '{{error}}'
+    severity: info
+    given: $.paths.*.*.responses
+    then:
+      function: trimble-check-standard-for-error-payload
+    documentationUrl: https://apicommons.org/rules/#openapi-response-error-standard-payload
+  openapi-response-error-use-problem-json:
+    description: All 4xx and 5xx error responses MUST use the `application/problem+json` media type (RFC 7807).
+    message: 'Error response documents MUST use the application/problem+json media type: {{error}}'
+    severity: info
+    given: $.paths..responses[?( @property >= 400 && @property < 600)].content[*]~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - application/problem+json
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-error-use-problem-json
+  openapi-response-error-use-problem-type:
+    description: 'Error management is a key enabler of a resilient API ecosystem. Enforcing a consistent schema for errors
+      between different APIs, enables client to properly implement an error management strategy, with positive impacts for
+      users. Error responses should return one of the media-type defined in RFC7807: - `application/problem+json` - `application/problem+xml`
+      An example of a valid response: ``` responses: "503": content: application/problem+json: schema: ... ```.'
+    message: Error responses should support RFC7807 in {{path}}.
+    severity: info
+    given: $.paths.[*].responses[?(@property.match(/^(4|5|default)/))].content.*~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - application/problem+xml
+        - application/problem+json
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-error-use-problem-type
+  openapi-response-error-use-problem-type-2:
+    formats:
+    - oas3
+    description: Every error response SHOULD support RFC 7807.
+    message: Every error response SHOULD support RFC 7807.
+    severity: info
+    given: $.paths...responses[?(@property.match(/^(4|5)/))].content.*~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - application/problem+xml
+        - application/problem+json
+    documentationUrl: https://apicommons.org/rules/#openapi-response-error-use-problem-type-2
+  openapi-response-get-codes-allowed:
+    description: GET operations should not use status codes 201, 202, 204, 409, 412.
+    message: GET operations should not use status codes 201, 202, 204, 409, 412.
+    severity: info
+    given: $.paths[*].get.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^(201|202|204|409|412)$
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-codes-allowed
+  openapi-response-get-define-200:
+    description: GET responses should have a 200 success HTTP status codes, communicating a successful response to consumers.
+    message: GET Responses MUST Have 200 Status Codes
+    severity: info
+    given: $.paths.*.get.responses
+    then:
+      field: '200'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-define-200
+  openapi-response-get-must-return-200:
+    description: GET operations must always return 200 status code.
+    message: GET operations must always return 200 status code.
+    severity: info
+    given: $.paths[*].get.responses
+    then:
+    - field: '200'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-must-return-200
+  openapi-response-get-must-return-body:
+    formats:
+    - oas3
+    description: A `GET` operation must return a response body.
+    message: A `GET` operation must return a response body.
+    severity: info
+    given: $.paths[*].get.responses[*]
+    then:
+      field: content
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-must-return-body
+  openapi-response-get-must-return-body-oas2:
+    formats:
+    - oas2
+    description: A `GET` operation must return a response body.
+    message: A `GET` operation must return a response body.
+    severity: info
+    given: $.paths[*].get.responses[*]
+    then:
+      field: schema
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-must-return-body-oas2
+  openapi-response-head-codes-allowed:
+    description: HEAD operations should not return 201, 202, 204, 409, 412 status codes.
+    message: HEAD operations should not return 201, 202, 204, 409, 412 status codes.
+    severity: info
+    given: $.paths[*].head.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^(201|202|204|409|412)$
+    documentationUrl: https://apicommons.org/rules/#openapi-response-head-codes-allowed
+  openapi-response-head-must-not-return-body:
+    formats:
+    - oas3
+    description: HEAD operations should not return a response body for success.
+    message: HEAD operations should not return a response body for success.
+    severity: info
+    given: $.paths.*.head.responses[200].content
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-head-must-not-return-body
+  openapi-response-head-must-not-return-body-oas2:
+    formats:
+    - oas2
+    description: HEAD operations should not return a response body for success.
+    message: HEAD operations should not return a response body for success.
+    severity: info
+    given: $.paths.*.head.responses[200].schema
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-head-must-not-return-body-oas2
+  openapi-response-header-names-pascal-case:
+    description: Headers should be pascal-case. See Italian recommendation RAC_REST_NAME_003.
+    message: 'Header {{error}}: {{path}}'
+    severity: info
+    given:
+    - $.[responses][*].headers.*~
+    then:
+      function: casing
+      functionOptions:
+        type: pascal
+        separator:
+          char: '-'
+    documentationUrl: https://apicommons.org/rules/#openapi-response-header-names-pascal-case
+  openapi-response-header-no-x-prefix:
+    description: '''HTTP'' headers SHOULD NOT start with ''X-'' RFC6648.'
+    message: HTTP response header SHOULD NOT start with 'X-' in {{path}}
+    severity: info
+    given:
+    - $.[responses][*].headers.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: /^([^x]|.[^-])|RateLimit-/i
+    documentationUrl: https://apicommons.org/rules/#openapi-response-header-no-x-prefix
+  openapi-response-keys-snake-case:
+    description: response key must be snake cased (e.g. snake_case).
+    message: '{{error}}'
+    severity: info
+    given: $.components['responses'].*~
+    then:
+      function: digitalocean-ensureSnakeCaseWithDigits
+    documentationUrl: https://apicommons.org/rules/#openapi-response-keys-snake-case
+  openapi-response-location-header-only-on-201:
+    description: Location header MUST NOT be present in non-201 responses.
+    message: Location header MUST NOT be present in non-201 responses.
+    severity: info
+    given: $.paths[*][*].responses[?(@property !== '201')].headers
+    then:
+      field: Location
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-location-header-only-on-201
+  openapi-response-must-use-json-content-type:
+    formats:
+    - oas3
+    description: API responses should use application/json as the primary content type. Analysis of 773 specs shows application/json
+      is used by 92% of APIs, making it the universal standard for modern REST APIs.
+    message: Response MUST Use application/json Content Type
+    severity: info
+    given: $.paths.*[get,post,put,patch,delete].responses[*].content
+    then:
+      field: application/json
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-must-use-json-content-type
+  openapi-response-must-use-json-content-type-oas2:
+    formats:
+    - oas2
+    description: API responses should offer application/json as a produced content type. In Swagger 2.0 produced media types
+      are declared in the operation (or root) `produces` array.
+    message: Operation `produces` MUST Include application/json
+    severity: info
+    given: $.paths.*[get,post,put,patch,delete]
+    then:
+      field: produces
+      function: schema
+      functionOptions:
+        dialect: draft7
+        schema:
+          type: array
+          contains:
+            const: application/json
+    documentationUrl: https://apicommons.org/rules/#openapi-response-must-use-json-content-type-oas2
+  openapi-response-names-pascal-case:
+    description: Response names SHOULD be written in PascalCase.
+    message: '{{property}} is not PascalCase: {{error}}'
+    severity: info
+    given:
+    - $.components.responses.*~
+    - $.responses.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-response-names-pascal-case
+  openapi-response-no-operational-header-in-spec:
+    description: Access-Control-*, Content-Type, and Accept Headers SHOULD NOT be specified explicitly in a spec as it an
+      operational concern.
+    message: Access-Control-*, Content-Type, and Accept Headers SHOULD NOT be specified explicitly in a spec as it an operational
+      concern.
+    severity: info
+    given: $.paths[*][*].responses[*].headers
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(Access-Control-.*|Content-Type|Accept)$
+    documentationUrl: https://apicommons.org/rules/#openapi-response-no-operational-header-in-spec
+  openapi-response-options-codes-allowed:
+    description: OPTIONS operations should not return 201, 202, 409, 412 status codes.
+    message: OPTIONS operations should not return 201, 202, 409, 412 status codes.
+    severity: info
+    given: $.paths[*].options.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^(201|202|409|412)$
+    documentationUrl: https://apicommons.org/rules/#openapi-response-options-codes-allowed
+  openapi-response-options-must-not-return-body:
+    formats:
+    - oas3
+    description: OPTIONS operations should not return a response body for success.
+    message: OPTIONS operations should not return a response body for success.
+    severity: info
+    given: $.paths.*.options.responses[200, 204].content
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-options-must-not-return-body
+  openapi-response-options-must-not-return-body-oas2:
+    formats:
+    - oas2
+    description: OPTIONS operations should not return a response body for success.
+    message: OPTIONS operations should not return a response body for success.
+    severity: info
+    given: $.paths.*.options.responses[200, 204].schema
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-options-must-not-return-body-oas2
+  openapi-response-patch-codes-allowed:
+    description: PATCH operations should not return 201 status code.
+    message: PATCH operations should not return 201 status code.
+    severity: info
+    given: $.paths[*].patch.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^201$
+    documentationUrl: https://apicommons.org/rules/#openapi-response-patch-codes-allowed
+  openapi-response-post-codes-allowed:
+    description: POST operations should not return 412 status codes.
+    message: POST operations should not return 412 status codes.
+    severity: info
+    given: $.paths[*].post.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: '412'
+    documentationUrl: https://apicommons.org/rules/#openapi-response-post-codes-allowed
+  openapi-response-post-define-201:
+    description: POST responses should have a 201 success HTTP status codes, communicating a success created response to consumers.
+    message: POST Responses MUST Have 201 Status Codes
+    severity: info
+    given: $.paths[*].post.responses
+    then:
+      field: '201'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-post-define-201
+  openapi-response-post-require-201-or-202:
+    description: All POST methods MUST have a 201 or 202 response.
+    message: All POST methods MUST have a 201 or 202 response.
+    severity: info
+    given:
+    - $.paths[*].post.responses
+    then:
+      function: trimble-operation-post-201-202-status-code
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-post-require-201-or-202
+  openapi-response-prefer-400-over-422:
+    description: MUST use standard HTTP status codes [150a].
+    message: Prefer 400 over 422 as response code
+    severity: info
+    given: $.paths.*.*.responses.422
+    then:
+      field: '422'
+      function: defined
+    documentationUrl: https://apicommons.org/rules/#openapi-response-prefer-400-over-422
+  openapi-response-put-codes-allowed:
+    description: PUT operations should not return 200 or 201 status codes.
+    message: PUT operations should not return 200 or 201 status codes.
+    severity: info
+    given: $.paths[*].put.responses
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^(200|201)$
+    documentationUrl: https://apicommons.org/rules/#openapi-response-put-codes-allowed
+  openapi-response-success-use-hal-json:
+    description: All 2xx success responses MUST use the `application/hal+json` media type.
+    message: 'Success response documents MUST use the application/hal+json media type: {{error}}'
+    severity: info
+    given: $.paths..responses[?( @property >= 200 && @property < 300 && @property != 204)].content[*]~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - application/hal+json
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-success-use-hal-json
+  openapi-response-use-json-api:
+    description: All responses MUST use the JSON:API `application/vnd.api+json` media type.
+    message: 'Response documents MUST use the application/vnd.api+json (JSON:API) media type: {{error}}'
+    severity: info
+    given: $.paths..responses[?( @property >= 200 && @property < 600 && @property != 204)].content[*]~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - application/vnd.api+json
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-use-json-api
+  openapi-response-use-standard-mime-types:
+    formats:
+    - oas3
+    description: MIME types MUST be standard (application/json, application/problem+json, application/problem+xml) or use
+      custom format application/vnd.*.
+    message: MIME types MUST be standard (application/json, application/problem+json, application/problem+xml) or use custom
+      format application/vnd.*.
+    severity: info
+    given: $.paths[*][*].responses[*].content.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^application/(json|problem\+json|problem\+xml|vnd\..*)$
+    documentationUrl: https://apicommons.org/rules/#openapi-response-use-standard-mime-types
+  openapi-response-use-standard-mime-types-oas2:
+    formats:
+    - oas2
+    description: Produced MIME types MUST be standard (application/json, application/problem+json, application/problem+xml)
+      or use custom format application/vnd.*.
+    message: MIME types MUST be standard (application/json, application/problem+json, application/problem+xml) or use custom
+      format application/vnd.*.
+    severity: info
+    given: $.paths[*][*].produces[*]
+    then:
+      function: pattern
+      functionOptions:
+        match: ^application/(json|problem\+json|problem\+xml|vnd\..*)$
+    documentationUrl: https://apicommons.org/rules/#openapi-response-use-standard-mime-types-oas2
+  openapi-response-use-standard-status-codes:
+    description: MUST use standard HTTP status codes [150a].
+    message: '{{property}} is not a standardized response code'
+    severity: info
+    given: $.paths.*.*.responses.*~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - '100'
+        - '101'
+        - '200'
+        - '201'
+        - '202'
+        - '203'
+        - '204'
+        - '205'
+        - '206'
+        - '207'
+        - '300'
+        - '301'
+        - '302'
+        - '303'
+        - '304'
+        - '305'
+        - '307'
+        - '400'
+        - '401'
+        - '402'
+        - '403'
+        - '404'
+        - '405'
+        - '406'
+        - '407'
+        - '408'
+        - '409'
+        - '410'
+        - '411'
+        - '412'
+        - '413'
+        - '414'
+        - '415'
+        - '416'
+        - '417'
+        - '422'
+        - '423'
+        - '426'
+        - '428'
+        - '429'
+        - '431'
+        - '500'
+        - '501'
+        - '502'
+        - '503'
+        - '504'
+        - '505'
+        - '511'
+        - default
+    documentationUrl: https://apicommons.org/rules/#openapi-response-use-standard-status-codes
+  openapi-response-use-standard-status-codes-2:
+    description: An API MUST return HTTP response codes in conformance with RFC-2616 and common usage.
+    message: An API MUST return HTTP response codes in conformance with RFC-2616 and common usage.
+    severity: info
+    given: $.paths...responses.*~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - '200'
+        - '201'
+        - '202'
+        - '204'
+        - '400'
+        - '401'
+        - '403'
+        - '404'
+        - '405'
+        - '406'
+        - '409'
+        - '412'
+        - '415'
+        - '428'
+        - '429'
+        - '500'
+    documentationUrl: https://apicommons.org/rules/#openapi-response-use-standard-status-codes-2
+  openapi-response-write-require-content-type:
+    description: All API responses MUST include the Content-Type header in all responses.
+    message: '{{error}}'
+    severity: info
+    given:
+    - $.paths[*].post.responses
+    - $.paths[*].put.responses
+    then:
+      function: trimble-check-for-content-type-in-put-and-post-responses
+    documentationUrl: https://apicommons.org/rules/#openapi-response-write-require-content-type
+  openapi-schema-array-property-require-items:
+    description: Schema properties that are of the type array must have an items property defined.
+    message: Schema Array Properties MUST Have Items
+    severity: info
+    given:
+    - $.components.schemas.*.properties[?(@.type=="array")]
+    - $.definitions.*.properties[?(@.type=="array")]
+    then:
+      field: items
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-array-property-require-items
+  openapi-schema-array-property-typed-items:
+    description: Array properties must have an items attribute with a type.
+    message: '{{error}}'
+    severity: info
+    given: $..*.properties[*]
+    then:
+      function: digitalocean-ensureAllArraysHaveItemTypes
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-array-property-typed-items
+  openapi-schema-boolean-no-prefix:
+    description: Boolean properties SHOULD NOT use is, has, or another prefix.
+    message: Boolean properties SHOULD NOT use is, has, or another prefix.
+    severity: info
+    given: $..properties[?(@ && @.type == 'boolean')]~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(is|has|was|will|needs|uses|should|can)([A-Z]|$).*
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-boolean-no-prefix
+  openapi-schema-created-datetime-must-be-date-time:
+    description: createdDateTime MUST use a data type of 'string' with the format 'date-time'.
+    message: createdDateTime MUST use a data type of 'string' with the format 'date-time'.
+    severity: info
+    given: $..properties.createdDateTime
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        match: ^string$
+    - field: format
+      function: truthy
+    - field: format
+      function: pattern
+      functionOptions:
+        match: ^date-time$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-created-datetime-must-be-date-time
+  openapi-schema-createdby-property-must-be-string:
+    description: createdBy MUST use a data type of 'string'.
+    message: createdBy MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "createdBy")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-createdby-property-must-be-string
+  openapi-schema-date-time-property-require-format:
+    description: Date/time string properties (createdAt, updated_at, *_date, timestamp, …) should declare a format such as
+      date-time (RFC 3339) so the value is unambiguous and machine-validatable.
+    message: Date/time string property should declare a format (e.g. date-time).
+    given: $..properties[?( @property.match(/(_at$|_date$|_time$|At$|Date$|Time$|timestamp)/i) && @.type == 'string' )]
+    severity: info
+    then:
+      field: format
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-date-time-property-require-format
+  openapi-schema-definition-camel-case:
+    formats:
+    - oas2
+    description: Schema definitions MUST follow camelCase.
+    message: '{{property}} schema definition is not camelCase: {{error}}'
+    severity: info
+    given: $.definitions[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-definition-camel-case
+  openapi-schema-definition-constant-case:
+    formats:
+    - oas2
+    description: Schema definitions MUST follow CONSTANT_CASE (screaming snake_case).
+    message: '{{property}} schema definition is not CONSTANT_CASE: {{error}}'
+    severity: info
+    given: $.definitions[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-definition-constant-case
+  openapi-schema-definition-kebab-case:
+    formats:
+    - oas2
+    description: Schema definitions MUST follow kebab-case.
+    message: '{{property}} schema definition is not kebab-case: {{error}}'
+    severity: info
+    given: $.definitions[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(-[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-definition-kebab-case
+  openapi-schema-definition-pascal-case:
+    formats:
+    - oas2
+    description: Schema definitions MUST follow PascalCase.
+    message: '{{property}} schema definition is not PascalCase: {{error}}'
+    severity: info
+    given: $.definitions[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-definition-pascal-case
+  openapi-schema-definition-snake-case:
+    formats:
+    - oas2
+    description: Schema definitions MUST follow snake_case.
+    message: '{{property}} schema definition is not snake_case: {{error}}'
+    severity: info
+    given: $.definitions[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(_[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-definition-snake-case
+  openapi-schema-deletedby-property-must-be-string:
+    description: deletedBy MUST use a data type of 'string'.
+    message: deletedBy MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "deletedBy")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-deletedby-property-must-be-string
+  openapi-schema-description-max-length:
+    description: Schema should have a length limit applied, restricting how long schema descriptions can be, helping keep
+      them concise and consistent.
+    message: Schema Description MUST be Less Than 250 Characters
+    severity: info
+    given:
+    - $.components.schemas.*
+    - $.definitions.*
+    then:
+      field: description
+      function: length
+      functionOptions:
+        max: 250
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-description-max-length
+  openapi-schema-description-property-must-be-string:
+    description: description MUST use a data type of 'string'.
+    message: description MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "description")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-description-property-must-be-string
+  openapi-schema-enum-not-empty:
+    description: An enum should declare at least one value — an empty enum permits nothing and is almost always a mistake.
+    message: enum should not be empty.
+    given: $..enum
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          minItems: 1
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-enum-not-empty
+  openapi-schema-fingerprint-property-must-be-string:
+    description: Fingerprint values MUST use a data type of `string`.
+    message: Fingerprint values MUST use a data type of `string`.
+    severity: info
+    given: $..[?(@property === "fingerprint")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-fingerprint-property-must-be-string
+  openapi-schema-id-property-must-be-string:
+    description: id SHOULD use a data type of 'string'.
+    message: id SHOULD use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "id")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-id-property-must-be-string
+  openapi-schema-integer-format-allowed-values:
+    description: To improve interoperability, integer and number formats are constrained to a shared subset. See recommendation
+      RAC_REST_FORMAT_004.
+    message: Type format is "{{value}}", expected one of [int32, int64]. {{path}}
+    severity: info
+    given: '$.[?(@.type=="integer")]
+
+      '
+    then:
+      field: format
+      function: enumeration
+      functionOptions:
+        values:
+        - int32
+        - int64
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-integer-format-allowed-values
+  openapi-schema-integer-require-format:
+    description: Schema of type number or integer must specify a format to express the associated datatype, eg. `int32`, `int64`,
+      ... You can express similar requirements using the `minimum` and `maximum` properties. See recommendation RAC_REST_FORMAT_004.
+    message: Schema of type number or integer must specify a format. {{path}}
+    severity: info
+    given: '$.[?(@.type=="integer")]
+
+      '
+    then:
+      field: format
+      function: truthy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-integer-require-format
+  openapi-schema-keys-snake-case:
+    description: schema key must be snake cased (e.g. snake_case).
+    message: '{{error}}'
+    severity: info
+    given: $.components['schemas'].*~
+    then:
+      function: digitalocean-ensureSnakeCaseWithDigits
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-keys-snake-case
+  openapi-schema-modified-datetime-must-be-date-time:
+    description: modifiedDateTime MUST use a data type of 'string' with the format 'date-time'.
+    message: modifiedDateTime MUST use a data type of 'string' with the format 'date-time'.
+    severity: info
+    given: $..properties.modifiedDateTime
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        match: ^string$
+    - field: format
+      function: truthy
+    - field: format
+      function: pattern
+      functionOptions:
+        match: ^date-time$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-modified-datetime-must-be-date-time
+  openapi-schema-modifiedby-property-must-be-string:
+    description: modifiedBy MUST use a data type of 'string'.
+    message: modifiedBy MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "modifiedBy")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-modifiedby-property-must-be-string
+  openapi-schema-name-max-length:
+    description: Schema should have a length limit applied keeping the names of schema consistent across APIs.
+    message: Schema Names MUST Be Less Than 25 Characters
+    severity: info
+    given:
+    - $.components.schemas
+    - $.definitions
+    then:
+      field: '@key'
+      function: length
+      functionOptions:
+        max: 25
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-name-max-length
+  openapi-schema-name-property-must-be-string:
+    description: name MUST use a data type of 'string'.
+    message: name MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "name")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-name-property-must-be-string
+  openapi-schema-names-pascal-case:
+    description: Schema names SHOULD be written in PascalCase.
+    message: '{{property}} is not PascalCase: {{error}}'
+    severity: info
+    given:
+    - $.components.schemas.*~
+    - $.definitions.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-names-pascal-case
+  openapi-schema-number-format-allowed-values:
+    description: To improve interoperability, integer and number formats are constrained to a shared subset. See recommendation
+      RAC_REST_FORMAT_004.
+    message: Type format is "{{value}}", expected one of [decimal32, decimal64, decimal128, float, double]. {{path}}
+    severity: info
+    given: '$.[?(@.type=="number")]
+
+      '
+    then:
+      field: format
+      function: enumeration
+      functionOptions:
+        values:
+        - decimal32
+        - decimal64
+        - float
+        - double
+        - decimal128
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-number-format-allowed-values
+  openapi-schema-number-require-format:
+    description: Schema of type number or integer must specify a format to express the associated datatype, eg. `int32`, `int64`,
+      ... You can express similar requirements using the `minimum` and `maximum` properties. See recommendation RAC_REST_FORMAT_004.
+    message: Schema of type number or integer must specify a format. {{path}}
+    severity: info
+    given: $.[?(@.type=="number")]
+    then:
+      field: format
+      function: truthy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-number-require-format
+  openapi-schema-orgid-property-must-be-string:
+    description: orgId MUST use a data type of 'string'.
+    message: orgId MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "orgId")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-orgid-property-must-be-string
+  openapi-schema-property-camel-case:
+    formats:
+    - oas2
+    description: Schema properties MUST follow camelCase.
+    message: '{{property}} schema property is not camelCase: {{error}}'
+    severity: info
+    given: $.definitions..properties[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-camel-case
+  openapi-schema-property-camel-case-3:
+    description: Schema property names should use camelCase. Analysis of 773 specs shows camelCase is the dominant convention
+      at 65% (12958 properties), followed by snake_case at 33% (6661 properties).
+    message: Schema Properties MUST Use camelCase
+    severity: info
+    given:
+    - $.components.schemas[*].properties
+    - $.definitions[*].properties
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-camel-case-3
+  openapi-schema-property-constant-case:
+    formats:
+    - oas2
+    description: Schema properties MUST follow CONSTANT_CASE (screaming snake_case).
+    message: '{{property}} schema property is not CONSTANT_CASE: {{error}}'
+    severity: info
+    given: $.definitions..properties[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-constant-case
+  openapi-schema-property-description-max-length:
+    description: Schema property descriptions should have a length limit applied, applying constraints to writing descriptions,
+      and keeping consistent across APIs.
+    message: Schema Properties Description MUST Have 250 Characters
+    severity: info
+    given:
+    - $.components.schemas.*.properties[?(@.type == 'string')]
+    - $.definitions.*.properties[?(@.type == 'string')]
+    then:
+      field: description
+      function: length
+      functionOptions:
+        max: 250
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-description-max-length
+  openapi-schema-property-enum-upper-snake-case:
+    description: Schema property enumerators are consistent casing, keeping all entries upper snake case, and consistent across
+      all APIs.
+    message: Schema Property Enum MUST Be Upper Snake Case
+    severity: info
+    given:
+    - $.components.schemas.*.properties.*.enum.*
+    - $.definitions.*.properties.*.enum.*
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z]+(?:_[A-Z]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-enum-upper-snake-case
+  openapi-schema-property-kebab-case:
+    formats:
+    - oas2
+    description: Schema properties MUST follow kebab-case.
+    message: '{{property}} schema property is not kebab-case: {{error}}'
+    severity: info
+    given: $.definitions..properties[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(-[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-kebab-case
+  openapi-schema-property-names-camel-case:
+    description: Schema property names are camel case, providing consistent casing across all the schema properties used by
+      APIs.
+    message: Schema Property Names MUST Be camelCase.
+    severity: info
+    given:
+    - $.components.schemas.*.properties
+    - $.definitions.*.properties
+    then:
+    - field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^[A-Z][a-z0-9]*[A-Z0-9][a-z0-9]+[A-Za-z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-names-camel-case
+  openapi-schema-property-names-camel-case-2:
+    description: Property names and acronyms MUST be in camelCase.
+    message: Property names and acronyms MUST be in camelCase.
+    severity: info
+    given: $..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(([A-Z]{2}|[A-Z])[a-z0-9]+)*$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-names-camel-case-2
+  openapi-schema-property-names-length-limit:
+    description: Schema property names have a length restriction applied, keeping names consistent, and avoiding being too
+      long.
+    message: Schema Properties Name Length
+    severity: info
+    given:
+    - $.components.schemas.*.properties
+    - $.definitions.*.properties
+    then:
+      field: '@key'
+      function: length
+      functionOptions:
+        max: 25
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-names-length-limit
+  openapi-schema-property-no-language-keywords:
+    description: Names that may conflict with keywords in common programming languages SHOULD NOT be used.
+    message: Names that may conflict with keywords in common programming languages SHOULD NOT be used.
+    severity: info
+    given: $..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(abstract|for|new|switch|assert|default|goto|package|synchronized|boolean|do|if|private|this|break|double|implements|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|volatile|const|float|native|super|while)$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-no-language-keywords
+  openapi-schema-property-no-prepositions:
+    description: Property names SHOULD NOT include prepositions (e.g. "for", "during", "at", etc.).
+    message: Property names SHOULD NOT include prepositions (e.g.
+    severity: info
+    given: $..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: (^(about|above|across|after|against|among|around|at|before|behind|below|beside|between|down|during|for|from|in|inside|into|near|of|off|on|out|over|through|to|toward|under|up|with|as|but|like|since|than|till|unlike|until|upon|within|without)([A-Z]|$)|.*(About|Above|Across|After|Against|Among|Around|At|Before|Behind|Below|Beside|Between|Down|During|For|From|In|Inside|Into|Near|Of|Off|On|Out|Over|Through|To|Toward|Under|Up|With|As|But|Like|Since|Than|Till|Unlike|Until|Upon|Within|Without)([A-Z]|$)).*
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-no-prepositions
+  openapi-schema-property-pascal-case:
+    formats:
+    - oas2
+    description: Schema properties MUST follow PascalCase.
+    message: '{{property}} schema property is not PascalCase: {{error}}'
+    severity: info
+    given: $.definitions..properties[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-pascal-case
+  openapi-schema-property-require-type:
+    description: Schema properties must have a type defined.
+    message: '{{error}}'
+    severity: info
+    given: $..properties.*
+    then:
+      function: digitalocean-ensureSchemaHasType
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-require-type
+  openapi-schema-property-snake-case:
+    formats:
+    - oas2
+    description: Schema properties MUST follow snake_case.
+    message: '{{property}} schema property is not snake_case: {{error}}'
+    severity: info
+    given: $.definitions..properties[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(_[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-snake-case
+  openapi-schema-ref-property-must-be-string:
+    description: ref MUST use a data type of 'string'.
+    message: ref MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "ref")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-ref-property-must-be-string
+  openapi-schema-ref-property-require-format:
+    description: Property with the name 'ref' MUST use a format 'sps-ref'.
+    message: Property with the name 'ref' MUST use a format 'sps-ref'.
+    severity: info
+    given: $..properties..[?((@property=== "ref" || @property === "Ref") && @.$ref == null && @.allOf == null && @.oneOf ==
+      null && @.type != null)]
+    then:
+    - field: format
+      function: truthy
+    - field: format
+      function: pattern
+      functionOptions:
+        match: ^sps-ref$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-ref-property-require-format
+  openapi-schema-ref-property-standard:
+    description: Properties following 'sps-ref' format MUST use the standardized schema - maxLength (255), minLength(7), pattern
+      (includes 'sps'), type (string).
+    message: '{{property}} is not provided or not following required schema values.'
+    severity: info
+    given: $..[?(@property=== "format" && @ == "sps-ref")]^
+    then:
+    - function: schema
+      functionOptions:
+        schema:
+          type: object
+          required:
+          - maxLength
+          - minLength
+          - type
+          - pattern
+          properties:
+            maxLength:
+              type: integer
+              minimum: 255
+              maximum: 255
+            minLength:
+              type: integer
+              minimum: 7
+              maximum: 7
+            type:
+              type: string
+            pattern:
+              type: string
+    - field: pattern
+      function: pattern
+      functionOptions:
+        match: sps
+    - field: type
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-ref-property-standard
+  openapi-schema-requestid-property-must-be-string:
+    description: requestId MUST use a data type of 'string'.
+    message: requestId MUST use a data type of 'string'.
+    severity: info
+    given: $..[?(@property === "requestId")].type
+    then:
+      function: pattern
+      functionOptions:
+        match: ^string$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-requestid-property-must-be-string
+  openapi-schema-require-tag-object:
+    description: There needs to be a central tags object applied to the OpenAPI, providing central tags that can be applied
+      across all operations within an OpenAPI.
+    message: OpenAPIs MUST Have a Tag Object
+    severity: info
+    given: $
+    then:
+      field: tags
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-require-tag-object
+  openapi-schema-require-type:
+    description: Schema should have a type defined, being explicit about type of data a schema describes and can be used to
+      validate, helping standardize the type of data being made available.
+    message: Schema MUST Have Type Property
+    severity: info
+    given:
+    - $.components.schemas.*
+    - $.definitions.*
+    then:
+      field: type
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-require-type
+  openapi-schema-use-fingerprint-not-hash:
+    description: Rather than property names refering to the implementation for 'hash' or 'hashkey', you MUST use the property
+      name 'fingerprint'.
+    message: '{{property}} is not using property name fingerprint.'
+    severity: info
+    given: $.components.schemas..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^hashkey|hashKey|hash$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-use-fingerprint-not-hash
+  openapi-schema-use-id-not-identifier:
+    description: Use abbreviations instead of long form names, i.e. identifier SHOULD BE id.
+    message: Use abbreviations instead of long form names, i.e.
+    severity: info
+    given: $..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^identifier$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-use-id-not-identifier
+  openapi-schema-use-org-not-organization:
+    description: Use abbreviations instead of long form names, i.e. organization SHOULD BE org.
+    message: Use abbreviations instead of long form names, i.e.
+    severity: info
+    given: $..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: (^organization([A-Z]|$)|Organization([A-Z]|$))
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-use-org-not-organization
+  openapi-server-must-not-specify-port:
+    description: Port MUST NOT be specified or required to use the API, except for 'localhost' testing in a spec.
+    message: Port MUST NOT be specified or required to use the API, except for 'localhost' testing in a spec.
+    severity: info
+    given: $.servers..url
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: (?!https?://localhost)(https?://.*):(\d*)\/?(.*)
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-server-must-not-specify-port
+  openapi-server-on-approved-domain:
+    description: APIs SHOULD be accessible under api.spscommerce.com.
+    message: APIs SHOULD be accessible under api.spscommerce.com.
+    severity: info
+    given: $.servers..url
+    then:
+      function: pattern
+      functionOptions:
+        match: api.spscommerce.com|api.sps-internal.com|localhost
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-server-on-approved-domain
+  openapi-server-url-include-version:
+    formats:
+    - oas3
+    description: API URLs versions should meet the Trimble API Standards.
+    message: '{{error}}'
+    severity: info
+    given: $.servers
+    then:
+      function: trimble-valid-version-checker
+    documentationUrl: https://apicommons.org/rules/#openapi-server-url-include-version
+  openapi-server-url-include-version-oas2:
+    formats:
+    - oas2
+    description: The API base path should include a version segment (e.g. /v1) so consumers can pin to a major version.
+    message: Base path should include a version (e.g. /v1).
+    severity: info
+    given: $.basePath
+    then:
+      function: pattern
+      functionOptions:
+        match: /v\d+
+    documentationUrl: https://apicommons.org/rules/#openapi-server-url-include-version-oas2
+  openapi-server-url-meet-standards:
+    formats:
+    - oas3
+    description: API URLs should meet the Trimble API Standards.
+    message: '{{error}}'
+    severity: info
+    given: $.servers
+    then:
+      function: trimble-valid-url-checker
+    documentationUrl: https://apicommons.org/rules/#openapi-server-url-meet-standards
+  openapi-server-url-must-be-lowercase:
+    description: Server URL SHOULD BE lowercase.
+    message: Server URL SHOULD BE lowercase.
+    severity: info
+    given: $.servers..url
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[^A-Z]*$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-server-url-must-be-lowercase
+  openapi-tag-names-title-case:
+    description: The first letter of each word in a tag being applied to APIs needs to be capitalized, keeping the tags being
+      applied across APIs the same look and feel for organizing and publishing to documentation.
+    message: Tag Names MUST Have First Letter in Each Word Capitalized
+    severity: info
+    given: $.tags.*.name
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    documentationUrl: https://apicommons.org/rules/#openapi-tag-names-title-case
+  openapi-tag-no-camel-case:
+    description: Detects a tag with camelCase (personalItem) text within it.
+    message: Tag names cannot use Camel Case. Please rename {{value}}.
+    severity: info
+    given:
+    - $.tags[*].name
+    - $.paths[*][*].tags[*]
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /^[a-z]+[A-Z][a-z]+$/g
+    documentationUrl: https://apicommons.org/rules/#openapi-tag-no-camel-case
+  openapi-tag-no-pascal-case:
+    description: Tag names cannot use Pascal Case. Please rename {{value}}.
+    message: Tag names cannot use Pascal Case. Please rename {{value}}.
+    severity: info
+    given:
+    - $.tags[*].name
+    - $.paths[*][*].tags[*]
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /[A-Z][a-z]+[A-Z][a-z]+$/g
+    documentationUrl: https://apicommons.org/rules/#openapi-tag-no-pascal-case
+  openapi-tag-require-at-least-one:
+    description: There needs to be at least one tag applied to an OpenAPI, providing a key word or phrase that can be applied
+      to API operations.
+    message: MUST Be At Least One Tag
+    severity: info
+    given: $
+    then:
+      field: tags
+      function: length
+      functionOptions:
+        min: 1
+    documentationUrl: https://apicommons.org/rules/#openapi-tag-require-at-least-one
+  apis-json-api-property-require-linting-rules:
+    description: This property ensures that an API has governance rules applied, usually as part of a central set of governance
+      rules, defined by policy, or stages of the API lifecycle.
+    message: Has Linting Rules
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-rules|OpenApiRules)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-linting-rules
+  apis-json-api-property-require-valid-url:
+    description: This property ensures that properties of an API or API contract all have valid URLs, checking if any of the
+      URLs are not properly formed, or could be other formats.
+    message: Property URLs Are Valid
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: url
+      function: pattern
+      functionOptions:
+        notMatch: ^((http|https)://)[-a-zA-Z0-9@:%._\+~#?&//=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%._\+~#?&//=]*)$
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-valid-url
+  apis-json-api-property-require-vocabulary:
+    description: This property ensures that there is a centralized vocabulary in use for guiding the creation and usage of
+      tags, path segments, and other metadata associated with an APIs.
+    message: Has Vocabulary
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(vocabulary|vocabularies|Vocabulary|Vocabularies)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-vocabulary
+  apis-json-api-tag-require-upper-case:
+    description: Maintaining consistent casing for tags applied to individual APIs ensures a uniform appearance and enhances
+      search and discovery. Each word in a tag should be capitalized, with the first letter of every word in a phrase treated
+      the same way.
+    message: API Tags MUST Be Upper Case
+    severity: info
+    given: $.apis.*.tags.*
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-tag-require-upper-case
+  apis-json-info-apis-json-specification-version-format:
+    description: specificationVersion should be a major.minor version (e.g. 0.21).
+    message: specificationVersion should be major.minor.
+    given: $.specificationVersion
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d+\.\d+$
+    documentationUrl: https://apicommons.org/rules/#apis-json-info-apis-json-specification-version-format
+  apis-json-maintainer-email-format:
+    description: A maintainer email should be a valid email address.
+    message: Maintainer email should be a valid email.
+    given: $.maintainers[*].email
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[^@\s]+@[^@\s]+\.[^@\s]+$
+    documentationUrl: https://apicommons.org/rules/#apis-json-maintainer-email-format
+  apis-json-tag-require-upper-case:
+    description: Maintaining consistent casing for tags applied to APIs.json contracts ensures a uniform appearance and enhances
+      search and discovery. Each word in a tag should be capitalized, with the first letter of every word in a phrase treated
+      the same way.
+    message: Tags Upper Case
+    severity: info
+    given: $.tags.*
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    documentationUrl: https://apicommons.org/rules/#apis-json-tag-require-upper-case
+  asyncapi-component-asyncapi-message-require-contenttype:
+    description: Messages should declare a contentType (e.g. application/json).
+    message: Message should declare a contentType.
+    given: $.components.messages[*]
+    severity: info
+    then:
+      field: contentType
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#asyncapi-component-asyncapi-message-require-contenttype
+  asyncapi-component-asyncapi-message-require-name:
+    description: Messages should declare a name.
+    message: Message should declare a name.
+    given: $.components.messages[*]
+    severity: info
+    then:
+      field: name
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#asyncapi-component-asyncapi-message-require-name
+  asyncapi-schema-asyncapi-property-camel-case:
+    description: Schema property names should be camelCase.
+    message: Schema property is not camelCase.
+    given: $.components.schemas[*].properties[*]~
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#asyncapi-schema-asyncapi-property-camel-case
+  arazzo-source-arazzo-description-require-name:
+    description: Each source description should declare a name used to reference it from steps.
+    message: Source description should have a name.
+    given: $.sourceDescriptions[*]
+    severity: info
+    then:
+      field: name
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#arazzo-source-arazzo-description-require-name
+  arazzo-workflow-arazzo-step-require-operation:
+    description: Each step should reference an operation via operationId, operationPath, or a nested workflowId.
+    message: Step should reference an operationId, operationPath, or workflowId.
+    given: $.workflows[*].steps[*]
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          anyOf:
+          - required:
+            - operationId
+          - required:
+            - operationPath
+          - required:
+            - workflowId
+    documentationUrl: https://apicommons.org/rules/#arazzo-workflow-arazzo-step-require-operation
+  json-schema-document-require-id:
+    description: The `$id` property should be present.
+    message: $id should be present
+    severity: info
+    given: $
+    then:
+      field: $id
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-schema-document-require-id
+  json-schema-document-require-property:
+    description: The `properties` property should be present.
+    message: properties should be present
+    severity: info
+    given: $
+    then:
+      field: properties
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-schema-document-require-property
+  json-schema-document-require-required-list:
+    description: The `required` property should be present.
+    message: required should be present
+    severity: info
+    given: $
+    then:
+      field: required
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-schema-document-require-required-list
+  json-schema-document-require-type:
+    description: The `type` property should be present.
+    message: type should be present
+    severity: info
+    given: $
+    then:
+      field: type
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-schema-document-require-type
+  json-schema-schema-property-require-type:
+    description: The `type` property of each property should be present.
+    message: type should be present
+    severity: info
+    given: $.properties[*]
+    then:
+      field: type
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-schema-schema-property-require-type
+  json-schema-schema-require:
+    description: The `$schema` property should be present.
+    message: $schema should be present
+    severity: info
+    given: $
+    then:
+      field: $schema
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-schema-schema-require
+  json-structure-document-json-structure-id-uri:
+    description: $id should be a stable absolute URI (https:// or urn:) identifying the schema.
+    message: $id should be an absolute URI.
+    given: $.$id
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: '^https?://|^urn:'
+    documentationUrl: https://apicommons.org/rules/#json-structure-document-json-structure-id-uri
+  json-structure-document-require-id:
+    description: The `$id` property should be present.
+    message: $id should be present
+    severity: info
+    given: $
+    then:
+      field: $id
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-structure-document-require-id
+  json-structure-document-require-name:
+    description: The `name` property should be present.
+    message: name should be present
+    severity: info
+    given: $
+    then:
+      field: name
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-structure-document-require-name
+  json-structure-document-require-property:
+    description: The `properties` property should be present.
+    message: properties should be present
+    severity: info
+    given: $
+    then:
+      field: properties
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-structure-document-require-property
+  json-structure-document-require-type:
+    description: The `type` property should be present.
+    message: type should be present
+    severity: info
+    given: $
+    then:
+      field: type
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-structure-document-require-type
+  json-structure-schema-json-structure-property-camel-case:
+    description: Property names should be camelCase.
+    message: Property is not camelCase.
+    given: $.properties[*]~
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#json-structure-schema-json-structure-property-camel-case
+  json-structure-schema-json-structure-uri:
+    description: $schema should be the URI of the JSON Structure meta-schema.
+    message: $schema should be a URI.
+    given: $.$schema
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^https?://
+    documentationUrl: https://apicommons.org/rules/#json-structure-schema-json-structure-uri
+  json-structure-schema-property-require-type:
+    description: The `type` property of each property should be present.
+    message: type should be present
+    severity: info
+    given: $.properties[*]
+    then:
+      field: type
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-structure-schema-property-require-type
+  json-structure-schema-require:
+    description: The `$schema` property should be present.
+    message: $schema should be present
+    severity: info
+    given: $
+    then:
+      field: $schema
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#json-structure-schema-require
+  json-ld-document-json-ld-id-iri:
+    description: '@id should be an IRI (https://, urn:, did:) or a blank-node identifier.'
+    message: '@id should be an IRI.'
+    given: $['@id']
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: '^https?://|^urn:|^did:|^_:'
+    documentationUrl: https://apicommons.org/rules/#json-ld-document-json-ld-id-iri
+  json-ld-schema-json-ld-context-uri-or-object:
+    description: '@context should be a URI string, an inline object, or an array of those.'
+    message: '@context should be a URI, object, or array.'
+    given: $['@context']
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type:
+          - string
+          - object
+          - array
+    documentationUrl: https://apicommons.org/rules/#json-ld-schema-json-ld-context-uri-or-object
+  mcp-document-mcp-name-kebab-case:
+    description: MCP server name should be lower kebab-case.
+    message: MCP server name should be kebab-case.
+    given: $.name
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#mcp-document-mcp-name-kebab-case
+  mcp-info-mcp-protocol-version-dated:
+    description: protocolVersion should be a dated MCP revision (YYYY-MM-DD).
+    message: protocolVersion should be a dated revision (YYYY-MM-DD).
+    given: $.protocolVersion
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d{4}-\d{2}-\d{2}$
+    documentationUrl: https://apicommons.org/rules/#mcp-info-mcp-protocol-version-dated
+  mcp-info-require-protocol-version:
+    description: The `protocolVersion` property should be present.
+    message: protocolVersion should be present
+    severity: info
+    given: $
+    then:
+      field: protocolVersion
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#mcp-info-require-protocol-version
+  plans-plan-currency-iso4217:
+    description: currency should be a 3-letter ISO 4217 code (e.g. USD).
+    message: currency should be an ISO 4217 code.
+    given: $.currency
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z]{3}$
+    documentationUrl: https://apicommons.org/rules/#plans-plan-currency-iso4217
+  plans-plan-require-interval:
+    description: Each plan should declare a billing interval (e.g. month, year).
+    message: Plan should declare a billing interval.
+    given: $.plans[*]
+    severity: info
+    then:
+      field: interval
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#plans-plan-require-interval
+  rate-limits-limit-scope-known:
+    description: A limit scope should be one of ip, user, api-key, client, or global.
+    message: Limit scope should be a known value.
+    given: $.limits[*].scope
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: string
+          enum:
+          - ip
+          - user
+          - api-key
+          - client
+          - global
+    documentationUrl: https://apicommons.org/rules/#rate-limits-limit-scope-known
+  rate-limits-limit-window-format:
+    description: A limit window should be a duration like 60s, 1m, 1h, or 1d.
+    message: Limit window should be a duration (e.g. 60s, 1h).
+    given: $.limits[*].window
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d+(ms|s|m|h|d)$
+    documentationUrl: https://apicommons.org/rules/#rate-limits-limit-window-format
+  finops-document-finops-currency-iso4217:
+    description: currency should be a 3-letter ISO 4217 code (e.g. USD).
+    message: currency should be an ISO 4217 code.
+    given: $.currency
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z]{3}$
+    documentationUrl: https://apicommons.org/rules/#finops-document-finops-currency-iso4217
+  finops-document-finops-require-period:
+    description: A FinOps artifact should declare a period (e.g. monthly, annual) for the budget and costs.
+    message: FinOps should declare a period.
+    given: $
+    severity: info
+    then:
+      field: period
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#finops-document-finops-require-period
+  agent-skill-skill-description-single-line:
+    description: A skill description should be a single line (no embedded line breaks) so it renders cleanly in pickers.
+    message: Skill description should be a single line.
+    given: $.frontmatter.description
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \n
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-description-single-line

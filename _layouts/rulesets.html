@@ -31,16 +31,15 @@ layout: default
     <span class="badge bg-primary">{{ page.count }} rules</span>
     <span class="badge bg-secondary">experience: {{ page.experience }}</span>
     {% assign builtins = page.count | minus: page.runnable_count %}
-    <span class="badge bg-light text-dark border">{{ page.runnable_count }} inlined · {{ builtins }} from the engine</span>
+    <span class="badge bg-light text-dark border">{{ page.runnable_count }} in the file · {{ builtins }} built-in or validator-only</span>
   </div>
 
   <div class="run-box">
     <h3>Run this ruleset</h3>
-    <p class="muted mb-1">Lint any matching artifact against this ruleset with the Spotlight CLI:</p>
-    <pre>npm i -g @spotlight-rules/spotlight-cli
-spotlight lint api.yaml \
+    <p class="muted mb-1">Lint any matching artifact against this ruleset with any Spectral-compatible linter, such as the Spectral CLI today and the <a href="https://openlint.org">OpenLint</a> CLI when it ships:</p>
+    <pre>npx @stoplight/spectral-cli lint api.yaml \
   --ruleset https://apicommons.org{{ page.ruleset_url }}</pre>
-    <p class="muted mb-0">Or load it into the <a href="https://validator.spotlight-rules.com">browser validator</a>, post it to the <a href="https://github.com/api-commons/spotlight-api">HTTP API</a>, or wire it into a <a href="https://github.com/api-commons/spotlight-pipeline">CI gate</a>. {{ builtins }} of these rules are the engine's built-ins (they come with <code>spotlight:*</code>); the other {{ page.runnable_count }} are inlined in the file below.</p>
+    <p class="muted mb-0">Or run every rule, including the {{ builtins }} that are engine built-ins or need the validator's own functions, in the <a href="https://validator.apicommons.org">API Commons validator</a>. The other {{ page.runnable_count }} are inlined in the file below.</p>
   </div>
 
   <h3 id="source" class="h5">Ruleset definition</h3>
@@ -50,7 +49,7 @@ spotlight lint api.yaml \
 
   <h3 class="h5 mt-4">Rules in this ruleset <span class="text-muted">({{ page.count }})</span></h3>
   <div>
-    {% assign ruleset_rules = site.data.spotlight_rules.experience_rules[page.experience] %}
+    {% assign ruleset_rules = site.data.rules_catalog.experience_rules[page.experience] %}
     {% for r in ruleset_rules %}
     <div class="rule-line">
       <a class="rl-name" href="{{ r.detail_url }}" target="_blank" rel="noopener">{{ r.name }}</a>

@@ -1,0 +1,1377 @@
+documentationUrl: https://spec.openlint.org/
+functions:
+- baloise-validate-tracing
+functionsDir: ./functions
+rules:
+  openapi-document-cache-control-parameter:
+    description: 'Cache usage SHOULD be extensively detailed in the `description` property to avoid data leaks or the usage
+      of stale data. This rule should ensure in some way that the api provider documented extensively the cache usage to avoid
+      data leaks or usage of stale data. For now this ruleset tests: * the presence of following keywords in the `description`:
+      `max-age`, `private`, `no-store`, `no-cache`. * that one and only one between Expires and Cache-Control is used. `Cache-Control`
+      and `Expires` should not be used in conjuction, because `Cache-Control` overrides `Expires` when `max-age` is set. Instead
+      if neither `Cache-Control` or `Expires` are set, clients MAY use euristic cache like described in RFC7234.'
+    message: Cache usage SHOULD be documented when used.
+    severity: info
+    given: $..[parameters][?(@.in == "header" && @.name.match(/Cache-Control/i))]
+    then:
+    - field: description
+      function: truthy
+    - field: description
+      function: pattern
+      functionOptions:
+        match: .*(max-age|private|no-store|no-cache).*
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-document-cache-control-parameter
+  openapi-document-cache-response-header:
+    description: 'Cache usage SHOULD be extensively detailed in the `description` property to avoid data leaks or the usage
+      of stale data. This rule should ensure in some way that the api provider documented extensively the cache usage to avoid
+      data leaks or usage of stale data. For now this ruleset tests: * the presence of following keywords in the `description`:
+      `max-age`, `private`, `no-store`, `no-cache`. * that one and only one between Expires and Cache-Control is used. `Cache-Control`
+      and `Expires` should not be used in conjuction, because `Cache-Control` overrides `Expires` when `max-age` is set. Instead
+      if neither `Cache-Control` or `Expires` are set, clients MAY use euristic cache like described in RFC7234.'
+    message: Cache usage in responses SHOULD be documented in Cache-Control and/or Expires. {{error}}
+    severity: info
+    given: $.[responses][?(@property[0] == "2" )][headers].[?(@property.match(/Cache-Control|Expires/i))]]
+    then:
+    - field: description
+      function: truthy
+    - field: description
+      function: pattern
+      functionOptions:
+        match: .*(max-age|private|no-store|no-cache).*
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-document-cache-response-header
+  openapi-operation-collection-support-sparse-fieldsets:
+    description: GET operations should support sparse fieldsets via a fields query parameter so clients can request only the
+      fields they need.
+    message: Operation should support a fields (sparse fieldset) query parameter.
+    given: $.paths[*].get
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^fields
+              in:
+                const: query
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-collection-support-sparse-fieldsets
+  openapi-operation-define-429-response:
+    description: APIs should define a 429 Too Many Requests response to document rate limiting behavior. Analysis shows 429
+      appears in 671 operations, confirming rate limiting is a common API pattern.
+    message: Operations MUST Have 429 Response
+    severity: info
+    given: $.paths.*[get,post,put,patch,delete].responses
+    then:
+      field: '429'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-define-429-response
+  openapi-operation-define-500-response:
+    description: Every endpoint SHOULD have a 500 response.
+    message: Every endpoint SHOULD have a 500 response.
+    severity: info
+    given: $.paths[*][*]
+    then:
+      field: responses.500
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-define-500-response
+  openapi-operation-get-support-if-modified-since:
+    description: GET operations should accept an If-Modified-Since request header to enable date-based conditional requests.
+    message: Operation should accept a `If-Modified-Since` request header.
+    given: $.paths[*][get]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                const: If-Modified-Since
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-get-support-if-modified-since
+  openapi-operation-get-support-if-none-match:
+    description: GET operations should accept an If-None-Match request header to enable ETag-based conditional requests (304
+      responses).
+    message: Operation should accept a `If-None-Match` request header.
+    given: $.paths[*][get]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                const: If-None-Match
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-get-support-if-none-match
+  openapi-operation-mutation-support-idempotency-key:
+    description: POST and PATCH operations should accept an Idempotency-Key request header so clients can safely retry without
+      creating duplicates.
+    message: Mutation should accept an Idempotency-Key header for safe retries.
+    given: $.paths[*][post,patch]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: Idempotency-Key
+              in:
+                const: header
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-mutation-support-idempotency-key
+  openapi-operation-patch-must-have-request-body:
+    formats:
+    - oas3
+    description: PATCH operations must have a request body.
+    message: PATCH operations must have a request body.
+    severity: info
+    given: $.paths[*].patch
+    then:
+      field: requestBody
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-patch-must-have-request-body
+  openapi-operation-patch-must-have-request-body-oas2:
+    formats:
+    - oas2
+    description: 'PATCH operations must accept a body parameter (a `parameters` entry with `in: body`).'
+    message: PATCH operations must have a body parameter.
+    severity: info
+    given: $.paths[*].patch
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        dialect: draft7
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - in
+            properties:
+              in:
+                const: body
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-patch-must-have-request-body-oas2
+  openapi-operation-write-support-if-match:
+    description: Write operations should accept an If-Match request header to enable optimistic concurrency / conditional
+      writes.
+    message: Operation should accept a `If-Match` request header.
+    given: $.paths[*][put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                const: If-Match
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-write-support-if-match
+  openapi-operation-write-support-if-unmodified-since:
+    description: Write operations should accept an If-Unmodified-Since request header to enable date-based optimistic concurrency
+      / conditional writes.
+    message: Operation should accept a `If-Unmodified-Since` request header.
+    given: $.paths[*][put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                const: If-Unmodified-Since
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-write-support-if-unmodified-since
+  openapi-parameter-collection-limit-param-maximum:
+    description: The limit / page-size query parameter should declare a maximum so a caller cannot request an unbounded page
+      (OWASP API4 — unrestricted resource consumption).
+    message: limit parameter should declare a maximum.
+    given: $.paths[*].get.parameters[?(@ && @.in == 'query' && (@.name == 'limit' || @.name == 'per_page' || @.name == 'page_size'
+      || @.name == 'pageSize'))].schema
+    severity: info
+    then:
+      field: maximum
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-collection-limit-param-maximum
+  openapi-parameter-integer-require-maximum:
+    description: Parameters that are of the integer schema type must have their maximum value set, defining the shape of parameter
+      data passed in with a request.
+    message: Parameter Schema Type Integer Maximum
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+      field: maximum
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-integer-require-maximum
+  openapi-parameter-integer-require-minimum:
+    description: Parameters that are of the integer schema type must have their minimum value set, defining the shape of parameter
+      data passed in with a request.
+    message: Parameter Schema Type Integer Minimum
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+      field: minimum
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-integer-require-minimum
+  openapi-parameter-string-require-max-length:
+    description: Parameters that are of the string schema type must have their maximum value set, defining the shape of parameter
+      data passed in with a request.
+    message: Parameter Schema Type String MaxLength
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+      field: maxLength
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-string-require-max-length
+  openapi-parameter-string-require-min-length:
+    description: Parameters that are of the string schema type must have their minimum value set, defining the shape of parameter
+      data passed in with a request.
+    message: Parameter Schema Type String MinLength
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+      field: minLength
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-string-require-min-length
+  openapi-parameter-string-require-pattern:
+    description: Parameters that are of the string schema type must have a pattern set, using a regex to define the shape
+      of parameter data passed in with a request.
+    message: Parameter Schema Type String Pattern
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+      field: pattern
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-string-require-pattern
+  openapi-path-require-tracing-header:
+    description: MUST use b3 or w3c tracing [233a].
+    message: Header X-B3-Traceid, X-B3-Spanid or traceparent (w3c) missing
+    severity: info
+    given: $.paths.*
+    then:
+      function: baloise-validate-tracing
+    documentationUrl: https://apicommons.org/rules/#openapi-path-require-tracing-header
+  openapi-request-delete-must-not-have-body:
+    formats:
+    - oas3
+    description: DELETE operations must not accept a request body.
+    message: DELETE operations must not accept a request body.
+    severity: info
+    given: $.paths[*].delete.requestBody
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-delete-must-not-have-body
+  openapi-request-delete-must-not-have-body-oas2:
+    formats:
+    - oas2
+    description: A DELETE operation must not accept a body parameter.
+    message: DELETE operations must not accept a body parameter.
+    severity: info
+    given: $.paths[*].delete.parameters[?(@.in=='body')]
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-delete-must-not-have-body-oas2
+  openapi-request-get-must-not-have-body:
+    formats:
+    - oas3
+    description: A `GET` request MUST NOT accept a request body.
+    message: A `GET` request MUST NOT accept a request body.
+    severity: info
+    given: $.paths[*][get].requestBody
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-get-must-not-have-body
+  openapi-request-get-must-not-have-body-oas2:
+    formats:
+    - oas2
+    description: A `GET` request MUST NOT accept a body parameter.
+    message: A `GET` request MUST NOT accept a body parameter.
+    severity: info
+    given: $.paths[*][get].parameters[?(@.in=='body')]
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-get-must-not-have-body-oas2
+  openapi-request-head-must-not-have-body:
+    formats:
+    - oas3
+    description: A `HEAD` request MUST NOT accept a request body.
+    message: A `HEAD` request MUST NOT accept a request body.
+    severity: info
+    given: $.paths[*][head].requestBody
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-head-must-not-have-body
+  openapi-request-head-must-not-have-body-oas2:
+    formats:
+    - oas2
+    description: A `HEAD` request MUST NOT accept a body parameter.
+    message: A `HEAD` request MUST NOT accept a body parameter.
+    severity: info
+    given: $.paths[*][head].parameters[?(@.in=='body')]
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-head-must-not-have-body-oas2
+  openapi-request-options-must-not-have-body:
+    formats:
+    - oas3
+    description: An `OPTIONS` request MUST NOT accept a request body.
+    message: An `OPTIONS` request MUST NOT accept a request body.
+    severity: info
+    given: $.paths[*][options].requestBody
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-options-must-not-have-body
+  openapi-request-options-must-not-have-body-oas2:
+    formats:
+    - oas2
+    description: An `OPTIONS` request MUST NOT accept a body parameter.
+    message: An `OPTIONS` request MUST NOT accept a body parameter.
+    severity: info
+    given: $.paths[*][options].parameters[?(@.in=='body')]
+    then:
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-request-options-must-not-have-body-oas2
+  openapi-request-support-accept-encoding:
+    description: Operations should accept an Accept-Encoding request header so clients can negotiate a compressed (e.g. gzip)
+      response.
+    message: Operation should accept an Accept-Encoding header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: Accept-Encoding
+              in:
+                const: header
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-accept-encoding
+  openapi-request-support-baggage:
+    description: Operations should accept a baggage request header (W3C Baggage / OpenTelemetry) so application-defined context
+      propagates across services.
+    message: Operation should accept a `baggage` request header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: baggage
+              in:
+                const: header
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-baggage
+  openapi-request-support-correlation-id:
+    description: Operations should accept a correlation / request ID request header (e.g. Correlation-Id or X-Request-Id)
+      so a caller-supplied id can be traced end to end.
+    message: Operation should accept a `Correlation-Id` request header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                pattern: ^([Xx]-)?([Cc]orrelation|[Rr]equest)-[Ii][Dd]$
+              in:
+                const: header
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-correlation-id
+  openapi-request-support-tracestate:
+    description: Operations should accept a tracestate request header (W3C Trace Context) so vendor-specific trace state propagates
+      alongside traceparent.
+    message: Operation should accept a `tracestate` request header.
+    given: $.paths[*][get,post,put,patch,delete]
+    severity: info
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required:
+            - name
+            - in
+            properties:
+              name:
+                const: tracestate
+              in:
+                const: header
+    documentationUrl: https://apicommons.org/rules/#openapi-request-support-tracestate
+  openapi-response-202-location-header:
+    description: 202 Accepted responses should document a Location header pointing at the status or result resource clients
+      can poll for the long-running operation.
+    message: 202 Accepted responses should document a Location header.
+    given: $.paths[*][*].responses['202'].headers
+    severity: info
+    then:
+      field: Location
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-202-location-header
+  openapi-response-202-retry-after:
+    description: 202 Accepted responses should document a Retry-After header suggesting how long clients should wait before
+      polling the status resource.
+    message: 202 Accepted responses should document a Retry-After header.
+    given: $.paths[*][*].responses['202'].headers
+    severity: info
+    then:
+      field: Retry-After
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-202-retry-after
+  openapi-response-cache-header-no-conflict:
+    description: 'Cache usage SHOULD be extensively detailed in the `description` property to avoid data leaks or the usage
+      of stale data. This rule should ensure in some way that the api provider documented extensively the cache usage to avoid
+      data leaks or usage of stale data. For now this ruleset tests: * the presence of following keywords in the `description`:
+      `max-age`, `private`, `no-store`, `no-cache`. * that one and only one between Expires and Cache-Control is used. `Cache-Control`
+      and `Expires` should not be used in conjuction, because `Cache-Control` overrides `Expires` when `max-age` is set. Instead
+      if neither `Cache-Control` or `Expires` are set, clients MAY use euristic cache like described in RFC7234.'
+    message: '{{error}}'
+    severity: info
+    given: $.[responses][?(@property[0] == "2" )][headers]
+    then:
+    - function: xor
+      functionOptions:
+        properties:
+        - Expires
+        - Cache-Control
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-cache-header-no-conflict
+  openapi-response-define-429:
+    description: Responses should contain common response - 429 (too many requests).
+    message: '{{description}}. Missing {{property}}'
+    severity: info
+    given: $.paths..responses
+    then:
+      field: '429'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-define-429
+  openapi-response-define-500:
+    description: Responses should contain common response - 500 (server error).
+    message: '{{description}}. Missing {{property}}'
+    severity: info
+    given: $.paths..responses
+    then:
+      field: '500'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-define-500
+  openapi-response-delete-define-204:
+    description: DELETE responses should have a 204 success HTTP status codes, communicating a success created response to
+      consumers.
+    message: DELETE 204 Status Code
+    severity: info
+    given: $.paths.*.delete.responses
+    then:
+      field: '204'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-delete-define-204
+  openapi-response-delete-define-500:
+    description: DELETE responses should have a 500 internal server erorr HTTP status code, communicating the API had a problem
+      to consumers.
+    message: DELETE Responses MUST Have 500 Status Codes
+    severity: info
+    given: $.paths.*.delete.responses
+    then:
+      field: '500'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-delete-define-500
+  openapi-response-delete-must-not-return-body:
+    formats:
+    - oas3
+    description: DELETE operations must not have a response body.
+    message: DELETE operations must not have a response body.
+    severity: info
+    given: $.paths.*.delete.responses[202,204].content
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-delete-must-not-return-body
+  openapi-response-delete-must-not-return-body-oas2:
+    formats:
+    - oas2
+    description: DELETE operations must not have a response body.
+    message: DELETE operations must not have a response body.
+    severity: info
+    given: $.paths.*.delete.responses[202,204].schema
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-delete-must-not-return-body-oas2
+  openapi-response-get-cache-control:
+    description: GET success responses should define a Cache-Control header so clients and intermediaries know how to cache
+      the representation.
+    message: GET success responses should define a `Cache-Control` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Cache-Control
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-cache-control
+  openapi-response-get-define-200:
+    description: GET responses should have a 200 success HTTP status codes, communicating a successful response to consumers.
+    message: GET Responses MUST Have 200 Status Codes
+    severity: info
+    given: $.paths.*.get.responses
+    then:
+      field: '200'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-define-200
+  openapi-response-get-define-500:
+    description: GET responses should have a 500 internal server erorr HTTP status code, communicating the API had a problem
+      to consumers.
+    message: GET Responses MUST Have 500 Status Code
+    severity: info
+    given: $.paths.*.get.responses
+    then:
+      field: '500'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-define-500
+  openapi-response-get-document-304-not-modified:
+    description: GET operations should document a 304 Not Modified response so ETag/Last-Modified conditional requests are
+      handled.
+    message: Operation should document a `304` response.
+    given: $.paths[*][get].responses
+    severity: info
+    then:
+      field: '304'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-document-304-not-modified
+  openapi-response-get-etag:
+    description: GET success responses should define an ETag header to enable validation-based caching and conditional requests.
+    message: GET success responses should define a `ETag` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: ETag
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-etag
+  openapi-response-get-last-modified:
+    description: GET success responses should define a Last-Modified header to enable date-based conditional requests.
+    message: GET success responses should define a `Last-Modified` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Last-Modified
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-last-modified
+  openapi-response-get-must-return-body:
+    formats:
+    - oas3
+    description: A `GET` operation must return a response body.
+    message: A `GET` operation must return a response body.
+    severity: info
+    given: $.paths[*].get.responses[*]
+    then:
+      field: content
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-must-return-body
+  openapi-response-get-must-return-body-oas2:
+    formats:
+    - oas2
+    description: A `GET` operation must return a response body.
+    message: A `GET` operation must return a response body.
+    severity: info
+    given: $.paths[*].get.responses[*]
+    then:
+      field: schema
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-must-return-body-oas2
+  openapi-response-get-vary:
+    description: GET success responses should define a Vary header so caches key correctly on the request headers that affect
+      the representation.
+    message: GET success responses should define a `Vary` header.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Vary
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-vary
+  openapi-response-head-must-not-return-body:
+    formats:
+    - oas3
+    description: HEAD operations should not return a response body for success.
+    message: HEAD operations should not return a response body for success.
+    severity: info
+    given: $.paths.*.head.responses[200].content
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-head-must-not-return-body
+  openapi-response-head-must-not-return-body-oas2:
+    formats:
+    - oas2
+    description: HEAD operations should not return a response body for success.
+    message: HEAD operations should not return a response body for success.
+    severity: info
+    given: $.paths.*.head.responses[200].schema
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-head-must-not-return-body-oas2
+  openapi-response-include-ratelimit-header:
+    description: Response must include ratelimit-x headers.
+    message: '{{description}}; missing {{property}}'
+    severity: info
+    given: $..responses.*
+    then:
+    - field: headers.ratelimit-limit
+      function: truthy
+    - field: headers.ratelimit-remaining
+      function: truthy
+    - field: headers.ratelimit-reset
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-include-ratelimit-header
+  openapi-response-options-must-not-return-body:
+    formats:
+    - oas3
+    description: OPTIONS operations should not return a response body for success.
+    message: OPTIONS operations should not return a response body for success.
+    severity: info
+    given: $.paths.*.options.responses[200, 204].content
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-options-must-not-return-body
+  openapi-response-options-must-not-return-body-oas2:
+    formats:
+    - oas2
+    description: OPTIONS operations should not return a response body for success.
+    message: OPTIONS operations should not return a response body for success.
+    severity: info
+    given: $.paths.*.options.responses[200, 204].schema
+    then:
+      function: falsy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-options-must-not-return-body-oas2
+  openapi-response-patch-define-200:
+    description: PATCH operations should define a 200 OK response for successful partial updates. Analysis shows PATCH is
+      used in 17.7% of APIs.
+    message: PATCH MUST Have 200 Response
+    severity: info
+    given: $.paths[*].patch.responses
+    then:
+      field: '200'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-patch-define-200
+  openapi-response-patch-define-400:
+    description: PATCH operations should define a 400 Bad Request response for validation errors on partial update payloads.
+    message: PATCH MUST Have 400 Response
+    severity: info
+    given: $.paths[*].patch.responses
+    then:
+      field: '400'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-patch-define-400
+  openapi-response-patch-define-404:
+    description: PATCH operations should define a 404 Not Found response for cases where the resource to be updated does not
+      exist.
+    message: PATCH MUST Have 404 Response
+    severity: info
+    given: $.paths[*].patch.responses
+    then:
+      field: '404'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-patch-define-404
+  openapi-response-post-define-201:
+    description: POST responses should have a 201 success HTTP status codes, communicating a success created response to consumers.
+    message: POST Responses MUST Have 201 Status Codes
+    severity: info
+    given: $.paths[*].post.responses
+    then:
+      field: '201'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-post-define-201
+  openapi-response-post-define-400:
+    description: POST operations should define a 400 Bad Request response for input validation errors. Analysis shows 400
+      is the 4th most common response code across 2516 operations.
+    message: POST MUST Have 400 Response
+    severity: info
+    given: $.paths[*].post.responses
+    then:
+      field: '400'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-post-define-400
+  openapi-response-post-define-500:
+    description: POST responses should have a 500 internal server erorr HTTP status code, communicating the API had a problem
+      to consumers.
+    message: POST Responses MUST Have 500 Status Codes
+    severity: info
+    given: $.paths.*.post.responses
+    then:
+      field: '500'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-post-define-500
+  openapi-response-put-define-400:
+    description: PUT responses should have a 400 not found HTTP status code, communicating nothing was found to consumers.
+    message: PUT Responses MUST Have 400 Status Codes
+    severity: info
+    given: $.paths.*.put.responses
+    then:
+      field: '400'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-put-define-400
+  openapi-response-put-define-500:
+    description: PUT responses should have a 500 internal server erorr HTTP status code, communicating the API had a problem
+      to consumers.
+    message: PUT Responses MUST Have 500 Status Codes
+    severity: info
+    given: $.paths.*.put.responses
+    then:
+      field: '500'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-put-define-500
+  openapi-response-ratelimit-header:
+    description: Responses should define the structured RateLimit header (current IETF draft) conveying quota, remaining,
+      and reset in one field — the modern successor to the RateLimit-Limit/Remaining/Reset triplet.
+    message: Responses should define a `RateLimit` header.
+    given: $..responses.*
+    severity: info
+    then:
+      field: headers.RateLimit
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-ratelimit-header
+  openapi-response-ratelimit-policy:
+    description: Responses should define a RateLimit-Policy header documenting the quota policy and window (e.g. 100;w=60),
+      so clients understand the limits in effect.
+    message: Responses should define a `RateLimit-Policy` header.
+    given: $..responses.*
+    severity: info
+    then:
+      field: headers.RateLimit-Policy
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-ratelimit-policy
+  openapi-response-require-status-health-check-path:
+    description: You must define a `/status` path that can be used to health-check the API. Using this path avoids the arbitrary
+      usage of a server URL for health-check scope. The `/status` endpoint should return a `application/problem+json` response
+      containing a successful status code if the service is working correctly. The service provider is free to define the
+      implementation logic for this path.
+    message: The "/status" path used to health-check the API must be defined. {{error}}
+    severity: info
+    given: $
+    then:
+      field: paths./status.get.responses.200
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-require-status-health-check-path
+  openapi-response-return-correlation-id:
+    description: Responses should return a correlation / request ID header (e.g. Request-Id or X-Correlation-Id) so callers
+      can correlate a response with their request and with server-side logs.
+    message: Responses should return a correlation / request ID header.
+    given: $..responses.*
+    severity: info
+    then:
+      field: headers
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          anyOf:
+          - required:
+            - Request-Id
+          - required:
+            - X-Request-Id
+          - required:
+            - X-Request-ID
+          - required:
+            - Correlation-Id
+          - required:
+            - X-Correlation-Id
+          - required:
+            - X-Correlation-ID
+    documentationUrl: https://apicommons.org/rules/#openapi-response-return-correlation-id
+  openapi-response-status-path-problem-schema-fields:
+    formats:
+    - oas3
+    description: '"/status" schema is not a Problem object.'
+    message: '{{error}} {{path}}'
+    severity: info
+    given: $.paths.'/status'.get.responses.200.content.[[schema]]
+    then:
+    - function: truthy
+      field: properties.status
+    - function: truthy
+      field: properties.title
+    - function: truthy
+      field: properties.detail
+    documentationUrl: https://apicommons.org/rules/#openapi-response-status-path-problem-schema-fields
+  openapi-response-status-path-problem-schema-fields-oas2:
+    formats:
+    - oas2
+    description: '"/status" schema is not a Problem object.'
+    message: '{{error}} {{path}}'
+    severity: info
+    given: $.paths.'/status'.get.responses.200.schema
+    then:
+    - function: truthy
+      field: properties.status
+    - function: truthy
+      field: properties.title
+    - function: truthy
+      field: properties.detail
+    documentationUrl: https://apicommons.org/rules/#openapi-response-status-path-problem-schema-fields-oas2
+  openapi-response-status-path-return-problem-type:
+    formats:
+    - oas3
+    description: '"/status" must return a Problem object.'
+    message: '{{error}}'
+    severity: info
+    given: $.paths.'/status'.get.responses.200.content.*~
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - application/problem+xml
+        - application/problem+json
+    documentationUrl: https://apicommons.org/rules/#openapi-response-status-path-return-problem-type
+  openapi-response-status-path-return-problem-type-oas2:
+    formats:
+    - oas2
+    description: '"/status" must be produced as a Problem media type.'
+    message: '{{error}}'
+    severity: info
+    given: $.paths.'/status'.get.produces[*]
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+        - application/problem+xml
+        - application/problem+json
+    documentationUrl: https://apicommons.org/rules/#openapi-response-status-path-return-problem-type-oas2
+  openapi-response-success-require-ratelimit-header:
+    description: 'Ratelimiting API preserves a service and limits attack scenario [see API4:2019 Lack of Resources & Rate
+      Limiting](https://owasp.org/www-project-api-security). APIs should use the following headers at least on successful
+      responses: - `X-RateLimit-Limit`: number of total requests in a give time window - `X-RateLimit-Remaining`: remaining
+      requests in the current window - `X-RateLimit-Reset`: number of seconds before the window resets An example set of headers
+      is the following ``` X-Ratelimit-Limit: 100 X-Ratelimit-Remaining: 40 X-Ratelimit-Reset: 12 ``` A standardization proposal
+      for ratelimit headers is ongoning inside the IETF HTTPAPI Workgroup. See [the draft](https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/).'
+    message: Missing ratelimit headers. {{property}} {{error}} {{path}}
+    severity: info
+    given: $.[responses][?(@property[0] == "2" )][headers]
+    then:
+    - functionOptions:
+        properties:
+        - X-RateLimit-Limit
+        - RateLimit-Limit
+      function: xor
+    - functionOptions:
+        properties:
+        - X-RateLimit-Remaining
+        - RateLimit-Remaining
+      function: xor
+    - functionOptions:
+        properties:
+        - X-RateLimit-Reset
+        - RateLimit-Reset
+      function: xor
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-success-require-ratelimit-header
+  openapi-response-throttled-require-retry-after:
+    description: 'When a client is either: * throttled out with a 429 status code; * warned about a temporary server issue
+      with a 503 status code; the server should explicitly communicate how long to wait before issuing further requests using
+      the Retry-After header. Retry-After is defined in RFC7231.'
+    message: 'Missing ratelimit header: {{property}} in {{path}}'
+    severity: info
+    given: $.[responses][?(@property == "429" || @property == "503"  )][headers]
+    then:
+      field: Retry-After
+      function: truthy
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-response-throttled-require-retry-after
+  openapi-response-write-document-412-precondition-failed:
+    description: Write operations should document a 412 Precondition Failed response for failed conditional (If-Match) writes.
+    message: Operation should document a `412` response.
+    given: $.paths[*][put,patch,delete].responses
+    severity: info
+    then:
+      field: '412'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-write-document-412-precondition-failed
+  openapi-response-write-etag:
+    description: Write success responses (POST/PUT/PATCH) should define an ETag header so clients receive the new entity tag
+      after a write and can make subsequent conditional requests.
+    message: Write success responses should define a `ETag` header.
+    given: $.paths[*][post,put,patch].responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: ETag
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-write-etag
+  openapi-schema-array-property-require-max-items:
+    description: Schema properties that are of the type array should have a max items property defined.
+    message: Schema Array Properties MUST Have Max Items
+    severity: info
+    given:
+    - $.components.schemas.*.properties[?(@.type=="array")]
+    - $.definitions.*.properties[?(@.type=="array")]
+    then:
+    - field: maxItems
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-array-property-require-max-items
+  openapi-schema-array-property-require-min-items:
+    description: Schema properties that are of the type array should have a min items property defined.
+    message: Schema Array Properties MUST Have Min Items
+    severity: info
+    given:
+    - $.components.schemas.*.properties[?(@.type=="array")]
+    - $.definitions.*.properties[?(@.type=="array")]
+    then:
+    - field: minItems
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-array-property-require-min-items
+  openapi-schema-get-define-404-response:
+    description: GET responses should have a 404 not found HTTP status code, communicating that nothing was found to consumers.
+    message: GET Responses MUST Have 404 Status Code
+    severity: info
+    given: $.paths.*.get[?(@.properties)]
+    then:
+      field: '404'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-get-define-404-response
+  openapi-schema-monetary-property-avoid-float:
+    description: Monetary properties (amount, price, cost, fee, balance, …) should avoid floating-point numbers, which lose
+      precision — use an integer of minor units or a decimal string instead.
+    message: Monetary property should not be a floating-point number.
+    given: $..properties[?( @property.match(/(amount|price|cost|total|fee|balance|subtotal)/i) )]
+    severity: info
+    then:
+      field: type
+      function: pattern
+      functionOptions:
+        notMatch: ^number$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-monetary-property-avoid-float
+  openapi-schema-number-property-require-maximum:
+    description: Schema properties that are of the type number should have a maximum property defined.
+    message: Schema Number Properties MUST Have Maximum
+    severity: info
+    given:
+    - $.components.schemas.*.properties[?(@.type=="number")]
+    - $.definitions.*.properties[?(@.type=="number")]
+    then:
+    - field: maximum
+      function: defined
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-number-property-require-maximum
+  openapi-schema-number-property-require-minimum:
+    description: Schema properties that are of the type number should have a minimum property defined.
+    message: Schema Number Properties MUST Have Minimum
+    severity: info
+    given:
+    - $.components.schemas.*.properties[?(@.type=="number")]
+    - $.definitions.*.properties[?(@.type=="number")]
+    then:
+    - field: minimum
+      function: defined
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-number-property-require-minimum
+  openapi-schema-string-property-require-max-length:
+    description: Schema properties that are of the string type have the max length applied defining the shape of the property.
+    message: Schema String Properties MUST Have Maximum Length
+    severity: info
+    given:
+    - $.components.schemas.*.properties[?(@.type == 'string')]
+    - $.definitions.*.properties[?(@.type == 'string')]
+    then:
+      field: maxLength
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-string-property-require-max-length
+  openapi-schema-string-property-require-min-length:
+    description: Schema properties that are of the string type have the min length applied defining the shape of the property.
+    message: Schema String Properties MUST Have Minimum Length
+    severity: info
+    given:
+    - $.components.schemas.*.properties[?(@.type == 'string')]
+    - $.definitions.*.properties[?(@.type == 'string')]
+    then:
+      field: minLength
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-string-property-require-min-length
+  openapi-server-must-use-https:
+    description: Servers MUST be https and no other protocol is allowed unless using localhost.
+    message: Servers MUST be https and no other protocol is allowed unless using localhost.
+    severity: info
+    given: $.servers..url
+    then:
+      function: pattern
+      functionOptions:
+        match: ^(https:|http://localhost)
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-server-must-use-https
+  openapi-agentic-access-core-fields:
+    description: An x-agentic-access contract must declare action-class, consequence, subject, and a non-empty scope so the
+      runtime decision layer has the token and policy context it needs.
+    message: x-agentic-access must declare action-class, consequence, subject, and a non-empty scope.
+    severity: info
+    given: $.paths[*][get,post,put,patch,delete,options,head,trace].x-agentic-access
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required:
+          - action-class
+          - consequence
+          - subject
+          - scope
+          properties:
+            action-class:
+              enum:
+              - connected
+              - delegated
+              - acting
+            consequence:
+              enum:
+              - read
+              - write
+              - physical
+              - safety-critical
+            subject:
+              enum:
+              - required
+              - optional
+              - none
+            scope:
+              type: array
+              minItems: 1
+              items:
+                type: string
+            audience:
+              type: string
+            audit:
+              enum:
+              - required
+              - none
+            token:
+              type: object
+              properties:
+                max-ttl:
+                  type: integer
+                  minimum: 1
+                exchange:
+                  type: boolean
+                proof-of-possession:
+                  type: boolean
+                purpose-required:
+                  type: boolean
+            escalation:
+              type: object
+              properties:
+                human-in-the-loop:
+                  enum:
+                  - required
+                  - conditional
+                  - none
+                triggers:
+                  type: array
+                  items:
+                    enum:
+                    - abnormal
+                    - high-value
+                    - safety
+                approver:
+                  type: string
+    documentationUrl: https://apicommons.org/rules/#openapi-agentic-access-core-fields
+  apis-json-api-property-require-status-page:
+    description: This property ensures that there is a status page available for each API, providing the uptime status for
+      any given moment, as well as historical data.
+    message: Has a Status Page
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(x-status|status|Status|StatusPage)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-status-page
+  apis-json-schema-include-github-action:
+    description: This property ensures that a GitHub Actions CI/CD pipeline is available for an API, providing a link to the
+      pipeline YAML artifact, which can be used to automate and govern the API as part of the build process.
+    message: Has a GitHub Action
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(github-actions|GitHubActions)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-github-action
+  apis-json-schema-include-performance-testing:
+    description: This property ensures that an API has performance testing in place, providing a URL to the performance testing,
+      dashboard, or other resource.
+    message: Has API Performance
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(Performance|PerformanceTesting)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-performance-testing
+  apis-json-schema-include-production-environment:
+    description: This property ensures that there is a production environment available for an API, providing base URL, tokens,
+      keys, and other key / value pairs that are needed to integrate with an API.
+    message: Has a Production Environment
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(ProductionEnvironment)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-production-environment
+  apis-json-schema-include-rate-limit-reference:
+    description: This property ensures there is an API rate limits reference associated with API, ensuring the rate limits
+      applied to an API are clearly communicated.
+    message: Has an API Terms of Services
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(rate-limits|RateLimits|Rate Limits)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-rate-limit-reference
+  apis-json-schema-include-staging-environment:
+    description: This property ensures that there is a staging environment available for an API, providing base URL, tokens,
+      keys, and other key / value pairs that are needed to integrate with an API.
+    message: Has a Stage Environment
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(StagingEnvironment)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-staging-environment
+  asyncapi-component-asyncapi-message-require-correlation-id:
+    description: Messages should define a correlationId so events can be traced across services.
+    message: Message should define a correlationId.
+    given: $.components.messages[*]
+    severity: info
+    then:
+      field: correlationId
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#asyncapi-component-asyncapi-message-require-correlation-id
+  arazzo-workflow-arazzo-require-step:
+    description: A workflow should define at least one step.
+    message: Workflow should define at least one step.
+    given: $.workflows[*]
+    severity: info
+    then:
+      field: steps
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          minItems: 1
+    documentationUrl: https://apicommons.org/rules/#arazzo-workflow-arazzo-require-step
+  arazzo-workflow-arazzo-step-require-operation:
+    description: Each step should reference an operation via operationId, operationPath, or a nested workflowId.
+    message: Step should reference an operationId, operationPath, or workflowId.
+    given: $.workflows[*].steps[*]
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          anyOf:
+          - required:
+            - operationId
+          - required:
+            - operationPath
+          - required:
+            - workflowId
+    documentationUrl: https://apicommons.org/rules/#arazzo-workflow-arazzo-step-require-operation
+  arazzo-workflow-arazzo-step-require-success-criteria:
+    description: Steps should declare successCriteria so the workflow can assert each step succeeded.
+    message: Step should declare successCriteria.
+    given: $.workflows[*].steps[*]
+    severity: info
+    then:
+      field: successCriteria
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#arazzo-workflow-arazzo-step-require-success-criteria
+  plans-plan-require-limit:
+    description: The `limits` property of each plan should be present.
+    message: limits should be present
+    severity: info
+    given: $.plans[*]
+    then:
+      field: limits
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#plans-plan-require-limit
+  rate-limits-document-require-limit:
+    description: The `limits` property should be present.
+    message: limits should be present
+    severity: info
+    given: $
+    then:
+      field: limits
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#rate-limits-document-require-limit
+  rate-limits-limit-max-positive:
+    description: A limit max should be a positive integer.
+    message: Limit max should be a positive integer.
+    given: $.limits[*].max
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: integer
+          minimum: 1
+    documentationUrl: https://apicommons.org/rules/#rate-limits-limit-max-positive
+  rate-limits-limit-require-max:
+    description: The `max` property of each limit should be present.
+    message: max should be present
+    severity: info
+    given: $.limits[*]
+    then:
+      field: max
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#rate-limits-limit-require-max
+  rate-limits-limit-require-name:
+    description: The `name` property of each limit should be present.
+    message: name should be present
+    severity: info
+    given: $.limits[*]
+    then:
+      field: name
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#rate-limits-limit-require-name
+  rate-limits-limit-require-scope:
+    description: The `scope` property of each limit should be present.
+    message: scope should be present
+    severity: info
+    given: $.limits[*]
+    then:
+      field: scope
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#rate-limits-limit-require-scope
+  rate-limits-limit-require-window:
+    description: The `window` property of each limit should be present.
+    message: window should be present
+    severity: info
+    given: $.limits[*]
+    then:
+      field: window
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#rate-limits-limit-require-window
+  rate-limits-limit-window-format:
+    description: A limit window should be a duration like 60s, 1m, 1h, or 1d.
+    message: Limit window should be a duration (e.g. 60s, 1h).
+    given: $.limits[*].window
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d+(ms|s|m|h|d)$
+    documentationUrl: https://apicommons.org/rules/#rate-limits-limit-window-format
+  agent-skill-skill-body-length:
+    description: Skill bodies should stay focused — very long instructions degrade agent performance. Keep the body under
+      ~5000 words.
+    message: Skill body is very long (over ~5000 words).
+    severity: info
+    given: $.words
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: integer
+          maximum: 5000
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-body-length
+  agent-skill-skill-body-present:
+    description: A skill must have body content, not just frontmatter — the body is the instruction set the agent actually
+      follows.
+    message: A skill must have body content.
+    severity: info
+    given: $.words
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: integer
+          minimum: 1
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-body-present

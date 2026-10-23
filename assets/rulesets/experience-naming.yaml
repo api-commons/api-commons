@@ -1,0 +1,1007 @@
+documentationUrl: https://spec.openlint.org/
+functions:
+- digitalocean-ensureSnakeCaseWithDigits
+- trimble-invalid-symbol-in-path
+- trimble-no-http-verbs-in-path
+functionsDir: ./functions
+rules:
+  openapi-component-example-keys-snake-case:
+    description: example key must be snake cased (e.g. snake_case).
+    message: '{{error}}'
+    severity: info
+    given: $.components['examples'].*~
+    then:
+      function: digitalocean-ensureSnakeCaseWithDigits
+    documentationUrl: https://apicommons.org/rules/#openapi-component-example-keys-snake-case
+  openapi-header-names-hyphenated-pascal-case:
+    description: All `HTTP` headers MUST use `Hyphenated-Pascal-Case` notation.
+    message: '''HTTP'' headers MUST follow ''Hyphenated-Pascal-Case'' notation'
+    severity: info
+    given: $..parameters[?(@.in == 'header')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: /^([A-Z][a-z0-9]-)*([A-Z][a-z0-9])+/
+    documentationUrl: https://apicommons.org/rules/#openapi-header-names-hyphenated-pascal-case
+  openapi-header-no-x-prefix:
+    description: '''HTTP'' headers SHOULD NOT start with ''X-'' RFC6648.'
+    message: HTTP header '{{value}}' SHOULD NOT start with 'X-' in {{path}}
+    severity: info
+    given:
+    - $..parameters[?(@.in == 'header')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: /^([^x]|.[^-])|RateLimit-/i
+    documentationUrl: https://apicommons.org/rules/#openapi-header-no-x-prefix
+  openapi-info-title-capitalized:
+    description: Having a consistent casing for the title for your API helps provide constraints for teams naming the API,
+      but also keep consistent with other APIs from across teams.
+    message: Info Title Has First Characters Capitalized
+    severity: info
+    given: $.info.title
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    documentationUrl: https://apicommons.org/rules/#openapi-info-title-capitalized
+  openapi-operation-id-camel-case:
+    description: Operation identifiers provide a unique way to identify each individual API, and requiring them to have consistent
+      casing reduces friction when generating SDKs and automating around APIs.
+    message: Operation Identifier MUST Be camelCase
+    severity: info
+    given: $.paths.*[get,post,patch,put,delete].operationId
+    then:
+    - function: pattern
+      functionOptions:
+        match: ^[a-z]+(?:[A-Z][a-z]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-id-camel-case
+  openapi-operation-id-url-safe:
+    description: OperationId must use URL friendly characters.
+    message: OperationId must use URL friendly characters.
+    severity: info
+    given: $.paths[*][*]
+    then:
+      field: operationId
+      function: pattern
+      functionOptions:
+        match: ^[A-Za-z0-9-._~:/?#\[\]@!\$&'()*+,;=]*$
+    formats:
+    - oas3
+    - oas3_1
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-id-url-safe
+  openapi-operation-tag-title-case:
+    description: Having the first letter of each word applied as a tag to API operations helps keep a consistent layout when
+      published via search, documentation, and other ways APIs are made available.
+    message: Operation Tag Names MUST Have First Letter in Each Word Capitalized
+    severity: info
+    given: $.paths.*[get,post,patch,put,delete].tags.*
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-tag-title-case
+  openapi-parameter-enum-upper-snake-case:
+    description: Keeping parameters enumerator casing consistent across APIs helps reduce confusion by consumers, and can
+      keep aligned with services and applications putting an API to work.
+    message: Parameters Enums MUST Must Be Upper Snake Case
+    severity: info
+    given:
+    - $.components.parameters.*.enum.*
+    - $.parameters.*.enum.*
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^[A-Z]+(?:_[A-Z]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-enum-upper-snake-case
+  openapi-parameter-keys-snake-case:
+    description: parameter key must be snake cased (e.g. snake_case).
+    message: '{{error}}'
+    severity: info
+    given: $.components['parameters'].*~
+    then:
+      function: digitalocean-ensureSnakeCaseWithDigits
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-keys-snake-case
+  openapi-parameter-name-max-length:
+    severity: info
+    description: Providing short and concise names for your parameters helps make it easier for API consumers to understand
+      how they are able to configure their API requests.
+    message: Parameters Name Length MUST Be Less Than 25 Characters
+    given:
+    - $.components.parameters[?(@.in=='path')].name
+    - $.parameters[?(@.in=='path')].name
+    then:
+      field: summary
+      function: length
+      functionOptions:
+        max: 25
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-name-max-length
+  openapi-parameter-names-camel-case:
+    description: Providing parameters with consistent naming helps make it easier for API consumers to understand how they
+      are able to configure their API requests.
+    message: Parameters Names MUST Be Camel Case
+    severity: info
+    given:
+    - $.components.parameters.*
+    - $.parameters.*
+    then:
+    - field: name
+      function: pattern
+      functionOptions:
+        notMatch: ^[a-z]+(?:[A-Z][a-z]+)*$
+    - field: name
+      function: pattern
+      functionOptions:
+        match: ^[A-Z](([a-z0-9]+[A-Z]?)*)$
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-names-camel-case
+  openapi-parameter-no-x-prefixed-request-header:
+    description: Do not use headers with X-.
+    message: 'Headers cannot start with X-. More: https://tools.ietf.org/html/rfc6648'
+    severity: info
+    given: $..parameters.[?(@.in === 'header')].name
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(x|X)-
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-no-x-prefixed-request-header
+  openapi-parameter-query-allowed-characters:
+    description: 'Query parameter keys MUST include only alpha-numeric characters and periods: [Aa0-Zz9]''.'
+    message: 'Query parameter keys MUST include only alpha-numeric characters and periods: [Aa0-Zz9]''.'
+    severity: info
+    given: $.paths.*.*.parameters[?(@.in=='query')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Za-z0-9\.]+$
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-query-allowed-characters
+  openapi-parameter-query-camel-case:
+    description: MUST query parameter names must be ASCII camelCase [130a].
+    message: Query parameter name has to be ASCII camelCase
+    severity: info
+    given: $.paths.*.*.parameters[?(@ && @.in=='query')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z]+((\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?$
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-query-camel-case
+  openapi-parameter-require-name:
+    description: Providing a simple, intuitive, and consistent names for your parameters helps make it easier for API consumers
+      to understand how they are able to configure their API requests.
+    message: Parameters MUST Have a Name
+    severity: info
+    given:
+    - $.components.parameters.*
+    - $.parameters.*
+    then:
+      field: name
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-require-name
+  openapi-path-no-api-prefix-in:
+    description: A resource SHOULD NOT contain 'api' as a prefix in or a part of the path.
+    message: A resource SHOULD NOT contain 'api' as a prefix in or a part of the path.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /api|/api/|-api/
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-api-prefix-in
+  openapi-path-no-empty-segment:
+    description: A resource MUST use normalized paths without empty path segments.
+    message: A resource MUST use normalized paths without empty path segments.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: //
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-empty-segment
+  openapi-path-no-environment-names-in:
+    description: API paths MUST NOT indicate environment names.
+    message: API paths MUST NOT indicate environment names.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /prod/|/preprod/|/dev/|/test/|/integration/|/stage/
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-environment-names-in
+  openapi-path-no-file-extension-in:
+    description: A resource SHOULD NOT make use of an extension at any point in the path.
+    message: A resource SHOULD NOT make use of an extension at any point in the path.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \.
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-file-extension-in
+  openapi-path-no-file-extensions:
+    description: API paths should not include file extensions like .json or .xml. Content negotiation should be handled through
+      Accept headers rather than path suffixes.
+    message: Paths MUST NOT Contain File Extensions
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \.(json|xml|html|yaml|yml|csv|pdf)$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-file-extensions
+  openapi-path-no-format-extensions-in:
+    description: Request and Response media type formats MUST NOT be implied using extensions on resources (i.e. .json or
+      .xml). Instead, use the standard resource path with the appropriate Content-Type header.
+    message: Request and Response media type formats MUST NOT be implied using extensions on resources (i.e.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \.json|\.xml|\.yml|\.yaml
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-format-extensions-in
+  openapi-path-no-http-method-names:
+    description: 'When you design a REST API, you don''t usually need to mention terms like `get`, `delete` and so on in your
+      `paths`, because this information is conveyed by the HTTP method. Instead of using ``` POST /books/1234/delete HTTP/1.1
+      Host: api.example ``` You can simply call ``` DELETE /books/1234 HTTP/1.1 Host: api.example ``` Similarly you don''t
+      need verbs like `list` or `create` because the HTTP Semantics RFC7231 supports this kind of actions natively with proper
+      methods and status code. Instead of ``` POST /create/user HTTP/1.1 Host: api.example Content-Type: application/json
+      {"given_name": "Mario"} ``` You can use ``` POST /create/user HTTP/1.1 Host: api.example Content-Type: application/json
+      {"given_name": "Mario"} ``` returning a proper response ``` HTTP/1.1 201 Created Location: /users/1234 ``` This simplifies
+      securing your API as you know beforehand the kind of action which is going to be performed.'
+    message: API "path" contains a name of an http method. {{error}}
+    severity: info
+    given:
+    - $.paths[?(@property.match( /\/(get|post|put|delete|patch)[\/A-Z_\-]?/ ))]~
+    - $.paths[?(@property.match( /\/(create|remove|list)[\/A-Z_\-]?/ ))]~
+    then:
+      field: '@key'
+      function: undefined
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-http-method-names
+  openapi-path-no-http-methods-in:
+    description: A resource SHOULD NOT contain HTTP methods.
+    message: A resource SHOULD NOT contain HTTP methods.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: (\/get|\/post|\/put|\/delete|\/patch)
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-http-methods-in
+  openapi-path-no-http-verbs:
+    severity: info
+    description: HTTP verbs should be not be in URL paths.
+    message: '{{property}} has HTTP verb in path: {{error}}'
+    given: $.paths[*]~
+    then:
+      function: trimble-no-http-verbs-in-path
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-http-verbs
+  openapi-path-no-invalid-symbols:
+    description: Check if the given endpoint has queryparameter.
+    message: '{{error}}'
+    severity: info
+    given: $.paths[*]~
+    then:
+      function: trimble-invalid-symbol-in-path
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-invalid-symbols
+  openapi-path-no-query-string:
+    description: Path must not include query string.
+    message: Path must not include query string.
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \?
+    formats:
+    - oas3
+    - oas3_1
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-query-string
+  openapi-path-no-query-strings-in:
+    description: Paths SHOULD NOT have query parameters in them. They should be defined separately in the OpenAPI.
+    message: Paths SHOULD NOT have query parameters in them. They should be defined separately in the OpenAPI.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: \?
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-query-strings-in
+  openapi-path-no-technology-leak-in:
+    description: A resource MUST NOT leak or expose format or technology-specific information at any point in the path.
+    message: A resource MUST NOT leak or expose format or technology-specific information at any point in the path.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: (.php|.asp|.jsp|.cgi|.psp|.json|.xml)
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-technology-leak-in
+  openapi-path-no-trailing-slash:
+    description: Path must not end with a slash.
+    message: Path must not end with a slash.
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: .+\/$
+    formats:
+    - oas3
+    - oas3_1
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-trailing-slash
+  openapi-path-no-trailing-slash-in:
+    description: A resource MUST be addressable without a trailing slash on the path.
+    message: A resource MUST be addressable without a trailing slash on the path.
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-trailing-slash-in
+  openapi-path-no-verbs:
+    description: API paths MUST be resource-focused and MUST NOT include verbs like 'get', 'update', 'create', or 'delete'.
+    message: Path '{{path}}' includes a verb (e.g., 'get', 'update', 'create', 'delete'). API paths SHOULD be resource-focused.
+    severity: info
+    given: $.paths[*]~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /\b(get|update|create|delete|fetch|retrieve)\b/
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-verbs
+  openapi-path-no-x-prefixed-response-header:
+    description: Do not use headers with X-.
+    message: 'Headers cannot start with X-, so please find a new name for {{property}}. More: https://tools.ietf.org/html/rfc6648'
+    severity: info
+    given: $..headers.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(x|X)-
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-x-prefixed-response-header
+  openapi-path-parameter-camel-case:
+    description: Path parameters MUST follow camelCase.
+    message: '{{property}} path parameter is not camelCase: {{error}}'
+    severity: info
+    given: $..parameters[?(@.in == 'path')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9]+$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-parameter-camel-case
+  openapi-path-parameter-constant-case:
+    description: Path parameters MUST follow CONSTANT_CASE (screaming snake_case).
+    message: '{{property}} path parameter is not CONSTANT_CASE: {{error}}'
+    severity: info
+    given: $..parameters[?(@.in == 'path')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-parameter-constant-case
+  openapi-path-parameter-kebab-case:
+    description: Path parameters MUST follow kebab-case.
+    message: '{{property}} path parameter is not kebab-case: {{error}}'
+    severity: info
+    given: $..parameters[?(@.in == 'path')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(-[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-parameter-kebab-case
+  openapi-path-parameter-pascal-case:
+    description: Path parameters MUST follow PascalCase.
+    message: '{{property}} path parameter is not PascalCase: {{error}}'
+    severity: info
+    given: $..parameters[?(@.in == 'path')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][a-zA-Z0-9]+$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-parameter-pascal-case
+  openapi-path-parameter-snake-case:
+    description: Path parameters MUST follow snake_case.
+    message: '{{property}} path parameter is not snake_case: {{error}}'
+    severity: info
+    given: $..parameters[?(@.in == 'path')].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(_[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-parameter-snake-case
+  openapi-path-resources-plural:
+    description: Resource names in paths should use plural nouns to maintain consistency and follow REST conventions for collection-oriented
+      resource design.
+    message: Path Resources Should Be Plural
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        match: ^(/[a-z].*s(/\{[^}]+\})?)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-resources-plural
+  openapi-path-segment-kebab-case:
+    description: All YAML/JSON paths MUST follow kebab-case.
+    message: '{{property}} is not kebab-case: {{error}}'
+    severity: info
+    given: $.paths[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^/([a-z0-9]+(-[a-z0-9]+)*)?(/[a-z0-9]+(-[a-z0-9]+)*|/{.+})*$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-segment-kebab-case
+  openapi-path-use-standard-http-methods:
+    description: Operations MUST use only the common HTTP methods as outlined in the standards guide, and must be in lower-case.
+    message: Operations MUST use only the common HTTP methods as outlined in the standards guide, and must be in lower-case.
+    severity: info
+    given: $.paths[*].*~
+    then:
+      field: method
+      function: enumeration
+      functionOptions:
+        values:
+        - get
+        - post
+        - put
+        - patch
+        - delete
+        - head
+        - options
+    documentationUrl: https://apicommons.org/rules/#openapi-path-use-standard-http-methods
+  openapi-request-header-names-pascal-case:
+    description: Headers should be pascal-case. See Italian recommendation RAC_REST_NAME_003.
+    message: '{{value}} {{error}} in {{path}}'
+    severity: info
+    given:
+    - $.[parameters][?(@.in=="header")].name
+    then:
+      function: casing
+      functionOptions:
+        type: pascal
+        separator:
+          char: '-'
+    documentationUrl: https://apicommons.org/rules/#openapi-request-header-names-pascal-case
+  openapi-request-property-names-camel-case:
+    formats:
+    - oas3
+    description: MUST property names must be ASCII camelCase [118a].
+    message: Property name has to be ASCII camelCase
+    severity: info
+    given: $.paths.*.*[responses,requestBody]..content..schema..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z]+((\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?$
+    documentationUrl: https://apicommons.org/rules/#openapi-request-property-names-camel-case
+  openapi-request-property-names-camel-case-oas2:
+    formats:
+    - oas2
+    description: MUST property names must be ASCII camelCase [118a].
+    message: Property name has to be ASCII camelCase
+    severity: info
+    given:
+    - $.paths.*.*.responses..schema..properties.*~
+    - $.paths.*.*.parameters[?(@.in=='body')].schema..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z]+((\d)|([A-Z0-9][a-z0-9]+))*([A-Z])?$
+    documentationUrl: https://apicommons.org/rules/#openapi-request-property-names-camel-case-oas2
+  openapi-response-custom-header-naming-format:
+    description: Custom headers MUST NOT be longer than 50 chars, and MUST only contain alphanumeric and dash chars, and MUST
+      begin with Sps- not X-.
+    message: Custom headers MUST NOT be longer than 50 chars, and MUST only contain alphanumeric and dash chars, and MUST
+      begin with Sps- not X-.
+    severity: info
+    given: $.paths[*][*].responses[*].headers.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^(Sps-[a-zA-Z0-9-]{1,50}|Accept|Access-Control.*|Authorization|Cache-Control|Content-Disposition|Content-Language|Content-Length|Content-Type|Date|ETag|Host|If-Match|If-None-Match|Location|Origin|User-Agent)$
+    documentationUrl: https://apicommons.org/rules/#openapi-response-custom-header-naming-format
+  openapi-response-header-names-pascal-case:
+    description: Headers should be pascal-case. See Italian recommendation RAC_REST_NAME_003.
+    message: 'Header {{error}}: {{path}}'
+    severity: info
+    given:
+    - $.[responses][*].headers.*~
+    then:
+      function: casing
+      functionOptions:
+        type: pascal
+        separator:
+          char: '-'
+    documentationUrl: https://apicommons.org/rules/#openapi-response-header-names-pascal-case
+  openapi-response-header-no-x-prefix:
+    description: '''HTTP'' headers SHOULD NOT start with ''X-'' RFC6648.'
+    message: HTTP response header SHOULD NOT start with 'X-' in {{path}}
+    severity: info
+    given:
+    - $.[responses][*].headers.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: /^([^x]|.[^-])|RateLimit-/i
+    documentationUrl: https://apicommons.org/rules/#openapi-response-header-no-x-prefix
+  openapi-response-keys-snake-case:
+    description: response key must be snake cased (e.g. snake_case).
+    message: '{{error}}'
+    severity: info
+    given: $.components['responses'].*~
+    then:
+      function: digitalocean-ensureSnakeCaseWithDigits
+    documentationUrl: https://apicommons.org/rules/#openapi-response-keys-snake-case
+  openapi-response-names-pascal-case:
+    description: Response names SHOULD be written in PascalCase.
+    message: '{{property}} is not PascalCase: {{error}}'
+    severity: info
+    given:
+    - $.components.responses.*~
+    - $.responses.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-response-names-pascal-case
+  openapi-schema-boolean-no-prefix:
+    description: Boolean properties SHOULD NOT use is, has, or another prefix.
+    message: Boolean properties SHOULD NOT use is, has, or another prefix.
+    severity: info
+    given: $..properties[?(@ && @.type == 'boolean')]~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(is|has|was|will|needs|uses|should|can)([A-Z]|$).*
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-boolean-no-prefix
+  openapi-schema-definition-camel-case:
+    formats:
+    - oas2
+    description: Schema definitions MUST follow camelCase.
+    message: '{{property}} schema definition is not camelCase: {{error}}'
+    severity: info
+    given: $.definitions[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-definition-camel-case
+  openapi-schema-definition-constant-case:
+    formats:
+    - oas2
+    description: Schema definitions MUST follow CONSTANT_CASE (screaming snake_case).
+    message: '{{property}} schema definition is not CONSTANT_CASE: {{error}}'
+    severity: info
+    given: $.definitions[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-definition-constant-case
+  openapi-schema-definition-kebab-case:
+    formats:
+    - oas2
+    description: Schema definitions MUST follow kebab-case.
+    message: '{{property}} schema definition is not kebab-case: {{error}}'
+    severity: info
+    given: $.definitions[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(-[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-definition-kebab-case
+  openapi-schema-definition-pascal-case:
+    formats:
+    - oas2
+    description: Schema definitions MUST follow PascalCase.
+    message: '{{property}} schema definition is not PascalCase: {{error}}'
+    severity: info
+    given: $.definitions[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-definition-pascal-case
+  openapi-schema-definition-snake-case:
+    formats:
+    - oas2
+    description: Schema definitions MUST follow snake_case.
+    message: '{{property}} schema definition is not snake_case: {{error}}'
+    severity: info
+    given: $.definitions[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(_[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-definition-snake-case
+  openapi-schema-keys-snake-case:
+    description: schema key must be snake cased (e.g. snake_case).
+    message: '{{error}}'
+    severity: info
+    given: $.components['schemas'].*~
+    then:
+      function: digitalocean-ensureSnakeCaseWithDigits
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-keys-snake-case
+  openapi-schema-name-max-length:
+    description: Schema should have a length limit applied keeping the names of schema consistent across APIs.
+    message: Schema Names MUST Be Less Than 25 Characters
+    severity: info
+    given:
+    - $.components.schemas
+    - $.definitions
+    then:
+      field: '@key'
+      function: length
+      functionOptions:
+        max: 25
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-name-max-length
+  openapi-schema-names-pascal-case:
+    description: Schema names SHOULD be written in PascalCase.
+    message: '{{property}} is not PascalCase: {{error}}'
+    severity: info
+    given:
+    - $.components.schemas.*~
+    - $.definitions.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-names-pascal-case
+  openapi-schema-property-camel-case:
+    formats:
+    - oas2
+    description: Schema properties MUST follow camelCase.
+    message: '{{property}} schema property is not camelCase: {{error}}'
+    severity: info
+    given: $.definitions..properties[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-camel-case
+  openapi-schema-property-camel-case-3:
+    description: Schema property names should use camelCase. Analysis of 773 specs shows camelCase is the dominant convention
+      at 65% (12958 properties), followed by snake_case at 33% (6661 properties).
+    message: Schema Properties MUST Use camelCase
+    severity: info
+    given:
+    - $.components.schemas[*].properties
+    - $.definitions[*].properties
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-camel-case-3
+  openapi-schema-property-constant-case:
+    formats:
+    - oas2
+    description: Schema properties MUST follow CONSTANT_CASE (screaming snake_case).
+    message: '{{property}} schema property is not CONSTANT_CASE: {{error}}'
+    severity: info
+    given: $.definitions..properties[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-constant-case
+  openapi-schema-property-enum-upper-snake-case:
+    description: Schema property enumerators are consistent casing, keeping all entries upper snake case, and consistent across
+      all APIs.
+    message: Schema Property Enum MUST Be Upper Snake Case
+    severity: info
+    given:
+    - $.components.schemas.*.properties.*.enum.*
+    - $.definitions.*.properties.*.enum.*
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z]+(?:_[A-Z]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-enum-upper-snake-case
+  openapi-schema-property-kebab-case:
+    formats:
+    - oas2
+    description: Schema properties MUST follow kebab-case.
+    message: '{{property}} schema property is not kebab-case: {{error}}'
+    severity: info
+    given: $.definitions..properties[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(-[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-kebab-case
+  openapi-schema-property-names-camel-case:
+    description: Schema property names are camel case, providing consistent casing across all the schema properties used by
+      APIs.
+    message: Schema Property Names MUST Be camelCase.
+    severity: info
+    given:
+    - $.components.schemas.*.properties
+    - $.definitions.*.properties
+    then:
+    - field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ^[A-Z][a-z0-9]*[A-Z0-9][a-z0-9]+[A-Za-z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-names-camel-case
+  openapi-schema-property-names-camel-case-2:
+    description: Property names and acronyms MUST be in camelCase.
+    message: Property names and acronyms MUST be in camelCase.
+    severity: info
+    given: $..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(([A-Z]{2}|[A-Z])[a-z0-9]+)*$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-names-camel-case-2
+  openapi-schema-property-names-length-limit:
+    description: Schema property names have a length restriction applied, keeping names consistent, and avoiding being too
+      long.
+    message: Schema Properties Name Length
+    severity: info
+    given:
+    - $.components.schemas.*.properties
+    - $.definitions.*.properties
+    then:
+      field: '@key'
+      function: length
+      functionOptions:
+        max: 25
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-names-length-limit
+  openapi-schema-property-no-language-keywords:
+    description: Names that may conflict with keywords in common programming languages SHOULD NOT be used.
+    message: Names that may conflict with keywords in common programming languages SHOULD NOT be used.
+    severity: info
+    given: $..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^(abstract|for|new|switch|assert|default|goto|package|synchronized|boolean|do|if|private|this|break|double|implements|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|volatile|const|float|native|super|while)$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-no-language-keywords
+  openapi-schema-property-no-prepositions:
+    description: Property names SHOULD NOT include prepositions (e.g. "for", "during", "at", etc.).
+    message: Property names SHOULD NOT include prepositions (e.g.
+    severity: info
+    given: $..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: (^(about|above|across|after|against|among|around|at|before|behind|below|beside|between|down|during|for|from|in|inside|into|near|of|off|on|out|over|through|to|toward|under|up|with|as|but|like|since|than|till|unlike|until|upon|within|without)([A-Z]|$)|.*(About|Above|Across|After|Against|Among|Around|At|Before|Behind|Below|Beside|Between|Down|During|For|From|In|Inside|Into|Near|Of|Off|On|Out|Over|Through|To|Toward|Under|Up|With|As|But|Like|Since|Than|Till|Unlike|Until|Upon|Within|Without)([A-Z]|$)).*
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-no-prepositions
+  openapi-schema-property-pascal-case:
+    formats:
+    - oas2
+    description: Schema properties MUST follow PascalCase.
+    message: '{{property}} schema property is not PascalCase: {{error}}'
+    severity: info
+    given: $.definitions..properties[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-pascal-case
+  openapi-schema-property-snake-case:
+    formats:
+    - oas2
+    description: Schema properties MUST follow snake_case.
+    message: '{{property}} schema property is not snake_case: {{error}}'
+    severity: info
+    given: $.definitions..properties[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-z0-9]*(_[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-property-snake-case
+  openapi-schema-require-name:
+    description: Schema names, keeping the naming of them consistent across APIs, standardizing how consumers can use in their
+      applications.
+    message: Schema Names MUST Exist
+    severity: info
+    given:
+    - $.components.schemas
+    - $.definitions
+    then:
+      field: '@key'
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-require-name
+  openapi-schema-use-fingerprint-not-hash:
+    description: Rather than property names refering to the implementation for 'hash' or 'hashkey', you MUST use the property
+      name 'fingerprint'.
+    message: '{{property}} is not using property name fingerprint.'
+    severity: info
+    given: $.components.schemas..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^hashkey|hashKey|hash$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-use-fingerprint-not-hash
+  openapi-schema-use-id-not-identifier:
+    description: Use abbreviations instead of long form names, i.e. identifier SHOULD BE id.
+    message: Use abbreviations instead of long form names, i.e.
+    severity: info
+    given: $..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^identifier$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-use-id-not-identifier
+  openapi-schema-use-org-not-organization:
+    description: Use abbreviations instead of long form names, i.e. organization SHOULD BE org.
+    message: Use abbreviations instead of long form names, i.e.
+    severity: info
+    given: $..properties.*~
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: (^organization([A-Z]|$)|Organization([A-Z]|$))
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-use-org-not-organization
+  openapi-server-url-must-be-lowercase:
+    description: Server URL SHOULD BE lowercase.
+    message: Server URL SHOULD BE lowercase.
+    severity: info
+    given: $.servers..url
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[^A-Z]*$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-server-url-must-be-lowercase
+  openapi-tag-names-title-case:
+    description: The first letter of each word in a tag being applied to APIs needs to be capitalized, keeping the tags being
+      applied across APIs the same look and feel for organizing and publishing to documentation.
+    message: Tag Names MUST Have First Letter in Each Word Capitalized
+    severity: info
+    given: $.tags.*.name
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    documentationUrl: https://apicommons.org/rules/#openapi-tag-names-title-case
+  openapi-tag-no-camel-case:
+    description: Detects a tag with camelCase (personalItem) text within it.
+    message: Tag names cannot use Camel Case. Please rename {{value}}.
+    severity: info
+    given:
+    - $.tags[*].name
+    - $.paths[*][*].tags[*]
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /^[a-z]+[A-Z][a-z]+$/g
+    documentationUrl: https://apicommons.org/rules/#openapi-tag-no-camel-case
+  openapi-tag-no-pascal-case:
+    description: Tag names cannot use Pascal Case. Please rename {{value}}.
+    message: Tag names cannot use Pascal Case. Please rename {{value}}.
+    severity: info
+    given:
+    - $.tags[*].name
+    - $.paths[*][*].tags[*]
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /[A-Z][a-z]+[A-Z][a-z]+$/g
+    documentationUrl: https://apicommons.org/rules/#openapi-tag-no-pascal-case
+  openapi-tag-no-version-info:
+    description: Tag names cannot have version information {{value}}. Consider versioning your API.
+    message: Tag names cannot have version information {{value}}. Consider versioning your API.
+    severity: info
+    given:
+    - $.tags[*].name
+    - $.paths[*][*].tags[*]
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /(V|v)\s?[0-9]+/g
+    documentationUrl: https://apicommons.org/rules/#openapi-tag-no-version-info
+  openapi-tag-require-name:
+    description: Tags used as part of an OpenAPI should have names, providing a simple key word or phrase that represents
+      the tag being applied to APIs.
+    message: Tags MUST Have a Name
+    severity: info
+    given: $.tags[*]
+    then:
+      field: name
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-tag-require-name
+  apis-json-api-property-require-vocabulary:
+    description: This property ensures that there is a centralized vocabulary in use for guiding the creation and usage of
+      tags, path segments, and other metadata associated with an APIs.
+    message: Has Vocabulary
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(vocabulary|vocabularies|Vocabulary|Vocabularies)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-require-vocabulary
+  apis-json-api-tag-require-upper-case:
+    description: Maintaining consistent casing for tags applied to individual APIs ensures a uniform appearance and enhances
+      search and discovery. Each word in a tag should be capitalized, with the first letter of every word in a phrase treated
+      the same way.
+    message: API Tags MUST Be Upper Case
+    severity: info
+    given: $.apis.*.tags.*
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-tag-require-upper-case
+  apis-json-tag-require-upper-case:
+    description: Maintaining consistent casing for tags applied to APIs.json contracts ensures a uniform appearance and enhances
+      search and discovery. Each word in a tag should be capitalized, with the first letter of every word in a phrase treated
+      the same way.
+    message: Tags Upper Case
+    severity: info
+    given: $.tags.*
+    then:
+      function: pattern
+      functionOptions:
+        match: '[A-Z]\w*'
+    documentationUrl: https://apicommons.org/rules/#apis-json-tag-require-upper-case
+  asyncapi-schema-asyncapi-property-camel-case:
+    description: Schema property names should be camelCase.
+    message: Schema property is not camelCase.
+    given: $.components.schemas[*].properties[*]~
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#asyncapi-schema-asyncapi-property-camel-case
+  json-structure-schema-json-structure-property-camel-case:
+    description: Property names should be camelCase.
+    message: Property is not camelCase.
+    given: $.properties[*]~
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9]*$
+    documentationUrl: https://apicommons.org/rules/#json-structure-schema-json-structure-property-camel-case
+  mcp-document-mcp-name-kebab-case:
+    description: MCP server name should be lower kebab-case.
+    message: MCP server name should be kebab-case.
+    given: $.name
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#mcp-document-mcp-name-kebab-case
+  agent-skill-skill-name-kebab-case:
+    description: Skill name should be lower kebab-case so it matches the skill directory name and stays portable.
+    message: Skill name should be lower kebab-case.
+    severity: info
+    given: $.frontmatter.name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-name-kebab-case
+  agent-skill-skill-name-max-length:
+    description: A skill name should be concise (64 characters or fewer).
+    message: Skill name should be 64 characters or fewer.
+    given: $.frontmatter.name
+    severity: info
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: string
+          maxLength: 64
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-name-max-length

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Generate the API Commons /rules/ and /rulesets/ content from the Spotlight
-catalog — the single source of truth in the sibling spotlight-validator checkout
+"""Generate the API Commons /rules/ and /rulesets/ content from the API Commons
+rule catalog — the single source of truth in the sibling api-validator checkout
 (rules/all-rules.yaml). Re-runnable; commit the output.
 
 Writes:
-  _data/spotlight_rules.json                       the rule index for /rules/
+  _data/rules_catalog.json                the rule index for /rules/
   _rulesets/experience-<exp>.md                    one ruleset per experience tag
-  assets/rulesets/experience-<exp>.spotlight.yaml  a runnable ruleset (rules inlined)
+  assets/rulesets/experience-<exp>.yaml  a runnable ruleset (rules inlined)
   assets/rulesets/functions/*.js                   custom functions those rulesets use
 """
 import json
@@ -15,26 +15,27 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent          # api-commons/
-SRC = ROOT.parent / "spotlight-validator" / "rules" / "all-rules.yaml"
-FN_SRC = ROOT.parent / "spotlight-validator" / "src" / "functions"
+SRC = ROOT.parent / "api-validator" / "rules" / "all-rules.yaml"
+FN_SRC = ROOT.parent / "api-validator" / "src" / "functions"
 
 # The rule catalog lives in a SIBLING checkout, not in this repo. Check for it
-# up front and say so plainly — the original remote for spotlight-validator was
+# up front and say so plainly — the catalog's original remote was
 # lost once, and a run against a missing or stale checkout silently regenerates
-# _data/spotlight_rules.json from whatever happens to be on disk. That is how
+# _data/rules_catalog.json from whatever happens to be on disk. That is how
 # corrected content (e.g. the RFC 7807 -> RFC 9457 pass) gets quietly reverted.
 if not SRC.exists():
     raise SystemExit(
         f"Rule catalog not found: {SRC}\n\n"
-        "This script reads the Spotlight rule catalog from a sibling checkout.\n"
+        "This script reads the API Commons rule catalog from a sibling checkout.\n"
         "Clone it next to this repo, then re-run:\n\n"
-        "    git clone https://github.com/api-commons/spotlight-validator.git "
-        f"{ROOT.parent / 'spotlight-validator'}\n\n"
-        "The repo is PRIVATE. Do not hand-edit _data/spotlight_rules.json as a\n"
+        "    git clone https://github.com/api-commons/api-validator.git "
+        f"{ROOT.parent / 'api-validator'}\n\n"
+        "Do not hand-edit _data/rules_catalog.json as a\n"
         "workaround — it is generated, and the next run overwrites it."
     )
-SITE = "https://spotlight-rules.com"
-DOC = SITE + "/spec/"
+SITE = "https://apicommons.org"
+# The ruleset format these files follow is the OpenLint Ruleset Specification.
+DOC = "https://spec.openlint.org/"
 
 # all-rules.yaml groups by format key; the site uses an artifact id.
 FMT_TO_ARTIFACT = {"jsonschema": "json-schema"}
@@ -101,6 +102,41 @@ def flatten_funcs(node, local):
     return node
 
 
+# The ruleset format only allows these properties on a rule; the catalog's
+# own metadata (title, reference, prompt, tags) makes a linter reject the file.
+RULE_KEYS = {"description", "message", "severity", "given", "then", "formats",
+             "recommended", "resolved", "documentationUrl", "type", "extensions"}
+
+
+# Functions every Spectral-compatible linter ships. A rule calling anything else
+# that is not a bundled custom function (e.g. headingCount) only runs in the
+# API Commons validator, so it stays out of the downloadable ruleset.
+CORE_FUNCS = {"alphabetical", "casing", "defined", "enumeration", "falsy", "length",
+              "or", "pattern", "schema", "truthy", "typedEnum", "undefined",
+              "unreferencedReusableObject", "xor"}
+
+
+def funcs_of(node):
+    if isinstance(node, list):
+        return set().union(*(funcs_of(n) for n in node)) if node else set()
+    if isinstance(node, dict):
+        out = {node["function"]} if isinstance(node.get("function"), str) else set()
+        for v in node.values():
+            out |= funcs_of(v)
+        return out
+    return set()
+
+
+def portable(x):
+    return all(f in CORE_FUNCS or ":" in f for f in funcs_of(x["body"].get("then")))
+
+
+def runnable_rule(x):
+    rule = {k: v for k, v in x["body"].items() if k in RULE_KEYS}
+    rule.setdefault("documentationUrl", x["detail_url"])
+    return rule
+
+
 data = yaml.safe_load(SRC.read_text())
 
 records = []
@@ -116,12 +152,12 @@ for fmt, rules in data.items():
             "spec": tagvals(r.get("tags"), "spec"),
             "topic": tagvals(r.get("tags"), "topic"),
             "owasp": tagvals(r.get("tags"), "owasp"),
-            "detail_url": f"{SITE}/spec/rules/{art}/{slug}/",
+            "detail_url": f"{SITE}/rules/#{art}-{slug}",
             "builtin": r.get("source") == "builtin",
             "body": body,
         })
 
-# ---- _data/spotlight_rules.json (the /rules/ index) -------------------------
+# ---- _data/rules_catalog.json (the /rules/ index) -------------------------
 artifacts_out = []
 for art in ARTIFACT_ORDER:
     rs = sorted((x for x in records if x["artifact"] == art), key=lambda x: x["name"].lower())
@@ -171,17 +207,17 @@ for eid, label, desc in EXPERIENCES:
     members = [x for x in records if eid in x["experience"]]
     if not members:
         continue
-    runnable = [x for x in members if not x["builtin"]]
+    runnable = [x for x in members if not x["builtin"] and portable(x)]
 
     local = set()
-    rules_map = {x["gslug"]: flatten_funcs(x["body"], local) for x in runnable}
+    rules_map = {x["gslug"]: flatten_funcs(runnable_rule(x), local) for x in runnable}
     used_funcs |= local
     ruleset = {"documentationUrl": DOC}
     if local:
         ruleset["functions"] = sorted(f.replace(":", "-") for f in local)
         ruleset["functionsDir"] = "./functions"
     ruleset["rules"] = rules_map
-    (assetdir / f"experience-{eid}.spotlight.yaml").write_text(
+    (assetdir / f"experience-{eid}.yaml").write_text(
         yaml.safe_dump(ruleset, sort_keys=False, width=120, allow_unicode=True))
 
     listed = sorted(members, key=lambda x: (x["artifact"], x["name"].lower()))
@@ -198,7 +234,7 @@ for eid, label, desc in EXPERIENCES:
         "name": f"{label} Ruleset", "title": f"{label} Ruleset",
         "slug": f"experience-{eid}", "experience": eid, "description": desc,
         "count": len(members), "runnable_count": len(runnable),
-        "ruleset_url": f"/assets/rulesets/experience-{eid}.spotlight.yaml",
+        "ruleset_url": f"/assets/rulesets/experience-{eid}.yaml",
     }
     (rsdir / f"experience-{eid}.html").write_text(
         "---\n" + yaml.safe_dump(fm, sort_keys=False, width=120, allow_unicode=True) + "---\n")
@@ -206,12 +242,15 @@ for eid, label, desc in EXPERIENCES:
 for fn in used_funcs:
     srcf = FN_SRC.joinpath(*fn.split(":")).with_suffix(".js")
     if srcf.exists():
-        (assetdir / "functions" / f"{fn.replace(':', '-')}.js").write_text(srcf.read_text())
+        # Spectral's bundler rejects a default import of spectral-core.
+        src = srcf.read_text().replace("import __sc from '@stoplight/spectral-core';",
+                                       "import * as __sc from '@stoplight/spectral-core';")
+        (assetdir / "functions" / f"{fn.replace(':', '-')}.js").write_text(src)
     else:
         print(f"  WARN missing function file: {fn}")
 
 (ROOT / "_data").mkdir(exist_ok=True)
-(ROOT / "_data" / "spotlight_rules.json").write_text(json.dumps({
+(ROOT / "_data" / "rules_catalog.json").write_text(json.dumps({
     "total": len(records), "artifact_count": len(artifacts_out),
     "experience_count": len(experiences_out),
     "artifacts": artifacts_out, "experiences": experiences_out,

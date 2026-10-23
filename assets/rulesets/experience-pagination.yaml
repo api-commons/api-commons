@@ -1,0 +1,190 @@
+documentationUrl: https://spec.openlint.org/
+rules:
+  openapi-parameter-collection-limit-param-default:
+    description: The limit / page-size query parameter should declare a default so the page size is predictable when the caller
+      omits it.
+    message: limit parameter should declare a default.
+    given: $.paths[*].get.parameters[?(@ && @.in == 'query' && (@.name == 'limit' || @.name == 'per_page' || @.name == 'page_size'
+      || @.name == 'pageSize'))].schema
+    severity: info
+    then:
+      field: default
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-collection-limit-param-default
+  openapi-parameter-collection-limit-param-maximum:
+    description: The limit / page-size query parameter should declare a maximum so a caller cannot request an unbounded page
+      (OWASP API4 — unrestricted resource consumption).
+    message: limit parameter should declare a maximum.
+    given: $.paths[*].get.parameters[?(@ && @.in == 'query' && (@.name == 'limit' || @.name == 'per_page' || @.name == 'page_size'
+      || @.name == 'pageSize'))].schema
+    severity: info
+    then:
+      field: maximum
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-collection-limit-param-maximum
+  openapi-parameter-pagination-params-in-query:
+    description: Pagination parameters like page, limit, offset, and cursor should be passed as query parameters, not in headers
+      or path segments. Analysis confirms 100% of pagination parameters observed are query parameters.
+    message: Pagination Parameters MUST Be Query Parameters
+    severity: info
+    given: $.paths[*].get.parameters[?(@.name == 'page' || @.name == 'limit' || @.name == 'offset' || @.name == 'cursor' ||
+      @.name == 'per_page' || @.name == 'page_size')]
+    then:
+      field: in
+      function: pattern
+      functionOptions:
+        match: query
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-pagination-params-in-query
+  openapi-request-post-collection-require-paging-object:
+    formats:
+    - oas3
+    description: POST collection endpoints MUST have a request body schema that includes paging parameters.
+    message: POST collection endpoints MUST have a request body schema that includes paging parameters.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].post.requestBody.content.application/json.schema.properties.paging
+    then:
+      field: type
+      function: pattern
+      functionOptions:
+        match: object
+    documentationUrl: https://apicommons.org/rules/#openapi-request-post-collection-require-paging-object
+  openapi-request-post-collection-require-paging-object-oas2:
+    formats:
+    - oas2
+    description: POST collection endpoints MUST have a body-parameter schema that includes paging parameters.
+    message: POST collection endpoints MUST have a body-parameter schema that includes paging parameters.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].post.parameters[?(@.in=='body')].schema.properties.paging
+    then:
+      field: type
+      function: pattern
+      functionOptions:
+        match: object
+    documentationUrl: https://apicommons.org/rules/#openapi-request-post-collection-require-paging-object-oas2
+  openapi-response-collection-require-results-array:
+    formats:
+    - oas3
+    description: Response bodies must have a root element called results and is an array of objects.
+    message: Response bodies must have a root element called results and is an array of objects.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].get.responses['200'].content.application/json.schema.properties.results
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        match: array
+    - field: items.type
+      function: pattern
+      functionOptions:
+        match: object
+    documentationUrl: https://apicommons.org/rules/#openapi-response-collection-require-results-array
+  openapi-response-collection-require-results-array-oas2:
+    formats:
+    - oas2
+    description: Response bodies must have a root element called results and is an array of objects.
+    message: Response bodies must have a root element called results and is an array of objects.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}$/))].get.responses['200'].schema.properties.results
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        match: array
+    - field: items.type
+      function: pattern
+      functionOptions:
+        match: object
+    documentationUrl: https://apicommons.org/rules/#openapi-response-collection-require-results-array-oas2
+  openapi-response-collection-support-paging:
+    formats:
+    - oas3
+    description: Response bodies from collection endpoints SHOULD offer paging capability.
+    message: Response bodies from collection endpoints SHOULD offer paging capability.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}.*$/))].get.responses['200'].content.application/json.schema.properties
+    then:
+    - field: paging
+      function: truthy
+    - field: paging
+      function: pattern
+      functionOptions:
+        match: object
+    - field: paging.type
+      function: pattern
+      functionOptions:
+        match: object
+    documentationUrl: https://apicommons.org/rules/#openapi-response-collection-support-paging
+  openapi-response-collection-support-paging-oas2:
+    formats:
+    - oas2
+    description: Response bodies from collection endpoints SHOULD offer paging capability.
+    message: Response bodies from collection endpoints SHOULD offer paging capability.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}.*$/))].get.responses['200'].schema.properties
+    then:
+    - field: paging
+      function: truthy
+    - field: paging
+      function: pattern
+      functionOptions:
+        match: object
+    - field: paging.type
+      function: pattern
+      functionOptions:
+        match: object
+    documentationUrl: https://apicommons.org/rules/#openapi-response-collection-support-paging-oas2
+  openapi-response-get-link-header:
+    description: GET success responses should provide a Link header (RFC 8288) with rel next/prev/first/last for pagination
+      and navigation — the header-based alternative to an in-body paging object.
+    message: GET responses should provide a Link header (RFC 8288) for pagination/navigation.
+    given: $.paths[*].get.responses[?( @property >= 200 && @property < 300 && @property != 204 )].headers
+    severity: info
+    then:
+      field: Link
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-get-link-header
+  openapi-schema-collection-require-pagination-params:
+    description: Collection GET endpoints SHOULD support pagination using query parameters. Offset or cursor based pagination
+      is required.
+    message: Collection GET endpoints SHOULD support pagination using query parameters.
+    severity: info
+    given: $.paths[?(!@property.match(/.*\/\{[^}]+\}\/*.*/))].get
+    then:
+    - field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          items:
+            type: object
+          contains:
+            type: object
+            properties:
+              name:
+                const: limit
+              in:
+                const: query
+          allOf:
+          - anyOf:
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: offset
+                  in:
+                    const: query
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: cursor
+                  in:
+                    const: query
+            - contains:
+                type: object
+                properties:
+                  name:
+                    const: page
+                  in:
+                    const: query
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-collection-require-pagination-params

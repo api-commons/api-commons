@@ -1,10 +1,10 @@
 ---
 layout: default
 title: Rules
-description: The Spotlight rule catalog — 740 openly-governed API governance rules across 12 artifact types (OpenAPI, AsyncAPI, Arazzo, JSON Schema, APIs.json, MCP, and more). Each rule is a single testable assertion you can run with the Spotlight CLI, the browser validator, the HTTP API, an MCP server, or in CI.
+description: The API Commons rule catalog — openly-governed API governance rules across 12 artifact types (OpenAPI, AsyncAPI, Arazzo, JSON Schema, APIs.json, MCP, and more). Each rule is a single testable assertion you can run in the browser validator, from an AI client, or with any Spectral-compatible linter.
 ---
 
-{% assign cat = site.data.spotlight_rules %}
+{% assign cat = site.data.rules_catalog %}
 
 <style>
   .page-hero { padding: 1.5rem 0 1rem; }
@@ -42,8 +42,8 @@ description: The Spotlight rule catalog — 740 openly-governed API governance r
 </style>
 
 <div class="page-hero">
-  <h1>Spotlight API Governance Rules</h1>
-  <p>The <strong>{{ cat.total }}</strong> rules of the openly-governed <a href="https://spotlight-rules.com">Spotlight</a> catalog — a progressive build of the Spectral API linter. Each rule is a single, testable assertion about an API artifact, spanning <strong>{{ cat.artifact_count }} artifact types</strong> from OpenAPI and AsyncAPI to APIs.json, JSON Schema, Arazzo, MCP, and agent skills. Rules ship at <code>info</code> by default — educate first, then raise to <code>warn</code> or <code>error</code> to enforce. Expand any rule for its full definition, or open it on spotlight-rules.com for detail and an AI fix prompt.</p>
+  <h1>API Commons Governance Rules</h1>
+  <p>The <strong>{{ cat.total }}</strong> rules of the openly-governed API Commons catalog, written in the ruleset format specified by <a href="https://spec.openlint.org">OpenLint</a>. Each rule is a single, testable assertion about an API artifact, spanning <strong>{{ cat.artifact_count }} artifact types</strong> from OpenAPI and AsyncAPI to APIs.json, JSON Schema, Arazzo, MCP, and agent skills. Rules ship at <code>info</code> by default — educate first, then raise to <code>warn</code> or <code>error</code> to enforce. Expand any rule for its full definition; each one has its own link to share.</p>
 </div>
 
 <div class="stats-row">
@@ -53,15 +53,12 @@ description: The Spotlight rule catalog — 740 openly-governed API governance r
   <div class="stat-card"><div class="stat-num">{{ cat.artifacts[0].count }}</div><div class="stat-label">{{ cat.artifacts[0].label }} Rules</div></div>
 </div>
 
-<h2 style="font-size:1.25rem;font-weight:800;color:#1a1a2e;">Run these rules with Spotlight</h2>
+<h2 style="font-size:1.25rem;font-weight:800;color:#1a1a2e;">Run these rules</h2>
 <p style="color:#555;max-width:760px;">The same catalog runs everywhere — on the command line, in the browser, over HTTP, from an AI client, or as a CI gate. Bundle rules by <a href="/rulesets/">experience ruleset</a>, or extend the built-ins.</p>
 <div class="tool-grid">
-  <div class="tool-card"><h4>CLI</h4><p>Lint locally or in CI.</p><code>npm i -g @spotlight-rules/spotlight-cli</code><br><code>spotlight lint api.yaml --ruleset spotlight:oas</code><p style="margin-top:.5rem;"><a href="https://github.com/api-commons/spotlight-cli">spotlight-cli →</a></p></div>
-  <div class="tool-card"><h4>Browser validator</h4><p>Lint in the browser — no install — with AI fixes and utilities.</p><a href="https://validator.spotlight-rules.com">validator.spotlight-rules.com →</a></div>
-  <div class="tool-card"><h4>HTTP API</h4><p>An OpenAPI-first service over the engine.</p><code>POST /lint</code><p style="margin-top:.5rem;"><a href="https://github.com/api-commons/spotlight-api">spotlight-api →</a></p></div>
-  <div class="tool-card"><h4>MCP server</h4><p>Expose linting and rulesets to any AI client.</p><a href="https://github.com/api-commons/spotlight-mcp">spotlight-mcp →</a></div>
-  <div class="tool-card"><h4>CI pipeline</h4><p>A governance gate for GitHub, GitLab, Bitbucket, Azure, and AWS.</p><a href="https://github.com/api-commons/spotlight-pipeline">spotlight-pipeline →</a></div>
-  <div class="tool-card"><h4>VS Code</h4><p>Lint while you edit, with ruleset autocomplete.</p><a href="https://github.com/api-commons/spotlight-vscode">spotlight-vscode →</a></div>
+  <div class="tool-card"><h4>CLI</h4><p>Lint locally or in CI with any Spectral-compatible linter. Download an <a href="/rulesets/">experience ruleset</a> and run it.</p><code>npx @stoplight/spectral-cli lint api.yaml --ruleset &lt;ruleset&gt;</code><p style="margin-top:.5rem;"><a href="https://openlint.org">OpenLint →</a></p></div>
+  <div class="tool-card"><h4>Browser validator</h4><p>Lint in the browser — no install — with AI fixes and utilities.</p><a href="https://validator.apicommons.org">validator.apicommons.org →</a></div>
+  <div class="tool-card"><h4>MCP server</h4><p>Expose linting and rulesets to any AI client.</p><a href="https://github.com/api-commons/api-governance-mcp">api-governance-mcp →</a></div>
 </div>
 
 <hr style="margin:1.5rem 0;">
@@ -78,12 +75,12 @@ description: The Spotlight rule catalog — 740 openly-governed API governance r
   <p class="art-desc">{{ a.description }}</p>
   <div class="rules-list">
     {% for rule in a.rules %}
-    <div class="rule-item" data-rule data-text="{{ rule.name | downcase }} {{ rule.slug }} {{ rule.experience | join: ' ' }} {{ rule.spec | join: ' ' }} {{ rule.topic | join: ' ' }} {{ rule.owasp | join: ' ' }}">
+    <div class="rule-item" id="{{ rule.slug }}" data-rule data-text="{{ rule.name | downcase }} {{ rule.slug }} {{ rule.experience | join: ' ' }} {{ rule.spec | join: ' ' }} {{ rule.topic | join: ' ' }} {{ rule.owasp | join: ' ' }}">
       <div class="rule-row">
         <button class="rule-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#rc-{{ a.id }}-{{ forloop.index }}" aria-controls="rc-{{ a.id }}-{{ forloop.index }}"><span class="rule-chevron">›</span></button>
         <span class="rule-name">{{ rule.name }}</span>
         <span class="rule-sev">{{ rule.severity }}</span>
-        <a href="{{ rule.detail_url }}" class="btn btn-sm btn-outline-dark" target="_blank" rel="noopener">View</a>
+        <a href="#{{ rule.slug }}" class="btn btn-sm btn-outline-dark" title="Link to this rule">Link</a>
       </div>
       <div class="collapse rule-yaml-wrap" id="rc-{{ a.id }}-{{ forloop.index }}">
         <script type="application/json" class="rule-json-data">{{ rule.rule | jsonify }}</script>
@@ -120,6 +117,15 @@ description: The Spotlight rule catalog — 740 openly-governed API governance r
         if (pre.textContent) navigator.clipboard.writeText(pre.textContent).then(function () { btn.textContent = 'Copied!'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); });
       });
     });
+    // Open the rule a link points at (apicommons.org/rules/#<artifact>-<rule>).
+    function openHash() {
+      var id = decodeURIComponent(location.hash.slice(1)); if (!id) return;
+      var item = document.getElementById(id); if (!item || !item.hasAttribute('data-rule')) return;
+      var wrap = item.querySelector('.rule-yaml-wrap');
+      if (wrap && window.bootstrap) bootstrap.Collapse.getOrCreateInstance(wrap).show();
+      item.scrollIntoView({ block: 'center' });
+    }
+    openHash(); window.addEventListener('hashchange', openHash);
     var input = document.getElementById('rule-filter');
     var rules = Array.prototype.slice.call(document.querySelectorAll('[data-rule]'));
     var secs = Array.prototype.slice.call(document.querySelectorAll('[data-art]'));

@@ -1,0 +1,326 @@
+documentationUrl: https://spec.openlint.org/
+functions:
+- trimble-valid-version-checker
+functionsDir: ./functions
+rules:
+  openapi-info-require-openapi-version-3x:
+    formats:
+    - oas3
+    description: APIs should use OpenAPI 3.x specification. Analysis of 773 API specs shows 97% use OpenAPI 3.x, with 86%
+      on 3.1.0, making it the dominant standard for modern API definitions.
+    message: OpenAPI MUST Be Version 3.x
+    severity: info
+    given: $
+    then:
+      field: openapi
+      function: pattern
+      functionOptions:
+        match: ^3\.
+    documentationUrl: https://apicommons.org/rules/#openapi-info-require-openapi-version-3x
+  openapi-info-require-openapi-version-3x-oas2:
+    formats:
+    - oas2
+    description: 'Swagger 2.0 documents should declare `swagger: "2.0"` as their specification version.'
+    message: Swagger MUST Be Version 2.0
+    severity: info
+    given: $
+    then:
+      field: swagger
+      function: pattern
+      functionOptions:
+        match: ^2\.
+    documentationUrl: https://apicommons.org/rules/#openapi-info-require-openapi-version-3x-oas2
+  openapi-info-skill-require-version:
+    description: Publishing a version for your OpenAPI technical contract helps you communicate change with consumers using
+      Semantic or date-based versioning published to the info version property.
+    message: Info MUST Have Version
+    severity: info
+    given: $.info
+    then:
+      field: version
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-info-skill-require-version
+  openapi-info-version-must-be-semver:
+    description: The API version field should follow [semantic versioning](https://semver.org/#semantic-versioning-specification-semver).
+    message: Specs should follow semantic versioning. {{value}} is not a valid version.
+    severity: info
+    given: $.info.version
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[0-9]+.[0-9]+.[0-9]+(-[a-z0-9+.-]+)?
+    documentationUrl: https://apicommons.org/rules/#openapi-info-version-must-be-semver
+  openapi-info-version-must-use-semver:
+    description: Version should use semantic versioning. {{value}} is not a valid version.
+    message: Version should use semantic versioning. {{value}} is not a valid version.
+    severity: info
+    given: $.info.version
+    then:
+      function: pattern
+      functionOptions:
+        match: ^([0-9]+.[0-9]+.[0-9]+)$
+    documentationUrl: https://apicommons.org/rules/#openapi-info-version-must-use-semver
+  openapi-info-version-semantic-and-stable:
+    description: The API contract MUST have a stable version and MUST follow semantic versioning (e.g., '1.0.0'). Words like
+      'SNAPSHOT' or 'RELEASE' are not allowed.
+    message: '{{description}}: {{error}}'
+    severity: info
+    given: $.info.version
+    then:
+      function: pattern
+      functionOptions:
+        match: ^(?!.*\b(SNAPSHOT|RELEASE)\b)(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$
+    formats:
+    - oas3
+    documentationUrl: https://apicommons.org/rules/#openapi-info-version-semantic-and-stable
+  openapi-operation-deprecated-require-description:
+    description: Deprecated operations should have a description explaining the deprecation and the migration path / successor.
+    message: Deprecated operation should describe the deprecation and successor.
+    given: $.paths[*][?(@ && @.deprecated == true)]
+    severity: info
+    then:
+      field: description
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-operation-deprecated-require-description
+  openapi-parameter-deprecated-require-description:
+    description: Deprecated parameters should have a description explaining the deprecation and what to use instead.
+    message: Deprecated parameter should describe the deprecation.
+    given: $..parameters[?(@ && @.deprecated == true)]
+    severity: info
+    then:
+      field: description
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-parameter-deprecated-require-description
+  openapi-path-include-version:
+    description: Path must include the version.
+    message: '{{description}}; {{property}} incorrect'
+    severity: info
+    given: $.paths[?(@property!='/<upload_url>')]~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^(/v[12]/.*|/api/v[12]/.*)$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-include-version
+  openapi-path-no-version-segment:
+    description: API paths should not contain version numbers like v1 or v2. API versioning should be handled through headers,
+      query parameters, or server URLs rather than embedded in resource paths.
+    message: Paths MUST NOT Contain API Version
+    severity: info
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /v[0-9]
+    documentationUrl: https://apicommons.org/rules/#openapi-path-no-version-segment
+  openapi-path-uri-versioning-single-version:
+    description: CAN use correct URI versioning [115a].
+    message: Path can contain correct URI versioning
+    severity: info
+    given: $.paths.*~
+    then:
+      function: pattern
+      functionOptions:
+        match: ^((?!.*\/v\d+(\/.*)?\/v\d+)\/.*)$
+    documentationUrl: https://apicommons.org/rules/#openapi-path-uri-versioning-single-version
+  openapi-response-deprecated-operation-deprecation-header:
+    description: Deprecated operations should document a Deprecation response header (RFC 9745) signalling that the resource
+      is deprecated.
+    message: Deprecated operation should document a Deprecation header.
+    given: $.paths[*][?(@ && @.deprecated == true)].responses[*].headers
+    severity: info
+    then:
+      field: Deprecation
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-deprecated-operation-deprecation-header
+  openapi-response-deprecated-operation-sunset-header:
+    description: Deprecated operations should document a Sunset response header (RFC 8594) telling clients when the operation
+      will be removed.
+    message: Deprecated operation should document a Sunset header.
+    given: $.paths[*][?(@ && @.deprecated == true)].responses[*].headers
+    severity: info
+    then:
+      field: Sunset
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-response-deprecated-operation-sunset-header
+  openapi-schema-deprecated-property-require-description:
+    description: Deprecated schema properties should have a description explaining the deprecation and the replacement field.
+    message: Deprecated property should describe the deprecation.
+    given: $..properties[?(@ && @.deprecated == true)]
+    severity: info
+    then:
+      field: description
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#openapi-schema-deprecated-property-require-description
+  openapi-server-url-include-version:
+    formats:
+    - oas3
+    description: API URLs versions should meet the Trimble API Standards.
+    message: '{{error}}'
+    severity: info
+    given: $.servers
+    then:
+      function: trimble-valid-version-checker
+    documentationUrl: https://apicommons.org/rules/#openapi-server-url-include-version
+  openapi-server-url-include-version-oas2:
+    formats:
+    - oas2
+    description: The API base path should include a version segment (e.g. /v1) so consumers can pin to a major version.
+    message: Base path should include a version (e.g. /v1).
+    severity: info
+    given: $.basePath
+    then:
+      function: pattern
+      functionOptions:
+        match: /v\d+
+    documentationUrl: https://apicommons.org/rules/#openapi-server-url-include-version-oas2
+  openapi-tag-no-version-info:
+    description: Tag names cannot have version information {{value}}. Consider versioning your API.
+    message: Tag names cannot have version information {{value}}. Consider versioning your API.
+    severity: info
+    given:
+    - $.tags[*].name
+    - $.paths[*][*].tags[*]
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: /(V|v)\s?[0-9]+/g
+    documentationUrl: https://apicommons.org/rules/#openapi-tag-no-version-info
+  apis-json-api-property-skill-require-versioning:
+    description: This property ensures there is a reference to how APIs are versioned, providing a single place where teams
+      can learn about how change is communicated.
+    message: Has Versioning for API
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(versions|Versions|Versioning|versioning)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-api-property-skill-require-versioning
+  apis-json-info-apis-json-specification-version-format:
+    description: specificationVersion should be a major.minor version (e.g. 0.21).
+    message: specificationVersion should be major.minor.
+    given: $.specificationVersion
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d+\.\d+$
+    documentationUrl: https://apicommons.org/rules/#apis-json-info-apis-json-specification-version-format
+  apis-json-schema-include-api-lifecycle:
+    description: This property makes sure there is an API lifecycle schema defining all of the stages of a lifecycle and which
+      policies get applied at each stage of the API lifecycle.
+    message: Has an API Lifecycle
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(lifecycle|Lifecycle)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-api-lifecycle
+  apis-json-schema-include-change-log:
+    description: This property ensures that than an individual API or API operations possesses a change log that catalogs
+      all the changes that have occurred in a recent time frame, with historical and version information available if possible.
+    message: Has Change Log
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-change-log|change-log|Change Log|Changelog|ChangeLog)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-change-log
+  apis-json-schema-include-deprecation-policy:
+    description: This property ensures that an API has a deprecation policy shared as part of the contract, communicating
+      what the lifespan of APIs are, each individual version, as well as communication around the deprecation of APIs.
+    message: Has Deprecation Policy
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(api-deprecation-policy|deprecation-policy|Deprecation|Deprecation Policy|DeprecationPolicy)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-deprecation-policy
+  apis-json-schema-include-version-comparison:
+    description: This property ensures that an API has the ability to compare two different versions of an API and see what
+      the difference are between them.
+    message: Has an API Comparison
+    severity: info
+    given:
+    - $.apis.*.properties.*
+    - $.common.*
+    then:
+    - field: type
+      function: pattern
+      functionOptions:
+        notMatch: \b(compare|Compare)\b
+    documentationUrl: https://apicommons.org/rules/#apis-json-schema-include-version-comparison
+  asyncapi-info-asyncapi-version-semver:
+    description: info.version should be semantic (e.g. 1.0.0).
+    message: AsyncAPI version should be semantic.
+    given: $.info.version
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d+\.\d+\.\d+
+    documentationUrl: https://apicommons.org/rules/#asyncapi-info-asyncapi-version-semver
+  mcp-info-mcp-protocol-version-dated:
+    description: protocolVersion should be a dated MCP revision (YYYY-MM-DD).
+    message: protocolVersion should be a dated revision (YYYY-MM-DD).
+    given: $.protocolVersion
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d{4}-\d{2}-\d{2}$
+    documentationUrl: https://apicommons.org/rules/#mcp-info-mcp-protocol-version-dated
+  mcp-info-mcp-version-semver:
+    description: The server version should be semantic (e.g. 1.0.0).
+    message: MCP version should be semantic.
+    given: $.version
+    severity: info
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d+\.\d+\.\d+
+    documentationUrl: https://apicommons.org/rules/#mcp-info-mcp-version-semver
+  mcp-info-require-protocol-version:
+    description: The `protocolVersion` property should be present.
+    message: protocolVersion should be present
+    severity: info
+    given: $
+    then:
+      field: protocolVersion
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#mcp-info-require-protocol-version
+  mcp-info-skill-require-version:
+    description: The `version` property should be present.
+    message: version should be present
+    severity: info
+    given: $
+    then:
+      field: version
+      function: truthy
+    documentationUrl: https://apicommons.org/rules/#mcp-info-skill-require-version
+  agent-skill-skill-version-semver:
+    description: If a skill declares a version, it should be semantic (e.g. 1.0.0) so consumers can reason about changes between
+      releases.
+    message: Skill version should be semantic (e.g. 1.0.0).
+    severity: info
+    given: $.frontmatter.version
+    then:
+      function: pattern
+      functionOptions:
+        match: ^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$
+    documentationUrl: https://apicommons.org/rules/#agent-skill-skill-version-semver
