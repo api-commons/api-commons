@@ -10,7 +10,7 @@ tags:
 image: /assets/images/blog/train-travel-moves-to-openapi-3-2.png
 ---
 
-The [Train Travel API](https://github.com/api-commons/train-travel) is the example OpenAPI we keep in the commons because it is small enough to read in one sitting and real enough to exercise tooling. Today it moved to OpenAPI 3.2. Thanks to [Polo](https://github.com/Polo2) from Bump.sh, who opened [PR #3](https://github.com/api-commons/train-travel/pull/3) to bring our copy back in sync with the upstream [bump-sh-examples/train-travel-api](https://github.com/bump-sh-examples/train-travel-api) — and to strip out Bump.sh-specific vendor extensions like `x-topic` along the way, so what lives here is plain specification.
+The [Train Travel API](https://github.com/api-commons/train-travel) is the example OpenAPI we keep in the commons because it is small enough to read in one sitting and real enough to exercise tooling. Today it moved to OpenAPI 3.2. Thanks to [Polo](https://github.com/Polo2) from [Bump.sh](https://apis.io/providers/bump-sh/), who opened [PR #3](https://github.com/api-commons/train-travel/pull/3) to bring our copy back in sync with the upstream [bump-sh-examples/train-travel-api](https://github.com/bump-sh-examples/train-travel-api) — and to strip out Bump.sh-specific vendor extensions like `x-topic` along the way, so what lives here is plain specification.
 
 ## What 3.2 Looks Like in a Real Document
 
