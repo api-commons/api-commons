@@ -10,6 +10,7 @@ Writes:
   assets/rulesets/functions/*.js                   custom functions those rulesets use
 """
 import json
+import re
 import shutil
 from pathlib import Path
 import yaml
@@ -242,9 +243,15 @@ for eid, label, desc in EXPERIENCES:
 for fn in used_funcs:
     srcf = FN_SRC.joinpath(*fn.split(":")).with_suffix(".js")
     if srcf.exists():
-        # Spectral's bundler rejects a default import of spectral-core.
-        src = srcf.read_text().replace("import __sc from '@stoplight/spectral-core';",
-                                       "import * as __sc from '@stoplight/spectral-core';")
+        # A downloaded function must not import a linter's core package: OpenLint
+        # resolves only @openlint/openlint-core, Spectral only @stoplight/spectral-core.
+        # These functions use createRulesetFunction with no input/options schema, which
+        # only wraps the function, so a local pass-through keeps them portable.
+        src = re.sub(
+            r"import __sc from '@(?:openlint/openlint|stoplight/spectral)-core';\nconst \{ createRulesetFunction \} = __sc;",
+            "// Portable: no linter-specific import (see scripts/generate-rules.py).\n"
+            "const createRulesetFunction = (_schema, fn) => fn;",
+            srcf.read_text())
         (assetdir / "functions" / f"{fn.replace(':', '-')}.js").write_text(src)
     else:
         print(f"  WARN missing function file: {fn}")

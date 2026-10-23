@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as __sc from '@stoplight/spectral-core';
-const { createRulesetFunction } = __sc;
+// Portable: no linter-specific import (see scripts/generate-rules.py).
+const createRulesetFunction = (_schema, fn) => fn;
 
 export default createRulesetFunction(
   {

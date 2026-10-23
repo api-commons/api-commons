@@ -36,8 +36,8 @@ layout: default
 
   <div class="run-box">
     <h3>Run this ruleset</h3>
-    <p class="muted mb-1">Lint any matching artifact against this ruleset with any Spectral-compatible linter, such as the Spectral CLI today and the <a href="https://openlint.org">OpenLint</a> CLI when it ships:</p>
-    <pre>npx @stoplight/spectral-cli lint api.yaml \
+    <p class="muted mb-1">Lint any matching artifact against this ruleset with the <a href="https://openlint.org">OpenLint</a> CLI (the Spectral CLI gives the same results):</p>
+    <pre>npx openlint lint api.yaml \
   --ruleset https://apicommons.org{{ page.ruleset_url }}</pre>
     <p class="muted mb-0">Or run every rule, including the {{ builtins }} that are engine built-ins or need the validator's own functions, in the <a href="https://validator.apicommons.org">API Commons validator</a>. The other {{ page.runnable_count }} are inlined in the file below.</p>
   </div>
