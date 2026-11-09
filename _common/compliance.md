@@ -11,7 +11,7 @@ tags:
   - Trust
 yaml_example: |
   - name: Compliance
-    type: Compliance
+    type: Attestations
     description: The compliance of the Example Weather API, harvested from its own page.
     url: compliance/example-weather-api-compliance.yml
     source_date: '2026-11-09'

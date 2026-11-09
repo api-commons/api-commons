@@ -14,7 +14,7 @@ aliases:
   - Data Protection Notice
 yaml_example: |
   - name: Privacy Policy
-    type: PrivacyPolicy
+    type: DataProcessing
     description: The privacy policy of the Example Weather API, harvested from its own page.
     url: privacy/example-weather-api-privacy-policy.yml
     source_date: '2026-11-09'

@@ -14,7 +14,7 @@ aliases:
   - EOL
 yaml_example: |
   - name: Deprecation Policy
-    type: DeprecationPolicy
+    type: DeprecationSchedule
     description: The deprecation policy of the Example Weather API, harvested from its own page.
     url: deprecation/example-weather-api-deprecation-policy.yml
     source_date: '2026-11-09'

@@ -19,7 +19,7 @@ aliases:
   - EULA
 yaml_example: |
   - name: Terms of Service
-    type: TermsOfService
+    type: UsageTerms
     description: The terms of service of the Example Weather API, harvested from its own page.
     url: terms/example-weather-api-terms-of-service.yml
     source_date: '2026-11-09'
