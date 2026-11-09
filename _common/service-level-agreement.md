@@ -3,7 +3,7 @@ name: Service Level Agreement
 description: A service level agreement, or simply SLA, defines the level of service you expect from a vendor, laying out the metrics by which service is measured, as well as remedies or penalties should agreed-on service levels not be achieved. A SLA sets the tone between an API producer and consumer and can be communicated as part of API change management practices.
 image: /images/service-level-agreement.png
 url: '#'
-machineReadable: false
+machineReadable: true
 source: concept
 tags:
   - Change
@@ -16,10 +16,79 @@ aliases:
   - Service Level Objective
   - Service Level Indicator
 yaml_example: |
-  - type: ServiceLevelAgreement
-    url: https://developers.example.com/sla
+  - name: Service Level Agreement
+    type: ServiceLevelAgreement
+    description: Service levels of the Example Weather API, quoted from its own SLA and status pages.
+    url: sla/example-weather-api-sla.yml
+    source_date: '2026-11-09'
+    data:
+      sla4oas: 1.0.0
+      context:
+        id: example-weather-api-plans
+        type: plans
+        provider: Example Weather API
+        api:
+          $ref: ../openapi/example-weather-api-openapi.yml
+        x-apis-io-derivation:
+          synthetic: false
+          method: searched
+          read: '2026-11-09'
+          tool: engine/economics/build-sla4oai.py
+          coverage:
+            promised_uptime: found
+            reported_uptime: found
+          statement: Figures are quoted from the pages listed in sources. Guarantees are what the provider
+            promises. Observed figures are what the provider reports about itself. APIs.io runs no monitors
+            and has not measured or verified any of them.
+          sources:
+          - https://weather.example.com/legal/sla
+          - https://status.weather.example.com/
+      metrics:
+        requests:
+          type: integer
+          format: int64
+          description: Number of requests
+      plans:
+        base:
+          x-apis-io-observed:
+          - text: 99.98% uptime Last 90 days
+            percent: 99.98
+            window: Last 90 days
+            component: Forecast API
+            source: https://status.weather.example.com/
+            read: '2026-11-09'
+          x-apis-io-limits:
+          - limit_text: 60 calls per minute per API key
+            limit: 60
+            window: minute
+            scope: key
+        business:
+          pricing:
+            cost: 99.0
+            currency: USD
+            billing: monthly
+          rates:
+            /forecast:
+              get:
+                requests:
+                - max: 600
+                  period: minute
+          x-apis-io-guarantees:
+          - text: We guarantee 99.9% monthly uptime for Business plans.
+            percent: 99.9
+            window: monthly
+            credits_text: If we miss the commitment, you receive a 10% service credit on that month's fee.
+            response_time_text: Priority incidents receive a first response within 1 hour.
+            source: https://weather.example.com/legal/sla
+            read: '2026-11-09'
 
 standards:
+  - name: API Commons Service Level Agreement (SLA4OAI profile) schema
+    url: https://github.com/api-commons/service-level-agreement
+    kind: API Commons (CC BY-NC-SA 4.0 artifacts, Apache-2.0 code)
+  - name: SLA4OAI 1.0.0 Draft
+    url: https://github.com/isa-group/SLA4OAI-Specification
+    kind: Community spec
   - name: ISO/IEC 19086-1 — Cloud SLA Framework and Terminology
     url: https://www.iso.org/standard/67545.html
     kind: ISO/IEC
@@ -110,6 +179,10 @@ risk:
   security_implications: SLA documents publicly disclose architectural commitments (regions, failover, RTO/RPO). Avoid leaking internal incident-response playbooks; keep credits and remedies precise to avoid ambiguity during incidents.
 
 tools:
+  - name: API Commons Service Level Agreement (SLA4OAI profile) schema + validator
+    url: https://github.com/api-commons/service-level-agreement
+    license: Apache-2.0
+    category: Machine-readable schema
   - name: Nobl9
     url: https://www.nobl9.com/
     category: SLO platform

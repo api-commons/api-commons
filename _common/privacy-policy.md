@@ -4,7 +4,7 @@ description: |
   Breaking up the privacy policy into machine-readable, schema defined properties that allow for the legal side of an API to be understood programmatically. A privacy policy sets the stage when it comes to consumption, helping consumers with what they can expect when it comes to how their data and usage of digital resources will be shared or sold. 
 image: /images/privacy-policy.png
 url: '#'
-machineReadable: false
+machineReadable: true
 source: concept
 tags:
   - Legal
@@ -13,10 +13,68 @@ aliases:
   - Privacy Statement
   - Data Protection Notice
 yaml_example: |
-  - type: PrivacyPolicy
-    url: https://example.com/privacy
+  - name: Privacy Policy
+    type: PrivacyPolicy
+    description: The privacy policy of the Example Weather API, harvested from its own page.
+    url: privacy/example-weather-api-privacy-policy.yml
+    source_date: '2026-11-09'
+    data:
+      privacy_policy: 0.1.0
+      provider: Example Weather API
+      aid: example-weather-api
+      url: https://weather.example.com/legal/privacy
+      source_date: '2026-11-09'
+      x-apis-io-derivation:
+        synthetic: false
+        method: harvested
+        read: '2026-11-09'
+        tool: engine/business/harvest-business.py
+        model: claude-haiku-4-5
+      role:
+        value: processor
+        text: When we process personal data on behalf of our API customers, we act as a data processor.
+      data_categories:
+      - category: contact
+        text: We collect your name and email address when you create a developer account.
+      - category: location
+        text: API requests may include latitude and longitude coordinates.
+      purposes:
+      - purpose: Service delivery
+        text: We use request data only to return the forecast you asked for.
+      retention:
+      - scope: API request logs
+        period: 90 days
+        text: API request logs are retained for 90 days.
+      residency:
+      - region: United States
+        text: Customer data is stored in data centers located in the United States.
+      transfers:
+      - mechanism: SCC
+        text: Transfers from the EEA rely on the Standard Contractual Clauses.
+      subprocessors:
+        url: https://weather.example.com/legal/subprocessors
+        text: A current list of subprocessors is available on our subprocessors page.
+      dpa:
+        available: true
+        url: https://weather.example.com/legal/dpa
+        text: Our Data Processing Addendum is available to all customers.
+      deletion:
+        route: privacy@weather.example.com
+        text: To request deletion of your data, email privacy@weather.example.com.
+      rights:
+      - right: access
+        text: You have the right to access the personal data we hold about you.
+      sale_or_sharing:
+        stance: prohibited
+        text: We do not sell your personal information.
 
 standards:
+  - name: API Commons Privacy Policy schema
+    url: https://github.com/api-commons/privacy-policy
+    kind: API Commons (CC BY-NC-SA 4.0 artifacts, Apache-2.0 code)
+  - name: W3C Data Privacy Vocabulary (DPV)
+    url: https://w3c.github.io/dpv/
+    kind: W3C Community Group
   - name: GDPR — Regulation (EU) 2016/679
     url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
     kind: EU
@@ -110,6 +168,10 @@ risk:
   security_implications: A privacy policy is the consumer-facing surface of the data-protection program. It must accurately describe data collected, purposes, lawful bases (GDPR), retention, sub-processors, international transfers (SCCs/adequacy), security measures (Art. 32), and individual rights with response SLAs. Misalignment between the policy and actual API data flows is itself a regulatory and reputational risk. Version the policy, surface effective_date, and notify users of material changes before they take effect.
 
 tools:
+  - name: API Commons Privacy Policy schema + validator
+    url: https://github.com/api-commons/privacy-policy
+    license: Apache-2.0
+    category: Machine-readable schema
   - name: OneTrust
     url: https://www.onetrust.com/
     category: Privacy management platform

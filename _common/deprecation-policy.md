@@ -3,7 +3,7 @@ name: Deprecation Policy
 description: Every API will eventually be deprecated, so having a plan and communicating the deprecation policy with consumers via a dedicated page makes a lot of sense. This page will help API providers think a little bit about the future, and establish some guard rails and channels for communication with consumers.
 image: /images/deprecation.png
 url: '#'
-machineReadable: false
+machineReadable: true
 source: concept
 tags:
   - Deprecation
@@ -13,16 +13,54 @@ aliases:
   - End-of-Life
   - EOL
 yaml_example: |
-  - type: DeprecationPolicy
-    url: https://developers.example.com/deprecation
+  - name: Deprecation Policy
+    type: DeprecationPolicy
+    description: The deprecation policy of the Example Weather API, harvested from its own page.
+    url: deprecation/example-weather-api-deprecation-policy.yml
+    source_date: '2026-11-09'
+    data:
+      deprecation_policy: 0.1.0
+      provider: Example Weather API
+      aid: example-weather-api
+      url: https://weather.example.com/docs/deprecation
+      source_date: '2026-11-09'
+      x-apis-io-derivation:
+        synthetic: false
+        method: harvested
+        read: '2026-11-09'
+        tool: engine/business/harvest-business.py
+        model: claude-haiku-4-5
+      minimum_notice:
+        period: 6 months
+        text: We give at least 6 months notice before removing a deprecated endpoint.
+      support_window:
+        period: 12 months
+        text: Each major version is supported for 12 months after its successor ships.
+      announcement_channels:
+      - channel: changelog
+        text: Deprecations are announced in the changelog.
+      - channel: email
+        text: We also email the owner of every affected API key.
+      headers:
+        deprecation: true
+        sunset: true
+        text: Deprecated endpoints return Deprecation and Sunset headers on every response.
+      versioning_scheme:
+        value: major versions in the path
+        text: The major version is part of the URL path, for example /v2/forecast.
+      breaking_change_definition:
+        text: Removing a field, renaming a field, or changing a field type is a breaking change.
 
 standards:
-  - name: RFC 9745 — The Sunset HTTP Response Header Field
+  - name: API Commons Deprecation Policy schema
+    url: https://github.com/api-commons/deprecation-policy
+    kind: API Commons (CC BY-NC-SA 4.0 artifacts, Apache-2.0 code)
+  - name: RFC 9745 — The Deprecation HTTP Response Header Field
     url: https://www.rfc-editor.org/rfc/rfc9745
     kind: IETF
-  - name: RFC 8594 — The Sunset HTTP Header Field (obsoleted by RFC 9745)
+  - name: RFC 8594 — The Sunset HTTP Header Field
     url: https://www.rfc-editor.org/rfc/rfc8594
-    kind: IETF (historic)
+    kind: IETF
   - name: The Deprecation HTTP Response Header Field (draft-ietf-httpapi-deprecation-header)
     url: https://datatracker.ietf.org/doc/draft-ietf-httpapi-deprecation-header/
     kind: IETF
@@ -90,6 +128,10 @@ risk:
   security_implications: Long-tail use of deprecated endpoints accumulates known vulnerabilities and unsupported authentication patterns. A clear policy with Sunset + Deprecation headers, telemetry on deprecated traffic, and a documented removal date reduces lingering attack surface.
 
 tools:
+  - name: API Commons Deprecation Policy schema + validator
+    url: https://github.com/api-commons/deprecation-policy
+    license: Apache-2.0
+    category: Machine-readable schema
   - name: Spectral
     url: https://github.com/stoplightio/spectral
     license: Apache-2.0

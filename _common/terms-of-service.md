@@ -3,7 +3,7 @@ name: Terms Of Service
 description: Breaking up the terms of service into machine-readable, schema defined properties that allow for the legal side of an API to be understood programmatically. Providing a break down of what the legal constraints involved with putting an API to use will help consumers understand if it is a fit for their business needs.
 image: /images/terms-of-service.png
 url: '#'
-machineReadable: false
+machineReadable: true
 source: concept
 tags:
   - Legal
@@ -18,10 +18,63 @@ aliases:
   - Service Agreement
   - EULA
 yaml_example: |
-  - type: TermsOfService
-    url: https://example.com/terms
+  - name: Terms of Service
+    type: TermsOfService
+    description: The terms of service of the Example Weather API, harvested from its own page.
+    url: terms/example-weather-api-terms-of-service.yml
+    source_date: '2026-11-09'
+    data:
+      terms_of_service: 0.1.0
+      provider: Example Weather API
+      aid: example-weather-api
+      url: https://weather.example.com/legal/api-terms
+      source_date: '2026-11-09'
+      x-apis-io-derivation:
+        synthetic: false
+        method: harvested
+        read: '2026-11-09'
+        tool: engine/business/harvest-business.py
+        model: claude-haiku-4-5
+      effective_date: Last updated March 1, 2026
+      permitted_use:
+      - summary: Display forecasts in your application
+        text: You may use the API to retrieve and display weather data within your own applications.
+      prohibited_use:
+      - summary: Resale of raw data
+        text: You may not resell, sublicense or redistribute raw API data as a standalone data product.
+      caching:
+        stance: conditional
+        max_duration: 24 hours
+        text: You may cache API responses for up to 24 hours to improve performance.
+      redistribution:
+        stance: prohibited
+        text: You may not resell, sublicense or redistribute raw API data as a standalone data product.
+      attribution:
+        required: true
+        text: Applications must display "Weather data by Example Weather API" wherever the data
+          is shown.
+      governing_law:
+        jurisdiction: State of Oregon
+        text: These Terms are governed by the laws of the State of Oregon.
+      liability_cap:
+        text: Our total liability will not exceed the fees you paid us in the 12 months before the
+          claim.
+      termination_notice:
+        period: 30 days
+        text: We may terminate your access for convenience with 30 days written notice.
+      change_notice:
+        period: 14 days
+        text: We will post changes to these Terms at least 14 days before they take effect.
+      rate_or_usage_limits_referenced:
+        text: Your use is subject to the rate limits described in our documentation.
 
 standards:
+  - name: API Commons Terms of Service schema
+    url: https://github.com/api-commons/terms-of-service
+    kind: API Commons (CC BY-NC-SA 4.0 artifacts, Apache-2.0 code)
+  - name: W3C ODRL Information Model 2.2
+    url: https://www.w3.org/TR/odrl-model/
+    kind: W3C
   - name: OpenAPI Specification — info.termsOfService
     url: https://spec.openapis.org/oas/v3.1.0#info-object
     kind: OpenAPI Initiative
@@ -96,6 +149,10 @@ risk:
   security_implications: A clear, versioned ToS is itself a security control — it sets acceptable-use boundaries (scraping, automation, abuse), defines incident-response and notification obligations, allocates liability, and authorizes the provider to suspend abusive consumers. Track effective_date and prior versions so consumers can detect breaking legal changes the same way they track API versions.
 
 tools:
+  - name: API Commons Terms of Service schema + validator
+    url: https://github.com/api-commons/terms-of-service
+    license: Apache-2.0
+    category: Machine-readable schema
   - name: Common Paper
     url: https://commonpaper.com/
     category: Standardized contract templates
