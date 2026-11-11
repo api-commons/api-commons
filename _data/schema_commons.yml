@@ -1,0 +1,1700 @@
+generated: '2026-11-11'
+hub: https://github.com/api-commons/schema-commons
+report: https://github.com/api-commons/schema-commons/blob/main/REPORT.md
+standards_registry: https://github.com/api-commons/schema-commons/blob/main/standards/README.md
+ruleset: https://github.com/openlint/rules
+totals:
+  measured: 216
+  built: 129
+  references: 5
+  thin: 82
+  concepts: 467
+  core: 1653
+  crosswalks: 6545
+  providers: 4086
+contexts:
+- context: accounting
+  name: Accounting
+  repo: https://github.com/api-commons/accounting
+  measured: 139
+  concepts:
+  - ledger_account
+  - journal_entry
+  - vendor
+  - bill
+  - expense
+  - tax_rate
+  core: 27
+  crosswalks: 67
+  version: draft
+  standards: []
+- context: advertising
+  name: Advertising
+  repo: https://github.com/api-commons/advertising
+  measured: 134
+  concepts:
+  - ad_account
+  - ad_campaign
+  - ad_group
+  - ad
+  - creative
+  - ad_audience
+  - ad_report
+  core: 23
+  crosswalks: 33
+  version: draft
+  standards: []
+- context: affiliates
+  name: Affiliates and Partners
+  repo: https://github.com/api-commons/affiliates
+  measured: 28
+  concepts:
+  - partner
+  core: 5
+  crosswalks: 6
+  version: draft
+  standards: []
+- context: agriculture
+  name: Agriculture
+  repo: https://github.com/api-commons/agriculture
+  measured: 47
+  concepts:
+  - farm
+  - field
+  core: 6
+  crosswalks: 9
+  version: draft
+  standards: []
+- context: ai-agents
+  name: AI Agents
+  repo: https://github.com/api-commons/ai-agents
+  measured: 680
+  concepts:
+  - ai_agent
+  - agent_thread
+  - agent_run
+  - agent_tool
+  core: 13
+  crosswalks: 156
+  version: draft
+  standards: []
+- context: ai-inference
+  name: AI Inference and Deployments
+  repo: https://github.com/api-commons/ai-inference
+  measured: 172
+  concepts:
+  - deployment
+  - gpu_instance
+  core: 9
+  crosswalks: 41
+  version: draft
+  standards: []
+- context: api-management
+  name: API Management
+  repo: https://github.com/api-commons/api-management
+  measured: 135
+  concepts:
+  - managed_api
+  - api_product
+  - consumer_app
+  core: 16
+  crosswalks: 23
+  version: draft
+  standards: []
+- context: audit-logs
+  name: Audit Logs
+  repo: https://github.com/api-commons/audit-logs
+  measured: 844
+  concepts:
+  - audit_event
+  core: 4
+  crosswalks: 61
+  version: draft
+  standards: []
+- context: automotive
+  name: Automotive and Connected Vehicles
+  repo: https://github.com/api-commons/automotive
+  measured: 99
+  concepts:
+  - vehicle
+  - vehicle_location
+  core: 7
+  crosswalks: 36
+  version: draft
+  standards: []
+- context: aviation
+  name: Aviation and Flights
+  repo: https://github.com/api-commons/aviation
+  measured: 56
+  concepts:
+  - flight_status
+  - airport
+  core: 7
+  crosswalks: 17
+  version: draft
+  standards:
+  - schemaorg-30.1
+- context: banking
+  name: Banking
+  repo: https://github.com/api-commons/banking
+  measured: 315
+  concepts:
+  - bank_account
+  - balance
+  - transaction
+  - beneficiary
+  - transfer
+  - statement
+  core: 22
+  crosswalks: 211
+  version: draft
+  standards: []
+- context: billing
+  name: Billing and Invoicing
+  repo: https://github.com/api-commons/billing
+  measured: 837
+  concepts:
+  - invoice
+  - invoice_line
+  - subscription
+  - plan
+  - price
+  - credit_note
+  - coupon
+  - usage_record
+  core: 34
+  crosswalks: 270
+  version: draft
+  standards: []
+- context: blockchain-data
+  name: Blockchain Data
+  repo: https://github.com/api-commons/blockchain-data
+  measured: 374
+  concepts:
+  - block
+  - transaction
+  - token
+  core: 5
+  crosswalks: 109
+  version: draft
+  standards: []
+- context: books
+  name: Books and Publishing
+  repo: https://github.com/api-commons/books
+  measured: 132
+  concepts:
+  - book
+  core: 2
+  crosswalks: 12
+  version: draft
+  standards:
+  - schemaorg-30.1
+- context: business-intelligence
+  name: Business Intelligence
+  repo: https://github.com/api-commons/business-intelligence
+  measured: 159
+  concepts:
+  - dashboard
+  - chart
+  - data_source
+  core: 7
+  crosswalks: 42
+  version: draft
+  standards: []
+- context: scheduling
+  name: Calendars and Scheduling
+  repo: https://github.com/api-commons/scheduling
+  measured: 112
+  concepts:
+  - calendar
+  - calendar_event
+  - appointment
+  - availability
+  - service
+  core: 22
+  crosswalks: 38
+  version: draft
+  standards: []
+- context: card-issuing
+  name: Card Issuing
+  repo: https://github.com/api-commons/card-issuing
+  measured: 740
+  concepts:
+  - card
+  - cardholder
+  - authorization
+  - card_transaction
+  - spending_control
+  - card_program
+  core: 22
+  crosswalks: 65
+  version: draft
+  standards: []
+- context: cdn
+  name: CDN and Edge
+  repo: https://github.com/api-commons/cdn
+  measured: 77
+  concepts:
+  - purge
+  - tls_certificate
+  core: 4
+  crosswalks: 17
+  version: draft
+  standards: []
+- context: chatbots
+  name: Chatbots and Conversational AI
+  repo: https://github.com/api-commons/chatbots
+  measured: 147
+  concepts:
+  - bot
+  - conversation
+  - conversation_message
+  - intent
+  core: 11
+  crosswalks: 69
+  version: draft
+  standards: []
+- context: ci-cd
+  name: CI/CD
+  repo: https://github.com/api-commons/ci-cd
+  measured: 241
+  concepts:
+  - pipeline
+  - run
+  - job
+  - artifact
+  - environment
+  - deployment
+  core: 20
+  crosswalks: 81
+  version: draft
+  standards: []
+- context: finops
+  name: Cloud Cost and FinOps
+  repo: https://github.com/api-commons/finops
+  measured: 81
+  concepts:
+  - cost
+  - budget
+  - savings_recommendation
+  core: 10
+  crosswalks: 21
+  version: draft
+  standards: []
+- context: cloud-infrastructure
+  name: Cloud Infrastructure
+  repo: https://github.com/api-commons/cloud-infrastructure
+  measured: 384
+  concepts:
+  - instance
+  - volume
+  - snapshot
+  - network
+  - firewall
+  - load_balancer
+  - ssh_key
+  - region
+  core: 33
+  crosswalks: 88
+  version: draft
+  standards: []
+- context: commerce
+  name: Commerce
+  repo: https://github.com/api-commons/commerce
+  measured: 401
+  concepts:
+  - product
+  - product_variant
+  - category
+  - customer
+  - cart
+  - order
+  - order_item
+  - shipment
+  - inventory
+  core: 28
+  crosswalks: 254
+  version: draft
+  standards:
+  - schemaorg-30.1
+- context: cpq
+  name: Configure, Price, Quote
+  repo: https://github.com/api-commons/cpq
+  measured: 46
+  concepts:
+  - sales_quote
+  core: 2
+  crosswalks: 16
+  version: draft
+  standards: []
+- context: contact-center
+  name: Contact Center
+  repo: https://github.com/api-commons/contact-center
+  measured: 93
+  concepts:
+  - queue
+  core: 3
+  crosswalks: 10
+  version: draft
+  standards: []
+- context: cms
+  name: Content Management
+  repo: https://github.com/api-commons/cms
+  measured: 73
+  concepts:
+  - content_type
+  - entry
+  - page
+  - post
+  - asset
+  core: 22
+  crosswalks: 36
+  version: draft
+  standards: []
+- context: contracts
+  name: Contract Lifecycle
+  repo: https://github.com/api-commons/contracts
+  measured: 45
+  concepts:
+  - contract
+  - contract_template
+  core: 6
+  crosswalks: 10
+  version: draft
+  standards: []
+- context: crypto-exchanges
+  name: Crypto Exchanges
+  repo: https://github.com/api-commons/crypto-exchanges
+  measured: 288
+  concepts:
+  - trading_pair
+  - exchange_order
+  - balance
+  core: 9
+  crosswalks: 55
+  version: draft
+  standards: []
+- context: crypto-wallets
+  name: Crypto Wallets
+  repo: https://github.com/api-commons/crypto-wallets
+  measured: 345
+  concepts:
+  - wallet
+  - wallet_address
+  - wallet_balance
+  - wallet_transaction
+  - token
+  core: 13
+  crosswalks: 75
+  version: draft
+  standards: []
+- context: crm
+  name: Customer Relationship Management
+  repo: https://github.com/api-commons/crm
+  measured: 177
+  concepts:
+  - contact
+  - company
+  - deal
+  - lead
+  - activity
+  - task
+  - note
+  - pipeline
+  core: 32
+  crosswalks: 112
+  version: draft
+  standards: []
+- context: data-governance
+  name: Data Catalogs and Governance
+  repo: https://github.com/api-commons/data-governance
+  measured: 94
+  concepts:
+  - data_asset
+  - glossary_term
+  - data_domain
+  core: 12
+  crosswalks: 27
+  version: draft
+  standards: []
+- context: data-enrichment
+  name: Data Enrichment
+  repo: https://github.com/api-commons/data-enrichment
+  measured: 137
+  concepts:
+  - person_profile
+  - company_profile
+  - email_lookup
+  core: 13
+  crosswalks: 47
+  version: draft
+  standards: []
+- context: etl
+  name: Data Integration and ETL
+  repo: https://github.com/api-commons/etl
+  measured: 101
+  concepts:
+  - source
+  - destination
+  - data_pipeline
+  - sync_job
+  core: 12
+  crosswalks: 47
+  version: draft
+  standards: []
+- context: databases
+  name: Databases
+  repo: https://github.com/api-commons/databases
+  measured: 184
+  concepts:
+  - database_cluster
+  - database
+  - database_user
+  - backup
+  core: 10
+  crosswalks: 73
+  version: draft
+  standards: []
+- context: digital-asset-management
+  name: Digital Asset Management
+  repo: https://github.com/api-commons/digital-asset-management
+  measured: 82
+  concepts:
+  - media_asset
+  - asset_collection
+  core: 6
+  crosswalks: 42
+  version: draft
+  standards: []
+- context: dns
+  name: DNS and Domains
+  repo: https://github.com/api-commons/dns
+  measured: 69
+  concepts:
+  - domain
+  - zone
+  - dns_record
+  core: 12
+  crosswalks: 28
+  version: draft
+  standards: []
+- context: document-ai
+  name: Document AI
+  repo: https://github.com/api-commons/document-ai
+  measured: 132
+  concepts:
+  - extraction
+  - extractor
+  core: 2
+  crosswalks: 35
+  version: draft
+  standards: []
+- context: e-signature
+  name: E-Signature
+  repo: https://github.com/api-commons/e-signature
+  measured: 72
+  concepts:
+  - envelope
+  - recipient
+  - template
+  - signature_field
+  core: 20
+  crosswalks: 35
+  version: draft
+  standards: []
+- context: email-marketing
+  name: Email Marketing
+  repo: https://github.com/api-commons/email-marketing
+  measured: 102
+  concepts:
+  - list
+  - subscriber
+  - segment
+  - campaign
+  - automation
+  - campaign_report
+  core: 21
+  crosswalks: 51
+  version: draft
+  standards: []
+- context: employee-benefits
+  name: Employee Benefits
+  repo: https://github.com/api-commons/employee-benefits
+  measured: 37
+  concepts:
+  - benefit_plan
+  - enrollment
+  core: 7
+  crosswalks: 18
+  version: draft
+  standards: []
+- context: energy
+  name: Energy and Utilities
+  repo: https://github.com/api-commons/energy
+  measured: 95
+  concepts:
+  - meter
+  - meter_reading
+  - utility_account
+  core: 6
+  crosswalks: 25
+  version: draft
+  standards: []
+- context: ev-charging
+  name: EV Charging
+  repo: https://github.com/api-commons/ev-charging
+  measured: 41
+  concepts:
+  - charger
+  - charging_session
+  core: 3
+  crosswalks: 4
+  version: draft
+  standards:
+  - ocpi-2.2.1
+- context: events
+  name: Events and Ticketing
+  repo: https://github.com/api-commons/events
+  measured: 123
+  concepts:
+  - event
+  - venue
+  - ticket_type
+  - ticket
+  - attendee
+  core: 20
+  crosswalks: 26
+  version: draft
+  standards:
+  - schemaorg-30.1
+- context: expenses
+  name: Expense Management
+  repo: https://github.com/api-commons/expenses
+  measured: 58
+  concepts:
+  - expense_claim
+  core: 9
+  crosswalks: 11
+  version: draft
+  standards: []
+- context: feature-flags
+  name: Feature Flags
+  repo: https://github.com/api-commons/feature-flags
+  measured: 36
+  concepts:
+  - flag
+  - flag_environment
+  - flag_segment
+  - experiment
+  core: 22
+  crosswalks: 19
+  version: draft
+  standards: []
+- context: field-service
+  name: Field Service
+  repo: https://github.com/api-commons/field-service
+  measured: 50
+  concepts:
+  - field_job
+  - technician
+  core: 7
+  crosswalks: 21
+  version: draft
+  standards: []
+- context: files
+  name: Files and Documents
+  repo: https://github.com/api-commons/files
+  measured: 133
+  concepts:
+  - file
+  - folder
+  - bucket
+  - file_version
+  - permission
+  core: 14
+  crosswalks: 51
+  version: draft
+  standards: []
+- context: fitness
+  name: Fitness and Wearables
+  repo: https://github.com/api-commons/fitness
+  measured: 52
+  concepts:
+  - workout
+  - sleep
+  - daily_summary
+  core: 8
+  crosswalks: 18
+  version: draft
+  standards: []
+- context: fleet
+  name: Fleet and Telematics
+  repo: https://github.com/api-commons/fleet
+  measured: 85
+  concepts:
+  - vehicle
+  - driver
+  - trip
+  - vehicle_location
+  - geofence
+  - inspection
+  core: 17
+  crosswalks: 29
+  version: draft
+  standards: []
+- context: food-ordering
+  name: Food Ordering
+  repo: https://github.com/api-commons/food-ordering
+  measured: 77
+  concepts:
+  - restaurant
+  - menu
+  - menu_item
+  - food_order
+  core: 8
+  crosswalks: 35
+  version: draft
+  standards: []
+- context: foreign-exchange
+  name: Foreign Exchange
+  repo: https://github.com/api-commons/foreign-exchange
+  measured: 65
+  concepts:
+  - exchange_rate
+  - conversion
+  core: 9
+  crosswalks: 30
+  version: draft
+  standards: []
+- context: forms
+  name: Forms and Surveys
+  repo: https://github.com/api-commons/forms
+  measured: 93
+  concepts:
+  - form
+  - question
+  - response
+  core: 4
+  crosswalks: 40
+  version: draft
+  standards: []
+- context: freight
+  name: Freight and TMS
+  repo: https://github.com/api-commons/freight
+  measured: 205
+  concepts:
+  - load
+  - freight_carrier
+  core: 8
+  crosswalks: 12
+  version: draft
+  standards: []
+- context: gaming
+  name: Gaming
+  repo: https://github.com/api-commons/gaming
+  measured: 73
+  concepts:
+  - game_title
+  - player_profile
+  - leaderboard
+  - achievement
+  core: 9
+  crosswalks: 26
+  version: draft
+  standards: []
+- context: healthcare
+  name: Healthcare
+  repo: https://github.com/api-commons/healthcare
+  measured: 259
+  concepts:
+  - patient
+  - practitioner
+  - encounter
+  - observation
+  - condition
+  - prescription
+  - coverage
+  - health_claim
+  core: 39
+  crosswalks: 69
+  version: draft
+  standards:
+  - fhir-r4
+- context: ticketing
+  name: Help Desk and Ticketing
+  repo: https://github.com/api-commons/ticketing
+  measured: 77
+  concepts:
+  - ticket
+  - ticket_message
+  - requester
+  - agent
+  - group
+  - organization
+  core: 28
+  crosswalks: 48
+  version: draft
+  standards: []
+- context: identity
+  name: Identity and Users
+  repo: https://github.com/api-commons/identity
+  measured: 443
+  concepts:
+  - user
+  - group
+  - organization
+  - role
+  - permission
+  - invite
+  - api_key
+  core: 22
+  crosswalks: 185
+  version: draft
+  standards: []
+- context: identity-verification
+  name: Identity Verification
+  repo: https://github.com/api-commons/identity-verification
+  measured: 173
+  concepts:
+  - verification
+  - person
+  - business
+  - document
+  - report
+  core: 23
+  crosswalks: 31
+  version: draft
+  standards: []
+- context: image-generation
+  name: Image and Video Generation
+  repo: https://github.com/api-commons/image-generation
+  measured: 148
+  concepts:
+  - generation
+  core: 6
+  crosswalks: 70
+  version: draft
+  standards: []
+- context: incident-management
+  name: Incident Management
+  repo: https://github.com/api-commons/incident-management
+  measured: 75
+  concepts:
+  - incident
+  - incident_update
+  - service
+  - on_call_schedule
+  - escalation_policy
+  - status_page
+  core: 24
+  crosswalks: 28
+  version: draft
+  standards: []
+- context: industrial-automation
+  name: Industrial Automation
+  repo: https://github.com/api-commons/industrial-automation
+  measured: 30
+  concepts:
+  - industrial_asset
+  - data_point
+  core: 8
+  crosswalks: 11
+  version: draft
+  standards: []
+- context: insurance
+  name: Insurance
+  repo: https://github.com/api-commons/insurance
+  measured: 143
+  concepts:
+  - policy
+  - quote
+  - claim
+  - insurance_product
+  core: 13
+  crosswalks: 47
+  version: draft
+  standards: []
+- context: iot-connectivity
+  name: IoT Connectivity and SIMs
+  repo: https://github.com/api-commons/iot-connectivity
+  measured: 35
+  concepts:
+  - sim
+  - data_usage
+  core: 6
+  crosswalks: 10
+  version: draft
+  standards: []
+- context: iot
+  name: IoT Devices
+  repo: https://github.com/api-commons/iot
+  measured: 195
+  concepts:
+  - device
+  - telemetry
+  - device_command
+  - firmware_update
+  core: 7
+  crosswalks: 69
+  version: draft
+  standards: []
+- context: it-assets
+  name: IT Asset Management
+  repo: https://github.com/api-commons/it-assets
+  measured: 54
+  concepts:
+  - it_asset
+  - software_license
+  core: 3
+  crosswalks: 31
+  version: draft
+  standards: []
+- context: cmdb
+  name: ITSM Change and CMDB
+  repo: https://github.com/api-commons/cmdb
+  measured: 32
+  concepts:
+  - change_request
+  core: 2
+  crosswalks: 4
+  version: draft
+  standards: []
+- context: job-boards
+  name: Job Boards
+  repo: https://github.com/api-commons/job-boards
+  measured: 33
+  concepts:
+  - job_posting
+  core: 4
+  crosswalks: 23
+  version: draft
+  standards:
+  - schemaorg-30.1
+- context: knowledge-base
+  name: Knowledge Base
+  repo: https://github.com/api-commons/knowledge-base
+  measured: 146
+  concepts:
+  - knowledge_base
+  - article
+  core: 12
+  crosswalks: 21
+  version: draft
+  standards: []
+- context: lms
+  name: Learning Management
+  repo: https://github.com/api-commons/lms
+  measured: 57
+  concepts:
+  - course
+  - lesson
+  - enrollment
+  - learner
+  - assignment
+  - submission
+  core: 18
+  crosswalks: 22
+  version: draft
+  standards: []
+- context: legal
+  name: Legal Practice
+  repo: https://github.com/api-commons/legal
+  measured: 79
+  concepts:
+  - matter
+  core: 10
+  crosswalks: 10
+  version: draft
+  standards: []
+- context: lending
+  name: Lending
+  repo: https://github.com/api-commons/lending
+  measured: 134
+  concepts:
+  - loan
+  - borrower
+  core: 2
+  crosswalks: 14
+  version: draft
+  standards: []
+- context: loyalty
+  name: Loyalty
+  repo: https://github.com/api-commons/loyalty
+  measured: 77
+  concepts:
+  - member
+  - reward
+  - referral
+  core: 9
+  crosswalks: 17
+  version: draft
+  standards: []
+- context: maps
+  name: Maps and Geocoding
+  repo: https://github.com/api-commons/maps
+  measured: 193
+  concepts:
+  - geocode
+  - place
+  - route
+  - distance_matrix
+  core: 16
+  crosswalks: 45
+  version: draft
+  standards: []
+- context: market-data
+  name: Market Data
+  repo: https://github.com/api-commons/market-data
+  measured: 237
+  concepts:
+  - instrument
+  - market_quote
+  - bar
+  - market_trade
+  - order_book
+  - exchange
+  core: 13
+  crosswalks: 95
+  version: draft
+  standards: []
+- context: membership
+  name: Membership
+  repo: https://github.com/api-commons/membership
+  measured: 26
+  concepts:
+  - member
+  core: 3
+  crosswalks: 9
+  version: draft
+  standards: []
+- context: messaging
+  name: Messaging (Email, SMS, Chat)
+  repo: https://github.com/api-commons/messaging
+  measured: 365
+  concepts:
+  - message
+  - template
+  - conversation
+  - phone_number
+  - sender
+  - suppression
+  core: 21
+  crosswalks: 198
+  version: draft
+  standards: []
+- context: mlops
+  name: MLOps and Model Registry
+  repo: https://github.com/api-commons/mlops
+  measured: 342
+  concepts:
+  - ml_model
+  - dataset
+  - experiment
+  - training_run
+  core: 12
+  crosswalks: 126
+  version: draft
+  standards: []
+- context: mobility
+  name: Mobility and Ride Services
+  repo: https://github.com/api-commons/mobility
+  measured: 54
+  concepts:
+  - station
+  - mobility_vehicle
+  core: 12
+  crosswalks: 13
+  version: draft
+  standards: []
+- context: movies
+  name: Movies and TV
+  repo: https://github.com/api-commons/movies
+  measured: 203
+  concepts:
+  - screen_title
+  - tv_episode
+  - cast_member
+  core: 11
+  crosswalks: 35
+  version: draft
+  standards:
+  - schemaorg-30.1
+- context: music
+  name: Music
+  repo: https://github.com/api-commons/music
+  measured: 45
+  concepts:
+  - track
+  - artist
+  - album
+  - music_playlist
+  core: 16
+  crosswalks: 22
+  version: draft
+  standards: []
+- context: news
+  name: News
+  repo: https://github.com/api-commons/news
+  measured: 73
+  concepts:
+  - news_article
+  - news_source
+  core: 9
+  crosswalks: 31
+  version: draft
+  standards: []
+- context: nfts
+  name: NFTs and Digital Collectibles
+  repo: https://github.com/api-commons/nfts
+  measured: 47
+  concepts:
+  - nft_collection
+  - nft
+  - nft_sale
+  core: 4
+  crosswalks: 25
+  version: draft
+  standards: []
+- context: fundraising
+  name: Nonprofit Fundraising
+  repo: https://github.com/api-commons/fundraising
+  measured: 50
+  concepts:
+  - donor
+  - donation
+  - fundraising_campaign
+  - fund
+  core: 33
+  crosswalks: 14
+  version: draft
+  standards: []
+- context: productivity
+  name: Notes and Productivity
+  repo: https://github.com/api-commons/productivity
+  measured: 171
+  concepts:
+  - note
+  - notebook
+  core: 5
+  crosswalks: 49
+  version: draft
+  standards: []
+- context: nutrition
+  name: Nutrition and Recipes
+  repo: https://github.com/api-commons/nutrition
+  measured: 62
+  concepts:
+  - food
+  - recipe
+  core: 9
+  crosswalks: 24
+  version: draft
+  standards:
+  - schemaorg-30.1
+- context: object-storage
+  name: Object Storage
+  repo: https://github.com/api-commons/object-storage
+  measured: 121
+  concepts:
+  - bucket
+  - storage_object
+  core: 5
+  crosswalks: 21
+  version: draft
+  standards: []
+- context: observability
+  name: Observability
+  repo: https://github.com/api-commons/observability
+  measured: 279
+  concepts:
+  - monitor
+  - alert
+  - dashboard
+  - log
+  - metric
+  - trace
+  - slo
+  core: 23
+  crosswalks: 104
+  version: draft
+  standards:
+  - otlp-1
+- context: open-data-catalogs
+  name: Open Data Catalogs
+  repo: https://github.com/api-commons/open-data-catalogs
+  measured: 276
+  concepts:
+  - dataset
+  core: 1
+  crosswalks: 33
+  version: draft
+  standards:
+  - dcat-us-1.1
+- context: payments
+  name: Payments
+  repo: https://github.com/api-commons/payments
+  measured: 692
+  concepts:
+  - payment
+  - checkout_session
+  - refund
+  - payment_method
+  - customer
+  - payout
+  - dispute
+  - mandate
+  core: 28
+  crosswalks: 438
+  version: draft
+  standards: []
+- context: payouts
+  name: Payouts and Cross-Border Payments
+  repo: https://github.com/api-commons/payouts
+  measured: 100
+  concepts:
+  - beneficiary
+  - payout
+  core: 5
+  crosswalks: 62
+  version: draft
+  standards: []
+- context: payroll
+  name: Payroll
+  repo: https://github.com/api-commons/payroll
+  measured: 192
+  concepts:
+  - payroll
+  - payslip
+  - pay_group
+  core: 6
+  crosswalks: 27
+  version: draft
+  standards: []
+- context: hris
+  name: People and HR
+  repo: https://github.com/api-commons/hris
+  measured: 171
+  concepts:
+  - employee
+  - department
+  - team
+  - position
+  - work_location
+  - absence
+  - employment
+  core: 26
+  crosswalks: 61
+  version: draft
+  standards: []
+- context: personal-finance
+  name: Personal Finance
+  repo: https://github.com/api-commons/personal-finance
+  measured: 133
+  concepts:
+  - linked_account
+  - categorized_transaction
+  core: 12
+  crosswalks: 34
+  version: draft
+  standards: []
+- context: podcasts
+  name: Podcasts
+  repo: https://github.com/api-commons/podcasts
+  measured: 88
+  concepts:
+  - show
+  - episode
+  core: 10
+  crosswalks: 13
+  version: draft
+  standards:
+  - schemaorg-30.1
+- context: point-of-sale
+  name: Point of Sale
+  repo: https://github.com/api-commons/point-of-sale
+  measured: 84
+  concepts:
+  - store_location
+  - terminal
+  - sale
+  - shift
+  core: 21
+  crosswalks: 20
+  version: draft
+  standards: []
+- context: procurement
+  name: Procurement
+  repo: https://github.com/api-commons/procurement
+  measured: 126
+  concepts:
+  - purchase_order
+  - requisition
+  - sourcing_event
+  core: 17
+  crosswalks: 35
+  version: draft
+  standards: []
+- context: product-analytics
+  name: Product Analytics
+  repo: https://github.com/api-commons/product-analytics
+  measured: 80
+  concepts:
+  - event
+  - profile
+  - cohort
+  - dashboard
+  - funnel
+  core: 10
+  crosswalks: 40
+  version: draft
+  standards: []
+- context: project-management
+  name: Project Management
+  repo: https://github.com/api-commons/project-management
+  measured: 95
+  concepts:
+  - project
+  - task
+  - comment
+  - sprint
+  - milestone
+  - label
+  - time_entry
+  core: 45
+  crosswalks: 43
+  version: draft
+  standards: []
+- context: property-management
+  name: Property Management
+  repo: https://github.com/api-commons/property-management
+  measured: 143
+  concepts:
+  - property
+  - unit
+  - lease
+  - tenant
+  - work_order
+  - listing
+  core: 19
+  crosswalks: 62
+  version: draft
+  standards:
+  - reso-dd-2.0
+- context: recruiting
+  name: Recruiting
+  repo: https://github.com/api-commons/recruiting
+  measured: 67
+  concepts:
+  - job
+  - candidate
+  - application
+  - stage
+  - interview
+  core: 32
+  crosswalks: 32
+  version: draft
+  standards: []
+- context: research-repositories
+  name: Research Repositories
+  repo: https://github.com/api-commons/research-repositories
+  measured: 123
+  concepts:
+  - work
+  - collection
+  core: 6
+  crosswalks: 21
+  version: draft
+  standards: []
+- context: returns
+  name: Returns
+  repo: https://github.com/api-commons/returns
+  measured: 370
+  concepts:
+  - return_request
+  core: 3
+  crosswalks: 32
+  version: draft
+  standards: []
+- context: reviews
+  name: Reviews
+  repo: https://github.com/api-commons/reviews
+  measured: 42
+  concepts:
+  - review
+  - review_reply
+  - reviewed_location
+  core: 12
+  crosswalks: 26
+  version: draft
+  standards:
+  - schemaorg-30.1
+- context: sales-engagement
+  name: Sales Engagement
+  repo: https://github.com/api-commons/sales-engagement
+  measured: 61
+  concepts:
+  - sequence
+  - sequence_step
+  - enrollment
+  core: 16
+  crosswalks: 12
+  version: draft
+  standards: []
+- context: search
+  name: Search
+  repo: https://github.com/api-commons/search
+  measured: 187
+  concepts:
+  - search_index
+  - search_query
+  core: 2
+  crosswalks: 112
+  version: draft
+  standards: []
+- context: secrets
+  name: Secrets Management
+  repo: https://github.com/api-commons/secrets
+  measured: 46
+  concepts:
+  - secret
+  - secret_store
+  - encryption_key
+  core: 9
+  crosswalks: 11
+  version: draft
+  standards: []
+- context: serverless
+  name: Serverless Functions
+  repo: https://github.com/api-commons/serverless
+  measured: 136
+  concepts:
+  - function
+  - function_deployment
+  core: 9
+  crosswalks: 22
+  version: draft
+  standards: []
+- context: shipping
+  name: Shipping
+  repo: https://github.com/api-commons/shipping
+  measured: 258
+  concepts:
+  - shipment
+  - rate
+  - label
+  - tracking
+  - pickup
+  - carrier
+  core: 11
+  crosswalks: 99
+  version: draft
+  standards: []
+- context: social-media
+  name: Social Media
+  repo: https://github.com/api-commons/social-media
+  measured: 118
+  concepts:
+  - social_account
+  - post
+  - social_comment
+  core: 9
+  crosswalks: 53
+  version: draft
+  standards: []
+- context: testing
+  name: Software Testing
+  repo: https://github.com/api-commons/testing
+  measured: 95
+  concepts:
+  - test_case
+  - test_suite
+  - test_run
+  - test_result
+  core: 10
+  crosswalks: 32
+  version: draft
+  standards: []
+- context: source-control
+  name: Source Control
+  repo: https://github.com/api-commons/source-control
+  measured: 242
+  concepts:
+  - repository
+  - branch
+  - commit
+  - pull_request
+  - repo_issue
+  - release
+  core: 38
+  crosswalks: 49
+  version: draft
+  standards: []
+- context: speech
+  name: Speech and Transcription
+  repo: https://github.com/api-commons/speech
+  measured: 131
+  concepts:
+  - speech_transcript
+  - voice
+  - speech_synthesis
+  core: 7
+  crosswalks: 67
+  version: draft
+  standards: []
+- context: sports
+  name: Sports Data
+  repo: https://github.com/api-commons/sports
+  measured: 64
+  concepts:
+  - league
+  - team
+  - player
+  - game
+  core: 7
+  crosswalks: 38
+  version: draft
+  standards: []
+- context: staffing
+  name: Staffing
+  repo: https://github.com/api-commons/staffing
+  measured: 51
+  concepts:
+  - work_shift
+  core: 6
+  crosswalks: 12
+  version: draft
+  standards: []
+- context: tax
+  name: Tax
+  repo: https://github.com/api-commons/tax
+  measured: 51
+  concepts:
+  - tax_calculation
+  - tax_transaction
+  core: 5
+  crosswalks: 13
+  version: draft
+  standards: []
+- context: telephony
+  name: Telephony
+  repo: https://github.com/api-commons/telephony
+  measured: 146
+  concepts:
+  - call
+  - recording
+  - transcription
+  - conference
+  core: 16
+  crosswalks: 49
+  version: draft
+  standards: []
+- context: threat-detection
+  name: Threat Detection and SIEM
+  repo: https://github.com/api-commons/threat-detection
+  measured: 60
+  concepts:
+  - security_alert
+  - security_case
+  - endpoint
+  core: 13
+  crosswalks: 25
+  version: draft
+  standards: []
+- context: time-tracking
+  name: Time Tracking
+  repo: https://github.com/api-commons/time-tracking
+  measured: 80
+  concepts:
+  - timesheet
+  - scheduled_shift
+  core: 6
+  crosswalks: 20
+  version: draft
+  standards: []
+- context: trading
+  name: Trading
+  repo: https://github.com/api-commons/trading
+  measured: 174
+  concepts:
+  - trade_order
+  - fill
+  - position
+  - brokerage_account
+  - portfolio
+  - watchlist
+  core: 27
+  crosswalks: 51
+  version: draft
+  standards: []
+- context: localization
+  name: Translation and Localization
+  repo: https://github.com/api-commons/localization
+  measured: 49
+  concepts:
+  - localization_project
+  - string_key
+  - translation
+  - locale_resource
+  core: 11
+  crosswalks: 27
+  version: draft
+  standards: []
+- context: travel
+  name: Travel and Lodging
+  repo: https://github.com/api-commons/travel
+  measured: 184
+  concepts:
+  - booking
+  - hotel
+  - room
+  - rate_plan
+  - guest
+  - flight
+  core: 14
+  crosswalks: 67
+  version: draft
+  standards: []
+- context: vector-search
+  name: Vector Search and RAG
+  repo: https://github.com/api-commons/vector-search
+  measured: 125
+  concepts:
+  - vector_index
+  - vector_query
+  core: 4
+  crosswalks: 26
+  version: draft
+  standards: []
+- context: video
+  name: Video
+  repo: https://github.com/api-commons/video
+  measured: 163
+  concepts:
+  - video
+  - video_upload
+  - live_stream
+  - playlist
+  - caption
+  core: 15
+  crosswalks: 51
+  version: draft
+  standards: []
+- context: vulnerability-management
+  name: Vulnerability Management
+  repo: https://github.com/api-commons/vulnerability-management
+  measured: 111
+  concepts:
+  - finding
+  - vulnerability
+  - scan
+  - scanned_asset
+  core: 14
+  crosswalks: 54
+  version: draft
+  standards: []
+- context: warehouse
+  name: Warehouse Management
+  repo: https://github.com/api-commons/warehouse
+  measured: 75
+  concepts:
+  - warehouse
+  - inbound_receipt
+  core: 4
+  crosswalks: 13
+  version: draft
+  standards: []
+- context: weather
+  name: Weather
+  repo: https://github.com/api-commons/weather
+  measured: 54
+  concepts:
+  - current_conditions
+  - forecast
+  - historical_weather
+  - weather_alert
+  - air_quality
+  - station
+  core: 6
+  crosswalks: 27
+  version: draft
+  standards:
+  - cap-1.2
+- context: web-scraping
+  name: Web Scraping and Crawling
+  repo: https://github.com/api-commons/web-scraping
+  measured: 109
+  concepts:
+  - scrape
+  - crawl
+  core: 3
+  crosswalks: 50
+  version: draft
+  standards: []
+- context: webhooks
+  name: Webhooks
+  repo: https://github.com/api-commons/webhooks
+  measured: 487
+  concepts:
+  - webhook_endpoint
+  - event_type
+  - event
+  - delivery
+  core: 14
+  crosswalks: 202
+  version: draft
+  standards:
+  - cloudevents-1.0
+- context: workflow-automation
+  name: Workflow Automation
+  repo: https://github.com/api-commons/workflow-automation
+  measured: 348
+  concepts:
+  - workflow
+  - workflow_run
+  - trigger
+  - connection
+  core: 13
+  crosswalks: 73
+  version: draft
+  standards: []
+references:
+- context: network-apis
+  name: Operator Network APIs (CAMARA)
+  repo: https://github.com/api-commons/network-apis
+  measured: 282
+  standard: camara-2025
+  home: https://camaraproject.org
+  implementers: 8
+  mentioned_by: 16
+- context: imagery-catalogs
+  name: Imagery Catalogs (STAC)
+  repo: https://github.com/api-commons/imagery-catalogs
+  measured: 215
+  standard: stac-1.1
+  home: https://stacspec.org
+  implementers: 6
+  mentioned_by: 17
+- context: registry-protocol
+  name: Container Registry Protocol (OCI Distribution)
+  repo: https://github.com/api-commons/registry-protocol
+  measured: 406
+  standard: oci-distribution-1.1
+  home: https://github.com/opencontainers/distribution-spec
+  implementers: 3
+  mentioned_by: 9
+- context: ocean-shipping
+  name: Container Shipping (DCSA)
+  repo: https://github.com/api-commons/ocean-shipping
+  measured: 300
+  standard: dcsa-2025
+  home: https://dcsa.org/standards
+  implementers: 3
+  mentioned_by: 4
+- context: cloud-events
+  name: Event Envelopes (CloudEvents)
+  repo: https://github.com/api-commons/cloud-events
+  measured: 858
+  standard: cloudevents-1.0
+  home: https://cloudevents.io
+  implementers: 3
+  mentioned_by: 16
