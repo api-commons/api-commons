@@ -70,6 +70,7 @@ both humans and agents can consume it. Each lives in its own repo under
 - [**deprecation-policy**](https://github.com/api-commons/deprecation-policy) — notice, support window, channels, and the Deprecation and Sunset headers.
 - [**compliance**](https://github.com/api-commons/compliance) — the compliance attestations a provider states (SOC 2, ISO 27001, PCI DSS, HIPAA, FedRAMP).
 - [**eligibility**](https://github.com/api-commons/eligibility) — who may use an API and where: countries, entity types, KYC/KYB, minimum age.
+- [**aid**](https://github.com/api-commons/aid) — the APIs.json API Identifier: grammar, MUST/SHOULD rules and a reference linter for provider and API aids.
 - [**ai-preferences**](https://github.com/api-commons/ai-preferences) — AI training, inference and agent-use stances, aligned with IETF AIPREF and Content Signals.
 - [**data-license**](https://github.com/api-commons/data-license) — the license on an API's outputs and data (SPDX), separate from the interface.
 - [**service-level-agreement**](https://github.com/api-commons/service-level-agreement) — a profile of SLA4OAI for uptime guarantees, observed uptime and limits.
