@@ -141,6 +141,9 @@ tools:
   - name: ReadMe
     url: https://readme.com/
     category: Docs platform
+  - name: Octri
+    url: https://octri.dev/
+    category: Docs platform
 
 metrics:
   - name: docs_coverage
